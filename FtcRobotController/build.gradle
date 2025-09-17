@@ -17,8 +17,8 @@ android {
     buildFeatures {
         buildConfig = true
     }
+    compileSdk 34
 
-    compileSdkVersion 30
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -26,5 +26,9 @@ android {
     }
     namespace = 'com.qualcomm.ftcrobotcontroller'
 }
-
+dependencies {
+    implementation 'dev.nextftc:ftc:1.0.0'
+    implementation 'dev.nextftc:hardware:1.0.0' // If you would like to use the hardware module
+    implementation 'dev.nextftc.extensions:pedro:1.0.0'
+}
 apply from: '../build.dependencies.gradle'
