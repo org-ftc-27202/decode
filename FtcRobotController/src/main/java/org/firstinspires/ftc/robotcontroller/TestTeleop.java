@@ -30,12 +30,12 @@ public class TestTeleop extends NextFTCOpMode {
     private MotorEx backLeftMotor = new MotorEx("lr").reversed();
     private MotorEx backRightMotor = new MotorEx("rr").reversed();
     private final Pose startPose = new Pose(5, 72, Math.toRadians(0));
-    private final Pose basePose = new Pose(24, 120 , Math.toRadians(0));
+    private final Pose basePose = new Pose(24, 100 , Math.toRadians(0));
     Path BaseMovePath;
     FollowPath baseMove;
     public void buildPaths() {
         BaseMovePath = new Path(new BezierLine(startPose, basePose));
-        BaseMovePath.setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(90), .8);
+        BaseMovePath.setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(90), .8);
     }
     MecanumDriverControlled drivercontrolled = new MecanumDriverControlled(
             frontLeftMotor,
