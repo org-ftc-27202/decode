@@ -1,4 +1,5 @@
 package org.firstinspires.ftc.robotcontroller;
+
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.Path;
@@ -6,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import dev.nextftc.bindings.BindingManager;
 import dev.nextftc.bindings.Button;
 import dev.nextftc.core.components.BindingsComponent;
+import dev.nextftc.core.components.SubsystemComponent;
 import dev.nextftc.extensions.pedro.FollowPath;
 import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.Gamepads;
@@ -20,6 +22,8 @@ import static dev.nextftc.extensions.pedro.PedroComponent.follower;
 public class TestTeleop extends NextFTCOpMode {
     public TestTeleop() {
         addComponents(
+
+                new SubsystemComponent(Intake1.INSTANCE),
                 BulkReadComponent.INSTANCE,
                 BindingsComponent.INSTANCE,
                 new PedroComponent(Constants::createFollower)
@@ -45,7 +49,8 @@ public class TestTeleop extends NextFTCOpMode {
             Gamepads.gamepad1().leftStickY(),
             Gamepads.gamepad1().leftStickX().negate(),
             Gamepads.gamepad1().rightStickX());
-    Button myButton = button(() -> gamepad1.a);
+    Button toBaseButton = button(() -> gamepad1.a);
+    Button runIntakeButton = button(() -> gamepad1.x);
     @Override public void onInit(){
         buildPaths();
         baseMove = new FollowPath(BaseMovePath, true);
@@ -53,7 +58,9 @@ public class TestTeleop extends NextFTCOpMode {
     }
     @Override public void onStartButtonPressed(){
         drivercontrolled.schedule();
-        myButton.whenBecomesTrue(() -> baseMove.schedule());
+        toBaseButton.whenBecomesTrue(() -> baseMove.schedule());
+        runIntakeButton.whenBecomesTrue(()-> Intake1.INSTANCE.runMotor.schedule());
+
     }
     @Override public void onUpdate() {
         BindingManager.update();
