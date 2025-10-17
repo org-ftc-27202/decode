@@ -11,7 +11,7 @@ public class Intake1 implements Subsystem {
     public static final Intake1 INSTANCE = new Intake1();
     private Intake1(){}
 
-    private MotorEx motor = new MotorEx("intake_motor");
+    //private MotorEx motor = new MotorEx("intake_motor");
     private ControlSystem controlSystem = ControlSystem.builder()
             .posPid(0.005, 0, 0)
             .build();
@@ -26,7 +26,7 @@ public class Intake1 implements Subsystem {
     @Override
     public void periodic() {
         // periodic logic (runs every loop)
-        motor.setPower(controlSystem.calculate(motor.getState()));
+        //motor.setPower(controlSystem.calculate(motor.getState()));
 
     }
 }

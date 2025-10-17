@@ -37,11 +37,22 @@ public class TestAuto extends NextFTCOpMode {
                 new PedroComponent(Constants::createFollower)
         );
     }
-    private final Pose startPose = new Pose(144, 72, Math.toRadians(0));
-    private final Pose pickup1Pose = new Pose(96, 36 , Math.toRadians(90));
+    private final Pose startPose = new Pose(6, 60, Math.toRadians(0));
+    private final Pose pickup1Pose = new Pose(24, 36 , Math.toRadians(90));
     Path BaseMovePath;
     FollowPath baseMove;
+    FollowPath movetoPickup1;
     private PathChain grabPickup1, backStart1;
+
+    public void autonomousPathUpdate() {}
+    // this'll be used later, just putting it in here for future reference
+    // in case you forgot, look at pedro example auto
+
+    /** These change the states of the paths and actions. It will also reset the timers of the individual switches **/
+    public void setPathState(int pState) {
+        pathState = pState;
+        pathTimer.resetTimer();
+    }
 
     public void buildPaths() {
         grabPickup1 = follower.pathBuilder()
@@ -53,12 +64,14 @@ public class TestAuto extends NextFTCOpMode {
                 .addPath(new BezierLine(pickup1Pose, startPose))
                 .setLinearHeadingInterpolation(pickup1Pose.getHeading(), startPose.getHeading())
                 .build();
+
     }
 
     @Override
     public void onUpdate() {
         // These loop the movements of the robot, these must be called continuously in order to work
         follower.update();
+        autonomousPathUpdate();
         // Feedback to Driver Hub for debugging
         telemetry.addData("path state", pathState);
         telemetry.addData("x", follower.getPose().getX());
@@ -67,12 +80,30 @@ public class TestAuto extends NextFTCOpMode {
         telemetry.update();
     }
     @Override
-    public void onStartButtonPressed() {
+    public void onInit() {
         pathTimer = new Timer();
         opmodeTimer = new Timer();
         opmodeTimer.resetTimer();
         follower = Constants.createFollower(hardwareMap);
         buildPaths();
+        movetoPickup1 = new FollowPath(grabPickup1);
         follower.setStartingPose(startPose);
+    }
+
+    @Override
+    public void onWaitForStart() {
+
+    }
+
+    @Override
+    public void onStartButtonPressed() {
+        opmodeTimer.resetTimer();
+        setPathState(0);
+        movetoPickup1.schedule();
+    }
+    /** We do not use this because everything should automatically disable **/
+    @Override
+    public void onStop() {
+
     }
 }

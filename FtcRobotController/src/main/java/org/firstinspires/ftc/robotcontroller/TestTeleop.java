@@ -29,10 +29,10 @@ public class TestTeleop extends NextFTCOpMode {
                 new PedroComponent(Constants::createFollower)
         );
     }
-    private MotorEx frontLeftMotor = new MotorEx("lf").reversed();
-    private MotorEx frontRightMotor = new MotorEx("rf").reversed();
-    private MotorEx backLeftMotor = new MotorEx("lr").reversed();
-    private MotorEx backRightMotor = new MotorEx("rr").reversed();
+    private MotorEx frontLeftMotor = new MotorEx("leftFront").reversed();
+    private MotorEx frontRightMotor = new MotorEx("rightFront").reversed();
+    private MotorEx backLeftMotor = new MotorEx("leftBack").reversed();
+    private MotorEx backRightMotor = new MotorEx("rightBack").reversed();
     private final Pose startPose = new Pose(5, 72, Math.toRadians(0));
     private final Pose basePose = new Pose(24, 100 , Math.toRadians(0));
     Path BaseMovePath;
@@ -53,7 +53,7 @@ public class TestTeleop extends NextFTCOpMode {
     Button runIntakeButton = button(() -> gamepad1.x);
     @Override public void onInit(){
         buildPaths();
-        baseMove = new FollowPath(BaseMovePath, true);
+        baseMove = new FollowPath(BaseMovePath, false);
         follower().setStartingPose(startPose);
     }
     @Override public void onStartButtonPressed(){
