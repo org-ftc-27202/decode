@@ -33,8 +33,8 @@ public class Constants {
             .encoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD)
             .forwardEncoderDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)
             .strafeEncoderDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED)
-            .forwardPodY(-5.5)
-            .strafePodX(-1.77)
+            .forwardPodY(-5.4)
+            .strafePodX(-3.5)
 
             ;
     public static MecanumConstants driveConstants = new MecanumConstants()

@@ -6,6 +6,7 @@ import com.pedropathing.paths.Path;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import dev.nextftc.bindings.BindingManager;
 import dev.nextftc.bindings.Button;
+import dev.nextftc.core.commands.CommandManager;
 import dev.nextftc.core.components.BindingsComponent;
 import dev.nextftc.core.components.SubsystemComponent;
 import dev.nextftc.extensions.pedro.FollowPath;
@@ -23,7 +24,7 @@ public class TestTeleop extends NextFTCOpMode {
     public TestTeleop() {
         addComponents(
 
-                new SubsystemComponent(Intake1.INSTANCE),
+                new SubsystemComponent(Intake1.INSTANCE, Spindexer.INSTANCE),
                 BulkReadComponent.INSTANCE,
                 BindingsComponent.INSTANCE,
                 new PedroComponent(Constants::createFollower)
@@ -49,8 +50,20 @@ public class TestTeleop extends NextFTCOpMode {
             Gamepads.gamepad1().leftStickY(),
             Gamepads.gamepad1().leftStickX().negate(),
             Gamepads.gamepad1().rightStickX());
+
     Button toBaseButton = button(() -> gamepad1.a);
-    Button runIntakeButton = button(() -> gamepad1.x);
+    Button IntakeButton = button(() -> gamepad1.right_trigger>0);
+    Button LeverButton = button(() -> gamepad1.left_trigger>0);
+    Button ZeroButton = button(()-> gamepad1.dpad_left);
+    Button OneButton = button(()-> gamepad1.dpad_up);
+    Button TwoButton = button(() -> gamepad1.dpad_right);
+    Button ZeroButtonIntake = ZeroButton.and(IntakeButton);
+    Button OneButtonIntake = OneButton.and(IntakeButton);
+    Button TwoButtonIntake = TwoButton.and(IntakeButton);
+    Button ZeroButtonLever = ZeroButton.xor(ZeroButtonIntake);
+    Button OneButtonLever = OneButton.xor(OneButtonIntake);
+    Button TwoButtonLever = TwoButton.xor(TwoButtonIntake);
+
     @Override public void onInit(){
         buildPaths();
         baseMove = new FollowPath(BaseMovePath, false);
@@ -58,15 +71,30 @@ public class TestTeleop extends NextFTCOpMode {
     }
     @Override public void onStartButtonPressed(){
         drivercontrolled.schedule();
-        toBaseButton.whenBecomesTrue(() -> baseMove.schedule());
-        runIntakeButton.whenBecomesTrue(()-> Intake1.INSTANCE.runMotor.schedule());
+       // toBaseButton.whenBecomesTrue(() -> baseMove.schedule());
+        IntakeButton.whenBecomesTrue(()-> Intake1.INSTANCE.runMotor.schedule());
+        IntakeButton.whenBecomesFalse(()-> Intake1.INSTANCE.stopMotor.schedule());
+        LeverButton.whenBecomesTrue(()-> Spindexer.INSTANCE.leverUp.schedule());
+        LeverButton.whenBecomesFalse(()-> Spindexer.INSTANCE.leverDown.schedule());
+
+        ZeroButtonLever.whenBecomesTrue(()-> Spindexer.INSTANCE.lever0.schedule());
+        OneButtonLever.whenBecomesTrue(()-> Spindexer.INSTANCE.lever1.schedule());
+        TwoButtonLever.whenBecomesTrue(()-> Spindexer.INSTANCE.lever2.schedule());
+
+        ZeroButtonIntake.whenBecomesTrue(()-> Spindexer.INSTANCE.intake0.schedule());
+        OneButtonIntake.whenBecomesTrue(()-> Spindexer.INSTANCE.intake1.schedule());
+        TwoButtonIntake.whenBecomesTrue(()-> Spindexer.INSTANCE.intake2.schedule());
+
+
 
     }
     @Override public void onUpdate() {
         BindingManager.update();
         telemetry.addData("position", follower().getPose());
         telemetry.addData("heading", follower().getHeading());
+        telemetry.addData("button", TwoButtonLever);
         telemetry.update();
+
     }
     @Override public void onStop(){
         BindingManager.reset();
