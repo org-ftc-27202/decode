@@ -31,9 +31,9 @@ public class TestTeleop extends NextFTCOpMode {
         );
     }
     private MotorEx frontLeftMotor = new MotorEx("leftFront").reversed();
-    private MotorEx frontRightMotor = new MotorEx("rightFront").reversed();
+    private MotorEx frontRightMotor = new MotorEx("rightFront");
     private MotorEx backLeftMotor = new MotorEx("leftBack").reversed();
-    private MotorEx backRightMotor = new MotorEx("rightBack").reversed();
+    private MotorEx backRightMotor = new MotorEx("rightBack");
     private final Pose startPose = new Pose(5, 72, Math.toRadians(0));
     private final Pose basePose = new Pose(24, 100 , Math.toRadians(0));
     Path BaseMovePath;
@@ -64,6 +64,8 @@ public class TestTeleop extends NextFTCOpMode {
     Button OneButtonLever = OneButton.xor(OneButtonIntake);
     Button TwoButtonLever = TwoButton.xor(TwoButtonIntake);
 
+    Button BeamBroke = button(()-> Spindexer.INSTANCE.beamBreakCheck());
+
     @Override public void onInit(){
         buildPaths();
         baseMove = new FollowPath(BaseMovePath, false);
@@ -84,6 +86,8 @@ public class TestTeleop extends NextFTCOpMode {
         ZeroButtonIntake.whenBecomesTrue(()-> Spindexer.INSTANCE.intake0.schedule());
         OneButtonIntake.whenBecomesTrue(()-> Spindexer.INSTANCE.intake1.schedule());
         TwoButtonIntake.whenBecomesTrue(()-> Spindexer.INSTANCE.intake2.schedule());
+        BeamBroke.whenBecomesTrue(()-> Spindexer.INSTANCE.ballThru.schedule());
+
 
 
 
