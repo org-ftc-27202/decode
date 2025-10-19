@@ -42,9 +42,9 @@ public class TestBeamBreak extends LinearOpMode {
             // button is pressed if value returned is LOW or false.
             // send the info back to driver station using telemetry function.
             if (!digitalTouch.getState()) {
-                telemetry.addData("Beam", "Broken");
+                telemetry.addData("Beam", "Broken (v4)");
             } else {
-                telemetry.addData("Beam", "Not Broken");
+                telemetry.addData("Beam", "Not Broken (v4)");
             }
 
             telemetry.update();
