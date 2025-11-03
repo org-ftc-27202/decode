@@ -35,14 +35,14 @@ public abstract class Runnable {
         this.hadToInterruptToStart = hadToInterruptToStart;
     }
 
-    public final void schedulerStart() {
+    public final void startInScheduler() {
         this.hasFinished = false;
         this.isRunning = true;
 
         start(hadToInterruptToStart);
     }
 
-    public final void schedulerStop() {
+    public final void stopInScheduler() {
         this.hasFinished = true;
         this.isRunning = false;
 

@@ -9,7 +9,7 @@ public class MoveTo extends Directive {
 	private final StellarDcMotor motor;
 	private final int targetPosition;
 	private final double power;
-	private final double acceptableRange;
+	private final double tolerance;
 
 	public MoveTo(StellarDcMotor motor, int targetPosition, double power) {
 		this(motor, targetPosition, power, 5);
@@ -19,7 +19,7 @@ public class MoveTo extends Directive {
 		this.motor = motor;
 		this.targetPosition = targetPosition;
 		this.power = power;
-		this.acceptableRange = acceptableRange;
+		this.tolerance = acceptableRange;
 		setInterruptible(true);
 	}
 
@@ -50,6 +50,6 @@ public class MoveTo extends Directive {
 
 	@Override
 	public boolean isFinished() {
-		return Math.abs(motor.getCurrentPosition() - targetPosition) <= acceptableRange;
+		return Math.abs(motor.getCurrentPosition() - targetPosition) <= tolerance;
 	}
 }

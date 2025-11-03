@@ -171,7 +171,7 @@ public class Scheduler {
 		// remove runnables to be removed
 		for (Runnable runnable : runnablesToRemove) {
 			this.activeRunnables.remove(runnable);
-			runnable.schedulerStop();
+			runnable.stopInScheduler();
 
 			// remove the runnable's triggers
 			activeTriggers.removeAll(runnable.getOwnedTriggers());
@@ -181,7 +181,7 @@ public class Scheduler {
 		// add runnables to be added
 		for (Runnable runnable : runnablesToAdd) {
 			this.activeRunnables.add(runnable);
-			runnable.schedulerStart();
+			runnable.startInScheduler();
 
 			// add the runnable's triggers
 			activeTriggers.addAll(runnable.getOwnedTriggers());
@@ -232,7 +232,7 @@ public class Scheduler {
 
 		// stop all directives
 		for (Runnable runnable : this.activeRunnables) {
-			runnable.schedulerStop();
+			runnable.stopInScheduler();
 		}
 
 		// clear all running directives

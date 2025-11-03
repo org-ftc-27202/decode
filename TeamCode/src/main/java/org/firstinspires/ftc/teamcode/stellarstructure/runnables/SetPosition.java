@@ -6,7 +6,7 @@ import org.firstinspires.ftc.teamcode.stellarstructure.Subsystem;
 public class SetPosition extends Directive {
 	private final StellarServo servo;
 	private final double targetPosition;
-	private final double acceptableRange;
+	private final double tolerance;
 
 	public SetPosition(StellarServo servo, double targetPosition) {
 		this(servo, targetPosition, 0.01);
@@ -15,7 +15,7 @@ public class SetPosition extends Directive {
 	public SetPosition(StellarServo servo, double targetPosition, double acceptableRange) {
 		this.servo = servo;
 		this.targetPosition = targetPosition;
-		this.acceptableRange = acceptableRange;
+		this.tolerance = acceptableRange;
 		setInterruptible(true);
 	}
 
@@ -42,6 +42,6 @@ public class SetPosition extends Directive {
 
 	@Override
 	public boolean isFinished() {
-		return Math.abs(servo.getPosition() - targetPosition) <= acceptableRange;
+		return Math.abs(servo.getPosition() - targetPosition) <= tolerance;
 	}
 }

@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.stellarstructure.runnables;
 import androidx.annotation.NonNull;
 
 public class Procedure extends Runnable {
-    Runnable[] runnables;
+    private final Runnable[] runnables;
     private int currentDirectiveIndex = 0;
 
     public Procedure(@NonNull Runnable... runnables) {

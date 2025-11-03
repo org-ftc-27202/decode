@@ -20,10 +20,10 @@ public class TarsTele extends LinearOpMode {
 
 	@Override
 	public void runOpMode() {
-		//set up subsystems
+		// set up subsystems
 		tars.init(hardwareMap);
 
-		//set up gamepads
+		// set up gamepads
 		tars.setGamepads(gamepad1, gamepad2);
 
 		waitForStart();
@@ -31,7 +31,7 @@ public class TarsTele extends LinearOpMode {
 		if (isStopRequested()) return;
 
 		while (opModeIsActive()) {
-			//run subsystems logic
+			// run subsystems logic
 			tars.update();
 
 			//print telemetry
@@ -46,7 +46,7 @@ public class TarsTele extends LinearOpMode {
 			telemetry.update();
 		}
 
-		//cancel triggers and runnables
+		// cancel triggers and runnables
 		tars.cancelAll();
 	}
 }
