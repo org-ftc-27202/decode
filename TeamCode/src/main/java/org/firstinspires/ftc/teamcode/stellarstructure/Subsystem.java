@@ -7,6 +7,26 @@ import org.firstinspires.ftc.teamcode.stellarstructure.runnables.DefaultDirectiv
 
 public abstract class Subsystem {
 	private DefaultDirective defaultDirective;
+
+	@Override
+	public boolean equals(Object object) {
+		if (this == object) {
+			return true;
+		}
+
+		if (object == null || getClass() != object.getClass()) {
+			return false;
+		}
+
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		return getClass().hashCode();
+	}
+
+
 	public abstract void init(HardwareMap hardwareMap);
 	public abstract void setGamepads(Gamepad gamepad1, Gamepad gamepad2);
 	public abstract void update();

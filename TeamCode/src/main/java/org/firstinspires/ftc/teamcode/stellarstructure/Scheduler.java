@@ -64,7 +64,7 @@ public class Scheduler {
 		for (Runnable runningRunnable : runnables) {
 			for (Subsystem requiredByNew : runnableToCheck.getRequiredSubsystems()) {
 				for (Subsystem requiredByRunning : runningRunnable.getRequiredSubsystems()) {
-					if (requiredByNew == requiredByRunning && !runningRunnable.getInterruptible()) {
+					if (requiredByNew.equals(requiredByRunning) && !runningRunnable.getInterruptible()) {
 						return true;
 					}
 				}
@@ -82,7 +82,7 @@ public class Scheduler {
 			}
 			for (Subsystem requiredByNew : runnableToCheck.getRequiredSubsystems()) {
 				for (Subsystem requiredByRunning : runningRunnable.getRequiredSubsystems()) {
-					if (requiredByNew == requiredByRunning) {
+					if (requiredByNew.equals(requiredByRunning)) {
 						this.runnablesToRemove.add(runningRunnable);
 						didInterrupt = true;
 					}
@@ -214,7 +214,7 @@ public class Scheduler {
 
 			// includes the default directive itself but that's fine for this application
 			for (Subsystem requiredSubsystem : runnable.getRequiredSubsystems()) {
-				if (requiredSubsystem == subsystemToCheck) {
+				if (requiredSubsystem.equals(subsystemToCheck)) {
 					return true;
 				}
 			}
