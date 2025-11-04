@@ -1,22 +1,30 @@
 package org.firstinspires.ftc.teamcode.stellarstructure.hardwaremapwrappers;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class StellarDcMotor {
-	private final DcMotor dcMotor;
-	public StellarDcMotor(HardwareMap hardwareMap, String dcMotorName) {dcMotor = hardwareMap.get(DcMotor.class, dcMotorName);}
-	public void setZeroPowerBehavior(DcMotor.ZeroPowerBehavior zeroPowerBehavior) {dcMotor.setZeroPowerBehavior(zeroPowerBehavior);}
-	public DcMotor.ZeroPowerBehavior getZeroPowerBehavior() {return dcMotor.getZeroPowerBehavior();}
-	public void setTargetPosition(int targetPosition) {dcMotor.setTargetPosition(targetPosition);}
-	public int getTargetPosition() {return dcMotor.getTargetPosition();}
-	public void setPower(double power) {dcMotor.setPower(power);}
-	public double getPower() {return dcMotor.getPower();}
-	public void setMode(DcMotor.RunMode mode) {dcMotor.setMode(mode);}
-	public DcMotor.RunMode getMode() {return dcMotor.getMode();}
-	public void setDirection(DcMotor.Direction direction) {dcMotor.setDirection(direction);}
-	public DcMotor.Direction getDirection() {return dcMotor.getDirection();}
-	public int getCurrentPosition() {return dcMotor.getCurrentPosition();}
-	public boolean isBusy() {return dcMotor.isBusy();}
-	public void resetDeviceConfigurationForOpMode() {dcMotor.resetDeviceConfigurationForOpMode();}
+	private final DcMotorEx dcMotorEx;
+	public StellarDcMotor(HardwareMap hardwareMap, String dcMotorExName) {
+		dcMotorEx = hardwareMap.get(DcMotorEx.class, dcMotorExName);}
+	public void setZeroPowerBehavior(DcMotor.ZeroPowerBehavior zeroPowerBehavior) {
+		dcMotorEx.setZeroPowerBehavior(zeroPowerBehavior);}
+	public DcMotor.ZeroPowerBehavior getZeroPowerBehavior() {return dcMotorEx.getZeroPowerBehavior();}
+	public void setTargetPosition(int targetPosition) {
+		dcMotorEx.setTargetPosition(targetPosition);}
+	public int getTargetPosition() {return dcMotorEx.getTargetPosition();}
+	public void setPower(double power) {
+		dcMotorEx.setPower(power);}
+	public double getPower() {return dcMotorEx.getPower();}
+	public void setMode(DcMotor.RunMode mode) {
+		dcMotorEx.setMode(mode);}
+	public DcMotor.RunMode getMode() {return dcMotorEx.getMode();}
+	public void setDirection(DcMotor.Direction direction) {
+		dcMotorEx.setDirection(direction);}
+	public DcMotor.Direction getDirection() {return dcMotorEx.getDirection();}
+	public double getVelocity() { return dcMotorEx.getVelocity();}
+	public int getCurrentPosition() {return dcMotorEx.getCurrentPosition();}
+	public boolean isBusy() {return dcMotorEx.isBusy();}
+	public void resetDeviceConfigurationForOpMode() {dcMotorEx.resetDeviceConfigurationForOpMode();}
 }
