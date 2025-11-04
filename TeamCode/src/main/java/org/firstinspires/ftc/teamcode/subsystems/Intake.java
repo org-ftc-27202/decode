@@ -61,7 +61,7 @@ public final class Intake extends Subsystem {
 		intakeMotor.setPower(intakeSpeed);
 	}
 	public void setMotorPID(){
-		intakeMotor.setPower((controller.calculate(new KineticState(intakeMotor.getVelocity())
+		intakeMotor.setPower((controller.calculate(new KineticState(intakeMotor.getCurrentPosition(),intakeMotor.getVelocity())
         )));
 	}
 
