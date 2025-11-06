@@ -21,9 +21,10 @@ public class PulseTransferLever extends Procedure {
 				new SetPosition(LeverTransfer.getInstance().getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION, 0.01)
 		);
 
+		/*
 		setStartingConditions(
 				// spindexer outtake position
 				() -> Spindexer.getInstance().getIsTransferPosition()
-		);
+		);*/
 	}
 }

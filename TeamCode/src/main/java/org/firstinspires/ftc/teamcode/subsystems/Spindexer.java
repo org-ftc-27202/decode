@@ -35,9 +35,9 @@ public final class Spindexer extends Subsystem {
 
 	+-----------+--------+----------+
 	|           | Intake | Transfer |
-	| Segment 1 |   0    |   180    |
-	| Segment 2 |  120   |   300    |
-	| Segment 3 |  240   |   60     |
+	| Segment 0 |   0    |   180    |
+	| Segment 1 |  120   |   300    |
+	| Segment 2 |  240   |   60     |
 	+-----------+--------+----------+
 
 	Intake Procedure (60 ->) 0 -> 120 -> 240

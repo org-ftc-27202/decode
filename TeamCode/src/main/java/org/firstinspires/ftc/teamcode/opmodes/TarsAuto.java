@@ -62,7 +62,7 @@ public class TarsAuto extends OpMode {
     @Override
     public void loop() {
         tars.update();
-
+        follower.update();
         telemetry.addData("x", follower.getPose().getX());
         telemetry.addData("isBusy()", follower.isBusy());
         telemetry.addData("y", follower.getPose().getY());

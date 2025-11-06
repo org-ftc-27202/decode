@@ -245,6 +245,18 @@ public class Scheduler {
 	@NonNull
 	@Override
 	public final String toString() {
-		return String.format("Runnables Queue: %d\nActive Runnables: %d", this.pendingRunnables.size(), this.activeRunnables.size());
+		StringBuilder builder = new StringBuilder();
+		builder.append(String.format("Runnables Queue: %d\nActive Runnables: %d", this.pendingRunnables.size(), this.activeRunnables.size()));
+
+		builder.append("\nRunnables Queue\n");
+		for (Runnable runnable : this.pendingRunnables) {
+			builder.append(String.format("\n%s", runnable.toString()));
+		}
+
+		builder.append("\nActive Runnables\n");
+		for (Runnable runnable : this.activeRunnables) {
+			builder.append(String.format("\n%s", runnable.toString()));
+		}
+		return builder.toString();
 	}
 }

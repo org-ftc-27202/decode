@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.directives.defaultdirectives.DefaultIntake;
+import org.firstinspires.ftc.teamcode.directives.defaultdirectives.DefaultIntakePID;
 import org.firstinspires.ftc.teamcode.stellarstructure.hardwaremapwrappers.StellarDcMotor;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -26,29 +26,25 @@ public final class Intake extends Subsystem {
 
 	private StellarDcMotor intakeMotor;
 	private double intakeSpeed = 0;
-	private KineticState targetState;
 	private ControlSystem controller;
+
+	private double intakePower;
 
 	@Override
 	public void init(HardwareMap hardwareMap) {
 		intakeMotor = new StellarDcMotor(hardwareMap, "intake");
-		targetState = new KineticState(0,0);
 		controller = ControlSystem.builder()
-				.velPid(0.1, 0.0, 0.0)
+				.posPid(0.01, 0.0, 0.0)
 				.build();
-
 	}
 
 	@Override
 	public void setGamepads(Gamepad gamepad1, Gamepad gamepad2) {
-		setDefaultDirective(new DefaultIntake(this, gamepad1));
+		setDefaultDirective(new DefaultIntakePID(this, gamepad1));
 	}
 
 	@Override
-	public void update(
-
-
-	) {}
+	public void update() {}
 
 	public void setIntakeSpeed(double intakeSpeed) {
 		this.intakeSpeed = intakeSpeed;
@@ -61,13 +57,13 @@ public final class Intake extends Subsystem {
 		intakeMotor.setPower(intakeSpeed);
 	}
 	public void setMotorPID(){
-		intakeMotor.setPower((controller.calculate(new KineticState(intakeMotor.getCurrentPosition(),intakeMotor.getVelocity())
-        )));
+		intakePower = (controller.calculate(new KineticState(intakeMotor.getVelocity())));
+		intakeMotor.setPower(intakePower);
 	}
 
 	@NonNull
 	@Override
 	public String toString() {
-		return String.format("Intake Speed: %f", intakeSpeed);
+		return String.format("Intake Speed: %f, Intake Power: %f", intakeMotor.getVelocity(), intakePower);
 	}
 }

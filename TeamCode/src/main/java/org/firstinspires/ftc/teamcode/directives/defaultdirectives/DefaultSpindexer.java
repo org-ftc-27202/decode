@@ -33,16 +33,16 @@ public class DefaultSpindexer extends DefaultDirective {
 							new SetPosition(LeverTransfer.getInstance().getLeverTransferServo(), 0.0),
 
 							// move to intake position when beam broken
+							new SetPosition(spindexerServo, spindexer.getDegreesForSegmentPosition(0, Spindexer.Position.INTAKE)).setStartingConditions(beamBreak::getState),
 							new SetPosition(spindexerServo, spindexer.getDegreesForSegmentPosition(1, Spindexer.Position.INTAKE)).setStartingConditions(beamBreak::getState),
 							new SetPosition(spindexerServo, spindexer.getDegreesForSegmentPosition(2, Spindexer.Position.INTAKE)).setStartingConditions(beamBreak::getState),
-							new SetPosition(spindexerServo, spindexer.getDegreesForSegmentPosition(3, Spindexer.Position.INTAKE)).setStartingConditions(beamBreak::getState),
 
 							// move to transfer position and pulse lever
-							new SetPosition(spindexerServo, spindexer.getDegreesForSegmentPosition(2, Spindexer.Position.TRANSFER)),
-							new PulseTransferLever(),
 							new SetPosition(spindexerServo, spindexer.getDegreesForSegmentPosition(1, Spindexer.Position.TRANSFER)),
 							new PulseTransferLever(),
-							new SetPosition(spindexerServo, spindexer.getDegreesForSegmentPosition(3, Spindexer.Position.TRANSFER)),
+							new SetPosition(spindexerServo, spindexer.getDegreesForSegmentPosition(0, Spindexer.Position.TRANSFER)),
+							new PulseTransferLever(),
+							new SetPosition(spindexerServo, spindexer.getDegreesForSegmentPosition(2   , Spindexer.Position.TRANSFER)),
 							new PulseTransferLever()
 					).schedule();
 				}

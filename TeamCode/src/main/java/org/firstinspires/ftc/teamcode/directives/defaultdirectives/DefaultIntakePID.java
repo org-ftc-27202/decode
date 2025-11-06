@@ -18,17 +18,17 @@ public class DefaultIntakePID extends DefaultDirective {
 
 		addTrigger(new Trigger(
 				() -> gamepad.left_trigger > 0.05, //when left trigger pressed
-				() -> {intake.setIntakeTarget(new KineticState(0,-200*gamepad.left_trigger));} //set intake to left trigger
+				() -> {intake.setIntakeTarget(new KineticState(-200 * gamepad.left_trigger));} //set intake to left trigger
 		));
 
 		addTrigger(new Trigger(
 				() -> gamepad.right_trigger > 0.05, //when right trigger pressed
-				() -> {intake.setIntakeTarget(new KineticState(0,200*gamepad.right_trigger));} //set intake to right trigger
+				() -> {intake.setIntakeTarget(new KineticState(200 * gamepad.right_trigger));} //set intake to right trigger
 		));
 
 		addTrigger(new Trigger(
 				() -> (gamepad.right_trigger <= 0.05) == (gamepad.left_trigger <= 0.05), //neither or both triggers are pressed
-				() -> {intake.setIntakeTarget(new KineticState(0, 0));} //set intake speed to 0
+				() -> {intake.setIntakeTarget(new KineticState(0));} //set intake speed to 0
 		));
 	}
 

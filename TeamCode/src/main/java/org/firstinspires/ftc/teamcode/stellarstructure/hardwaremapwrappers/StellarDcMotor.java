@@ -4,6 +4,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import dev.nextftc.control.KineticState;
+
 public class StellarDcMotor {
 	private final DcMotorEx dcMotorEx;
 	public StellarDcMotor(HardwareMap hardwareMap, String dcMotorExName) {
@@ -25,6 +27,9 @@ public class StellarDcMotor {
 	public DcMotor.Direction getDirection() {return dcMotorEx.getDirection();}
 	public double getVelocity() { return dcMotorEx.getVelocity();}
 	public int getCurrentPosition() {return dcMotorEx.getCurrentPosition();}
+	public KineticState getState() {
+		return new KineticState(dcMotorEx.getCurrentPosition(), dcMotorEx.getVelocity());
+	}
 	public boolean isBusy() {return dcMotorEx.isBusy();}
 	public void resetDeviceConfigurationForOpMode() {dcMotorEx.resetDeviceConfigurationForOpMode();}
 }
