@@ -4,9 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.directives.defaultdirectives.DefaultLeverTransfer;
 import org.firstinspires.ftc.teamcode.stellarstructure.hardwaremapwrappers.StellarServo;
-import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.stellarstructure.Subsystem;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.SetPosition;
@@ -33,11 +31,6 @@ public final class LeverTransfer extends Subsystem {
 	}
 
 	@Override
-	public void setGamepads(Gamepad gamepad1, Gamepad gamepad2) {
-		setDefaultDirective(new DefaultLeverTransfer(this, gamepad1, leverTransferServo));
-	}
-
-	@Override
 	public void update() {}
 
 	public void setLeverPositionIsUp(boolean isUpPosition) {
@@ -45,7 +38,6 @@ public final class LeverTransfer extends Subsystem {
 	}
 
 	public void updateServoPosition() {
-		//todo: fix directive spam
 		new SetPosition(
 				leverTransferServo,
 				isLeverTargetUp ? LEVER_UP_POSITION : LEVER_DOWN_POSITION,
@@ -62,6 +54,6 @@ public final class LeverTransfer extends Subsystem {
 	@NonNull
 	@Override
 	public String toString() {
-		return String.format("Lever Up Position: %f\nLever Is Up: %b", LEVER_UP_POSITION, isLeverTargetUp);
+		return String.format("Lever Position: %f\nLever Is Up: %b", leverTransferServo.getPosition(), isLeverTargetUp);
 	}
 }

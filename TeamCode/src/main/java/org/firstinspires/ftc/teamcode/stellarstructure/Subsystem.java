@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.stellarstructure.runnables.DefaultDirectiv
 
 public abstract class Subsystem {
 	private DefaultDirective defaultDirective;
+	private Gamepad gamepad1, gamepad2;
 
 	@Override
 	public boolean equals(Object object) {
@@ -26,9 +27,7 @@ public abstract class Subsystem {
 		return getClass().hashCode();
 	}
 
-
 	public abstract void init(HardwareMap hardwareMap);
-	public abstract void setGamepads(Gamepad gamepad1, Gamepad gamepad2);
 	public abstract void update();
 
 	public final void setDefaultDirective(DefaultDirective defaultDirective) {

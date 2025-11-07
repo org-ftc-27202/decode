@@ -4,8 +4,6 @@ import androidx.annotation.NonNull;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.Gamepad;
-import org.firstinspires.ftc.teamcode.directives.defaultdirectives.DefaultDrivebase;
 
 import org.firstinspires.ftc.teamcode.stellarstructure.Subsystem;
 
@@ -19,8 +17,8 @@ public final class Drivebase extends Subsystem {
 
     private Drivebase() {}
 
-    private final static double CARDINAL_SPEED = 0.70;
-    private final static double TURN_SPEED = 0.70;
+    public final static double CARDINAL_SPEED = 0.70;
+    public final static double TURN_SPEED = 0.70;
 
     private DcMotorEx leftFrontDrive, leftBackDrive, rightFrontDrive, rightBackDrive;
 
@@ -41,11 +39,6 @@ public final class Drivebase extends Subsystem {
         leftBackDrive.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         rightFrontDrive.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         rightBackDrive.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-    }
-
-    @Override
-    public void setGamepads(Gamepad gamepad1, Gamepad gamepad2) {
-        setDefaultDirective(new DefaultDrivebase(this, gamepad1, CARDINAL_SPEED, TURN_SPEED));
     }
 
     @Override

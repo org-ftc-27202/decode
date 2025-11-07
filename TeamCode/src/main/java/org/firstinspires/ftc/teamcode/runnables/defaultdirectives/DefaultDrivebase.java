@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.directives.defaultdirectives;
+package org.firstinspires.ftc.teamcode.runnables.defaultdirectives;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
@@ -6,26 +6,22 @@ import org.firstinspires.ftc.teamcode.subsystems.Drivebase;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.DefaultDirective;
 
 public class DefaultDrivebase extends DefaultDirective {
-	private final double cardinalSpeed, turnSpeed;
-	private final Gamepad gamepad;
-	private final Drivebase drivebase;
+	private final Drivebase drivebase = Drivebase.getInstance();
+	private final Gamepad gamepad1;
 
-	public DefaultDrivebase(Drivebase drivebase, Gamepad gamepad, double cardinalSpeed, double turnSpeed) {
-		super(drivebase);
+	public DefaultDrivebase(Gamepad gamepad1) {
+		super(Drivebase.getInstance());
 
-		this.cardinalSpeed = cardinalSpeed;
-		this.turnSpeed = turnSpeed;
-		this.gamepad = gamepad;
-		this.drivebase = drivebase;
+		this.gamepad1 = gamepad1;
 	}
 
 	@Override
 	public void update() {
 		double max, axial, lateral, yaw;
 		double leftFrontPower, rightFrontPower, leftBackPower, rightBackPower;
-		axial = -gamepad.left_stick_y * cardinalSpeed;  // Note: pushing stick forward gives negative value
-		lateral = gamepad.left_stick_x * cardinalSpeed;
-		yaw = gamepad.right_stick_x * turnSpeed;
+		axial = -gamepad1.left_stick_y * Drivebase.CARDINAL_SPEED;  // Note: pushing stick forward gives negative value
+		lateral = gamepad1.left_stick_x * Drivebase.CARDINAL_SPEED;
+		yaw = gamepad1.right_stick_x * Drivebase.TURN_SPEED;
 
 		// combine the joystick requests for each axis-motion to determine each wheel's power
 		leftFrontPower = axial + lateral + yaw;

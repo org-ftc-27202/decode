@@ -9,7 +9,11 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import  com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.pedroPathing.Constants;
-import org.firstinspires.ftc.teamcode.directives.FollowPath;
+import org.firstinspires.ftc.teamcode.runnables.FollowPath;
+import org.firstinspires.ftc.teamcode.runnables.defaultdirectives.DefaultDrivebase;
+import org.firstinspires.ftc.teamcode.runnables.defaultdirectives.DefaultIntake;
+import org.firstinspires.ftc.teamcode.runnables.defaultdirectives.DefaultLeverTransfer;
+import org.firstinspires.ftc.teamcode.runnables.defaultdirectives.DefaultSpindexer;
 import org.firstinspires.ftc.teamcode.stellarstructure.StellarBot;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Procedure;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.SetPosition;
@@ -29,6 +33,7 @@ public class TarsAuto extends OpMode {
             LeverTransfer.getInstance(),
             Spindexer.getInstance()
     );
+
     private final Pose startPose = new Pose(56,9, Math.toRadians(90));
     private final Pose collect1Pose = new Pose(19, 35.5);
     private final Pose collect1Control = new Pose(56,35.5);
@@ -51,8 +56,10 @@ public class TarsAuto extends OpMode {
         follower.setStartingPose(startPose);
     }
 
-    @Override public void start(){
+    @Override public void start() {
+        //todo:
         new Procedure(
+                "TestDrive",
                 new SetPosition(LeverTransfer.getInstance().getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION, 0.01),
                 new Sleep(0.03),
                 new FollowPath(path1, follower, false)

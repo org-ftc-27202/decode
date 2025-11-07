@@ -5,35 +5,36 @@ import androidx.annotation.NonNull;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import java.util.List;
+
 public class StellarBot {
-	protected final Subsystem[] subsystems;
+	private final Subsystem[] subsystems;
+
+	private final Scheduler scheduler = new Scheduler();
+	public Scheduler getScheduler() {
+		return scheduler;
+	}
 
 	public StellarBot(Subsystem... subsystems) {
 		this.subsystems = subsystems;
 
-		//add subsystems to scheduler
 		for (Subsystem subsystem : subsystems) {
-			Scheduler.getInstance().addSubsystem(subsystem);
+			scheduler.addSubsystem(subsystem);
 		}
 	}
 
 	public final void init(HardwareMap hardwareMap) {
+		Scheduler.setGlobalInstance(this.scheduler);
+
 		//initialize all subsystems
 		for (Subsystem subsystem : subsystems) {
 			subsystem.init(hardwareMap);
 		}
 	}
 
-	public final void setGamepads(Gamepad gamepad1, Gamepad gamepad2) {
-		//set gamepads for all subsystems
-		for (Subsystem subsystem : subsystems) {
-			subsystem.setGamepads(gamepad1, gamepad2);
-		}
-	}
-
 	public final void update() {
 		//update triggers and directives
-		Scheduler.getInstance().run();
+		scheduler.run();
 
 		//update subsystems
 		for (Subsystem subsystem : subsystems) {
@@ -50,12 +51,12 @@ public class StellarBot {
 			telemetry.append(subsystem).append('\n');
 		}
 
-		telemetry.append(Scheduler.getInstance());
+		telemetry.append(scheduler);
 
 		return telemetry.toString();
 	}
 
 	public final void cancelAll() {
-		Scheduler.getInstance().cancelAll();
+		scheduler.cancelAll();
 	}
 }

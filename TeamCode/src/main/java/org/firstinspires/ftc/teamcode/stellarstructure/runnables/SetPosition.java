@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.stellarstructure.runnables;
 
+import androidx.annotation.NonNull;
+
 import org.firstinspires.ftc.teamcode.stellarstructure.hardwaremapwrappers.StellarServo;
 import org.firstinspires.ftc.teamcode.stellarstructure.Subsystem;
 
@@ -8,11 +10,12 @@ public class SetPosition extends Directive {
 	private final double targetPosition;
 	private final double tolerance;
 
-	public SetPosition(StellarServo servo, double targetPosition) {
+	public SetPosition(@NonNull StellarServo servo, double targetPosition) {
 		this(servo, targetPosition, 0.01);
 	}
 
-	public SetPosition(StellarServo servo, double targetPosition, double acceptableRange) {
+	public SetPosition(@NonNull StellarServo servo, double targetPosition, double acceptableRange) {
+		super();
 		this.servo = servo;
 		this.targetPosition = targetPosition;
 		this.tolerance = acceptableRange;

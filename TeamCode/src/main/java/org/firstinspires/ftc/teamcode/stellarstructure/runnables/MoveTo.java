@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.stellarstructure.runnables;
 
+import androidx.annotation.NonNull;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.stellarstructure.hardwaremapwrappers.StellarDcMotor;
@@ -11,11 +13,11 @@ public class MoveTo extends Directive {
 	private final double power;
 	private final double tolerance;
 
-	public MoveTo(StellarDcMotor motor, int targetPosition, double power) {
+	public MoveTo(@NonNull StellarDcMotor motor, int targetPosition, double power) {
 		this(motor, targetPosition, power, 5);
 	}
 
-	public MoveTo(StellarDcMotor motor, int targetPosition, double power, double acceptableRange) {
+	public MoveTo(@NonNull StellarDcMotor motor, int targetPosition, double power, double acceptableRange) {
 		this.motor = motor;
 		this.targetPosition = targetPosition;
 		this.power = power;
@@ -36,6 +38,7 @@ public class MoveTo extends Directive {
 	@Override
 	public void stop(boolean interrupted) {
 		motor.setPower(0);
+		motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 	}
 
 	public MoveTo requires(Subsystem... subsystems) {

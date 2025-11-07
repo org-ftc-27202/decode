@@ -11,16 +11,21 @@ import java.util.Iterator;
 import java.util.List;
 
 public class Scheduler {
-	private static final Scheduler instance = new Scheduler();
+	private static Scheduler activeSchedulerInstance;
 
-	private Scheduler() {}
+	public static void setGlobalInstance(Scheduler scheduler) {
+		activeSchedulerInstance = scheduler;
+	}
+
+	public static Scheduler getGlobalInstance() {
+		if (activeSchedulerInstance == null) {
+			throw new IllegalStateException("Scheduler global instance has not been set!");
+		}
+		return activeSchedulerInstance;
+	}
 
 	//todo: make the waitlist optional with a boolean
 	//todo: reorganize order of methods and variables
-
-	public static Scheduler getInstance() {
-		return instance;
-	}
 
 	private final List<Subsystem> subsystems = new ArrayList<>();
 	private final List<Runnable> pendingRunnables = new ArrayList<>();

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.directives;
+package org.firstinspires.ftc.teamcode.runnables;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.paths.PathChain;
@@ -31,8 +31,7 @@ public class FollowPath extends Directive {
     }
 
     @Override
-    public void stop(boolean interrupted) {
-    }
+    public void stop(boolean interrupted) {}
 
     @Override
     public boolean isFinished() {

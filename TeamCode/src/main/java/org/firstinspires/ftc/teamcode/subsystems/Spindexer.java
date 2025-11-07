@@ -5,9 +5,7 @@ import androidx.annotation.NonNull;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.teamcode.directives.defaultdirectives.DefaultSpindexer;
 import org.firstinspires.ftc.teamcode.stellarstructure.Subsystem;
 
 import org.firstinspires.ftc.teamcode.stellarstructure.hardwaremapwrappers.StellarServo;
@@ -22,10 +20,9 @@ public final class Spindexer extends Subsystem {
 	private Spindexer() {}
 
 	private final static double DEGREES_TO_SERVO = 1.0 / 320.0;
-	private boolean isIntakePosition = true;
 	private final static double SPINDEXER_OFFSET = 0.0;
-	private final static double[] INTAKE_DEGREE_POSITIONS = {0.0 + SPINDEXER_OFFSET, 240.0 + SPINDEXER_OFFSET, 120.0 + SPINDEXER_OFFSET};
-	private final static double[] TRANSFER_DEGREE_POSITIONS = {180.0 + SPINDEXER_OFFSET, 60.0 + SPINDEXER_OFFSET, 300.0 + SPINDEXER_OFFSET};
+	private final static double[] INTAKE_DEGREE_POSITIONS = {0.0 + SPINDEXER_OFFSET, 120.0 + SPINDEXER_OFFSET, 240.0 + SPINDEXER_OFFSET};
+	private final static double[] TRANSFER_DEGREE_POSITIONS = {300.0 + SPINDEXER_OFFSET, 300.0 + SPINDEXER_OFFSET, 60.0 + SPINDEXER_OFFSET};
 
 	public enum Position {
 		INTAKE, TRANSFER
@@ -59,11 +56,6 @@ public final class Spindexer extends Subsystem {
 	}
 
 	@Override
-	public void setGamepads(Gamepad gamepad1, Gamepad gamepad2) {
-		setDefaultDirective(new DefaultSpindexer(this, gamepad1));
-	}
-
-	@Override
 	public void update() {}
 
 	public StellarServo getSpindexerServo() {
@@ -78,18 +70,27 @@ public final class Spindexer extends Subsystem {
 		return colorSensor;
 	}
 
-	public double getDegreesForSegmentPosition(int segment, Position position) {
+	public double getDegreesForSegmentPosition(int segment, @NonNull Position position) {
 		if (position == Position.INTAKE) {
 			return INTAKE_DEGREE_POSITIONS[segment] * DEGREES_TO_SERVO;
 		} else if (position == Position.TRANSFER) {
 			return TRANSFER_DEGREE_POSITIONS[segment] * DEGREES_TO_SERVO;
 		} else {
-			return 0.0;
+			throw new IllegalArgumentException("Invalid Spindexer.Position provided: " + position);
 		}
 	}
 
 	public boolean getIsTransferPosition() {
-		return !isIntakePosition;
+		double currentPosition = spindexerServo.getPosition();
+		double tolerance = 0.01;
+
+		for (double transferDegreePosition : TRANSFER_DEGREE_POSITIONS) {
+			if (Math.abs(currentPosition - (transferDegreePosition * DEGREES_TO_SERVO)) < tolerance) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	@NonNull

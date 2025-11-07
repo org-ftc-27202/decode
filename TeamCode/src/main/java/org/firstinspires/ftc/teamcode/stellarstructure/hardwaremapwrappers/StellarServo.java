@@ -7,7 +7,7 @@ public class StellarServo {
 	private final Servo servo;
 	public StellarServo(HardwareMap hardwareMap, String servoName) {servo = hardwareMap.get(Servo.class, servoName);}
 	public void setPosition(double position) {servo.setPosition(position);}
-	public double getPosition() {return servo.getPosition();}
+	public double getPosition() {return this.servo.getPosition();}
 	public void setDirection(Servo.Direction direction) {servo.setDirection(direction);}
 	public Servo.Direction getDirection() {return servo.getDirection();}
 	public void scaleRange(double min, double max) {servo.scaleRange(min, max);}

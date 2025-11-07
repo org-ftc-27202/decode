@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.stellarstructure.runnables;
 import androidx.annotation.NonNull;
 
 import org.firstinspires.ftc.teamcode.stellarstructure.Scheduler;
+import org.firstinspires.ftc.teamcode.stellarstructure.StellarBot;
 import org.firstinspires.ftc.teamcode.stellarstructure.Subsystem;
 import org.firstinspires.ftc.teamcode.stellarstructure.Trigger;
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.Condition;
@@ -55,7 +56,7 @@ public abstract class Runnable {
         ownedTriggers.add(trigger);
 
         if (this.isRunning) {
-            Scheduler.getInstance().addTrigger(trigger);
+            Scheduler.getGlobalInstance().addTrigger(trigger);
         }
     }
 
@@ -63,7 +64,7 @@ public abstract class Runnable {
         ownedTriggers.remove(trigger);
 
         if (this.isRunning) {
-            Scheduler.getInstance().removeTrigger(trigger);
+            Scheduler.getGlobalInstance().removeTrigger(trigger);
         }
     }
 
@@ -111,6 +112,13 @@ public abstract class Runnable {
     }
 
     public final void schedule() {
-        Scheduler.getInstance().schedule(this);
+        Scheduler.getGlobalInstance().schedule(this);
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        // Simple default, can be overridden by specific commands for better telemetry.
+        return getClass().getSimpleName();
     }
 }
