@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Spindexer;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@TeleOp(name = "TARS +Ethan's Approval", group = "Robot")
+@TeleOp(name = "TARS +-Ethan's Approval", group = "Robot")
 public class TarsTele extends LinearOpMode {
 	private final Drivebase drivebase = Drivebase.getInstance();
 	private final Intake intake = Intake.getInstance();

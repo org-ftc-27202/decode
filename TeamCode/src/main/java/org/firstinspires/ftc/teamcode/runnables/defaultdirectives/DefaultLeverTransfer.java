@@ -44,7 +44,7 @@ public class DefaultLeverTransfer extends DefaultDirective {
 				),
 				() -> {
 					// up down up
-					PulseTransferLever.getInstance().schedule();
+					new PulseTransferLever().schedule();
 				}
 		));
 	}

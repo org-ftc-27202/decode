@@ -6,24 +6,20 @@ import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Sleep;
 import org.firstinspires.ftc.teamcode.subsystems.LeverTransfer;
 
 public class PulseTransferLever extends Procedure {
-	private static final PulseTransferLever instance = new PulseTransferLever();
-	public static PulseTransferLever getInstance() {
-		return instance;
-	}
-
-	private PulseTransferLever() {
+	public PulseTransferLever() {
 		super(
 				"pulseTransferLever",
 				// down
 				new SetPosition(LeverTransfer.getInstance().getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION, 0.01),
-				new Sleep(0.03),
+				new Sleep(0.1),
 
 				// up
 				new SetPosition(LeverTransfer.getInstance().getLeverTransferServo(), LeverTransfer.LEVER_UP_POSITION, 0.01),
-				new Sleep(0.03),
+				new Sleep(0.3),
 
 				// down
-				new SetPosition(LeverTransfer.getInstance().getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION, 0.01)
+				new SetPosition(LeverTransfer.getInstance().getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION, 0.01),
+				new Sleep(0.1)
 		);
 
 		/*

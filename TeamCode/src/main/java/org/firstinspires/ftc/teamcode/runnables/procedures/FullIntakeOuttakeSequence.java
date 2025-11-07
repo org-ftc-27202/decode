@@ -21,32 +21,38 @@ public class FullIntakeOuttakeSequence extends Procedure {
 				new SetPosition(Spindexer.getInstance().getSpindexerServo(), Spindexer.getInstance().getDegreesForSegmentPosition(0, Spindexer.Position.INTAKE), 0.01),
 				new Sleep(0.5),
 				new WaitUntil(() -> !Spindexer.getInstance().getBeamBreak().getState()),
-				new WaitUntil(() -> Spindexer.getInstance().getBeamBreak().getState()),
+				new Sleep(0.05),
+				//new WaitUntil(() -> Spindexer.getInstance().getBeamBreak().getState()),
 
 				new SetPosition(Spindexer.getInstance().getSpindexerServo(), Spindexer.getInstance().getDegreesForSegmentPosition(1, Spindexer.Position.INTAKE), 0.01),
 				new Sleep(0.5),
 				new WaitUntil(() -> !Spindexer.getInstance().getBeamBreak().getState()),
-				new WaitUntil(() -> Spindexer.getInstance().getBeamBreak().getState()),
+				new Sleep(0.05),
+				//new WaitUntil(() -> Spindexer.getInstance().getBeamBreak().getState()),
 
 				new SetPosition(Spindexer.getInstance().getSpindexerServo(), Spindexer.getInstance().getDegreesForSegmentPosition(2, Spindexer.Position.INTAKE), 0.01),
 				new Sleep(0.5),
 				new WaitUntil(() -> !Spindexer.getInstance().getBeamBreak().getState()),
-				new WaitUntil(() -> Spindexer.getInstance().getBeamBreak().getState()),
+				new Sleep(0.05),
+				//new WaitUntil(() -> Spindexer.getInstance().getBeamBreak().getState()),
 
 				// move to transfer position and pulse lever
-				new SetPosition(Spindexer.getInstance().getSpindexerServo(), Spindexer.getInstance().getDegreesForSegmentPosition(1, Spindexer.Position.TRANSFER), 0.01),
-				new Sleep(0.3),
-				PulseTransferLever.getInstance(),
-				new Sleep(0.3),
+				new SetPosition(Spindexer.getInstance().getSpindexerServo(), Spindexer.getInstance().getDegreesForSegmentPosition(2, Spindexer.Position.TRANSFER), 0.01),
+				new Sleep(0.15),
+
+				new PulseTransferLever(),
+				new Sleep(0.05),
 
 				new SetPosition(Spindexer.getInstance().getSpindexerServo(), Spindexer.getInstance().getDegreesForSegmentPosition(0, Spindexer.Position.TRANSFER), 0.01),
-				new Sleep(0.3),
-				PulseTransferLever.getInstance(),
-				new Sleep(0.3),
+				new Sleep(0.05),
 
-				new SetPosition(Spindexer.getInstance().getSpindexerServo(), Spindexer.getInstance().getDegreesForSegmentPosition(2   , Spindexer.Position.TRANSFER), 0.01),
-				new Sleep(0.3),
-				PulseTransferLever.getInstance()
+				new PulseTransferLever(),
+				new Sleep(0.05),
+
+				new SetPosition(Spindexer.getInstance().getSpindexerServo(), Spindexer.getInstance().getDegreesForSegmentPosition(1, Spindexer.Position.TRANSFER), 0.01),
+				new Sleep(0.05),
+
+				new PulseTransferLever()
 		);
 		/*
 		setStartingConditions(

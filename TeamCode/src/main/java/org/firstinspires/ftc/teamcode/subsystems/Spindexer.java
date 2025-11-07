@@ -22,7 +22,7 @@ public final class Spindexer extends Subsystem {
 	private final static double DEGREES_TO_SERVO = 1.0 / 320.0;
 	private final static double SPINDEXER_OFFSET = 0.0;
 	private final static double[] INTAKE_DEGREE_POSITIONS = {0.0 + SPINDEXER_OFFSET, 120.0 + SPINDEXER_OFFSET, 240.0 + SPINDEXER_OFFSET};
-	private final static double[] TRANSFER_DEGREE_POSITIONS = {300.0 + SPINDEXER_OFFSET, 300.0 + SPINDEXER_OFFSET, 60.0 + SPINDEXER_OFFSET};
+	private final static double[] TRANSFER_DEGREE_POSITIONS = {180.0 + SPINDEXER_OFFSET, 300.0 + SPINDEXER_OFFSET, 60.0 + SPINDEXER_OFFSET};
 
 	public enum Position {
 		INTAKE, TRANSFER
