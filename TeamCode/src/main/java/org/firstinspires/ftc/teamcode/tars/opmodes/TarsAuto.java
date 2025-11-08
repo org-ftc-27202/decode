@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes;// make sure this aligns with class location
+package org.firstinspires.ftc.teamcode.tars.opmodes;// make sure this aligns with class location
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
@@ -10,24 +10,23 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import  com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.pedroPathing.Constants;
-import org.firstinspires.ftc.teamcode.runnables.FollowPath;
-import org.firstinspires.ftc.teamcode.runnables.defaultdirectives.DefaultDrivebase;
-import org.firstinspires.ftc.teamcode.runnables.defaultdirectives.DefaultIntake;
-import org.firstinspires.ftc.teamcode.runnables.defaultdirectives.DefaultLeverTransfer;
-import org.firstinspires.ftc.teamcode.runnables.defaultdirectives.DefaultSpindexer;
-import org.firstinspires.ftc.teamcode.runnables.procedures.FullIntake;
-import org.firstinspires.ftc.teamcode.runnables.procedures.FullOuttake;
+import org.firstinspires.ftc.teamcode.tars.runnables.directives.FollowPath;
+import org.firstinspires.ftc.teamcode.tars.runnables.defaultdirectives.DefaultDrivebase;
+import org.firstinspires.ftc.teamcode.tars.runnables.defaultdirectives.DefaultIntake;
+import org.firstinspires.ftc.teamcode.tars.runnables.defaultdirectives.DefaultLeverTransfer;
+import org.firstinspires.ftc.teamcode.tars.runnables.defaultdirectives.DefaultSpindexer;
+import org.firstinspires.ftc.teamcode.tars.runnables.procedures.FullIntake;
+import org.firstinspires.ftc.teamcode.tars.runnables.procedures.FullOuttake;
 import org.firstinspires.ftc.teamcode.stellarstructure.StellarBot;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Parallel;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Procedure;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.SetPosition;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.SetPower;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Sleep;
-import org.firstinspires.ftc.teamcode.stellarstructure.runnables.WaitUntil;
-import org.firstinspires.ftc.teamcode.subsystems.Drivebase;
-import org.firstinspires.ftc.teamcode.subsystems.Intake;
-import org.firstinspires.ftc.teamcode.subsystems.LeverTransfer;
-import org.firstinspires.ftc.teamcode.subsystems.Spindexer;
+import org.firstinspires.ftc.teamcode.tars.subsystems.Drivebase;
+import org.firstinspires.ftc.teamcode.tars.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.tars.subsystems.LeverTransfer;
+import org.firstinspires.ftc.teamcode.tars.subsystems.Spindexer;
 
 @Autonomous(name = "Pedro", group = "Auto")
 public class TarsAuto extends OpMode {
@@ -85,15 +84,14 @@ public class TarsAuto extends OpMode {
 
     @Override
     public void start() {
-        //todo:
         new Procedure(
-                "TestDrive",
+                "AutoDrive",
                 new SetPosition(LeverTransfer.getInstance().getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION, 0.01),
                 new Sleep(0.03),
                 new Parallel(
                         new FollowPath(path1, follower, collect1Pose, true),
                         new FullIntake(),
-                        new SetPower(Intake.getInstance().getIntakeMotor(), .5)
+                        new SetPower(Intake.getInstance().getIntakeMotor(), 0.5)
                 ),
                 new FollowPath(path2, follower, launchFarPose, true),
                 new FullOuttake()

@@ -1,14 +1,14 @@
-package org.firstinspires.ftc.teamcode.opmodes;
+package org.firstinspires.ftc.teamcode.tars.opmodes;
 
-import org.firstinspires.ftc.teamcode.runnables.defaultdirectives.DefaultDrivebase;
-import org.firstinspires.ftc.teamcode.runnables.defaultdirectives.DefaultIntake;
-import org.firstinspires.ftc.teamcode.runnables.defaultdirectives.DefaultLeverTransfer;
-import org.firstinspires.ftc.teamcode.runnables.defaultdirectives.DefaultSpindexer;
+import org.firstinspires.ftc.teamcode.tars.runnables.defaultdirectives.DefaultDrivebase;
+import org.firstinspires.ftc.teamcode.tars.runnables.defaultdirectives.DefaultIntake;
+import org.firstinspires.ftc.teamcode.tars.runnables.defaultdirectives.DefaultLeverTransfer;
+import org.firstinspires.ftc.teamcode.tars.runnables.defaultdirectives.DefaultSpindexer;
 import org.firstinspires.ftc.teamcode.stellarstructure.StellarBot;
-import org.firstinspires.ftc.teamcode.subsystems.Drivebase;
-import org.firstinspires.ftc.teamcode.subsystems.Intake;
-import org.firstinspires.ftc.teamcode.subsystems.LeverTransfer;
-import org.firstinspires.ftc.teamcode.subsystems.Spindexer;
+import org.firstinspires.ftc.teamcode.tars.subsystems.Drivebase;
+import org.firstinspires.ftc.teamcode.tars.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.tars.subsystems.LeverTransfer;
+import org.firstinspires.ftc.teamcode.tars.subsystems.Spindexer;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;

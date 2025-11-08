@@ -1,13 +1,13 @@
-package org.firstinspires.ftc.teamcode.runnables.defaultdirectives;
+package org.firstinspires.ftc.teamcode.tars.runnables.defaultdirectives;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.teamcode.runnables.procedures.PulseTransferLever;
+import org.firstinspires.ftc.teamcode.tars.runnables.procedures.PulseTransferLever;
 import org.firstinspires.ftc.teamcode.stellarstructure.Trigger;
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.GamepadButtonMap;
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.StatefulCondition;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.DefaultDirective;
-import org.firstinspires.ftc.teamcode.subsystems.LeverTransfer;
+import org.firstinspires.ftc.teamcode.tars.subsystems.LeverTransfer;
 
 public class DefaultLeverTransfer extends DefaultDirective {
 	private final LeverTransfer leverTransfer = LeverTransfer.getInstance();

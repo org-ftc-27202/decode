@@ -1,11 +1,11 @@
-package org.firstinspires.ftc.teamcode.runnables;
+package org.firstinspires.ftc.teamcode.tars.runnables.directives;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Directive;
-import org.firstinspires.ftc.teamcode.subsystems.Drivebase;
+import org.firstinspires.ftc.teamcode.tars.subsystems.Drivebase;
 
 public class FollowPath extends Directive {
     private final PathChain path;
@@ -34,12 +34,14 @@ public class FollowPath extends Directive {
     }
 
     @Override
-    public void stop(boolean interrupted) {}
+    public void stop(boolean interrupted) {
+        follower.breakFollowing();
+
+        Drivebase.getInstance().setDrivePower(0, 0, 0, 0);
+    }
 
     @Override
     public boolean isFinished() {
-        return (
-                follower.atPose(endPose, 1,1)
-                );
+        return follower.atPose(endPose, 1,1);
     }
 }

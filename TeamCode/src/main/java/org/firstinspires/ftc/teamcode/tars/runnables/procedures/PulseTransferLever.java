@@ -1,9 +1,9 @@
-package org.firstinspires.ftc.teamcode.runnables.procedures;
+package org.firstinspires.ftc.teamcode.tars.runnables.procedures;
 
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Procedure;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.SetPosition;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Sleep;
-import org.firstinspires.ftc.teamcode.subsystems.LeverTransfer;
+import org.firstinspires.ftc.teamcode.tars.subsystems.LeverTransfer;
 
 public class PulseTransferLever extends Procedure {
 	public PulseTransferLever() {

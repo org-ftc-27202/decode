@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes;
+package org.firstinspires.ftc.teamcode.testingopmodes;
 
 import org.firstinspires.ftc.teamcode.util.DecodeDataTypes.ArtifactColor;
 import org.firstinspires.ftc.teamcode.util.DecodeDataTypes.ArtifactSequence;

@@ -1,8 +1,8 @@
-package org.firstinspires.ftc.teamcode.runnables.defaultdirectives;
+package org.firstinspires.ftc.teamcode.tars.runnables.defaultdirectives;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.teamcode.subsystems.Drivebase;
+import org.firstinspires.ftc.teamcode.tars.subsystems.Drivebase;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.DefaultDirective;
 
 public class DefaultDrivebase extends DefaultDirective {
