@@ -40,6 +40,8 @@ public final class Intake extends Subsystem {
 	@Override
 	public void update() {}
 
+	public StellarDcMotor getIntakeMotor() {return intakeMotor;}
+
 	public void setIntakeSpeed(double intakeSpeed) {
 		this.intakeSpeed = intakeSpeed;
 	}

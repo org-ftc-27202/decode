@@ -15,9 +15,13 @@ import org.firstinspires.ftc.teamcode.runnables.defaultdirectives.DefaultDriveba
 import org.firstinspires.ftc.teamcode.runnables.defaultdirectives.DefaultIntake;
 import org.firstinspires.ftc.teamcode.runnables.defaultdirectives.DefaultLeverTransfer;
 import org.firstinspires.ftc.teamcode.runnables.defaultdirectives.DefaultSpindexer;
+import org.firstinspires.ftc.teamcode.runnables.procedures.FullIntake;
+import org.firstinspires.ftc.teamcode.runnables.procedures.FullOuttake;
 import org.firstinspires.ftc.teamcode.stellarstructure.StellarBot;
+import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Parallel;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Procedure;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.SetPosition;
+import org.firstinspires.ftc.teamcode.stellarstructure.runnables.SetPower;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Sleep;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.WaitUntil;
 import org.firstinspires.ftc.teamcode.subsystems.Drivebase;
@@ -53,14 +57,16 @@ public class TarsAuto extends OpMode {
 
     public void buildPaths() {
         this.path1 = follower.pathBuilder()
-                .setGlobalDeceleration()
+                .setBrakingStrength(2)
+                .setBrakingStart(2)
                 .addPath(
                         new BezierCurve(startPose, collect1Control, collect1Pose)
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
                 .build();
         this.path2 = follower.pathBuilder()
-                .setGlobalDeceleration()
+                .setBrakingStrength(2)
+                .setBrakingStart(2)
                 .addPath(
                         new BezierLine(collect1Pose, launchFarPose)
                 )
@@ -84,8 +90,16 @@ public class TarsAuto extends OpMode {
                 "TestDrive",
                 new SetPosition(LeverTransfer.getInstance().getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION, 0.01),
                 new Sleep(0.03),
-                new FollowPath(path1, follower, collect1Pose, true),
-                new FollowPath(path2, follower, launchFarPose, false)
+                new Parallel(
+                        new FollowPath(path1, follower, collect1Pose, true),
+                        new FollowPath(path2, follower, launchFarPose, false),
+                        new FullIntake(),
+                        new SetPower(Intake.getInstance().getIntakeMotor(), .5)
+                ),
+                new FollowPath(path2, follower, launchFarPose, false),
+                new FullOuttake()
+
+
         ).schedule();
     }
 
