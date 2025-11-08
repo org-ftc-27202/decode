@@ -7,7 +7,6 @@ import org.firstinspires.ftc.teamcode.stellarstructure.runnables.DefaultDirectiv
 
 public abstract class Subsystem {
 	private DefaultDirective defaultDirective;
-	private Gamepad gamepad1, gamepad2;
 
 	@Override
 	public boolean equals(Object object) {

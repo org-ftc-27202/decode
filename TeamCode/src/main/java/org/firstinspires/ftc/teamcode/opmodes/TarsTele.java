@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Spindexer;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@TeleOp(name = "TARS +-Ethan's Approval", group = "Robot")
+@TeleOp(name = "TARS +Ethan's Approval", group = "Robot")
 public class TarsTele extends LinearOpMode {
 	private final Drivebase drivebase = Drivebase.getInstance();
 	private final Intake intake = Intake.getInstance();
@@ -33,16 +33,10 @@ public class TarsTele extends LinearOpMode {
 		tars.init(hardwareMap);
 
 		// set up default directives
-		//todo: move to a better place
-		DefaultDrivebase defaultDrivebase = new DefaultDrivebase(gamepad1);
-		DefaultIntake defaultIntake = new DefaultIntake(gamepad1);
-		DefaultLeverTransfer defaultLeverTransfer = new DefaultLeverTransfer(gamepad1);
-		DefaultSpindexer defaultSpindexer = new DefaultSpindexer(gamepad1);
-
-		drivebase.setDefaultDirective(defaultDrivebase);
-		intake.setDefaultDirective(defaultIntake);
-		leverTransfer.setDefaultDirective(defaultLeverTransfer);
-		spindexer.setDefaultDirective(defaultSpindexer);
+		drivebase.setDefaultDirective(new DefaultDrivebase(gamepad1));
+		intake.setDefaultDirective(new DefaultIntake(gamepad1));
+		leverTransfer.setDefaultDirective(new DefaultLeverTransfer(gamepad1));
+		spindexer.setDefaultDirective(new DefaultSpindexer(gamepad1));
 
 		// print telemetry
 		telemetry.addLine();

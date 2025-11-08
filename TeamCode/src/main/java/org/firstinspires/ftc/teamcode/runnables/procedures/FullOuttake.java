@@ -14,20 +14,18 @@ public class FullOuttake extends Procedure {
 
                 new SetPosition(Spindexer.getInstance().getSpindexerServo(), Spindexer.getInstance().getDegreesForSegmentPosition(2, Spindexer.Position.TRANSFER), 0.01),
                 new Sleep(0.15),
-
                 new PulseTransferLever(),
                 new Sleep(0.05),
 
                 new SetPosition(Spindexer.getInstance().getSpindexerServo(), Spindexer.getInstance().getDegreesForSegmentPosition(0, Spindexer.Position.TRANSFER), 0.01),
                 new Sleep(0.05),
-
                 new PulseTransferLever(),
                 new Sleep(0.05),
 
                 new SetPosition(Spindexer.getInstance().getSpindexerServo(), Spindexer.getInstance().getDegreesForSegmentPosition(1, Spindexer.Position.TRANSFER), 0.01),
                 new Sleep(0.05),
-
-                new PulseTransferLever()
+                new PulseTransferLever(),
+                new Sleep(0.05)
         );
     }
 }
