@@ -92,11 +92,10 @@ public class TarsAuto extends OpMode {
                 new Sleep(0.03),
                 new Parallel(
                         new FollowPath(path1, follower, collect1Pose, true),
-                        new FollowPath(path2, follower, launchFarPose, false),
                         new FullIntake(),
                         new SetPower(Intake.getInstance().getIntakeMotor(), .5)
                 ),
-                new FollowPath(path2, follower, launchFarPose, false),
+                new FollowPath(path2, follower, launchFarPose, true),
                 new FullOuttake()
 
 
