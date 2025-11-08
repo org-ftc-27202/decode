@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.subsystems.LeverTransfer;
 public class PulseTransferLever extends Procedure {
 	public PulseTransferLever() {
 		super(
-				"pulseTransferLever",
+				"PulseTransferLever",
 				// down
 				new SetPosition(LeverTransfer.getInstance().getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION, 0.01),
 				new Sleep(0.1),

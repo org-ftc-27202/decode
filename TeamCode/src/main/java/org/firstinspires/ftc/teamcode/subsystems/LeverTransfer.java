@@ -42,9 +42,9 @@ public final class LeverTransfer extends Subsystem {
 				leverTransferServo,
 				isLeverTargetUp ? LEVER_UP_POSITION : LEVER_DOWN_POSITION,
 				0.01
-		).setStartingConditions(
+		);/*.setStartingConditions(
 				() -> Spindexer.getInstance().getIsTransferPosition()
-		).schedule();
+		).schedule();*/
 	}
 
 	public StellarServo getLeverTransferServo() {
