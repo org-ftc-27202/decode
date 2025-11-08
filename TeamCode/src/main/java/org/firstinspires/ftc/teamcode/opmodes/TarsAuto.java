@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.opmodes;// make sure this aligns with cla
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
+import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
@@ -18,6 +19,7 @@ import org.firstinspires.ftc.teamcode.stellarstructure.StellarBot;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Procedure;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.SetPosition;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Sleep;
+import org.firstinspires.ftc.teamcode.stellarstructure.runnables.WaitUntil;
 import org.firstinspires.ftc.teamcode.subsystems.Drivebase;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.LeverTransfer;
@@ -33,18 +35,37 @@ public class TarsAuto extends OpMode {
             LeverTransfer.getInstance(),
             Spindexer.getInstance()
     );
+    DefaultDrivebase defaultDrivebase = new DefaultDrivebase(gamepad1);
+    DefaultIntake defaultIntake = new DefaultIntake(gamepad1);
+    DefaultLeverTransfer defaultLeverTransfer = new DefaultLeverTransfer(gamepad1);
+    DefaultSpindexer defaultSpindexer = new DefaultSpindexer(gamepad1);
 
-    private final Pose startPose = new Pose(56,9, Math.toRadians(90));
+    private final Drivebase drivebase = Drivebase.getInstance();
+    private final Intake intake = Intake.getInstance();
+    private final LeverTransfer leverTransfer = LeverTransfer.getInstance();
+    private final Spindexer spindexer = Spindexer.getInstance();
+
+    private final Pose startPose = new Pose(56.75,7, Math.toRadians(180));
     private final Pose collect1Pose = new Pose(19, 35.5);
     private final Pose collect1Control = new Pose(56,35.5);
+    private final Pose launchFarPose = new Pose(60,21);
     private PathChain path1, path2, path3, path4, path5;
 
     public void buildPaths() {
         this.path1 = follower.pathBuilder()
+                .setGlobalDeceleration()
                 .addPath(
                         new BezierCurve(startPose, collect1Control, collect1Pose)
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(180))
+                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
+                .build();
+        this.path2 = follower.pathBuilder()
+                .setGlobalDeceleration()
+                .addPath(
+                        new BezierLine(collect1Pose, launchFarPose)
+                )
+                .setTangentHeadingInterpolation()
+                .setReversed()
                 .build();
     }
 
@@ -56,13 +77,15 @@ public class TarsAuto extends OpMode {
         follower.setStartingPose(startPose);
     }
 
-    @Override public void start() {
+    @Override
+    public void start() {
         //todo:
         new Procedure(
                 "TestDrive",
                 new SetPosition(LeverTransfer.getInstance().getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION, 0.01),
                 new Sleep(0.03),
-                new FollowPath(path1, follower, false)
+                new FollowPath(path1, follower, collect1Pose, true),
+                new FollowPath(path2, follower, launchFarPose, false)
         ).schedule();
     }
 
