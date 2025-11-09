@@ -16,7 +16,6 @@ public class FollowPath extends Directive {
 
     public FollowPath(PathChain path, Follower follower, Pose endPose, boolean holdEnd) {
         setInterruptible(true);
-        setRequiredSubsystems(Drivebase.getInstance());
         this.path = path;
         this.follower = follower;
         this.endPose = endPose;
@@ -34,14 +33,10 @@ public class FollowPath extends Directive {
     }
 
     @Override
-    public void stop(boolean interrupted) {
-        follower.breakFollowing();
-
-        Drivebase.getInstance().setDrivePower(0, 0, 0, 0);
-    }
+    public void stop(boolean interrupted) {}
 
     @Override
     public boolean isFinished() {
-        return follower.atPose(endPose, 1,1);
+        return follower.atPose(endPose, 2,2)&&!follower.isBusy();
     }
 }

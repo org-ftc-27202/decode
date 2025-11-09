@@ -28,7 +28,7 @@ import org.firstinspires.ftc.teamcode.tars.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.tars.subsystems.LeverTransfer;
 import org.firstinspires.ftc.teamcode.tars.subsystems.Spindexer;
 
-@Autonomous(name = "Pedro", group = "Auto")
+@Autonomous(name = "Pedro-", group = "Auto")
 public class TarsAuto extends OpMode {
     private Follower follower;
     private Timer pathTimer, actionTimer, opmodeTimer;
@@ -38,7 +38,7 @@ public class TarsAuto extends OpMode {
             LeverTransfer.getInstance(),
             Spindexer.getInstance()
     );
-    DefaultDrivebase defaultDrivebase = new DefaultDrivebase(gamepad1);
+    //DefaultDrivebase defaultDrivebase = new DefaultDrivebase(gamepad1);
     DefaultIntake defaultIntake = new DefaultIntake(gamepad1);
     DefaultLeverTransfer defaultLeverTransfer = new DefaultLeverTransfer(gamepad1);
     DefaultSpindexer defaultSpindexer = new DefaultSpindexer(gamepad1);
@@ -56,20 +56,20 @@ public class TarsAuto extends OpMode {
 
     public void buildPaths() {
         this.path1 = follower.pathBuilder()
-                .setBrakingStrength(2)
-                .setBrakingStart(2)
                 .addPath(
                         new BezierCurve(startPose, collect1Control, collect1Pose)
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
+                .setBrakingStart(2)
+                .setBrakingStrength(2)
                 .build();
         this.path2 = follower.pathBuilder()
-                .setBrakingStrength(2)
-                .setBrakingStart(2)
                 .addPath(
                         new BezierLine(collect1Pose, launchFarPose)
                 )
                 .setTangentHeadingInterpolation()
+                .setBrakingStart(2)
+                .setBrakingStrength(2)
                 .setReversed()
                 .build();
     }
@@ -88,11 +88,10 @@ public class TarsAuto extends OpMode {
                 "AutoDrive",
                 new SetPosition(LeverTransfer.getInstance().getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION, 0.01),
                 new Sleep(0.03),
-                new Parallel(
+
                         new FollowPath(path1, follower, collect1Pose, true),
-                        new FullIntake(),
-                        new SetPower(Intake.getInstance().getIntakeMotor(), 0.5)
-                ),
+                        //new FullIntake(),
+                        //new SetPower(Intake.getInstance().getIntakeMotor(), 0.5),
                 new FollowPath(path2, follower, launchFarPose, true),
                 new FullOuttake()
 
