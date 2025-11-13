@@ -56,6 +56,7 @@ public class ArcadeDrive extends OpMode{
     public DcMotor  leftFrontMotor, leftBackMotor, rightFrontMotor, rightBackMotor;
     public DcMotor  leftArm     = null;
     private DcMotor intake = null;
+    private DcMotor catapult = null;
 
     // motor power 1 = 100% and 0.5 = 50%
     // negative values = reverse ex: -0.5 = reverse 50%
@@ -63,6 +64,13 @@ public class ArcadeDrive extends OpMode{
     private double INTAKE_OUT_POWER = -0.9;
     private double INTAKE_OFF_POWER = 0.0;
     private double intakePower = INTAKE_OFF_POWER;
+
+    private double CATAPULT_UP_POWER = -1.0;
+    private double CATAPULT_DOWN_POWER = 1.0;
+    private double CATAPULT_HOLD_POWER = 0.2;
+
+    private enum CatapultModes {UP, DOWN, HOLD}
+    private CatapultModes pivotMode;
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -91,12 +99,15 @@ public class ArcadeDrive extends OpMode{
         rightBackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         intake = hardwareMap.get(DcMotor.class, "intake");
+        catapult = hardwareMap.get(DcMotor.class, "catapult");
 
         // set direction of subsystem motors
         intake.setDirection(DcMotor.Direction.REVERSE);
+        catapult.setDirection(DcMotor.Direction.REVERSE); // Backwards should pivot DOWN, or in the stowed position.
 
         // set initial subsystem behavior
         intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        catapult.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData(">", "Robot Ready.  Press START.");    //
@@ -142,8 +153,8 @@ public class ArcadeDrive extends OpMode{
         double throttle;
         double spin;
 
-        boolean intakeInButton = gamepad1.right_trigger > 0.2;
-        boolean intakeOutButton = gamepad1.right_bumper;
+        boolean intakeInButton = gamepad1.left_trigger > 0.2;
+        boolean intakeOutButton = gamepad1.left_bumper;
 
         // Run wheels in tank mode (note: The joystick goes negative when pushed forward, so negate it)
         throttle = -gamepad1.left_stick_y;
@@ -156,6 +167,12 @@ public class ArcadeDrive extends OpMode{
             intakeInButton = false;
         }
 
+        boolean catapultUpButton = gamepad1.right_bumper;
+        boolean catapultDownButton = gamepad1.right_trigger > 0.2;
+        if (catapultUpButton && catapultDownButton) {
+            catapultUpButton = false;
+        }
+
         // INTAKE CODE
         if (intakeInButton) {
             intakePower = INTAKE_IN_POWER;
@@ -165,12 +182,37 @@ public class ArcadeDrive extends OpMode{
             intakePower = INTAKE_OFF_POWER;
         }
 
+        // Determine pivot mode
+        if (catapultUpButton) {
+            pivotMode = CatapultModes.UP;
+            catapult.setPower(CATAPULT_UP_POWER);
+        } else if (catapultDownButton) {
+            pivotMode = CatapultModes.DOWN;
+            catapult.setPower(CATAPULT_DOWN_POWER);
+        } else {
+            pivotMode = CatapultModes.HOLD;
+            catapult.setPower(CATAPULT_HOLD_POWER);
+            //Slight feed forward to keep catapult down while driving
+        }
+
         intake.setPower(intakePower);
 
-//        // Send telemetry message to signify robot running;
+        String catapult_mode_str;
+        if (pivotMode == CatapultModes.UP) {
+            catapult_mode_str = "UP";
+        } else if (pivotMode == CatapultModes.DOWN) {
+            catapult_mode_str = "DOWN";
+        } else {
+            catapult_mode_str = "HOLD";
+        }
+        //        // Send telemetry message to signify robot running;
 //        telemetry.addData("claw",  "Offset = %.2f", clawOffset);
         telemetry.addData("throttle",  "%.2f", throttle);
         telemetry.addData("spin", "%.2f", spin);
+        telemetry.addData("Intake", "%%4.2f", intake.getPower());
+        telemetry.addData("Catapult1 Current/Target/power", "%d, %d, %4.2f",
+                catapult.getCurrentPosition(), catapult.getTargetPosition(), catapult.getPower());
+        telemetry.addData("Catapult MODE", "%s", catapult_mode_str);
     }
 
     /*
