@@ -11,29 +11,9 @@ public class FullIntake extends Procedure {
 	public FullIntake() {
 		super(
 				"FullIntake",
-				// set transfer lever down
-				new SetPosition(LeverTransfer.getInstance().getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION),
-
-				// set to position and wait until artifact
-				new SetPosition(Spindexer.getInstance().getSpindexerServo(), Spindexer.getInstance().getDegreesForSegmentPosition(0, Spindexer.Position.INTAKE), 0.01),
-				new Sleep(0.5),
-				new WaitUntil(() -> !Spindexer.getInstance().getBeamBreak().getState()),
-				new Sleep(0.05),
-				//new WaitUntil(() -> Spindexer.getInstance().getBeamBreak().getState()),
-
-				new SetPosition(Spindexer.getInstance().getSpindexerServo(), Spindexer.getInstance().getDegreesForSegmentPosition(1, Spindexer.Position.INTAKE), 0.01),
-				new Sleep(0.5),
-				new WaitUntil(() -> !Spindexer.getInstance().getBeamBreak().getState()),
-				new Sleep(0.05),
-				//new WaitUntil(() -> Spindexer.getInstance().getBeamBreak().getState()),
-
-				new SetPosition(Spindexer.getInstance().getSpindexerServo(), Spindexer.getInstance().getDegreesForSegmentPosition(2, Spindexer.Position.INTAKE), 0.01),
-				new Sleep(0.5),
-				new WaitUntil(() -> !Spindexer.getInstance().getBeamBreak().getState()),
-				new Sleep(0.05),
-				//new WaitUntil(() -> Spindexer.getInstance().getBeamBreak().getState()),
-
-				new SetPosition(Spindexer.getInstance().getSpindexerServo(), Spindexer.getInstance().getDegreesForSegmentPosition(2, Spindexer.Position.TRANSFER), 0.01)
+				new IntakeAt(0),
+				new IntakeAt(1),
+				new IntakeAt(2)
 		);
 		/*
 		setStartingConditions(

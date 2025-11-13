@@ -10,7 +10,8 @@ import java.util.Map;
 public class DecodeDataTypes {
     public enum ArtifactColor {
         GREEN,
-        PURPLE
+        PURPLE,
+        NONE
     }
 
     public static class ArtifactSequence {

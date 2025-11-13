@@ -94,8 +94,6 @@ public class TarsAuto extends OpMode {
                         //new SetPower(Intake.getInstance().getIntakeMotor(), 0.5),
                 new FollowPath(path2, follower, launchFarPose, true),
                 new FullOuttake()
-
-
         ).schedule();
     }
 

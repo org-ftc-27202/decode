@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.stellarstructure.Subsystem;
 
 import org.firstinspires.ftc.teamcode.stellarstructure.hardwaremapwrappers.StellarServo;
+import org.firstinspires.ftc.teamcode.util.DecodeDataTypes;
 
 public final class Spindexer extends Subsystem {
 	private static final Spindexer spindexer = new Spindexer();
@@ -25,6 +26,12 @@ public final class Spindexer extends Subsystem {
 	private final static double[] TRANSFER_DEGREE_POSITIONS = {180.0 + SPINDEXER_OFFSET, 300.0 + SPINDEXER_OFFSET, 60.0 + SPINDEXER_OFFSET};
 
 	public final static double BUFFER_TIME = 1;
+
+	private final DecodeDataTypes.ArtifactColor[] artifactsInSpindexer = new DecodeDataTypes.ArtifactColor[]{
+		DecodeDataTypes.ArtifactColor.NONE,
+		DecodeDataTypes.ArtifactColor.NONE,
+		DecodeDataTypes.ArtifactColor.NONE
+	};
 
 	public enum Position {
 		INTAKE, TRANSFER
@@ -72,6 +79,24 @@ public final class Spindexer extends Subsystem {
 		return colorSensor;
 	}
 
+	public DecodeDataTypes.ArtifactColor[] getArtifactsInSpindexer() {
+		return artifactsInSpindexer;
+	}
+
+	public void setArtifactInSpindexer(int index, DecodeDataTypes.ArtifactColor artifactColor) {
+		artifactsInSpindexer[index] = artifactColor;
+	}
+
+	public DecodeDataTypes.ArtifactColor getColorSensorArtifactColor() {
+		if (colorSensor.red() + colorSensor.green() + colorSensor.blue() < 500) {
+				return DecodeDataTypes.ArtifactColor.NONE;
+		}
+
+		return colorSensor.blue() > colorSensor.green() ?
+				DecodeDataTypes.ArtifactColor.PURPLE :
+				DecodeDataTypes.ArtifactColor.GREEN;
+	}
+
 	public double getDegreesForSegmentPosition(int segment, @NonNull Position position) {
 		if (position == Position.INTAKE) {
 			return INTAKE_DEGREE_POSITIONS[segment] * DEGREES_TO_SERVO;
@@ -101,8 +126,10 @@ public final class Spindexer extends Subsystem {
 		return String.format(
 				"beamBreak: %b\n" +
 				"colorSensorRGB: %d, %d, %d",
+				"Artifact Storage Sequence: %s, %s, %s",
 				beamBreak.getState(),
-				colorSensor.red(), colorSensor.green(), colorSensor.blue()
+				colorSensor.red(), colorSensor.green(), colorSensor.blue(),
+				artifactsInSpindexer[0].toString(), artifactsInSpindexer[1].toString(), artifactsInSpindexer[2].toString()
 		);
 	}
 }
