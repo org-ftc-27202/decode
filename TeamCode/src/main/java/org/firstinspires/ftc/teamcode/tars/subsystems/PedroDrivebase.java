@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.stellarstructure.Subsystem;
 import org.firstinspires.ftc.teamcode.stellarstructure.hardwaremapwrappers.StellarLight;
+import org.firstinspires.ftc.teamcode.stellarstructure.hardwaremapwrappers.StellarServo;
 
 import java.util.function.BooleanSupplier;
 
@@ -40,7 +41,7 @@ public final class PedroDrivebase extends Subsystem {
     public void init(HardwareMap hardwareMap) {
         this.follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(new Pose(56.75,7, Math.toRadians(180)));
-        light = hardwareMap.get(StellarLight.class, "light");
+        light = new StellarLight(hardwareMap, "light");
         //todo: make omni wheel directive
         leftFrontDrive = hardwareMap.get(DcMotorEx.class, "leftFront");
         leftBackDrive = hardwareMap.get(DcMotorEx.class, "leftBack");

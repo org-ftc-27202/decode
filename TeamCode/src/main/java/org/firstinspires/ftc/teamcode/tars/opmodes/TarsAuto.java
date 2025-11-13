@@ -59,7 +59,7 @@ public class TarsAuto extends OpMode {
                 .addPath(
                         new BezierCurve(startPose, collect1Control, collect1Pose)
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
+                .setLinearHeadingInterpolation(startPose.getHeading(), Math.toRadians(180))
                 .setBrakingStart(2)
                 .setBrakingStrength(2)
                 .build();
@@ -103,10 +103,10 @@ public class TarsAuto extends OpMode {
     public void loop() {
         tars.update();
         follower.update();
-        telemetry.addData("x", follower.getPose().getX());
-        telemetry.addData("isBusy()", follower.isBusy());
-        telemetry.addData("y", follower.getPose().getY());
-        telemetry.addData("heading", follower.getPose().getHeading());
+        telemetry.addData("x: ", follower.getPose().getX());
+        telemetry.addData("isBusy(): ", follower.isBusy());
+        telemetry.addData("y: ", follower.getPose().getY());
+        telemetry.addData("heading: ", follower.getPose().getHeading());
         telemetry.addData("T: ", follower.getCurrentTValue());
         telemetry.addLine(tars.toString());
         telemetry.update();

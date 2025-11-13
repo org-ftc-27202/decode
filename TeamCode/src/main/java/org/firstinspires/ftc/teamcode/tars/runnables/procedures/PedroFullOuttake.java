@@ -33,7 +33,9 @@ public class PedroFullOuttake extends Procedure {
                 new SetPosition(Spindexer.getInstance().getSpindexerServo(), Spindexer.getInstance().getDegreesForSegmentPosition(1, Spindexer.Position.TRANSFER), 0.01),
                 new Sleep(0.05),
                 new PulseTransferLever(),
-                new Sleep(0.05)
+                new Sleep(0.05),
+
+                new Sleep(Spindexer.BUFFER_TIME)
         );
     }
 }
