@@ -133,7 +133,7 @@ public final class Spindexer extends Subsystem {
 	public String toString() {
 		return String.format(
 				"beamBreak: %b\n" +
-				"colorSensorRGB: %d, %d, %d",
+				"colorSensorRGB: %d, %d, %d" +
 				"Artifact Storage Sequence: %s, %s, %s",
 				beamBreak.getState(),
 				colorSensor.red(), colorSensor.green(), colorSensor.blue(),
