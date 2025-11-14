@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.stellarstructure.conditions.GamepadButtonM
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.StatefulCondition;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.DefaultDirective;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Procedure;
+import org.firstinspires.ftc.teamcode.tars.runnables.procedures.FullPatternOuttake;
 import org.firstinspires.ftc.teamcode.tars.runnables.procedures.PedroFullOuttake;
 import org.firstinspires.ftc.teamcode.tars.subsystems.PedroDrivebase;
 import org.firstinspires.ftc.teamcode.tars.subsystems.Spindexer;
@@ -27,12 +28,8 @@ public class DefaultSpindexer extends DefaultDirective {
 						StatefulCondition.Edge.RISING
 				),
 				() -> {
-					// intake 3, outtake 3
-					new Procedure(
-							"FullIntakeOuttake",
-							new FullIntake(),
-							new FullOuttake()
-					).schedule();
+					//outtake 3 in pattern order (PGP for now)
+					new FullPatternOuttake().schedule();
 				}
 		));
 
@@ -68,12 +65,7 @@ public class DefaultSpindexer extends DefaultDirective {
 				() -> {
 					new Procedure(
 							"PedroOuttake",
-							new SetLight(PedroDrivebase.getInstance().getLight(), "YELLOW"),
-							new SetSpeedScale(.2),
-							new PedroFullOuttake(),
-							new Sleep(Spindexer.BUFFER_TIME),
-							new SetSpeedScale(1),
-							new SetLight(PedroDrivebase.getInstance().getLight(), "BLUE")
+							new PedroFullOuttake()
 
 					).schedule();
 				}

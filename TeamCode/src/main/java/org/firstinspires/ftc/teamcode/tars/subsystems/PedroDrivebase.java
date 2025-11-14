@@ -31,6 +31,7 @@ public final class PedroDrivebase extends Subsystem {
     public final static double TURN_SPEED = 0.55;
     public final static double FAR_LAUNCH_FACTOR = .2;
     public final static double NEAR_LAUNCH_FACTOR = .4;
+    public final static double LAUNCH_ZONE_SCALE = 5.6;
 
     public double speedScale = 1;
 
@@ -68,17 +69,17 @@ public final class PedroDrivebase extends Subsystem {
             double x = follower.getPose().getX();
             double y = follower.getPose().getY();
 
-            if (y > 50) {
+            if (y > 48) {
                 if (x <= 72) {
-                    return y >= (-x + 138);
+                    return y >= (-x + 138-LAUNCH_ZONE_SCALE);
                 } else if (x > 72) {
-                    return y >= (x - 6);
+                    return y >= (x - 6-LAUNCH_ZONE_SCALE);
                 }
-            } else if (y <= 50) {
+            } else if (y <= 48) {
                 if (x <= 72) {
-                    return y <= x - 42;
+                    return y <= (x - 42+LAUNCH_ZONE_SCALE);
                 } else if (x > 72) {
-                    return y <= -x + 102;
+                    return y <= (-x + 102+LAUNCH_ZONE_SCALE);
                 }
             }
             return false;

@@ -96,6 +96,14 @@ public final class Spindexer extends Subsystem {
 				DecodeDataTypes.ArtifactColor.PURPLE :
 				DecodeDataTypes.ArtifactColor.GREEN;
 	}
+	public int getColorLocation(DecodeDataTypes.ArtifactColor color) {
+		for (int i = 0; i < 3; i++){
+				if (artifactsInSpindexer[i] == color){
+					return i;
+				}
+		}
+		return -1;
+	}
 
 	public double getDegreesForSegmentPosition(int segment, @NonNull Position position) {
 		if (position == Position.INTAKE) {
