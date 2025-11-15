@@ -27,6 +27,8 @@ public final class Spindexer extends Subsystem {
 
 	public final static double BUFFER_TIME = 1;
 
+	private double ratio;
+
 	private final DecodeDataTypes.ArtifactColor[] artifactColorsInSpindexer = new DecodeDataTypes.ArtifactColor[]{
 		DecodeDataTypes.ArtifactColor.NONE,
 		DecodeDataTypes.ArtifactColor.NONE,
@@ -62,10 +64,13 @@ public final class Spindexer extends Subsystem {
 		beamBreak.setMode(DigitalChannel.Mode.INPUT);
 
 		colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");
+
 	}
 
 	@Override
-	public void update() {}
+	public void update() {
+		setRatio();
+	}
 
 	public StellarServo getSpindexerServo() {
 		return spindexerServo;
@@ -92,13 +97,17 @@ public final class Spindexer extends Subsystem {
 
 		return getColorSensorArtifactColor();
 	}
-
+	public void setRatio(){
+		ratio = (double) colorSensor.green() /colorSensor.blue();
+	}
 	public DecodeDataTypes.ArtifactColor getColorSensorArtifactColor() {
-		if (colorSensor.red() + colorSensor.green() + colorSensor.blue() < 500) {
+
+
+		if ((ratio > 1.0)&&(ratio<1.3)) {
 				return DecodeDataTypes.ArtifactColor.NONE;
 		}
 
-		return colorSensor.blue() > colorSensor.green() ?
+		return ratio < 1.0 ?
 				DecodeDataTypes.ArtifactColor.PURPLE :
 				DecodeDataTypes.ArtifactColor.GREEN;
 	}
@@ -152,10 +161,12 @@ public final class Spindexer extends Subsystem {
 		return String.format(
 				"beamBreak: %b\n" +
 				"colorSensorRGB: %d, %d, %d"+
-				"Artifact Storage Sequence: %s, %s, %s",
+				"Artifact Storage Sequence: %s, %s, %s\n"+
+				"G/B ratio: %f",
 				beamBreak.getState(),
 				colorSensor.red(), colorSensor.green(), colorSensor.blue(),
-				artifactColorsInSpindexer[0].toString(), artifactColorsInSpindexer[1].toString(), artifactColorsInSpindexer[2].toString()
+				artifactColorsInSpindexer[0].toString(), artifactColorsInSpindexer[1].toString(), artifactColorsInSpindexer[2].toString(),
+				ratio
 		);
 	}
 }

@@ -2,17 +2,20 @@ package org.firstinspires.ftc.teamcode.tars.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.stellarstructure.StellarBot;
 import org.firstinspires.ftc.teamcode.tars.runnables.defaultdirectives.DefaultDrivebase;
 import org.firstinspires.ftc.teamcode.tars.runnables.defaultdirectives.DefaultIntake;
 import org.firstinspires.ftc.teamcode.tars.runnables.defaultdirectives.DefaultLeverTransfer;
 import org.firstinspires.ftc.teamcode.tars.runnables.defaultdirectives.DefaultSpindexer;
+import org.firstinspires.ftc.teamcode.tars.runnables.defaultdirectives.DefaultTurret;
 import org.firstinspires.ftc.teamcode.tars.runnables.defaultdirectives.PedroDefaultDrivebase;
 import org.firstinspires.ftc.teamcode.tars.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.tars.subsystems.LeverTransfer;
 import org.firstinspires.ftc.teamcode.tars.subsystems.PedroDrivebase;
 import org.firstinspires.ftc.teamcode.tars.subsystems.Spindexer;
+import org.firstinspires.ftc.teamcode.tars.subsystems.Turret;
 
 @TeleOp(name = "TARS +Pedro", group = "Robot")
     public class TarsPedroTele extends LinearOpMode {
@@ -21,11 +24,14 @@ import org.firstinspires.ftc.teamcode.tars.subsystems.Spindexer;
         private final LeverTransfer leverTransfer = LeverTransfer.getInstance();
         private final Spindexer spindexer = Spindexer.getInstance();
 
+        private final Turret turret = Turret.getInstance();
+
         private final StellarBot tars = new StellarBot(
                 pedroDrivebase,
                 intake,
                 leverTransfer,
-                spindexer
+                spindexer,
+                turret
         );
 
         @Override
@@ -38,6 +44,7 @@ import org.firstinspires.ftc.teamcode.tars.subsystems.Spindexer;
             intake.setDefaultDirective(new DefaultIntake(gamepad1));
             leverTransfer.setDefaultDirective(new DefaultLeverTransfer(gamepad1));
             spindexer.setDefaultDirective(new DefaultSpindexer(gamepad1));
+            turret.setDefaultDirective(new DefaultTurret(gamepad1));
 
             // print telemetry
             telemetry.addLine();

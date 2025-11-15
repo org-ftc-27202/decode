@@ -3,11 +3,14 @@ package org.firstinspires.ftc.teamcode.tars.subsystems;
 import androidx.annotation.NonNull;
 
 import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.stellarstructure.Subsystem;
 
+import org.firstinspires.ftc.teamcode.stellarstructure.hardwaremapwrappers.StellarDcMotor;
 import org.firstinspires.ftc.teamcode.stellarstructure.hardwaremapwrappers.StellarServo;
 
 public final class Turret extends Subsystem {
@@ -27,7 +30,7 @@ public final class Turret extends Subsystem {
     public final static double BUFFER_TIME = 1;
 
     public enum Position {
-        INTAKE, TRANSFER
+        ON, OFF
     }
 
 	/*
@@ -44,65 +47,46 @@ public final class Turret extends Subsystem {
 
 	 */
 
-    private StellarServo spindexerServo;
-    private DigitalChannel beamBreak;
-    private ColorSensor colorSensor;
+    private StellarServo turretServo;
+    private StellarDcMotor leftTurretMotor;
+    private StellarDcMotor rightTurretMotor;
+
 
     @Override
     public void init(HardwareMap hardwareMap) {
-        spindexerServo = new StellarServo(hardwareMap, "spindexer");
-        beamBreak = hardwareMap.get(DigitalChannel.class, "beamBreak"); //unused
-        beamBreak.setMode(DigitalChannel.Mode.INPUT);
-
-        colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");
+        turretServo= new StellarServo(hardwareMap, "turretServo");
+        leftTurretMotor = new StellarDcMotor(hardwareMap, "leftTurretMotor" );
+        rightTurretMotor = new StellarDcMotor(hardwareMap, "rightTurretMotor");
+        leftTurretMotor.setDirection(DcMotorEx.Direction.FORWARD);
+        rightTurretMotor.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     @Override
     public void update() {}
 
-    public StellarServo getSpindexerServo() {
-        return spindexerServo;
+    public StellarServo getTurretServo() {
+        return turretServo;
     }
 
-    public DigitalChannel getBeamBreak() {
-        return beamBreak;
+    public StellarDcMotor getLeftTurretMotor() {
+        return leftTurretMotor;
     }
 
-    public ColorSensor getColorSensor() {
-        return colorSensor;
+    public StellarDcMotor getRightTurretMotor() {
+        return rightTurretMotor;
     }
 
-    public double getDegreesForSegmentPosition(int segment, @NonNull Position position) {
-        if (position == Position.INTAKE) {
-            return INTAKE_DEGREE_POSITIONS[segment] * DEGREES_TO_SERVO;
-        } else if (position == Position.TRANSFER) {
-            return TRANSFER_DEGREE_POSITIONS[segment] * DEGREES_TO_SERVO;
-        } else {
-            throw new IllegalArgumentException("Invalid Spindexer.Position provided: " + position);
-        }
-    }
 
-    public boolean getIsTransferPosition() {
-        double currentPosition = spindexerServo.getPosition();
-        double tolerance = 0.01;
 
-        for (double transferDegreePosition : TRANSFER_DEGREE_POSITIONS) {
-            if (Math.abs(currentPosition - (transferDegreePosition * DEGREES_TO_SERVO)) < tolerance) {
-                return true;
-            }
-        }
-
-        return false;
-    }
 
     @NonNull
     @Override
     public String toString() {
         return String.format(
-                "beamBreak: %b\n" +
-                        "colorSensorRGB: %d, %d, %d",
-                beamBreak.getState(),
-                colorSensor.red(), colorSensor.green(), colorSensor.blue()
+                "Turret Servo Pos: %f\n" +
+                        "Turret Motor Vel: %f\n",
+                turretServo.getPosition(),
+                leftTurretMotor.getVelocity(), rightTurretMotor.getVelocity()
         );
     }
 }

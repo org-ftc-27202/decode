@@ -11,6 +11,7 @@ import org.firstinspires.ftc.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.stellarstructure.Subsystem;
 import org.firstinspires.ftc.teamcode.stellarstructure.hardwaremapwrappers.StellarLight;
 import org.firstinspires.ftc.teamcode.stellarstructure.hardwaremapwrappers.StellarServo;
+import org.firstinspires.ftc.teamcode.tars.runnables.directives.SetLight;
 
 import java.util.function.BooleanSupplier;
 
@@ -58,6 +59,8 @@ public final class PedroDrivebase extends Subsystem {
         leftBackDrive.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         rightFrontDrive.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         rightBackDrive.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+
+        new SetLight(light, "AZURE");
     }
 
     @Override
@@ -101,7 +104,16 @@ public final class PedroDrivebase extends Subsystem {
 	@NonNull
     @Override
     public String toString() {
-        return String.format("Left Front: %.2f\nRight Front: %.2f\nLeft Back: %.2f\nRight Back: %.2f\nX: %.3f\nY: %.3f\nHeading(degrees): %.2f\nIn Launch Zone: %b ",
+        return String.format(
+                        "Left Front: %.2f\n" +
+                        "Right Front: %.2f\n" +
+                        "Left Back: %.2f\n" +
+                        "Right Back: %.2f\n" +
+                        "X: %.3f\n" +
+                        "Y: %.3f\n" +
+                        "Heading(degrees): %.2f\n" +
+                        "In Launch Zone: %b\n "+
+                        "Light Color: %f",
                 leftFrontDrive.getPower(),
                 rightFrontDrive.getPower(),
                 leftBackDrive.getPower(),
@@ -109,6 +121,7 @@ public final class PedroDrivebase extends Subsystem {
                 follower.getPose().getX(),
                 follower.getPose().getY(),
                 Math.toDegrees(follower.getPose().getHeading()),
-                checkForLaunchPose());
+                checkForLaunchPose(),
+                light.getPosition());
     }
 }

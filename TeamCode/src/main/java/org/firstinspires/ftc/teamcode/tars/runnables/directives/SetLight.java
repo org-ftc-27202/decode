@@ -10,6 +10,8 @@ public class SetLight extends Directive {
 
     public SetLight(StellarLight light, String color) {
         setInterruptible(true);
+        setRequiredSubsystems();
+
         this.light = light;
         //color to power
         switch (color) {
