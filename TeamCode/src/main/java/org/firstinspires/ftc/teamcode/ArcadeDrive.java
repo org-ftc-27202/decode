@@ -29,11 +29,15 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import static java.lang.Thread.sleep;
+
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 /*
  * This OpMode executes a Tank Drive control TeleOp a direct drive robot
@@ -52,25 +56,34 @@ import com.qualcomm.robotcore.hardware.Servo;
 //@Disabled
 public class ArcadeDrive extends OpMode{
 
+    boolean flagInitial = true;
+
     /* Declare OpMode members. */
     public DcMotor  leftFrontMotor, leftBackMotor, rightFrontMotor, rightBackMotor;
     public DcMotor  leftArm     = null;
     private DcMotor intake = null;
     private DcMotor catapult = null;
+    private ServoImplEx holder;
+
+    DigitalChannel limitSwitchCatapult;
+
 
     // motor power 1 = 100% and 0.5 = 50%
     // negative values = reverse ex: -0.5 = reverse 50%
     private double INTAKE_IN_POWER = 1.0;
-    private double INTAKE_OUT_POWER = -0.9;
+    private double INTAKE_OUT_POWER = -0.5;
     private double INTAKE_OFF_POWER = 0.0;
     private double intakePower = INTAKE_OFF_POWER;
 
     private double CATAPULT_UP_POWER = -1.0;
-    private double CATAPULT_DOWN_POWER = 1.0;
-    private double CATAPULT_HOLD_POWER = 0.2;
+    private double CATAPULT_DOWN_POWER = 0.20;
+    private double CATAPULT_HOLD_POWER = 0.0;
 
     private enum CatapultModes {UP, DOWN, HOLD}
     private CatapultModes pivotMode;
+
+    final double HOLDER_RELEASE = 0.32;
+    final double HOLDER_HOLD = HOLDER_RELEASE + 0.30;
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -98,16 +111,24 @@ public class ArcadeDrive extends OpMode{
 //        rightFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightBackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        // intake motor
         intake = hardwareMap.get(DcMotor.class, "intake");
-        catapult = hardwareMap.get(DcMotor.class, "catapult");
-
-        // set direction of subsystem motors
         intake.setDirection(DcMotor.Direction.REVERSE);
-        catapult.setDirection(DcMotor.Direction.REVERSE); // Backwards should pivot DOWN, or in the stowed position.
-
-        // set initial subsystem behavior
         intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        catapult.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        // catapult motor
+        catapult = hardwareMap.get(DcMotor.class, "catapult");
+        catapult.setDirection(DcMotor.Direction.FORWARD);
+        catapult.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        catapult.setPower(CATAPULT_DOWN_POWER);
+        catapult.setTargetPosition(0);
+        catapult.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        holder = hardwareMap.get(ServoImplEx.class, "holder");
+
+        // limit switch
+        limitSwitchCatapult = hardwareMap.get(DigitalChannel.class, "limitSwitchCatapult");
+        limitSwitchCatapult.setMode(DigitalChannel.Mode.INPUT);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData(">", "Robot Ready.  Press START.");    //
@@ -162,6 +183,15 @@ public class ArcadeDrive extends OpMode{
 
         drive(throttle, spin);
 
+        if (flagInitial)
+        {
+            holder.setPosition(HOLDER_RELEASE);
+            catapult.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+            catapult.setTargetPosition(350);
+            catapult.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            flagInitial = false;
+        }
+
         // This conditional reduces ambiguity when multiple buttons are pressed.
         if (intakeInButton && intakeOutButton) {
             intakeInButton = false;
@@ -182,6 +212,20 @@ public class ArcadeDrive extends OpMode{
             intakePower = INTAKE_OFF_POWER;
         }
 
+        intake.setPower(intakePower);
+
+        // CATAPULT CODE
+        if (!limitSwitchCatapult.getState() && pivotMode != CatapultModes.HOLD) {
+            // Limit Switch is triggered
+            holder.setPosition(HOLDER_HOLD);
+            try {
+                Thread.sleep(500);
+            }
+            catch ( return 0)
+            catapult.setPower(CATAPULT_HOLD_POWER);
+            pivotMode = CatapultModes.HOLD;
+        }
+
         // Determine pivot mode
         if (catapultUpButton) {
             pivotMode = CatapultModes.UP;
@@ -189,13 +233,21 @@ public class ArcadeDrive extends OpMode{
         } else if (catapultDownButton) {
             pivotMode = CatapultModes.DOWN;
             catapult.setPower(CATAPULT_DOWN_POWER);
-        } else {
-            pivotMode = CatapultModes.HOLD;
-            catapult.setPower(CATAPULT_HOLD_POWER);
-            //Slight feed forward to keep catapult down while driving
+        }
+//        else {
+////            pivotMode = CatapultModes.HOLD;
+////            catapult.setPower(CATAPULT_HOLD_POWER);
+//            //Slight feed forward to keep catapult down while driving
+//        }
+
+
+        if (gamepad1.a){
+            holder.setPosition(HOLDER_RELEASE);
+        }
+        else if (gamepad1.b){
+            holder.setPosition(HOLDER_HOLD);
         }
 
-        intake.setPower(intakePower);
 
         String catapult_mode_str;
         if (pivotMode == CatapultModes.UP) {
@@ -209,11 +261,15 @@ public class ArcadeDrive extends OpMode{
 //        telemetry.addData("claw",  "Offset = %.2f", clawOffset);
         telemetry.addData("throttle",  "%.2f", throttle);
         telemetry.addData("spin", "%.2f", spin);
-        telemetry.addData("Intake", "%%4.2f", intake.getPower());
+        telemetry.addData("Intake", "%4.2f", intake.getPower());
         telemetry.addData("Catapult1 Current/Target/power", "%d, %d, %4.2f",
                 catapult.getCurrentPosition(), catapult.getTargetPosition(), catapult.getPower());
         telemetry.addData("Catapult MODE", "%s", catapult_mode_str);
-    }
+        if (limitSwitchCatapult.getState()) {
+            telemetry.addData("Limit Switch 1", "Off");
+        } else {
+            telemetry.addData("Limit Switch 1", "On");
+        }}
 
     /*
      * Code to run ONCE after the driver hits STOP
