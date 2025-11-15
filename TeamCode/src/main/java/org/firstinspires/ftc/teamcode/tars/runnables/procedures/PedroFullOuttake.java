@@ -16,14 +16,13 @@ public class PedroFullOuttake extends Procedure {
                 "PedroOuttake",
 
                 new SetLight(PedroDrivebase.getInstance().getLight(), "YELLOW"),
-                new SetSpeedScale(.2),
 
                 new WaitUntil(()->PedroDrivebase.getInstance().checkForLaunchPose()),
-
+                new SetSpeedScale(.5),
                 new SetLight(PedroDrivebase.getInstance().getLight(), "RED"),
+                new OuttakeAt(0),
                 new OuttakeAt(1),
                 new OuttakeAt(2),
-                new OuttakeAt(3),
 
                 new Sleep(Spindexer.BUFFER_TIME),
                 new SetSpeedScale(1),

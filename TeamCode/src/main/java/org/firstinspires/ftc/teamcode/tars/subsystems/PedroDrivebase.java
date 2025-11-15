@@ -31,7 +31,7 @@ public final class PedroDrivebase extends Subsystem {
     public final static double TURN_SPEED = 0.55;
     public final static double FAR_LAUNCH_FACTOR = .2;
     public final static double NEAR_LAUNCH_FACTOR = .4;
-    public final static double LAUNCH_ZONE_SCALE = 5.6;
+    public final static double LAUNCH_ZONE_SCALE = 6.2;
 
     public double speedScale = 1;
 
