@@ -15,5 +15,6 @@ public class OuttakeColor extends Procedure {
                 new OuttakeAt(Spindexer.getInstance().getFirstColorSegmentLocation(artifactColor))
         );
         setWaitForStartingConditions(false);
+        setStartingConditions(() -> Spindexer.getInstance().getHasArtifactColor(artifactColor));
     }
 }
