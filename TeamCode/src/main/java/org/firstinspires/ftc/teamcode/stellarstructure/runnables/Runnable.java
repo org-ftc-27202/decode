@@ -26,6 +26,8 @@ public abstract class Runnable {
 
     private boolean isRunning = false;
 
+    private boolean waitForStartingConditions = true;
+
     protected abstract void start(boolean hadToInterruptToStart);
 
     public abstract void update();
@@ -83,6 +85,15 @@ public abstract class Runnable {
 
     public final Runnable setInterruptible(boolean interruptible) {
         this.interruptible = interruptible;
+        return this;
+    }
+
+    public final boolean getWaitForStartingConditions() {
+        return waitForStartingConditions;
+    }
+
+    public final Runnable setWaitForStartingConditions(boolean waitForStartingConditions) {
+        this.waitForStartingConditions = waitForStartingConditions;
         return this;
     }
 

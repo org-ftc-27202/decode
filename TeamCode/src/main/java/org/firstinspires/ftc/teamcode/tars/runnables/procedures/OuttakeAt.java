@@ -17,6 +17,7 @@ public class OuttakeAt extends Procedure {
 
                 new SetPosition(Spindexer.getInstance().getSpindexerServo(), Spindexer.getInstance().getDegreesForSegmentPosition(segment, Spindexer.Position.TRANSFER), 0.01),
                 new ClearColor(segment),
+
                 new Sleep(0.15),
                 new PulseTransferLever(),
                 new Sleep(0.05)

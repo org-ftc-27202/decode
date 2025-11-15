@@ -27,7 +27,7 @@ public final class Spindexer extends Subsystem {
 
 	public final static double BUFFER_TIME = 1;
 
-	private final DecodeDataTypes.ArtifactColor[] artifactsInSpindexer = new DecodeDataTypes.ArtifactColor[]{
+	private final DecodeDataTypes.ArtifactColor[] artifactColorsInSpindexer = new DecodeDataTypes.ArtifactColor[]{
 		DecodeDataTypes.ArtifactColor.NONE,
 		DecodeDataTypes.ArtifactColor.NONE,
 		DecodeDataTypes.ArtifactColor.NONE
@@ -79,12 +79,18 @@ public final class Spindexer extends Subsystem {
 		return colorSensor;
 	}
 
-	public DecodeDataTypes.ArtifactColor[] getArtifactsInSpindexer() {
-		return artifactsInSpindexer;
+	public DecodeDataTypes.ArtifactColor[] getArtifactColorsInSpindexer() {
+		return artifactColorsInSpindexer;
 	}
 
-	public void setArtifactInSpindexer(int index, DecodeDataTypes.ArtifactColor artifactColor) {
-		artifactsInSpindexer[index] = artifactColor;
+	public void setArtifactColorInSpindexer(int index, DecodeDataTypes.ArtifactColor artifactColor) {
+		artifactColorsInSpindexer[index] = artifactColor;
+	}
+
+	public DecodeDataTypes.ArtifactColor setArtifactColorAtSegmentToColorSensor(int segment) {
+		setArtifactColorInSpindexer(segment, getColorSensorArtifactColor());
+
+		return getColorSensorArtifactColor();
 	}
 
 	public DecodeDataTypes.ArtifactColor getColorSensorArtifactColor() {
@@ -96,13 +102,25 @@ public final class Spindexer extends Subsystem {
 				DecodeDataTypes.ArtifactColor.PURPLE :
 				DecodeDataTypes.ArtifactColor.GREEN;
 	}
-	public int getColorLocation(DecodeDataTypes.ArtifactColor color) {
+	public int getFirstColorSegmentLocation(DecodeDataTypes.ArtifactColor color) {
 		for (int i = 0; i < 3; i++){
-				if (artifactsInSpindexer[i] == color){
+				if (artifactColorsInSpindexer[i] == color){
 					return i;
 				}
 		}
+
+		// no segments
 		return -1;
+	}
+
+	public boolean getHasArtifactColor(DecodeDataTypes.ArtifactColor artifactColor) {
+		for (int i = 0; i < 3; i++){
+			if (artifactColorsInSpindexer[i] == artifactColor){
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	public double getDegreesForSegmentPosition(int segment, @NonNull Position position) {
@@ -133,11 +151,11 @@ public final class Spindexer extends Subsystem {
 	public String toString() {
 		return String.format(
 				"beamBreak: %b\n" +
-				"colorSensorRGB: %d, %d, %d" +
+				"colorSensorRGB: %d, %d, %d"+
 				"Artifact Storage Sequence: %s, %s, %s",
 				beamBreak.getState(),
 				colorSensor.red(), colorSensor.green(), colorSensor.blue(),
-				artifactsInSpindexer[0].toString(), artifactsInSpindexer[1].toString(), artifactsInSpindexer[2].toString()
+				artifactColorsInSpindexer[0].toString(), artifactColorsInSpindexer[1].toString(), artifactColorsInSpindexer[2].toString()
 		);
 	}
 }

@@ -8,16 +8,17 @@ import org.firstinspires.ftc.teamcode.util.DecodeDataTypes;
 
 public class OuttakeColor extends Directive {
     DecodeDataTypes.ArtifactColor artifactColor;
-    private int segment;
     private Procedure outtakeAt;
     private boolean hasArtifactColor = false;
     public OuttakeColor(DecodeDataTypes.ArtifactColor artifactColor) {
         this.artifactColor = artifactColor;
+        setInterruptible(false);
+        setRequiredSubsystems();
     }
 
     @Override
     public void start(boolean hadToInterruptToStart) {
-        segment = Spindexer.getInstance().getColorLocation(artifactColor);
+        int segment = Spindexer.getInstance().getFirstColorSegmentLocation(artifactColor);
 
         if (segment == -1){
             hasArtifactColor = false;

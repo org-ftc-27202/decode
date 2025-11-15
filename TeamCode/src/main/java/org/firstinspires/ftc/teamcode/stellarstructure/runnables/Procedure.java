@@ -10,7 +10,7 @@ public class Procedure extends Runnable {
     private String nameId;
     private boolean hasScheduledFirst = false;
 
-    //todo: equals()
+    //todo: .schedule(), .getHasFinished() not proper
 
     public Procedure(@NonNull String nameId, @NonNull Runnable... runnables) {
         if (runnables.length == 0) {

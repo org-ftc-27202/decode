@@ -117,6 +117,15 @@ public class Scheduler {
 		return true;
 	}
 
+	public final void stopRunnable(@NonNull Runnable runnableToCancel) {
+		pendingRunnables.remove(runnableToCancel);
+		runnablesToAdd.remove(runnableToCancel);
+
+		if (activeRunnables.contains(runnableToCancel) && !runnablesToRemove.contains(runnableToCancel)) {
+			runnablesToRemove.add(runnableToCancel);
+		}
+	}
+
 	public final void schedule(@NonNull Runnable runnableToSchedule) {
 		// prevent scheduling of the same directive multiple times
 		if (
@@ -129,7 +138,10 @@ public class Scheduler {
 
 		// check for starting conditions
 		if (!checkStartingConditions(runnableToSchedule)) {
-			this.pendingRunnables.add(runnableToSchedule);
+			if (runnableToSchedule.getWaitForStartingConditions()) {
+				this.pendingRunnables.add(runnableToSchedule);
+			}
+
 			return;
 		}
 
@@ -262,6 +274,7 @@ public class Scheduler {
 		for (Runnable runnable : this.activeRunnables) {
 			builder.append(String.format("\n%s", runnable.toString()));
 		}
+
 		return builder.toString();
 	}
 }
