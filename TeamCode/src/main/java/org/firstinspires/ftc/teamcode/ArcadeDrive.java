@@ -29,15 +29,18 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import static java.lang.Thread.sleep;
-
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
-import com.qualcomm.robotcore.hardware.Servo;
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.ParallelAction;
+import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.SleepAction;
+import com.qualcomm.hardware.limelightvision.LLResult;
+import com.qualcomm.hardware.limelightvision.LLStatus;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 
 /*
  * This OpMode executes a Tank Drive control TeleOp a direct drive robot
@@ -62,7 +65,6 @@ public class ArcadeDrive extends OpMode{
     public DcMotor  leftFrontMotor, leftBackMotor, rightFrontMotor, rightBackMotor;
     public DcMotor  leftArm     = null;
     private DcMotor intake = null;
-    private DcMotor catapult = null;
     private ServoImplEx holder;
 
     DigitalChannel limitSwitchCatapult;
@@ -74,13 +76,6 @@ public class ArcadeDrive extends OpMode{
     private double INTAKE_OUT_POWER = -0.5;
     private double INTAKE_OFF_POWER = 0.0;
     private double intakePower = INTAKE_OFF_POWER;
-
-    private double CATAPULT_UP_POWER = -1.0;
-    private double CATAPULT_DOWN_POWER = 0.20;
-    private double CATAPULT_HOLD_POWER = 0.0;
-
-    private enum CatapultModes {UP, DOWN, HOLD}
-    private CatapultModes pivotMode;
 
     final double HOLDER_RELEASE = 0.32;
     final double HOLDER_HOLD = HOLDER_RELEASE + 0.30;
@@ -115,14 +110,6 @@ public class ArcadeDrive extends OpMode{
         intake = hardwareMap.get(DcMotor.class, "intake");
         intake.setDirection(DcMotor.Direction.REVERSE);
         intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        // catapult motor
-        catapult = hardwareMap.get(DcMotor.class, "catapult");
-        catapult.setDirection(DcMotor.Direction.FORWARD);
-        catapult.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        catapult.setPower(CATAPULT_DOWN_POWER);
-        catapult.setTargetPosition(0);
-        catapult.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         holder = hardwareMap.get(ServoImplEx.class, "holder");
 
