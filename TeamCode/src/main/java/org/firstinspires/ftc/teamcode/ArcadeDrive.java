@@ -29,15 +29,13 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
-import com.acmerobotics.roadrunner.Action;
-import com.acmerobotics.roadrunner.ParallelAction;
-import com.acmerobotics.roadrunner.SequentialAction;
-import com.acmerobotics.roadrunner.SleepAction;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLStatus;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
@@ -56,13 +54,13 @@ import com.qualcomm.robotcore.hardware.DigitalChannel;
  */
 
 @TeleOp(name="Robot: Arcade Drive", group="Robot")
-//@Disabled
-public class ArcadeDrive extends OpMode{
+@Disabled
+public class ArcadeDrive extends OpMode {
 
     boolean flagInitial = true;
 
     /* Declare OpMode members. */
-    public DcMotor  leftFrontMotor, leftBackMotor, rightFrontMotor, rightBackMotor;
+    public DcMotor leftFrontMotor, leftBackMotor, rightFrontMotor, rightBackMotor;
     public DcMotor  leftArm     = null;
     private DcMotor intake = null;
     private ServoImplEx holder;
@@ -173,9 +171,9 @@ public class ArcadeDrive extends OpMode{
         if (flagInitial)
         {
             holder.setPosition(HOLDER_RELEASE);
-            catapult.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-            catapult.setTargetPosition(350);
-            catapult.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            catapult.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+//            catapult.setTargetPosition(350);
+//            catapult.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             flagInitial = false;
         }
 
@@ -202,25 +200,21 @@ public class ArcadeDrive extends OpMode{
         intake.setPower(intakePower);
 
         // CATAPULT CODE
-        if (!limitSwitchCatapult.getState() && pivotMode != CatapultModes.HOLD) {
-            // Limit Switch is triggered
-            holder.setPosition(HOLDER_HOLD);
-            try {
-                Thread.sleep(500);
-            }
-            catch ( return 0)
-            catapult.setPower(CATAPULT_HOLD_POWER);
-            pivotMode = CatapultModes.HOLD;
-        }
-
-        // Determine pivot mode
-        if (catapultUpButton) {
-            pivotMode = CatapultModes.UP;
-            catapult.setPower(CATAPULT_UP_POWER);
-        } else if (catapultDownButton) {
-            pivotMode = CatapultModes.DOWN;
-            catapult.setPower(CATAPULT_DOWN_POWER);
-        }
+//        if (!limitSwitchCatapult.getState() && pivotMode != CatapultModes.HOLD) {
+//            // Limit Switch is triggered
+//            holder.setPosition(HOLDER_HOLD);
+//            catapult.setPower(CATAPULT_HOLD_POWER);
+//            pivotMode = CatapultModes.HOLD;
+//        }
+//
+//        // Determine pivot mode
+//        if (catapultUpButton) {
+//            pivotMode = CatapultModes.UP;
+//            catapult.setPower(CATAPULT_UP_POWER);
+//        } else if (catapultDownButton) {
+//            pivotMode = CatapultModes.DOWN;
+//            catapult.setPower(CATAPULT_DOWN_POWER);
+//        }
 //        else {
 ////            pivotMode = CatapultModes.HOLD;
 ////            catapult.setPower(CATAPULT_HOLD_POWER);
@@ -236,22 +230,22 @@ public class ArcadeDrive extends OpMode{
         }
 
 
-        String catapult_mode_str;
-        if (pivotMode == CatapultModes.UP) {
-            catapult_mode_str = "UP";
-        } else if (pivotMode == CatapultModes.DOWN) {
-            catapult_mode_str = "DOWN";
-        } else {
-            catapult_mode_str = "HOLD";
-        }
+//        String catapult_mode_str;
+//        if (pivotMode == CatapultModes.UP) {
+//            catapult_mode_str = "UP";
+//        } else if (pivotMode == CatapultModes.DOWN) {
+//            catapult_mode_str = "DOWN";
+//        } else {
+//            catapult_mode_str = "HOLD";
+//        }
         //        // Send telemetry message to signify robot running;
 //        telemetry.addData("claw",  "Offset = %.2f", clawOffset);
         telemetry.addData("throttle",  "%.2f", throttle);
         telemetry.addData("spin", "%.2f", spin);
         telemetry.addData("Intake", "%4.2f", intake.getPower());
-        telemetry.addData("Catapult1 Current/Target/power", "%d, %d, %4.2f",
-                catapult.getCurrentPosition(), catapult.getTargetPosition(), catapult.getPower());
-        telemetry.addData("Catapult MODE", "%s", catapult_mode_str);
+//        telemetry.addData("Catapult1 Current/Target/power", "%d, %d, %4.2f",
+//                catapult.getCurrentPosition(), catapult.getTargetPosition(), catapult.getPower());
+//        telemetry.addData("Catapult MODE", "%s", catapult_mode_str);
         if (limitSwitchCatapult.getState()) {
             telemetry.addData("Limit Switch 1", "Off");
         } else {
