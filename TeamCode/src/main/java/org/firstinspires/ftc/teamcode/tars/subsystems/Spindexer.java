@@ -25,8 +25,6 @@ public final class Spindexer extends Subsystem {
 	private final static double[] INTAKE_DEGREE_POSITIONS = {0.0 + SPINDEXER_OFFSET, 120.0 + SPINDEXER_OFFSET, 240.0 + SPINDEXER_OFFSET};
 	private final static double[] TRANSFER_DEGREE_POSITIONS = {180.0 + SPINDEXER_OFFSET, 300.0 + SPINDEXER_OFFSET, 60.0 + SPINDEXER_OFFSET};
 
-	public final static double BUFFER_TIME = 1;
-
 	private double ratio;
 
 	private final DecodeDataTypes.ArtifactColor[] artifactColorsInSpindexer = new DecodeDataTypes.ArtifactColor[]{

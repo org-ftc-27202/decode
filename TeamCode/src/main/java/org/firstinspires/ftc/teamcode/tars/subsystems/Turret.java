@@ -24,33 +24,9 @@ public final class Turret extends Subsystem {
     private Turret() {}
 
     private final static double DEGREES_TO_SERVO = 1.0 / 320.0;
-    private final static double SPINDEXER_OFFSET = 0.0;
-    private final static double[] INTAKE_DEGREE_POSITIONS = {0.0 + SPINDEXER_OFFSET, 120.0 + SPINDEXER_OFFSET, 240.0 + SPINDEXER_OFFSET};
-    private final static double[] TRANSFER_DEGREE_POSITIONS = {180.0 + SPINDEXER_OFFSET, 300.0 + SPINDEXER_OFFSET, 60.0 + SPINDEXER_OFFSET};
     private final static double VELOCITY_TOLERANCE = 10;
-    public final static double BUFFER_TIME = 1;
 
     private double velocity = 0;
-
-
-
-    public enum Position {
-        ON, OFF
-    }
-
-	/*
-
-	+-----------+--------+----------+
-	|           | Intake | Transfer |
-	| Segment 0 |   0    |   180    |
-	| Segment 1 |  120   |   300    |
-	| Segment 2 |  240   |   60     |
-	+-----------+--------+----------+
-
-	Intake Procedure (60 ->) 0 -> 120 -> 240
-	Transfer Procedure 240 -> 300 -> 180 -> 60
-
-	 */
 
     private StellarServo turretServo;
     private StellarDcMotor leftTurretMotor;
@@ -71,15 +47,15 @@ public final class Turret extends Subsystem {
     }
 
     @Override
-    public void update() {
-
-    }
+    public void update() {}
 
     public StellarServo getTurretServo() {
         return turretServo;
     }
 
-    public StellarServo getTurretHoodServo(){ return turretHoodServo;}
+    public StellarServo getTurretHoodServo(){
+        return turretHoodServo;
+    }
 
     public StellarDcMotor getLeftTurretMotor() {
         return leftTurretMotor;
@@ -89,19 +65,15 @@ public final class Turret extends Subsystem {
         return rightTurretMotor;
     }
 
-    public void setTurretVelocity(double velocity){
+    public void setTurretVelocity(double velocity) {
         this.velocity = velocity;
         leftTurretMotor.setTargetVelocity(velocity);
         rightTurretMotor.setTargetVelocity(velocity);
     }
 
-    public boolean checkCurrentVelocity(){
+    public boolean checkCurrentVelocity() {
         return (Math.abs(leftTurretMotor.getVelocity())) < (velocity + VELOCITY_TOLERANCE);
     }
-
-
-
-
 
     @NonNull
     @Override

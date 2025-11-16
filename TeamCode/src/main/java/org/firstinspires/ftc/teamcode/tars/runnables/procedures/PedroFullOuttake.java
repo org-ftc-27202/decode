@@ -24,7 +24,7 @@ public class PedroFullOuttake extends Procedure {
                 new OuttakeAt(1),
                 new OuttakeAt(2),
 
-                new Sleep(Spindexer.BUFFER_TIME),
+                new Sleep(1),
                 new SetSpeedScale(1),
                 new SetLight(PedroDrivebase.getInstance().getLight(), "BLUE")
         );
