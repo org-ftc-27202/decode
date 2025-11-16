@@ -15,14 +15,18 @@ public class StellarDcMotor {
 	public DcMotor.ZeroPowerBehavior getZeroPowerBehavior() {return dcMotorEx.getZeroPowerBehavior();}
 	public void setTargetPosition(int targetPosition) {
 		dcMotorEx.setTargetPosition(targetPosition);}
+	public void setTargetVelocity(double targetVelocity){
+		dcMotorEx.setVelocity(targetVelocity);
+	}
 	public int getTargetPosition() {return dcMotorEx.getTargetPosition();}
+	public void setVelocityPIDFCoefficents(double p, double i, double d, double f) {dcMotorEx.setVelocityPIDFCoefficients(p,i,d,f);}
 	public void setPower(double power) {
 		dcMotorEx.setPower(power);}
 	public double getPower() {return dcMotorEx.getPower();}
-	public void setMode(DcMotor.RunMode mode) {
+	public void setMode(DcMotorEx.RunMode mode) {
 		dcMotorEx.setMode(mode);}
 	public DcMotor.RunMode getMode() {return dcMotorEx.getMode();}
-	public void setDirection(DcMotor.Direction direction) {
+	public void setDirection(DcMotorEx.Direction direction) {
 		dcMotorEx.setDirection(direction);}
 	public DcMotor.Direction getDirection() {return dcMotorEx.getDirection();}
 	public double getVelocity() { return dcMotorEx.getVelocity();}

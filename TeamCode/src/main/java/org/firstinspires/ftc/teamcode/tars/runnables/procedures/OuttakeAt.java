@@ -4,9 +4,11 @@ import org.firstinspires.ftc.teamcode.stellarstructure.runnables.InstantlyDo;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Procedure;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.SetPosition;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Sleep;
+import org.firstinspires.ftc.teamcode.stellarstructure.runnables.WaitUntil;
 import org.firstinspires.ftc.teamcode.tars.runnables.directives.ClearColor;
 import org.firstinspires.ftc.teamcode.tars.subsystems.LeverTransfer;
 import org.firstinspires.ftc.teamcode.tars.subsystems.Spindexer;
+import org.firstinspires.ftc.teamcode.tars.subsystems.Turret;
 import org.firstinspires.ftc.teamcode.util.DecodeDataTypes;
 
 public class OuttakeAt extends Procedure {
@@ -19,6 +21,9 @@ public class OuttakeAt extends Procedure {
                 new ClearColor(segment),
 
                 new Sleep(0.15),
+
+                new WaitUntil(()->Turret.getInstance().checkCurrentVelocity()),
+
                 new PulseTransferLever(),
                 new Sleep(0.05)
         );

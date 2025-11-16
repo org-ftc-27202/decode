@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.tars.subsystems;
 import androidx.annotation.NonNull;
 
 import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
@@ -26,8 +27,12 @@ public final class Turret extends Subsystem {
     private final static double SPINDEXER_OFFSET = 0.0;
     private final static double[] INTAKE_DEGREE_POSITIONS = {0.0 + SPINDEXER_OFFSET, 120.0 + SPINDEXER_OFFSET, 240.0 + SPINDEXER_OFFSET};
     private final static double[] TRANSFER_DEGREE_POSITIONS = {180.0 + SPINDEXER_OFFSET, 300.0 + SPINDEXER_OFFSET, 60.0 + SPINDEXER_OFFSET};
-
+    private final static double VELOCITY_TOLERANCE = 10;
     public final static double BUFFER_TIME = 1;
+
+    private double velocity = 0;
+
+
 
     public enum Position {
         ON, OFF
@@ -50,23 +55,31 @@ public final class Turret extends Subsystem {
     private StellarServo turretServo;
     private StellarDcMotor leftTurretMotor;
     private StellarDcMotor rightTurretMotor;
+    private StellarServo turretHoodServo;
 
 
     @Override
     public void init(HardwareMap hardwareMap) {
         turretServo= new StellarServo(hardwareMap, "turretServo");
+        turretHoodServo = new StellarServo(hardwareMap, "turretHoodServo");
         leftTurretMotor = new StellarDcMotor(hardwareMap, "leftTurretMotor" );
         rightTurretMotor = new StellarDcMotor(hardwareMap, "rightTurretMotor");
         leftTurretMotor.setDirection(DcMotorEx.Direction.FORWARD);
         rightTurretMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftTurretMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        rightTurretMotor.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     @Override
-    public void update() {}
+    public void update() {
+
+    }
 
     public StellarServo getTurretServo() {
         return turretServo;
     }
+
+    public StellarServo getTurretHoodServo(){ return turretHoodServo;}
 
     public StellarDcMotor getLeftTurretMotor() {
         return leftTurretMotor;
@@ -76,6 +89,17 @@ public final class Turret extends Subsystem {
         return rightTurretMotor;
     }
 
+    public void setTurretVelocity(double velocity){
+        this.velocity = velocity;
+        leftTurretMotor.setTargetVelocity(velocity);
+        rightTurretMotor.setTargetVelocity(velocity);
+    }
+
+    public boolean checkCurrentVelocity(){
+        return (Math.abs(leftTurretMotor.getVelocity())) < (velocity + VELOCITY_TOLERANCE);
+    }
+
+
 
 
 
@@ -84,9 +108,13 @@ public final class Turret extends Subsystem {
     public String toString() {
         return String.format(
                 "Turret Servo Pos: %f\n" +
-                        "Turret Motor Vel: %f\n",
+                        "Hood Pos: %f\n" +
+                        "Turret Motor Vel: %f\n"+
+                "Turret Target Velocity: %f\n"+
+                        "TurretAtTargetVelocity?: %b",
                 turretServo.getPosition(),
-                leftTurretMotor.getVelocity(), rightTurretMotor.getVelocity()
+                turretHoodServo.getPosition(),
+                leftTurretMotor.getVelocity(), velocity, checkCurrentVelocity()
         );
     }
 }
