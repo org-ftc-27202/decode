@@ -37,6 +37,6 @@ public class FollowPath extends Directive {
 
     @Override
     public boolean isFinished() {
-        return follower.atPose(endPose, 2,2)&&!follower.isBusy();
+        return follower.atPose(endPose, 2,2) && !follower.isBusy();
     }
 }

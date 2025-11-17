@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.tars.runnables.procedures;
 
-import org.firstinspires.ftc.teamcode.stellarstructure.runnables.InstantlyDo;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Procedure;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.SetPosition;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Sleep;
@@ -15,14 +14,13 @@ public class IntakeAt extends Procedure {
                 "IntakeAt",
                 new SetPosition(LeverTransfer.getInstance().getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION),
 
-                new SetPosition(Spindexer.getInstance().getSpindexerServo(), Spindexer.getInstance().getDegreesForSegmentPosition(segment, Spindexer.Position.INTAKE), 0.01),
+                new SetPosition(Spindexer.getInstance().getSpindexerServo(), Spindexer.getInstance().getDegreesForSegmentPosition(segment, Spindexer.Position.INTAKE)),
 
                 new Sleep(0.5),
                 new WaitUntil(() ->
                         !Spindexer.getInstance().getBeamBreak().getState() &&
                         Spindexer.getInstance().setArtifactColorAtSegmentToColorSensor(segment) != DecodeDataTypes.ArtifactColor.NONE
-                ),
-                new Sleep(0.05)
+                )
         );
     }
 }

@@ -86,7 +86,7 @@ public class TarsAuto extends OpMode {
     public void start() {
         new Procedure(
                 "AutoDrive",
-                new SetPosition(LeverTransfer.getInstance().getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION, 0.01),
+                new SetPosition(LeverTransfer.getInstance().getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION),
                 new Sleep(0.03),
 
                         new FollowPath(path1, follower, collect1Pose, true),

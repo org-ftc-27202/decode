@@ -11,5 +11,7 @@ public class FullPatternOuttake extends Procedure {
                 new OuttakeColor(DecodeDataTypes.ArtifactColor.GREEN),
                 new OuttakeColor(DecodeDataTypes.ArtifactColor.PURPLE)
         );
+
+        setWaitForStartingConditions(false);
     }
 }

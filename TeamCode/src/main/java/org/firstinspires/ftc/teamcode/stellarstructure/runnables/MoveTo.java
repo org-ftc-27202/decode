@@ -5,23 +5,15 @@ import androidx.annotation.NonNull;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.stellarstructure.hardwaremapwrappers.StellarDcMotor;
-import org.firstinspires.ftc.teamcode.stellarstructure.Subsystem;
-
 public class MoveTo extends Directive {
 	private final StellarDcMotor motor;
 	private final int targetPosition;
 	private final double power;
-	private final double tolerance;
 
 	public MoveTo(@NonNull StellarDcMotor motor, int targetPosition, double power) {
-		this(motor, targetPosition, power, 5);
-	}
-
-	public MoveTo(@NonNull StellarDcMotor motor, int targetPosition, double power, double acceptableRange) {
 		this.motor = motor;
 		this.targetPosition = targetPosition;
 		this.power = power;
-		this.tolerance = acceptableRange;
 		setInterruptible(true);
 	}
 
@@ -41,18 +33,14 @@ public class MoveTo extends Directive {
 		motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 	}
 
-	public MoveTo requires(Subsystem... subsystems) {
-		setRequiredSubsystems(subsystems);
-		return this;
-	}
-
-	public MoveTo interruptible(boolean interruptible) {
-		setInterruptible(interruptible);
-		return this;
-	}
-
 	@Override
 	public boolean isFinished() {
-		return Math.abs(motor.getCurrentPosition() - targetPosition) <= tolerance;
+		return true;
+	}
+
+	@NonNull
+	@Override
+	public String toString() {
+		return String.format("MoveTo: %s to %d ", motor.toString(), targetPosition);
 	}
 }

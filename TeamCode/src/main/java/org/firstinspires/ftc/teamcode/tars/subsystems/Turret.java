@@ -2,11 +2,8 @@ package org.firstinspires.ftc.teamcode.tars.subsystems;
 
 import androidx.annotation.NonNull;
 
-import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.stellarstructure.Subsystem;
@@ -24,9 +21,9 @@ public final class Turret extends Subsystem {
     private Turret() {}
 
     private final static double DEGREES_TO_SERVO = 1.0 / 320.0;
-    private final static double VELOCITY_TOLERANCE = 10;
+    private final static double VELOCITY_TOLERANCE = 10.0;
 
-    private double velocity = 0;
+    private double velocity = 0.0;
 
     private StellarServo turretServo;
     private StellarDcMotor leftTurretMotor;
@@ -36,10 +33,11 @@ public final class Turret extends Subsystem {
 
     @Override
     public void init(HardwareMap hardwareMap) {
-        turretServo= new StellarServo(hardwareMap, "turretServo");
+        turretServo = new StellarServo(hardwareMap, "turretServo");
         turretHoodServo = new StellarServo(hardwareMap, "turretHoodServo");
         leftTurretMotor = new StellarDcMotor(hardwareMap, "leftTurretMotor" );
         rightTurretMotor = new StellarDcMotor(hardwareMap, "rightTurretMotor");
+
         leftTurretMotor.setDirection(DcMotorEx.Direction.FORWARD);
         rightTurretMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         leftTurretMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
@@ -67,12 +65,17 @@ public final class Turret extends Subsystem {
 
     public void setTurretVelocity(double velocity) {
         this.velocity = velocity;
+
         leftTurretMotor.setTargetVelocity(velocity);
         rightTurretMotor.setTargetVelocity(velocity);
     }
 
-    public boolean checkCurrentVelocity() {
-        return (Math.abs(leftTurretMotor.getVelocity())) < (velocity + VELOCITY_TOLERANCE);
+    public double getVelocityOffOfTarget() {
+        return Math.abs(leftTurretMotor.getVelocity() - velocity);
+    }
+
+    public boolean velocityWithinTolerance() {
+        return getVelocityOffOfTarget() < VELOCITY_TOLERANCE;
     }
 
     @NonNull
@@ -80,13 +83,13 @@ public final class Turret extends Subsystem {
     public String toString() {
         return String.format(
                 "Turret Servo Pos: %f\n" +
-                        "Hood Pos: %f\n" +
-                        "Turret Motor Vel: %f\n"+
-                "Turret Target Velocity: %f\n"+
-                        "TurretAtTargetVelocity?: %b",
+                    "   Hood Pos: %f\n" +
+                    "   Turret Motor Vel: %f\n" +
+                "Turret Target Velocity: %f\n" +
+                    "   TurretAtTargetVelocity?: %b",
                 turretServo.getPosition(),
                 turretHoodServo.getPosition(),
-                leftTurretMotor.getVelocity(), velocity, checkCurrentVelocity()
+                leftTurretMotor.getVelocity(), velocity, velocityWithinTolerance()
         );
     }
 }

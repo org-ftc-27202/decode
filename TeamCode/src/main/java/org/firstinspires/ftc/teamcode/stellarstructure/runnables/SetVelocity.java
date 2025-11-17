@@ -29,15 +29,16 @@ public class SetVelocity extends Directive {
 	public void update() {}
 
 	@Override
-	public void stop(boolean interrupted) {
-
-	}
-
-	public SetVelocity requires(Subsystem... subsystems) {
-		setRequiredSubsystems(subsystems);
-		return this;
-	}
+	public void stop(boolean interrupted) {}
 
 	@Override
-	public boolean isFinished() {return (Math.abs(motor.getVelocity())<tolerance);}
+	public boolean isFinished() {
+		return Math.abs(motor.getVelocity() - velocity) < tolerance;
+	}
+
+	@NonNull
+	@Override
+	public String toString() {
+		return String.format("Set Velocity: %s to %f", motor.toString(), velocity);
+	}
 }

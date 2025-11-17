@@ -27,7 +27,7 @@ public final class Spindexer extends Subsystem {
 
 	private double ratio;
 
-	private final DecodeDataTypes.ArtifactColor[] artifactColorsInSpindexer = new DecodeDataTypes.ArtifactColor[]{
+	private DecodeDataTypes.ArtifactColor[] artifactColorsInSpindexer = new DecodeDataTypes.ArtifactColor[]{
 		DecodeDataTypes.ArtifactColor.NONE,
 		DecodeDataTypes.ArtifactColor.NONE,
 		DecodeDataTypes.ArtifactColor.NONE
@@ -63,6 +63,11 @@ public final class Spindexer extends Subsystem {
 
 		colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");
 
+		artifactColorsInSpindexer = new DecodeDataTypes.ArtifactColor[]{
+				DecodeDataTypes.ArtifactColor.NONE,
+				DecodeDataTypes.ArtifactColor.NONE,
+				DecodeDataTypes.ArtifactColor.NONE
+		};
 	}
 
 	@Override
@@ -110,9 +115,9 @@ public final class Spindexer extends Subsystem {
 				DecodeDataTypes.ArtifactColor.GREEN;
 	}
 	public int getFirstColorSegmentLocation(DecodeDataTypes.ArtifactColor color) {
-		for (int i = 0; i < 3; i++){
-				if (artifactColorsInSpindexer[i] == color){
-					return i;
+		for (int segment = 0; segment < 3; segment++){
+				if (artifactColorsInSpindexer[segment] == color){
+					return segment;
 				}
 		}
 

@@ -129,7 +129,6 @@ public abstract class Runnable {
     @NonNull
     @Override
     public String toString() {
-        // Simple default, can be overridden by specific commands for better telemetry.
         return getClass().getSimpleName();
     }
 }

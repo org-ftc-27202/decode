@@ -3,22 +3,14 @@ package org.firstinspires.ftc.teamcode.stellarstructure.runnables;
 import androidx.annotation.NonNull;
 
 import org.firstinspires.ftc.teamcode.stellarstructure.hardwaremapwrappers.StellarServo;
-import org.firstinspires.ftc.teamcode.stellarstructure.Subsystem;
-
 public class SetPosition extends Directive {
 	private final StellarServo servo;
 	private final double targetPosition;
-	private final double tolerance;
-
 	public SetPosition(@NonNull StellarServo servo, double targetPosition) {
-		this(servo, targetPosition, 0.01);
-	}
-
-	public SetPosition(@NonNull StellarServo servo, double targetPosition, double acceptableRange) {
 		super();
 		this.servo = servo;
 		this.targetPosition = targetPosition;
-		this.tolerance = acceptableRange;
+
 		setInterruptible(true);
 	}
 
@@ -33,18 +25,14 @@ public class SetPosition extends Directive {
 	@Override
 	public void stop(boolean interrupted) {}
 
-	public SetPosition requires(Subsystem... subsystems) {
-		setRequiredSubsystems(subsystems);
-		return this;
-	}
-
-	public SetPosition interruptible(boolean interruptible) {
-		setInterruptible(interruptible);
-		return this;
-	}
-
 	@Override
 	public boolean isFinished() {
-		return Math.abs(servo.getPosition() - targetPosition) <= tolerance;
+		return true;
+	}
+
+	@NonNull
+	@Override
+	public String toString() {
+		return String.format("Set Position %s to %f", servo.toString(), targetPosition);
 	}
 }

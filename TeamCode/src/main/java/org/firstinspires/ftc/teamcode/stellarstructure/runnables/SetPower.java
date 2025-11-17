@@ -31,13 +31,14 @@ public class SetPower extends Directive {
 
 	}
 
-	public SetPower requires(Subsystem... subsystems) {
-		setRequiredSubsystems(subsystems);
-		return this;
-	}
-
 	@Override
 	public boolean isFinished() {
 		return true;
+	}
+
+	@NonNull
+	@Override
+	public String toString() {
+		return String.format("Set Power %s to %f", motor.toString(), power);
 	}
 }

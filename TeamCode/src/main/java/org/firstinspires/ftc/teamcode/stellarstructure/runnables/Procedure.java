@@ -95,6 +95,6 @@ public class Procedure extends Runnable {
     @NonNull
     @Override
     public String toString() {
-        return "Procedure: " + nameId; // Custom toString for better telemetry.
+        return "Procedure: " + nameId;
     }
 }

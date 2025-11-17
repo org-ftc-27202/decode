@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.tars.runnables.directives;
 
+import androidx.annotation.NonNull;
+
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Directive;
 import org.firstinspires.ftc.teamcode.tars.subsystems.Spindexer;
 import org.firstinspires.ftc.teamcode.util.DecodeDataTypes;
@@ -23,5 +25,11 @@ public class ClearColor extends Directive {
     @Override
     public boolean isFinished() {
         return true;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return String.format("ClearColor: Segment %d", segment);
     }
 }

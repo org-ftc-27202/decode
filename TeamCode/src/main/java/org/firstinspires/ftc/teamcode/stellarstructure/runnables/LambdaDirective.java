@@ -1,11 +1,7 @@
 package org.firstinspires.ftc.teamcode.stellarstructure.runnables;
 
-import androidx.annotation.NonNull;
-
 import org.firstinspires.ftc.teamcode.stellarstructure.actions.Action;
 import org.firstinspires.ftc.teamcode.stellarstructure.actions.BooleanAction;
-import org.firstinspires.ftc.teamcode.stellarstructure.Subsystem;
-
 import java.util.function.BooleanSupplier;
 
 public class LambdaDirective extends Directive {
@@ -54,15 +50,5 @@ public class LambdaDirective extends Directive {
 	@Override
 	public boolean isFinished() {
 		return finishedWhen.getAsBoolean();
-	}
-
-	public LambdaDirective requires(@NonNull Subsystem... subsystems) {
-		setRequiredSubsystems(subsystems);
-		return this;
-	}
-
-	public LambdaDirective interruptible(boolean isInterruptible) {
-		setInterruptible(isInterruptible);
-		return this;
 	}
 }

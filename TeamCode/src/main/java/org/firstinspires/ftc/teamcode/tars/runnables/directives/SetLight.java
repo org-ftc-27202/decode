@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.tars.runnables.directives;
 
+import androidx.annotation.NonNull;
+
 import org.firstinspires.ftc.teamcode.stellarstructure.hardwaremapwrappers.StellarLight;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Directive;
 
@@ -50,7 +52,9 @@ public class SetLight extends Directive {
     }
 
     @Override
-    public void start(boolean hadToInterruptToStart) {light.setPosition(color);}
+    public void start(boolean hadToInterruptToStart) {
+        light.setPosition(color);
+    }
 
     @Override
     public void update() {}
@@ -59,5 +63,13 @@ public class SetLight extends Directive {
     public void stop(boolean interrupted) {}
 
     @Override
-    public boolean isFinished() {return true;}
+    public boolean isFinished() {
+        return true;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return String.format("SetLight: %s", color);
+    }
 }
