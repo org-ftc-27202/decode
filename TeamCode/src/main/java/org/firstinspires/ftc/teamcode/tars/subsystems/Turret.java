@@ -1,5 +1,10 @@
 package org.firstinspires.ftc.teamcode.tars.subsystems;
 
+import static org.firstinspires.ftc.teamcode.tars.subsystems.TurretPIDFConstants.d;
+import static org.firstinspires.ftc.teamcode.tars.subsystems.TurretPIDFConstants.f;
+import static org.firstinspires.ftc.teamcode.tars.subsystems.TurretPIDFConstants.i;
+import static org.firstinspires.ftc.teamcode.tars.subsystems.TurretPIDFConstants.p;
+
 import androidx.annotation.NonNull;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -42,6 +47,8 @@ public final class Turret extends Subsystem {
         rightTurretMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         leftTurretMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         rightTurretMotor.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+        leftTurretMotor.setVelocityPIDFCoefficents(p,i,d,f);
+        rightTurretMotor.setVelocityPIDFCoefficents(p,i,d,f);
     }
 
     @Override
