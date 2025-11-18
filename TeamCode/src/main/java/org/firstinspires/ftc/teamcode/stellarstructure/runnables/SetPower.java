@@ -27,9 +27,7 @@ public class SetPower extends Directive {
 	public void update() {}
 
 	@Override
-	public void stop(boolean interrupted) {
-
-	}
+	public void stop(boolean interrupted) {}
 
 	@Override
 	public boolean isFinished() {

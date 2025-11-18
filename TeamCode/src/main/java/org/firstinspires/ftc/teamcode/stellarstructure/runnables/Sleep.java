@@ -30,6 +30,6 @@ public class Sleep extends Directive {
 	@NonNull
 	@Override
 	public String toString() {
-		return String.format("Sleep: %f", sleepTimeSeconds);
+		return String.format("Sleep: %.2f", sleepTimeSeconds);
 	}
 }

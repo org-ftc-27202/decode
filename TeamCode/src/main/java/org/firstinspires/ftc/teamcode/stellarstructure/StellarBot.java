@@ -26,17 +26,17 @@ public class StellarBot {
 	public final void init(HardwareMap hardwareMap) {
 		Scheduler.setGlobalInstance(this.scheduler);
 
-		//initialize all subsystems
+		// initialize all subsystems
 		for (Subsystem subsystem : subsystems) {
 			subsystem.init(hardwareMap);
 		}
 	}
 
 	public final void update() {
-		//update triggers and directives
+		// update triggers and directives
 		scheduler.run();
 
-		//update subsystems
+		// update subsystems
 		for (Subsystem subsystem : subsystems) {
 			subsystem.update();
 		}

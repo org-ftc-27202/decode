@@ -24,7 +24,6 @@ public class Scheduler {
 		return activeSchedulerInstance;
 	}
 
-	//todo: make the waitlist optional with a boolean
 	//todo: reorganize order of methods and variables
 
 	private final List<Subsystem> subsystems = new ArrayList<>();

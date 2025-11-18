@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.stellarstructure.runnables;
 
 import androidx.annotation.NonNull;
 
+// todo: actually make it work
+
 public class Parallel extends Runnable {
     private final Runnable[] runnables;
 

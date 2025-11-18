@@ -12,14 +12,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Runnable {
-    //no required subsystems by default
+    // no required subsystems by default
     private Subsystem[] requiredSubsystems = {};
     private Condition[] startingConditions = {};
     private final List<Trigger> ownedTriggers = new ArrayList<>();
 
     private boolean hadToInterruptToStart = false;
 
-    //interruptible by default
+    // interruptible by default
     private boolean interruptible = true;
 
     private boolean hasFinished = false;

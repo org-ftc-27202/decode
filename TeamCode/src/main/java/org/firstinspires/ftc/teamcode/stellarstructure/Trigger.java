@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.stellarstructure;
 import org.firstinspires.ftc.teamcode.stellarstructure.actions.Action;
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.Condition;
 
+// todo: make a iterator trigger that can iterator through actions
 public class Trigger {
 	private final Condition condition;
 	private final Action action;

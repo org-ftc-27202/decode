@@ -15,7 +15,7 @@ public class DefaultLeverTransfer extends DefaultDirective {
 	public DefaultLeverTransfer(Gamepad gamepad1) {
 		super(LeverTransfer.getInstance());
 
-		addTrigger(new Trigger(
+		/*addTrigger(new Trigger(
 				new StatefulCondition(
 						new GamepadButtonMap(gamepad1, GamepadButtonMap.Button.DPAD_UP),
 						StatefulCondition.Edge.RISING //On initial press
@@ -24,7 +24,7 @@ public class DefaultLeverTransfer extends DefaultDirective {
 					leverTransfer.setLeverPositionIsUp(true);
 					leverTransfer.updateServoPosition();
 				}
-		));
+		));*/
 
 		addTrigger(new Trigger(
 				new StatefulCondition(

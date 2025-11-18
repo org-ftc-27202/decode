@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.tars.subsystems;
 
 import androidx.annotation.NonNull;
 
+import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -10,6 +11,8 @@ import org.firstinspires.ftc.teamcode.stellarstructure.Subsystem;
 
 import org.firstinspires.ftc.teamcode.stellarstructure.hardwaremapwrappers.StellarServo;
 import org.firstinspires.ftc.teamcode.util.DecodeDataTypes;
+
+import java.util.function.Supplier;
 
 public final class Spindexer extends Subsystem {
 	private static final Spindexer spindexer = new Spindexer();
@@ -24,8 +27,6 @@ public final class Spindexer extends Subsystem {
 	private final static double SPINDEXER_OFFSET = 0.0;
 	private final static double[] INTAKE_DEGREE_POSITIONS = {0.0 + SPINDEXER_OFFSET, 120.0 + SPINDEXER_OFFSET, 240.0 + SPINDEXER_OFFSET};
 	private final static double[] TRANSFER_DEGREE_POSITIONS = {180.0 + SPINDEXER_OFFSET, 300.0 + SPINDEXER_OFFSET, 60.0 + SPINDEXER_OFFSET};
-
-	private double ratio;
 
 	private DecodeDataTypes.ArtifactColor[] artifactColorsInSpindexer = new DecodeDataTypes.ArtifactColor[]{
 		DecodeDataTypes.ArtifactColor.NONE,
@@ -54,16 +55,19 @@ public final class Spindexer extends Subsystem {
 	private StellarServo spindexerServo;
 	private DigitalChannel beamBreak;
 	private ColorSensor colorSensor;
+	private AnalogInput spindexerServoEncoder;
 
 	@Override
 	public void init(HardwareMap hardwareMap) {
 		spindexerServo = new StellarServo(hardwareMap, "spindexer");
-		beamBreak = hardwareMap.get(DigitalChannel.class, "beamBreak"); //unused
+		spindexerServoEncoder = hardwareMap.get(AnalogInput.class, "spindexerServo");
+
+		beamBreak = hardwareMap.get(DigitalChannel.class, "beamBreak");
 		beamBreak.setMode(DigitalChannel.Mode.INPUT);
 
 		colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");
 
-		artifactColorsInSpindexer = new DecodeDataTypes.ArtifactColor[]{
+		artifactColorsInSpindexer = new DecodeDataTypes.ArtifactColor[] {
 				DecodeDataTypes.ArtifactColor.NONE,
 				DecodeDataTypes.ArtifactColor.NONE,
 				DecodeDataTypes.ArtifactColor.NONE
@@ -71,12 +75,14 @@ public final class Spindexer extends Subsystem {
 	}
 
 	@Override
-	public void update() {
-		setRatio();
-	}
+	public void update() {}
 
 	public StellarServo getSpindexerServo() {
 		return spindexerServo;
+	}
+
+	public AnalogInput getSpindexerServoEncoder() {
+		return spindexerServoEncoder;
 	}
 
 	public DigitalChannel getBeamBreak() {
@@ -91,6 +97,10 @@ public final class Spindexer extends Subsystem {
 		return artifactColorsInSpindexer;
 	}
 
+	public void setArtifactColorsInSpindexerFromSupplier(Supplier<Integer> segmentSupplier, DecodeDataTypes.ArtifactColor artifactColor) {
+		setArtifactColorInSpindexer(segmentSupplier.get(), artifactColor);
+	}
+
 	public void setArtifactColorInSpindexer(int index, DecodeDataTypes.ArtifactColor artifactColor) {
 		artifactColorsInSpindexer[index] = artifactColor;
 	}
@@ -100,23 +110,31 @@ public final class Spindexer extends Subsystem {
 
 		return getColorSensorArtifactColor();
 	}
-	public void setRatio(){
-		ratio = (double) colorSensor.green() /colorSensor.blue();
+
+	public double getGreenToBlueRatio() {
+		return (double) colorSensor.green() / colorSensor.blue();
 	}
+
+	public double getRGBSum() {
+		return colorSensor.red() + colorSensor.green() + colorSensor.blue();
+	}
+
 	public DecodeDataTypes.ArtifactColor getColorSensorArtifactColor() {
+		double greenToBlueRatio = getGreenToBlueRatio();
+		double total = getRGBSum();
 
-
-		if ((ratio > 1.0)&&(ratio<1.3)) {
-				return DecodeDataTypes.ArtifactColor.NONE;
+		if (total < 300) {
+			return DecodeDataTypes.ArtifactColor.NONE;
 		}
 
-		return ratio < 1.0 ?
-				DecodeDataTypes.ArtifactColor.PURPLE :
-				DecodeDataTypes.ArtifactColor.GREEN;
+		return greenToBlueRatio < 0.9 ?
+			DecodeDataTypes.ArtifactColor.PURPLE :
+			DecodeDataTypes.ArtifactColor.GREEN;
 	}
+
 	public int getFirstColorSegmentLocation(DecodeDataTypes.ArtifactColor color) {
-		for (int segment = 0; segment < 3; segment++){
-				if (artifactColorsInSpindexer[segment] == color){
+		for (int segment = 0; segment < 3; segment++) {
+				if (artifactColorsInSpindexer[segment] == color) {
 					return segment;
 				}
 		}
@@ -126,13 +144,17 @@ public final class Spindexer extends Subsystem {
 	}
 
 	public boolean getHasArtifactColor(DecodeDataTypes.ArtifactColor artifactColor) {
-		for (int i = 0; i < 3; i++){
-			if (artifactColorsInSpindexer[i] == artifactColor){
+		for (int i = 0; i < 3; i++) {
+			if (artifactColorsInSpindexer[i] == artifactColor) {
 				return true;
 			}
 		}
 
 		return false;
+	}
+
+	public double getDegreesForSegmentSupplierAndPosition(Supplier<Integer> segmentSupplier, @NonNull Position position) {
+		return getDegreesForSegmentPosition(segmentSupplier.get(), position);
 	}
 
 	public double getDegreesForSegmentPosition(int segment, @NonNull Position position) {
@@ -144,7 +166,7 @@ public final class Spindexer extends Subsystem {
 			throw new IllegalArgumentException("Invalid Spindexer.Position provided: " + position);
 		}
 	}
-
+	/*
 	public boolean getIsTransferPosition() {
 		double currentPosition = spindexerServo.getPosition();
 		double tolerance = 0.01;
@@ -156,20 +178,26 @@ public final class Spindexer extends Subsystem {
 		}
 
 		return false;
-	}
+	}*/
 
 	@NonNull
 	@Override
 	public String toString() {
 		return String.format(
 				"beamBreak: %b\n" +
-				"colorSensorRGB: %d, %d, %d"+
-				"Artifact Storage Sequence: %s, %s, %s\n"+
-				"G/B ratio: %f",
+				"colorSensorRGB: %d, %d, %d\n"+
+				"Artifact Storage: %s, %s, %s\n"+
+				"G/B ratio: %f\n" +
+				"Total RGB: %f\n" +
+				"Spindexer Servo: %f\n" +
+				"Spindexer Encoder: %f\n",
 				beamBreak.getState(),
 				colorSensor.red(), colorSensor.green(), colorSensor.blue(),
 				artifactColorsInSpindexer[0].toString(), artifactColorsInSpindexer[1].toString(), artifactColorsInSpindexer[2].toString(),
-				ratio
+				getGreenToBlueRatio(),
+				getRGBSum(),
+				spindexerServo.getPosition(),
+				spindexerServoEncoder.getVoltage()
 		);
 	}
 }

@@ -11,17 +11,13 @@ import  com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.tars.runnables.directives.FollowPath;
-import org.firstinspires.ftc.teamcode.tars.runnables.defaultdirectives.DefaultDrivebase;
 import org.firstinspires.ftc.teamcode.tars.runnables.defaultdirectives.DefaultIntake;
 import org.firstinspires.ftc.teamcode.tars.runnables.defaultdirectives.DefaultLeverTransfer;
 import org.firstinspires.ftc.teamcode.tars.runnables.defaultdirectives.DefaultSpindexer;
-import org.firstinspires.ftc.teamcode.tars.runnables.procedures.FullIntake;
 import org.firstinspires.ftc.teamcode.tars.runnables.procedures.FullOuttake;
 import org.firstinspires.ftc.teamcode.stellarstructure.StellarBot;
-import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Parallel;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Procedure;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.SetPosition;
-import org.firstinspires.ftc.teamcode.stellarstructure.runnables.SetPower;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Sleep;
 import org.firstinspires.ftc.teamcode.tars.subsystems.Drivebase;
 import org.firstinspires.ftc.teamcode.tars.subsystems.Intake;

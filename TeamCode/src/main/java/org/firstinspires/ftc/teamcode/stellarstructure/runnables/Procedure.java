@@ -7,7 +7,7 @@ import java.util.Objects;
 public class Procedure extends Runnable {
     private final Runnable[] runnables;
     private int currentDirectiveIndex = 0;
-    private String nameId;
+    private final String nameId;
     private boolean hasScheduledFirst = false;
 
     //todo: .schedule(), .getHasFinished() not proper
