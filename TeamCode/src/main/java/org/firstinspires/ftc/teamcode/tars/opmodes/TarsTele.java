@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.tars.opmodes;
 
-import org.firstinspires.ftc.teamcode.stellarstructure.Scheduler;
 import org.firstinspires.ftc.teamcode.tars.runnables.defaultdirectives.DefaultDrivebase;
 import org.firstinspires.ftc.teamcode.tars.runnables.defaultdirectives.DefaultIntake;
 import org.firstinspires.ftc.teamcode.tars.runnables.defaultdirectives.DefaultLeverTransfer;
@@ -10,6 +9,7 @@ import org.firstinspires.ftc.teamcode.tars.subsystems.Drivebase;
 import org.firstinspires.ftc.teamcode.tars.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.tars.subsystems.LeverTransfer;
 import org.firstinspires.ftc.teamcode.tars.subsystems.Spindexer;
+import org.firstinspires.ftc.teamcode.util.BadApple;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -40,41 +40,31 @@ public class TarsTele extends LinearOpMode {
 		spindexer.setDefaultDirective(new DefaultSpindexer(gamepad1));
 
 		int iteration = 0;
+		//long startTime = System.currentTimeMillis();
+		//long currentTime = System.currentTimeMillis();
+		//long lastTime = System.currentTimeMillis() - 333;
 
 		while (!opModeIsActive()) {
 			// print telemetry
 			try {
-				StringBuilder spaces = new StringBuilder();
-				for (int i = 0; i < iteration % 6; i++) {
-					spaces.append(" ");
-				}
+				//lastTime = currentTime;
+				//currentTime = System.currentTimeMillis();
 
-				//telemetry.addLine(String.format("Time: %f", System.currentTimeMillis() / 1000.0));
+				//telemetry.addLine(String.format("Time: %.3f", (currentTime - startTime) / 1000.0));
+				//telemetry.addLine(String.format("Time Since: %.3f", (currentTime - lastTime) / 1000.0));
+				telemetry.addLine(String.format("Frame %d / %d", iteration, BadApple.FRAMES.length));
+
 				telemetry.addLine(
-						"\n" +
-								"▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄\n" +
-								"▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄\n" +
-								"▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄\n" +
-								"▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄\n" +
-								"▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄\n" +
-								"▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄\n" +
-								"▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄\n" +
-								spaces + "█   █   █   █   █   █   █   █   █   █   █   █   █   █   █   " + (spaces.length() < 3 ? "█" : "") + "\n" +
-								"▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄\n" +
-								"▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄\n" +
-								"▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄\n" +
-								"▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄\n" +
-								"▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄\n" +
-								"▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄\n" +
-								"▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄\n"
-
-						// 32x24 pixels with driver station warning
+						BadApple.FRAMES[iteration]
 				);
 
 				//telemetry.addLine(tars.getScheduler().toString());
-				sleep(325); // around 3 fps
+				sleep(328); // around 3 fps
 
 				iteration++;
+				if (iteration >= BadApple.FRAMES.length) {
+					iteration = 0;
+				}
 			} catch (Exception e) {
 				telemetry.addData("telemetry didn't work", e);
 			}
