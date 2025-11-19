@@ -2,15 +2,22 @@ package org.firstinspires.ftc.teamcode.stellarstructure.runnables;
 
 import androidx.annotation.NonNull;
 
+import org.firstinspires.ftc.teamcode.stellarstructure.Subsystem;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 public class Procedure extends Runnable {
     private final Runnable[] runnables;
     private int currentDirectiveIndex = 0;
     private final String nameId;
     private boolean hasScheduledFirst = false;
+    private boolean shouldStop = false;
 
-    //todo: .schedule(), .getHasFinished() not proper
 
     public Procedure(@NonNull String nameId, @NonNull Runnable... runnables) {
         if (runnables.length == 0) {
@@ -24,7 +31,15 @@ public class Procedure extends Runnable {
         this.nameId = nameId;
         this.runnables = runnables;
 
-        setRequiredSubsystems();
+        Set<Subsystem> subsystems = new HashSet<>();
+
+        for (Runnable runnable : runnables) {
+            subsystems.addAll(Arrays.asList(runnable.getRequiredSubsystems()));
+            runnable.setRequiredSubsystems();
+        }
+
+        setRequiredSubsystems(subsystems.toArray(new Subsystem[0]));
+
         setInterruptible(false);
     }
 
@@ -60,9 +75,15 @@ public class Procedure extends Runnable {
             return;
         }
 
+        // todo:
         if (!hasScheduledFirst) {
             runnables[0].schedule();
             hasScheduledFirst = true;
+            return;
+        }
+
+        if (runnables[currentDirectiveIndex].hasBeenInterrupted()) {
+            shouldStop = true;
             return;
         }
 
@@ -89,7 +110,7 @@ public class Procedure extends Runnable {
 
     @Override
     public final boolean isFinished() {
-        return currentDirectiveIndex >= runnables.length;
+        return currentDirectiveIndex >= runnables.length || shouldStop;
     }
 
     @NonNull

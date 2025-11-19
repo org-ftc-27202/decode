@@ -2,15 +2,14 @@ package org.firstinspires.ftc.teamcode.stellarstructure.conditions;
 
 public class StatefulCondition implements Condition {
 	public enum Edge {
-		RISING,  //on press
-		FALLING, //on release
-		HIGH,    //while pressed
-		LOW      //while not pressed
+		RISING,  // on press
+		FALLING, // on release
+		HIGH,    // while pressed
+		LOW      // while not pressed
 	}
 
 	private final Condition sourceCondition;
 	private final Edge edge;
-	private boolean previousState;
 	private boolean currentState = false;
 	private boolean firstRun = true;
 
@@ -21,7 +20,7 @@ public class StatefulCondition implements Condition {
 
 	@Override
 	public boolean evaluate() {
-		previousState = currentState;
+		boolean previousState = currentState;
 		currentState = sourceCondition.evaluate();
 
 		if (firstRun) {

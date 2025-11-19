@@ -15,7 +15,7 @@ public class PulseTransferLever extends Procedure {
 
 				// up
 				new SetPosition(LeverTransfer.getInstance().getLeverTransferServo(), LeverTransfer.LEVER_UP_POSITION),
-				new Sleep(0.3),
+				new Sleep(0.1),
 
 				// down
 				new SetPosition(LeverTransfer.getInstance().getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION),
@@ -27,5 +27,7 @@ public class PulseTransferLever extends Procedure {
 				// spindexer outtake position
 				() -> Spindexer.getInstance().getIsTransferPosition()
 		);*/
+
+		setRequiredSubsystems(LeverTransfer.getInstance());
 	}
 }

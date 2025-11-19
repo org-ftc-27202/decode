@@ -22,9 +22,8 @@ public abstract class Runnable {
     // interruptible by default
     private boolean interruptible = true;
 
+    private boolean hasBeenInterrupted = false;
     private boolean hasFinished = false;
-
-    private boolean isRunning = false;
 
     private boolean waitForStartingConditions = true;
 
@@ -40,15 +39,14 @@ public abstract class Runnable {
 
     public final void startInScheduler() {
         this.hasFinished = false;
-        this.isRunning = true;
 
         start(hadToInterruptToStart);
     }
 
     public final void stopInScheduler() {
         this.hasFinished = true;
-        this.isRunning = false;
 
+        setHasBeenInterrupted(!isFinished());
         stop(!isFinished());
     }
 
@@ -56,18 +54,10 @@ public abstract class Runnable {
 
     public final void addTrigger(Trigger trigger) {
         ownedTriggers.add(trigger);
-
-        if (this.isRunning) {
-            Scheduler.getGlobalInstance().addTrigger(trigger);
-        }
     }
 
     public final void removeTrigger(Trigger trigger) {
         ownedTriggers.remove(trigger);
-
-        if (this.isRunning) {
-            Scheduler.getGlobalInstance().removeTrigger(trigger);
-        }
     }
 
     public final List<Trigger> getOwnedTriggers() {
@@ -131,4 +121,12 @@ public abstract class Runnable {
     public String toString() {
         return getClass().getSimpleName();
     }
+
+	public boolean hasBeenInterrupted() {
+		return hasBeenInterrupted;
+	}
+
+	public void setHasBeenInterrupted(boolean hasBeenInterrupted) {
+		this.hasBeenInterrupted = hasBeenInterrupted;
+	}
 }

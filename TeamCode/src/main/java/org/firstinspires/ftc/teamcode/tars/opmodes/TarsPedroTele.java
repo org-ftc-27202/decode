@@ -47,9 +47,20 @@ import org.firstinspires.ftc.teamcode.tars.subsystems.Turret;
             turret.setDefaultDirective(new DefaultTurret(gamepad1));
 
             // print telemetry
-            telemetry.addLine();
             try {
-                telemetry.addLine(tars.getScheduler().toString());
+                telemetry.addLine(
+                        "\n                                 █\n" +
+                        "                                 █              █\n" +
+                        "                                 █              █              █\n" +
+                        "                                                  █              █\n" +
+                        "                       ▄███▄                             █\n" +
+                        "                    ▐█████▌██████▄\n" +
+                        "        ▌            ▀███▀▄███████▄                  ▄▄\n" +
+                        "        █                  ▄███████████▌     ▄▄███▀\n" +
+                        "        ▐▄    ▐██████▀      ▀▀▀▀████████▀\n" +
+                        "              ▀▀▀▀                                          ▀▀"
+                );
+                //telemetry.addLine(tars.getScheduler().toString());
             } catch (Exception e) {
                 telemetry.addData("telemetry didn't work", e);
             }
@@ -60,7 +71,12 @@ import org.firstinspires.ftc.teamcode.tars.subsystems.Turret;
             if (isStopRequested()) return;
 
             while (opModeIsActive()) {
-                // run subsystems logic
+                // panic: cancels all runnables
+                if (gamepad1.left_bumper && gamepad1.right_bumper) {
+                    tars.cancelAll();
+                }
+
+                // run scheduler and subsystems logic
                 tars.update();
 
                 //print telemetry

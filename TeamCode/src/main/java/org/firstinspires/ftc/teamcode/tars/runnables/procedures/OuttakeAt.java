@@ -31,5 +31,10 @@ public class OuttakeAt extends Procedure {
                     () -> Spindexer.getInstance().setArtifactColorsInSpindexerFromSupplier(segmentSupplier, DecodeDataTypes.ArtifactColor.NONE)
                 )
         );
+
+        setRequiredSubsystems(
+                Spindexer.getInstance(),
+                LeverTransfer.getInstance()
+        );
     }
 }

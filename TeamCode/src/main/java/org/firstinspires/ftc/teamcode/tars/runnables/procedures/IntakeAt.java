@@ -22,5 +22,10 @@ public class IntakeAt extends Procedure {
                         Spindexer.getInstance().setArtifactColorAtSegmentToColorSensor(segment) != DecodeDataTypes.ArtifactColor.NONE
                 )
         );
+
+        setRequiredSubsystems(
+                Spindexer.getInstance(),
+                LeverTransfer.getInstance()
+        );
     }
 }

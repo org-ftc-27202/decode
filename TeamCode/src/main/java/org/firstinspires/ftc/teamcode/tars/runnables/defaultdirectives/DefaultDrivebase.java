@@ -2,8 +2,20 @@ package org.firstinspires.ftc.teamcode.tars.runnables.defaultdirectives;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+import org.firstinspires.ftc.teamcode.stellarstructure.Trigger;
+import org.firstinspires.ftc.teamcode.stellarstructure.conditions.GamepadButtonMap;
+import org.firstinspires.ftc.teamcode.stellarstructure.conditions.StatefulCondition;
+import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Parallel;
+import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Procedure;
+import org.firstinspires.ftc.teamcode.stellarstructure.runnables.SetPosition;
+import org.firstinspires.ftc.teamcode.stellarstructure.runnables.SetPower;
+import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Sleep;
+import org.firstinspires.ftc.teamcode.stellarstructure.runnables.WaitUntil;
+import org.firstinspires.ftc.teamcode.tars.runnables.procedures.FullPatternOuttake;
+import org.firstinspires.ftc.teamcode.tars.runnables.procedures.IntakeAt;
 import org.firstinspires.ftc.teamcode.tars.subsystems.Drivebase;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.DefaultDirective;
+import org.firstinspires.ftc.teamcode.tars.subsystems.Spindexer;
 
 public class DefaultDrivebase extends DefaultDirective {
 	private final Drivebase drivebase = Drivebase.getInstance();
@@ -19,9 +31,9 @@ public class DefaultDrivebase extends DefaultDirective {
 	public void update() {
 		double max, axial, lateral, yaw;
 		double leftFrontPower, rightFrontPower, leftBackPower, rightBackPower;
-		axial = -gamepad1.left_stick_y * Drivebase.CARDINAL_SPEED;  // Note: pushing stick forward gives negative value
-		lateral = gamepad1.left_stick_x * Drivebase.CARDINAL_SPEED;
-		yaw = gamepad1.right_stick_x * Drivebase.TURN_SPEED;
+		axial = -this.gamepad1.left_stick_y * Drivebase.CARDINAL_SPEED;  // pushing stick forward gives negative value, hence the negative
+		lateral = this.gamepad1.left_stick_x * Drivebase.CARDINAL_SPEED;
+		yaw = this.gamepad1.right_stick_x * Drivebase.TURN_SPEED;
 
 		// combine the joystick requests for each axis-motion to determine each wheel's power
 		leftFrontPower = axial + lateral + yaw;

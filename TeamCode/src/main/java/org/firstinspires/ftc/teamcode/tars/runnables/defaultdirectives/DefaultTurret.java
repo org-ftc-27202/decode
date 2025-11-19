@@ -20,56 +20,54 @@ import java.util.Set;
 
 public class DefaultTurret extends DefaultDirective {
     private final Turret turret = Turret.getInstance();
-    private double velocity = 0;
-    private double position = 0;
+    private double velocity = 0.0;
+    private double position = 0.0;
     public DefaultTurret(Gamepad gamepad1) {
         super(Turret.getInstance());
 
-
         addTrigger(new Trigger(
-                // when y just first pressed
+                // when dpad up just first pressed
                 new StatefulCondition(
                         new GamepadButtonMap(gamepad1, GamepadButtonMap.Button.DPAD_UP),
                         StatefulCondition.Edge.RISING
                 ),
                 () -> {
-                    //outtake 3 in pattern order (PGP for now)
-                    velocity = velocity + 100;
+                    velocity = velocity + 100.0;
                 }
         ));
 
         addTrigger(new Trigger(
-                // when x just first pressed
+                // when dpad down just first pressed
                 new StatefulCondition(
                         new GamepadButtonMap(gamepad1, GamepadButtonMap.Button.DPAD_DOWN),
                         StatefulCondition.Edge.RISING
                 ),
                 () -> {
-                    // intake 3
-                    velocity = velocity -100;
+                    velocity = velocity - 100.0;
                 }
         ));
-        addTrigger(new Trigger(
+
+        /*addTrigger(new Trigger(
                 new StatefulCondition(
                         new GamepadButtonMap(gamepad1, GamepadButtonMap.Button.DPAD_LEFT),
                         StatefulCondition.Edge.RISING),
                 () -> {
-                    position = position +.05;
+                    position = position + 0.05;
                 }
         ));
+
         addTrigger(new Trigger(
                 new StatefulCondition(
                         new GamepadButtonMap(gamepad1, GamepadButtonMap.Button.DPAD_RIGHT),
                         StatefulCondition.Edge.RISING),
                 () -> {
-                    position = position -.05;
+                    position = position - 0.05;
                 }
-        ));
+        ));*/
     }
     @Override
     public void update(){
         turret.setTurretVelocity(velocity);
         turret.getTurretHoodServo().setPosition(position);
     }
-
 }

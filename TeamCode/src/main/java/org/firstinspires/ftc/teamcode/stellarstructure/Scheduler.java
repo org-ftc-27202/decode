@@ -29,7 +29,6 @@ public class Scheduler {
 	private final List<Subsystem> subsystems = new ArrayList<>();
 	private final List<Runnable> pendingRunnables = new ArrayList<>();
 	private final List<Runnable> activeRunnables = new ArrayList<>();
-	private final List<Trigger> activeTriggers = new ArrayList<>();
 
 	private final List<Runnable> runnablesToAdd = new ArrayList<>();
 	private final List<Runnable> runnablesToRemove = new ArrayList<>();
@@ -40,14 +39,6 @@ public class Scheduler {
 
 	public final void removeSubsystem(Subsystem subsystem) {
 		subsystems.remove(subsystem);
-	}
-
-	public final void addTrigger(@NonNull Trigger trigger) {
-		this.activeTriggers.add(trigger);
-	}
-
-	public final void removeTrigger(@NonNull Trigger trigger) {
-		this.activeTriggers.remove(trigger);
 	}
 
 	private boolean checkStartingConditions(@NonNull Runnable runnable) {
@@ -139,6 +130,8 @@ public class Scheduler {
 		if (!checkStartingConditions(runnableToSchedule)) {
 			if (runnableToSchedule.getWaitForStartingConditions()) {
 				this.pendingRunnables.add(runnableToSchedule);
+			} else {
+				runnableToSchedule.setHasBeenInterrupted(true);
 			}
 
 			return;
@@ -147,7 +140,11 @@ public class Scheduler {
 		// try to run
 		if (!startRunnable(runnableToSchedule)) {
 			// didn't start, so add to queue
-			this.pendingRunnables.add(runnableToSchedule);
+			if (runnableToSchedule.getWaitForStartingConditions()) {
+				this.pendingRunnables.add(runnableToSchedule);
+			} else {
+				runnableToSchedule.setHasBeenInterrupted(true);
+			}
 		}
 	}
 
@@ -166,13 +163,6 @@ public class Scheduler {
 		// check scheduled runnables and start them if possible
 		checkScheduleQueue();
 
-		// run triggers
-		for (Trigger trigger : new ArrayList<>(this.activeTriggers)) {
-			if (trigger.check()) {
-				trigger.run();
-			}
-		}
-
 		// update runnables
 		for (Runnable runnable : new ArrayList<>(this.activeRunnables)) {
 			if (runnable.getFinished()) {
@@ -181,6 +171,12 @@ public class Scheduler {
 				}
 			} else {
 				runnable.update();
+
+				for (Trigger trigger : runnable.getOwnedTriggers()) {
+					if (trigger.check()) {
+						trigger.run();
+					}
+				}
 			}
 		}
 
@@ -188,9 +184,6 @@ public class Scheduler {
 		for (Runnable runnable : runnablesToRemove) {
 			this.activeRunnables.remove(runnable);
 			runnable.stopInScheduler();
-
-			// remove the runnable's triggers
-			activeTriggers.removeAll(runnable.getOwnedTriggers());
 		}
 		runnablesToRemove.clear();
 
@@ -198,9 +191,6 @@ public class Scheduler {
 		for (Runnable runnable : runnablesToAdd) {
 			this.activeRunnables.add(runnable);
 			runnable.startInScheduler();
-
-			// add the runnable's triggers
-			activeTriggers.addAll(runnable.getOwnedTriggers());
 		}
 		runnablesToAdd.clear();
 
@@ -242,9 +232,6 @@ public class Scheduler {
 	public final void cancelAll() {
 		// clear all queued directives
 		this.pendingRunnables.clear();
-
-		// remove all triggers
-		this.activeTriggers.clear();
 
 		// stop all directives
 		for (Runnable runnable : this.activeRunnables) {

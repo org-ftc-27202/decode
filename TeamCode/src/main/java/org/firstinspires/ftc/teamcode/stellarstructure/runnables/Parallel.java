@@ -2,37 +2,107 @@ package org.firstinspires.ftc.teamcode.stellarstructure.runnables;
 
 import androidx.annotation.NonNull;
 
-// todo: actually make it work
+import org.firstinspires.ftc.teamcode.stellarstructure.Subsystem;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 public class Parallel extends Runnable {
     private final Runnable[] runnables;
+    private final String nameId;
+    private boolean hasScheduledFirst = false;
+    private boolean shouldStop = false;
 
-    public Parallel(@NonNull Runnable... runnables) {
+
+    public Parallel(@NonNull String nameId, @NonNull Runnable... runnables) {
+        if (runnables.length == 0) {
+            throw new IllegalArgumentException("No directives provided");
+        }
+
+        if (nameId.isEmpty()) {
+            throw new IllegalArgumentException("Parallel nameId cannot be empty");
+        }
+
+        this.nameId = nameId;
         this.runnables = runnables;
 
-        setInterruptible(true);
-        setRequiredSubsystems();
+        Set<Subsystem> subsystems = new HashSet<>();
+
+        for (Runnable runnable : runnables) {
+            subsystems.addAll(Arrays.asList(runnable.getRequiredSubsystems()));
+            runnable.setRequiredSubsystems();
+        }
+
+        setRequiredSubsystems(subsystems.toArray(new Subsystem[0]));
+
+        setInterruptible(false);
+    }
+
+    public final String getNameId() {
+        return nameId;
     }
 
     @Override
-    protected void start(boolean hadToInterruptToStart) {
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+
+        // check if the other object is an instance of Parallel
+        if (!(o instanceof Parallel)) return false;
+
+        // cast to Parallel.
+        Parallel parallel = (Parallel) o;
+
+        // two parallels are equal if they are same class and same nameId
+        return getClass() == parallel.getClass() && Objects.equals(nameId, parallel.nameId);
+    }
+
+    @Override
+    public final int hashCode() {
+        return Objects.hash(getClass(), nameId);
+    }
+
+    @Override
+    public final void start(boolean hadToInterruptToStart) {}
+
+    @Override
+    public final void update() {
+        if (isFinished()) {
+            return;
+        }
+
+        // todo:
+        if (!hasScheduledFirst) {
+            for (Runnable runnable : runnables) {
+                runnable.schedule();
+            }
+
+            hasScheduledFirst = true;
+            return;
+        }
+
         for (Runnable runnable : runnables) {
-            runnable.schedule();
+			if (runnable.hasBeenInterrupted()) {
+				shouldStop = true;
+				return;
+			}
         }
     }
 
     @Override
-    public void update() {}
-
-    @Override
-    protected void stop(boolean interrupted) {
+    public final void stop(boolean interrupted) {
         for (Runnable runnable : runnables) {
-            runnable.stop(true);
+            if (!runnable.getHasFinished()) {
+                runnable.stop(interrupted);
+            }
         }
     }
 
     @Override
-    protected boolean isFinished() {
+    public final boolean isFinished() {
         for (Runnable runnable : runnables) {
             if (!runnable.getHasFinished()) {
                 return false;
@@ -40,5 +110,11 @@ public class Parallel extends Runnable {
         }
 
         return true;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "Parallel: " + nameId;
     }
 }

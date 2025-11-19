@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.tars.opmodes;
 
+import org.firstinspires.ftc.teamcode.stellarstructure.Scheduler;
 import org.firstinspires.ftc.teamcode.tars.runnables.defaultdirectives.DefaultDrivebase;
 import org.firstinspires.ftc.teamcode.tars.runnables.defaultdirectives.DefaultIntake;
 import org.firstinspires.ftc.teamcode.tars.runnables.defaultdirectives.DefaultLeverTransfer;
@@ -38,21 +39,60 @@ public class TarsTele extends LinearOpMode {
 		leverTransfer.setDefaultDirective(new DefaultLeverTransfer(gamepad1));
 		spindexer.setDefaultDirective(new DefaultSpindexer(gamepad1));
 
-		// print telemetry
-		telemetry.addLine();
-		try {
-			telemetry.addLine(tars.getScheduler().toString());
-		} catch (Exception e) {
-			telemetry.addData("telemetry didn't work", e);
+		int iteration = 0;
+
+		while (!opModeIsActive()) {
+			// print telemetry
+			try {
+				StringBuilder spaces = new StringBuilder();
+				for (int i = 0; i < iteration % 6; i++) {
+					spaces.append(" ");
+				}
+
+				//telemetry.addLine(String.format("Time: %f", System.currentTimeMillis() / 1000.0));
+				telemetry.addLine(
+						"\n" +
+								"▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄\n" +
+								"▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄\n" +
+								"▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄\n" +
+								"▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄\n" +
+								"▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄\n" +
+								"▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄\n" +
+								"▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄\n" +
+								spaces + "█   █   █   █   █   █   █   █   █   █   █   █   █   █   █   " + (spaces.length() < 3 ? "█" : "") + "\n" +
+								"▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄\n" +
+								"▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄\n" +
+								"▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄\n" +
+								"▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄\n" +
+								"▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄\n" +
+								"▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄\n" +
+								"▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄\n"
+
+						// 32x24 pixels with driver station warning
+				);
+
+				//telemetry.addLine(tars.getScheduler().toString());
+				sleep(325); // around 3 fps
+
+				iteration++;
+			} catch (Exception e) {
+				telemetry.addData("telemetry didn't work", e);
+			}
+			telemetry.update();
+
+			//waitForStart();
+
+			if (isStopRequested()) return;
 		}
-		telemetry.update();
 
-		waitForStart();
-
-		if (isStopRequested()) return;
 
 		while (opModeIsActive()) {
-			// run subsystems logic
+			// panic cancel
+			if (gamepad1.left_bumper && gamepad1.right_bumper) {
+				tars.cancelAll();
+			}
+
+			// run scheduler and subsystems logic
 			tars.update();
 
 			//print telemetry

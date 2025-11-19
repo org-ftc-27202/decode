@@ -28,7 +28,7 @@ public class DefaultSpindexer extends DefaultDirective {
 						StatefulCondition.Edge.RISING
 				),
 				() -> {
-					//outtake 3 in pattern order (PGP for now)
+					// outtake 3 in pattern order (PGP for now)
 					new FullPatternOuttake().schedule();
 				}
 		));
@@ -56,7 +56,9 @@ public class DefaultSpindexer extends DefaultDirective {
 					new FullOuttake().schedule();
 				}
 		));
-		//thomas
+
+		/*
+		// thomas
 		addTrigger(new Trigger(
 				new StatefulCondition(
 						new GamepadButtonMap(gamepad1, GamepadButtonMap.Button.LEFT_BUMPER),
@@ -69,6 +71,6 @@ public class DefaultSpindexer extends DefaultDirective {
 
 					).schedule();
 				}
-		));
+		));*/
 	}
 }

@@ -76,6 +76,19 @@ public class TarsAuto extends OpMode {
         tars.init(hardwareMap);
         buildPaths();
         follower.setStartingPose(startPose);
+
+        telemetry.addLine(
+                "\n                                 █\n" +
+                        "                                 █              █\n" +
+                        "                                 █              █              █\n" +
+                        "                                                  █              █\n" +
+                        "                       ▄███▄                             █\n" +
+                        "                    ▐█████▌██████▄\n" +
+                        "        ▌            ▀███▀▄███████▄                  ▄▄\n" +
+                        "        █                  ▄███████████▌     ▄▄███▀\n" +
+                        "        ▐▄    ▐██████▀      ▀▀▀▀████████▀\n" +
+                        "              ▀▀▀▀                                          ▀▀"
+        );
     }
 
     @Override
