@@ -20,6 +20,8 @@ public class FollowPath extends Directive {
         this.follower = follower;
         this.endPose = endPose;
         this.holdEnd = holdEnd;
+
+        setRequiredSubsystems(Drivebase.getInstance());
     }
 
     @Override

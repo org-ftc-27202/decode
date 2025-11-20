@@ -26,7 +26,7 @@ public class DefaultLeverTransfer extends DefaultDirective {
 				}
 		));*/
 
-		addTrigger(new Trigger(
+		/*addTrigger(new Trigger(
 				new StatefulCondition(
 						new GamepadButtonMap(gamepad1, GamepadButtonMap.Button.DPAD_DOWN),
 						StatefulCondition.Edge.RISING //On initial press
@@ -35,7 +35,7 @@ public class DefaultLeverTransfer extends DefaultDirective {
 					leverTransfer.setLeverPositionIsUp(false);
 					leverTransfer.updateServoPosition();
 				}
-		));
+		));*/
 
 		addTrigger(new Trigger(
 				new StatefulCondition(

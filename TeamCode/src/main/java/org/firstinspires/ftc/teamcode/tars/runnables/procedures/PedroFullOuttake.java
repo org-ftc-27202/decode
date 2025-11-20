@@ -5,7 +5,10 @@ import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Sleep;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.WaitUntil;
 import org.firstinspires.ftc.teamcode.tars.runnables.directives.SetLight;
 import org.firstinspires.ftc.teamcode.tars.runnables.directives.SetSpeedScale;
+import org.firstinspires.ftc.teamcode.tars.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.tars.subsystems.LeverTransfer;
 import org.firstinspires.ftc.teamcode.tars.subsystems.PedroDrivebase;
+import org.firstinspires.ftc.teamcode.tars.subsystems.Spindexer;
 
 public class PedroFullOuttake extends Procedure {
     public PedroFullOuttake(){
@@ -24,6 +27,12 @@ public class PedroFullOuttake extends Procedure {
                 new Sleep(1.0),
                 new SetSpeedScale(1.0),
                 new SetLight(PedroDrivebase.getInstance().getLight(), "BLUE")
+        );
+
+        setRequiredSubsystems(
+                Intake.getInstance(),
+                Spindexer.getInstance(),
+                LeverTransfer.getInstance()
         );
     }
 }

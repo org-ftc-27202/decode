@@ -32,7 +32,7 @@ public class DefaultTurret extends DefaultDirective {
                         StatefulCondition.Edge.RISING
                 ),
                 () -> {
-                    velocity = velocity + 100.0;
+                    velocity += 100.0;
                 }
         ));
 
@@ -43,7 +43,7 @@ public class DefaultTurret extends DefaultDirective {
                         StatefulCondition.Edge.RISING
                 ),
                 () -> {
-                    velocity = velocity - 100.0;
+                    velocity -= 100.0;
                 }
         ));
 
@@ -66,7 +66,7 @@ public class DefaultTurret extends DefaultDirective {
         ));*/
     }
     @Override
-    public void update(){
+    public void update() {
         turret.setTurretVelocity(velocity);
         turret.getTurretHoodServo().setPosition(position);
     }
