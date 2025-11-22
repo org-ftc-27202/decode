@@ -2,20 +2,8 @@ package org.firstinspires.ftc.teamcode.tars.runnables.defaultdirectives;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.teamcode.stellarstructure.Trigger;
-import org.firstinspires.ftc.teamcode.stellarstructure.conditions.GamepadButtonMap;
-import org.firstinspires.ftc.teamcode.stellarstructure.conditions.StatefulCondition;
-import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Parallel;
-import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Procedure;
-import org.firstinspires.ftc.teamcode.stellarstructure.runnables.SetPosition;
-import org.firstinspires.ftc.teamcode.stellarstructure.runnables.SetPower;
-import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Sleep;
-import org.firstinspires.ftc.teamcode.stellarstructure.runnables.WaitUntil;
-import org.firstinspires.ftc.teamcode.tars.runnables.procedures.FullPatternOuttake;
-import org.firstinspires.ftc.teamcode.tars.runnables.procedures.IntakeAt;
 import org.firstinspires.ftc.teamcode.tars.subsystems.Drivebase;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.DefaultDirective;
-import org.firstinspires.ftc.teamcode.tars.subsystems.Spindexer;
 
 public class DefaultDrivebase extends DefaultDirective {
 	private final Drivebase drivebase = Drivebase.getInstance();

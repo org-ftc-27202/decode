@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.tars.runnables.defaultdirectives;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.teamcode.stellarstructure.Trigger;
+import org.firstinspires.ftc.teamcode.stellarstructure.triggers.ActionTrigger;
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.GamepadButtonMap;
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.StatefulCondition;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.DefaultDirective;
@@ -18,19 +18,28 @@ public class DefaultIntake extends DefaultDirective {
 	public DefaultIntake(Gamepad gamepad1) {
 		super(Intake.getInstance());
 
-		//todo: make if/else
+		/*addTrigger(new IteratorTrigger(
+				new StatefulCondition(
+						() -> gamepad1.left_trigger > 0.05,
+						StatefulCondition.Edge.RISING
+				),
+				() -> {intake.setIntakeSpeed(1.0);},
+				() -> {intake.setIntakeSpeed(0.0);},
+				() -> {intake.setIntakeSpeed(-1.0);}
+		));*/
 
-		addTrigger(new Trigger(
+
+		addTrigger(new ActionTrigger(
 				() -> gamepad1.left_trigger > 0.05, //when left trigger pressed
 				() -> {intake.setIntakeSpeed(0);} //set intake to left trigger
 		));
 
-		addTrigger(new Trigger(
+		addTrigger(new ActionTrigger(
 				() -> gamepad1.right_trigger > 0.05, //when right trigger pressed
 				() -> {intake.setIntakeSpeed(1.0);} //set intake to right trigger
 		));
 
-		addTrigger(new Trigger(
+		addTrigger(new ActionTrigger(
 				// when dpad right just first pressed
 				new StatefulCondition(
 						new GamepadButtonMap(gamepad1, GamepadButtonMap.Button.DPAD_RIGHT),

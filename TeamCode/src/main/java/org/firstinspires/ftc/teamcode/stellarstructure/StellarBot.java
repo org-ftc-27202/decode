@@ -11,9 +11,6 @@ public class StellarBot {
 	private final Subsystem[] subsystems;
 
 	private final Scheduler scheduler = new Scheduler();
-	public Scheduler getScheduler() {
-		return scheduler;
-	}
 
 	public StellarBot(Subsystem... subsystems) {
 		this.subsystems = subsystems;

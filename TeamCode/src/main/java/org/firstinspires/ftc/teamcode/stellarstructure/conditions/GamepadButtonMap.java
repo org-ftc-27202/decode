@@ -41,7 +41,7 @@ public class GamepadButtonMap implements Condition {
 			case DPAD_RIGHT:
 				return gamepad.dpad_right;
 			default:
-				return false;
+				throw new IllegalArgumentException("Unknown button: " + button);
 		}
 	}
 }

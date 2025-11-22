@@ -2,26 +2,20 @@ package org.firstinspires.ftc.teamcode.tars.runnables.defaultdirectives;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Sleep;
-import org.firstinspires.ftc.teamcode.tars.runnables.directives.SetLight;
-import org.firstinspires.ftc.teamcode.tars.runnables.directives.SetSpeedScale;
+import org.firstinspires.ftc.teamcode.stellarstructure.triggers.ActionTrigger;
 import org.firstinspires.ftc.teamcode.tars.runnables.procedures.FullIntake;
 import org.firstinspires.ftc.teamcode.tars.runnables.procedures.FullOuttake;
-import org.firstinspires.ftc.teamcode.stellarstructure.Trigger;
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.GamepadButtonMap;
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.StatefulCondition;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.DefaultDirective;
-import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Procedure;
 import org.firstinspires.ftc.teamcode.tars.runnables.procedures.FullPatternOuttake;
-import org.firstinspires.ftc.teamcode.tars.runnables.procedures.PedroFullOuttake;
-import org.firstinspires.ftc.teamcode.tars.subsystems.PedroDrivebase;
 import org.firstinspires.ftc.teamcode.tars.subsystems.Spindexer;
 
 public class DefaultSpindexer extends DefaultDirective {
 	public DefaultSpindexer(Gamepad gamepad1) {
 		super(Spindexer.getInstance());
 
-		addTrigger(new Trigger(
+		addTrigger(new ActionTrigger(
 				// when y just first pressed
 				new StatefulCondition(
 						new GamepadButtonMap(gamepad1, GamepadButtonMap.Button.Y),
@@ -33,7 +27,7 @@ public class DefaultSpindexer extends DefaultDirective {
 				}
 		));
 
-		addTrigger(new Trigger(
+		addTrigger(new ActionTrigger(
 				// when x just first pressed
 				new StatefulCondition(
 						new GamepadButtonMap(gamepad1, GamepadButtonMap.Button.X),
@@ -45,7 +39,7 @@ public class DefaultSpindexer extends DefaultDirective {
 				}
 		));
 
-		addTrigger(new Trigger(
+		addTrigger(new ActionTrigger(
 				// when x just first pressed
 				new StatefulCondition(
 						new GamepadButtonMap(gamepad1, GamepadButtonMap.Button.A),
@@ -59,7 +53,7 @@ public class DefaultSpindexer extends DefaultDirective {
 
 		/*
 		// thomas
-		addTrigger(new Trigger(
+		addTrigger(new ActionTrigger(
 				new StatefulCondition(
 						new GamepadButtonMap(gamepad1, GamepadButtonMap.Button.LEFT_BUMPER),
 						StatefulCondition.Edge.RISING

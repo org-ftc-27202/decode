@@ -49,6 +49,7 @@ public class PedroDefaultDrivebase extends DefaultDirective {
 				leftFrontPower*PedroDrivebase.getInstance().speedScale,
 				rightFrontPower*PedroDrivebase.getInstance().speedScale,
 				leftBackPower*PedroDrivebase.getInstance().speedScale,
-				rightBackPower*PedroDrivebase.getInstance().speedScale);
+				rightBackPower*PedroDrivebase.getInstance().speedScale
+		);
 	}
 }

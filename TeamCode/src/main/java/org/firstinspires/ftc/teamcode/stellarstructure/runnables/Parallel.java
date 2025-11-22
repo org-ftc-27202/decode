@@ -11,12 +11,28 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * Represents a list of {@link Runnable} tasks to be executed in parallel.
+ * Finishes when all {@link Runnable} tasks are complete or one interrupted.
+ *
+ * <p>Example:</p>
+ *
+ * <pre>
+ * {@code
+ *  new Parallel(
+ *      "IntakeWithTimer",
+ *      new Sleep(10),
+ *      new IntakeAt(2)
+ *  ).schedule();
+ * }
+ * </pre>
+ */
+
 public class Parallel extends Runnable {
     private final Runnable[] runnables;
     private final String nameId;
     private boolean hasScheduledFirst = false;
     private boolean shouldStop = false;
-
 
     public Parallel(@NonNull String nameId, @NonNull Runnable... runnables) {
         if (runnables.length == 0) {
@@ -40,10 +56,6 @@ public class Parallel extends Runnable {
         setRequiredSubsystems(subsystems.toArray(new Subsystem[0]));
 
         setInterruptible(false);
-    }
-
-    public final String getNameId() {
-        return nameId;
     }
 
     @Override
@@ -103,6 +115,10 @@ public class Parallel extends Runnable {
 
     @Override
     public final boolean isFinished() {
+        if (shouldStop) {
+            return true;
+        }
+
         for (Runnable runnable : runnables) {
             if (!runnable.getHasFinished()) {
                 return false;

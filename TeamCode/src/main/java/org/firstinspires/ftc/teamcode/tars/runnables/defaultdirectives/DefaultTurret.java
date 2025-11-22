@@ -2,18 +2,10 @@ package org.firstinspires.ftc.teamcode.tars.runnables.defaultdirectives;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.teamcode.stellarstructure.Trigger;
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.GamepadButtonMap;
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.StatefulCondition;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.DefaultDirective;
-import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Procedure;
-import org.firstinspires.ftc.teamcode.stellarstructure.runnables.SetPower;
-import org.firstinspires.ftc.teamcode.tars.runnables.procedures.FullIntake;
-import org.firstinspires.ftc.teamcode.tars.runnables.procedures.FullOuttake;
-import org.firstinspires.ftc.teamcode.tars.runnables.procedures.FullPatternOuttake;
-import org.firstinspires.ftc.teamcode.tars.runnables.procedures.PedroFullOuttake;
-import org.firstinspires.ftc.teamcode.tars.subsystems.Intake;
-import org.firstinspires.ftc.teamcode.tars.subsystems.Spindexer;
+import org.firstinspires.ftc.teamcode.stellarstructure.triggers.ActionTrigger;
 import org.firstinspires.ftc.teamcode.tars.subsystems.Turret;
 
 import java.util.Set;
@@ -27,7 +19,7 @@ public class DefaultTurret extends DefaultDirective {
     public DefaultTurret(Gamepad gamepad1, Gamepad gamepad2) {
         super(Turret.getInstance());
 
-        addTrigger(new Trigger(
+        addTrigger(new ActionTrigger(
                 // when dpad up just first pressed
                 new StatefulCondition(
                         new GamepadButtonMap(gamepad1, GamepadButtonMap.Button.DPAD_UP),
@@ -38,7 +30,7 @@ public class DefaultTurret extends DefaultDirective {
                 }
         ));
 
-        addTrigger(new Trigger(
+        addTrigger(new ActionTrigger(
                 // when dpad down just first pressed
                 new StatefulCondition(
                         new GamepadButtonMap(gamepad1, GamepadButtonMap.Button.DPAD_DOWN),
@@ -49,7 +41,7 @@ public class DefaultTurret extends DefaultDirective {
                 }
         ));
 
-        addTrigger(new Trigger(
+        addTrigger(new ActionTrigger(
                 new StatefulCondition(
                         new GamepadButtonMap(gamepad2, GamepadButtonMap.Button.DPAD_LEFT),
                         StatefulCondition.Edge.RISING),
@@ -58,7 +50,7 @@ public class DefaultTurret extends DefaultDirective {
                 }
         ));
 
-        addTrigger(new Trigger(
+        addTrigger(new ActionTrigger(
                 new StatefulCondition(
                         new GamepadButtonMap(gamepad2, GamepadButtonMap.Button.DPAD_RIGHT),
                         StatefulCondition.Edge.RISING),
@@ -66,7 +58,7 @@ public class DefaultTurret extends DefaultDirective {
                     position = position - 0.05;
                 }
         ));
-        addTrigger(new Trigger(
+        addTrigger(new ActionTrigger(
                 new StatefulCondition(
                         new GamepadButtonMap(gamepad2, GamepadButtonMap.Button.DPAD_UP),
                         StatefulCondition.Edge.RISING),
@@ -75,7 +67,7 @@ public class DefaultTurret extends DefaultDirective {
                 }
         ));
 
-        addTrigger(new Trigger(
+        addTrigger(new ActionTrigger(
                 new StatefulCondition(
                         new GamepadButtonMap(gamepad2, GamepadButtonMap.Button.DPAD_DOWN),
                         StatefulCondition.Edge.RISING),

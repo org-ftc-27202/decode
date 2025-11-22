@@ -1,25 +1,26 @@
 package org.firstinspires.ftc.teamcode.stellarstructure.runnables;
 
 import org.firstinspires.ftc.teamcode.stellarstructure.actions.Action;
-import org.firstinspires.ftc.teamcode.stellarstructure.actions.BooleanAction;
-import java.util.function.BooleanSupplier;
+import org.firstinspires.ftc.teamcode.stellarstructure.conditions.Condition;
+
+import java.util.function.Consumer;
 
 public class LambdaDirective extends Directive {
-	private BooleanAction onStart = (interrupted) -> {};
+	private Consumer<Boolean> onStart = (interrupted) -> {};
 	private Action onUpdate = () -> {};
-	private BooleanAction onStop = (interrupted) -> {};
-	private BooleanSupplier finishedWhen = () -> true;
+	private Consumer<Boolean> onStop = (interrupted) -> {};
+	private Condition finishedWhen = () -> true;
 
 	public LambdaDirective() {}
 
-	public LambdaDirective onStart(BooleanAction onStart) {
+	public LambdaDirective onStart(Consumer<Boolean> onStart) {
 		this.onStart = onStart;
 		return this;
 	}
 
 	@Override
 	public void start(boolean hadToInterruptToStart) {
-		onStart.run(hadToInterruptToStart);
+		onStart.accept(hadToInterruptToStart);
 	}
 
 	public LambdaDirective onUpdate(Action onUpdate) {
@@ -32,23 +33,23 @@ public class LambdaDirective extends Directive {
 		onUpdate.run();
 	}
 
-	public LambdaDirective onStop(BooleanAction onStop) {
+	public LambdaDirective onStop(Consumer<Boolean> onStop) {
 		this.onStop = onStop;
 		return this;
 	}
 
 	@Override
 	public void stop(boolean interrupted) {
-		onStop.run(interrupted);
+		onStop.accept(interrupted);
 	}
 
-	public LambdaDirective finishedWhen(BooleanSupplier finishedWhen) {
+	public LambdaDirective finishedWhen(Condition finishedWhen) {
 		this.finishedWhen = finishedWhen;
 		return this;
 	}
 
 	@Override
 	public boolean isFinished() {
-		return finishedWhen.getAsBoolean();
+		return finishedWhen.evaluate();
 	}
 }

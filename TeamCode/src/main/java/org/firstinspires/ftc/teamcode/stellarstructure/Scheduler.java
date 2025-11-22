@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Runnable;
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.Condition;
+import org.firstinspires.ftc.teamcode.stellarstructure.triggers.Trigger;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -23,8 +24,6 @@ public class Scheduler {
 		}
 		return activeSchedulerInstance;
 	}
-
-	//todo: reorganize order of methods and variables
 
 	private final List<Subsystem> subsystems = new ArrayList<>();
 	private final List<Runnable> pendingRunnables = new ArrayList<>();
@@ -107,15 +106,6 @@ public class Scheduler {
 		return true;
 	}
 
-	public final void stopRunnable(@NonNull Runnable runnableToCancel) {
-		pendingRunnables.remove(runnableToCancel);
-		runnablesToAdd.remove(runnableToCancel);
-
-		if (activeRunnables.contains(runnableToCancel) && !runnablesToRemove.contains(runnableToCancel)) {
-			runnablesToRemove.add(runnableToCancel);
-		}
-	}
-
 	public final void schedule(@NonNull Runnable runnableToSchedule) {
 		// prevent scheduling of the same directive multiple times
 		if (
@@ -148,7 +138,8 @@ public class Scheduler {
 		}
 	}
 
-	public final void checkScheduleQueue() {
+	public final void run() {
+		// check scheduled runnables and start them if possible
 		for (Iterator<Runnable> iterator = this.pendingRunnables.iterator(); iterator.hasNext(); ) {
 			Runnable runnable = iterator.next();
 			if (checkStartingConditions(runnable)) {
@@ -157,11 +148,6 @@ public class Scheduler {
 				}
 			}
 		}
-	}
-
-	public final void run() {
-		// check scheduled runnables and start them if possible
-		checkScheduleQueue();
 
 		// update runnables
 		for (Runnable runnable : new ArrayList<>(this.activeRunnables)) {
@@ -173,9 +159,7 @@ public class Scheduler {
 				runnable.update();
 
 				for (Trigger trigger : runnable.getOwnedTriggers()) {
-					if (trigger.check()) {
-						trigger.run();
-					}
+					trigger.update();
 				}
 			}
 		}
@@ -209,10 +193,8 @@ public class Scheduler {
 		futureRunnables.addAll(this.activeRunnables);
 		futureRunnables.addAll(this.runnablesToAdd);
 
-		// for every running directive
+		// check if running directive requires subsystem
 		for (Runnable runnable : futureRunnables) {
-			// check if running directive requires subsystem
-
 			// ignore to-be removed directives
 			if (this.runnablesToRemove.contains(runnable)) {
 				continue;
