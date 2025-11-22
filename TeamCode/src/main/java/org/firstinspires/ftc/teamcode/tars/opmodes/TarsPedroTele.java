@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.tars.subsystems.LeverTransfer;
 import org.firstinspires.ftc.teamcode.tars.subsystems.PedroDrivebase;
 import org.firstinspires.ftc.teamcode.tars.subsystems.Spindexer;
 import org.firstinspires.ftc.teamcode.tars.subsystems.Turret;
+import org.firstinspires.ftc.teamcode.util.TrajectoryCalculator;
 
 @TeleOp(name = "TARS +Pedro", group = "Robot")
     public class TarsPedroTele extends LinearOpMode {
@@ -60,10 +61,16 @@ import org.firstinspires.ftc.teamcode.tars.subsystems.Turret;
                         "        ▐▄    ▐██████▀      ▀▀▀▀████████▀\n" +
                         "              ▀▀▀▀                                          ▀▀"
                 );
+
                 //telemetry.addLine(tars.getScheduler().toString());
             } catch (Exception e) {
                 telemetry.addData("telemetry didn't work", e);
             }
+
+            TrajectoryCalculator trajectoryCalculator = new TrajectoryCalculator();
+            double[] radiansAndVelocity = trajectoryCalculator.calculateTrajectory(0.1, 3.6576, 0.9906, 20.0, 1.0, 2.7);
+            telemetry.addLine(String.format("Radians: %f, Velocity: %f", radiansAndVelocity[0], radiansAndVelocity[1]));
+
             telemetry.update();
 
             waitForStart();

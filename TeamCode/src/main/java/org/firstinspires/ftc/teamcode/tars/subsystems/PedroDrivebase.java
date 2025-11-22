@@ -74,6 +74,9 @@ public final class PedroDrivebase extends Subsystem {
         follower.update();
         distanceFromGoal = Math.sqrt(Math.pow(follower.getPose().getX()-GOAL_X, 2)+Math.pow(follower.getPose().getY()-GOAL_Y,2));
     }
+    public Follower getFollower(){
+        return follower;
+    }
 
 
     public boolean checkForLaunchPose() {
@@ -83,21 +86,23 @@ public final class PedroDrivebase extends Subsystem {
 
             if (y > 48) {
                 if (x <= 72) {
-                    return y >= (-x + 138-LAUNCH_ZONE_SCALE);
+                    return y >= (-x + 138 - LAUNCH_ZONE_SCALE);
                 } else if (x > 72) {
-                    return y >= (x - 6-LAUNCH_ZONE_SCALE);
+                    return y >= (x - 6 - LAUNCH_ZONE_SCALE);
                 }
             } else if (y <= 48) {
                 if (x <= 72) {
-                    return y <= (x - 42+LAUNCH_ZONE_SCALE);
+                    return y <= (x - 42 + LAUNCH_ZONE_SCALE);
                 } else if (x > 72) {
-                    return y <= (-x + 102+LAUNCH_ZONE_SCALE);
+                    return y <= (-x + 102 + LAUNCH_ZONE_SCALE);
                 }
             }
             return false;
 
     }
-    public StellarLight getLight(){return light;}
+    public StellarLight getLight() {
+        return light;
+    }
 
     public void setSpeedScale(double speedScale){
         this.speedScale = speedScale;

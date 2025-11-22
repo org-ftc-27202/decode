@@ -34,6 +34,8 @@ public final class Spindexer extends Subsystem {
 		DecodeDataTypes.ArtifactColor.NONE
 	};
 
+
+
 	public enum Position {
 		INTAKE, TRANSFER
 	}

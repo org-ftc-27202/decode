@@ -26,31 +26,36 @@ import org.firstinspires.ftc.teamcode.tars.runnables.procedures.IntakeAt;
 import org.firstinspires.ftc.teamcode.tars.subsystems.Drivebase;
 import org.firstinspires.ftc.teamcode.tars.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.tars.subsystems.LeverTransfer;
+import org.firstinspires.ftc.teamcode.tars.subsystems.PedroDrivebase;
 import org.firstinspires.ftc.teamcode.tars.subsystems.Spindexer;
 import org.firstinspires.ftc.teamcode.tars.subsystems.Turret;
+import org.firstinspires.ftc.teamcode.util.DecodeDataTypes;
 
 @Autonomous(name = "Pedro-", group = "Auto")
 public class TarsAuto extends OpMode {
-    final double FLYWHEEL_LAUNCH = 1000.0;
-    final double TURRET_LAUNCH = 0.5;
-    final double HOOD_LAUNCH = 0.5;
-    private Follower follower;
+    private final double FLYWHEEL_LAUNCH = 1080;
+    private final double TURRET_LAUNCH = 0;
+    private final double HOOD_LAUNCH = 0;
     private Timer pathTimer, actionTimer, opmodeTimer;
-    final StellarBot tars = new StellarBot(
-            Drivebase.getInstance(),
+    private final StellarBot tars = new StellarBot(
+            PedroDrivebase.getInstance(),
             Intake.getInstance(),
             LeverTransfer.getInstance(),
-            Spindexer.getInstance()
+            Spindexer.getInstance(),
+            Turret.getInstance()
     );
     //DefaultDrivebase defaultDrivebase = new DefaultDrivebase(gamepad1);
-    DefaultIntake defaultIntake = new DefaultIntake(gamepad1);
-    DefaultLeverTransfer defaultLeverTransfer = new DefaultLeverTransfer(gamepad1);
-    DefaultSpindexer defaultSpindexer = new DefaultSpindexer(gamepad1);
+    private DefaultIntake defaultIntake = new DefaultIntake(gamepad1);
+    private DefaultLeverTransfer defaultLeverTransfer = new DefaultLeverTransfer(gamepad1);
+    private DefaultSpindexer defaultSpindexer = new DefaultSpindexer(gamepad1);
 
-    private final Drivebase drivebase = Drivebase.getInstance();
+    private final PedroDrivebase pedroDrivebase = PedroDrivebase.getInstance();
     private final Intake intake = Intake.getInstance();
     private final LeverTransfer leverTransfer = LeverTransfer.getInstance();
     private final Spindexer spindexer = Spindexer.getInstance();
+    private final Turret turret = Turret.getInstance();
+
+    private Follower follower = pedroDrivebase.getFollower();
 
     private final Pose startPose = new Pose(56.75,7, Math.toRadians(180));
     private final Pose collect1Pose = new Pose(19, 35.5);
@@ -80,10 +85,13 @@ public class TarsAuto extends OpMode {
 
     @Override
     public void init() {
-        this.follower = Constants.createFollower(hardwareMap);
+        //this.follower = Constants.createFollower(hardwareMap);
         tars.init(hardwareMap);
         buildPaths();
         follower.setStartingPose(startPose);
+        spindexer.setArtifactColorInSpindexer(0, DecodeDataTypes.ArtifactColor.PURPLE);
+        spindexer.setArtifactColorInSpindexer(0, DecodeDataTypes.ArtifactColor.GREEN);
+        spindexer.setArtifactColorInSpindexer(0, DecodeDataTypes.ArtifactColor.PURPLE);
 
         telemetry.addLine(
                 "\n                                 █\n" +
@@ -105,12 +113,12 @@ public class TarsAuto extends OpMode {
                 "AutoDrive",
                 new SetPosition(LeverTransfer.getInstance().getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION),
                 new Sleep(0.03),
-                new InstantlyDo(()-> Turret.getInstance().setTurretVelocity(FLYWHEEL_LAUNCH)),
+                new InstantlyDo(()-> turret.setTurretVelocity(FLYWHEEL_LAUNCH)),
                 new FullIntake(),
-                new InstantlyDo(()-> Turret.getInstance().getTurretServo().setPosition(TURRET_LAUNCH)),
-                new InstantlyDo(()-> Turret.getInstance().getTurretHoodServo().setPosition(HOOD_LAUNCH)),
-                new FullPatternOuttake(),
-                new FollowPath(path1, follower, collect1Pose, true)
+                //new InstantlyDo(()-> Turret.getInstance().getTurretServo().setPosition(TURRET_LAUNCH)),
+                //new InstantlyDo(()-> Turret.getInstance().getTurretHoodServo().setPosition(HOOD_LAUNCH)),
+                new FullPatternOuttake()
+                //new FollowPath(path1, follower, collect1Pose, true)
                         //new FullIntake(),
                         //new SetPower(Intake.getInstance().getIntakeMotor(), 0.5),
                 //new FollowPath(path2, follower, launchFarPose, true),
@@ -122,11 +130,11 @@ public class TarsAuto extends OpMode {
     public void loop() {
         tars.update();
         follower.update();
-        telemetry.addData("x: ", follower.getPose().getX());
+        /*telemetry.addData("x: ", follower.getPose().getX());
         telemetry.addData("isBusy(): ", follower.isBusy());
         telemetry.addData("y: ", follower.getPose().getY());
         telemetry.addData("heading: ", follower.getPose().getHeading());
-        telemetry.addData("T: ", follower.getCurrentTValue());
+        telemetry.addData("T: ", follower.getCurrentTValue());*/
         telemetry.addLine(tars.toString());
         telemetry.update();
     }
