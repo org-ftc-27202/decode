@@ -13,18 +13,18 @@ import java.util.Set;
 
 /**
  * Represents a list of {@link Runnable} tasks to be executed in parallel.
- * Finishes when all {@link Runnable} tasks are complete or one interrupted.
+ * Finishes when all {@link Runnable} tasks are complete or one is interrupted/doesn't start.
  *
  * <p>Example:</p>
  *
  * <pre>
- * {@code
- *  new Parallel(
- *      "IntakeWithTimer",
- *      new Sleep(10),
- *      new IntakeAt(2)
- *  ).schedule();
- * }
+ *     {@code
+ *     new Parallel(
+ *         "IntakeWithTimer",
+ *         new Sleep(10),
+ *         new IntakeAt(2)
+ *     ).schedule();
+ *     }
  * </pre>
  */
 
@@ -34,6 +34,12 @@ public class Parallel extends Runnable {
     private boolean hasScheduledFirst = false;
     private boolean shouldStop = false;
 
+    /**
+     * Constructs a new parallel runnable.
+     *
+     * @param nameId The name of the parallel command. Must be unique.
+     * @param runnables The {@link Runnable} tasks to be executed in parallel.
+     */
     public Parallel(@NonNull String nameId, @NonNull Runnable... runnables) {
         if (runnables.length == 0) {
             throw new IllegalArgumentException("No directives provided");

@@ -31,9 +31,9 @@ import org.firstinspires.ftc.teamcode.tars.subsystems.Turret;
 
 @Autonomous(name = "Pedro-", group = "Auto")
 public class TarsAuto extends OpMode {
-    final double FLYWHEEL_LAUNCH = 1000;
-    final double TURRET_LAUNCH = .5;
-    final double HOOD_LAUNCH = .5;
+    final double FLYWHEEL_LAUNCH = 1000.0;
+    final double TURRET_LAUNCH = 0.5;
+    final double HOOD_LAUNCH = 0.5;
     private Follower follower;
     private Timer pathTimer, actionTimer, opmodeTimer;
     final StellarBot tars = new StellarBot(

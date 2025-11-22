@@ -13,7 +13,6 @@ public class DecodeDataTypes {
         PURPLE,
         NONE
     }
-
     public static class ArtifactSequence {
         private ArtifactColor[] sequence = new ArtifactColor[3];
 

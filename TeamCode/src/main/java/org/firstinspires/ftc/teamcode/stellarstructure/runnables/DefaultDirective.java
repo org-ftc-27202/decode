@@ -3,8 +3,20 @@ package org.firstinspires.ftc.teamcode.stellarstructure.runnables;
 import org.firstinspires.ftc.teamcode.stellarstructure.Subsystem;
 
 /**
- * Default directives are directives that can be applied to subsystems.
- * When applied and when the subsystem is not being used, the default directive will be scheduled automatically.
+ * {@link Directive} that is assigned to a {@link Subsystem}.
+ * When the {@link Subsystem} is unassigned, this directive will be scheduled.
+ *
+ * <p> Note: All  {@link Directive}s can interrupt {@link DefaultDirective}s by default.</p>
+ *
+ * <pre>
+ *     {@code
+ *     // set up subsystems
+ *     tars.init(hardwareMap);
+ *
+ * 	   // set up default directives
+ * 	   drivebase.setDefaultDirective(new DefaultDrivebase(gamepad1, gamepad2));
+ *     }
+ * </pre>
  */
 
 public class DefaultDirective extends Directive {
