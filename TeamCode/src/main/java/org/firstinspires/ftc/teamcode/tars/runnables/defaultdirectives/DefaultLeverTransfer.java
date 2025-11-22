@@ -37,7 +37,7 @@ public class DefaultLeverTransfer extends DefaultDirective {
 				}
 		));*/
 
-		addTrigger(new Trigger(
+		/*addTrigger(new Trigger(
 				new StatefulCondition(
 						new GamepadButtonMap(gamepad1, GamepadButtonMap.Button.DPAD_LEFT),
 						StatefulCondition.Edge.RISING //On initial press
@@ -46,6 +46,6 @@ public class DefaultLeverTransfer extends DefaultDirective {
 					// up down up
 					new PulseTransferLever().schedule();
 				}
-		));
+		));*/
 	}
 }

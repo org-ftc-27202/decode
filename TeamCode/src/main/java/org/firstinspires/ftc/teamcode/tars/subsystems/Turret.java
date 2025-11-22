@@ -1,9 +1,16 @@
 package org.firstinspires.ftc.teamcode.tars.subsystems;
 
-import static org.firstinspires.ftc.teamcode.tars.subsystems.TurretPIDFConstants.d;
-import static org.firstinspires.ftc.teamcode.tars.subsystems.TurretPIDFConstants.f;
-import static org.firstinspires.ftc.teamcode.tars.subsystems.TurretPIDFConstants.i;
-import static org.firstinspires.ftc.teamcode.tars.subsystems.TurretPIDFConstants.p;
+import static org.firstinspires.ftc.teamcode.tars.subsystems.TurretPIDFConstants.d_left;
+import static org.firstinspires.ftc.teamcode.tars.subsystems.TurretPIDFConstants.d_right;
+
+import static org.firstinspires.ftc.teamcode.tars.subsystems.TurretPIDFConstants.f_left;
+import static org.firstinspires.ftc.teamcode.tars.subsystems.TurretPIDFConstants.f_right;
+
+import static org.firstinspires.ftc.teamcode.tars.subsystems.TurretPIDFConstants.i_left;
+import static org.firstinspires.ftc.teamcode.tars.subsystems.TurretPIDFConstants.i_right;
+
+import static org.firstinspires.ftc.teamcode.tars.subsystems.TurretPIDFConstants.p_left;
+import static org.firstinspires.ftc.teamcode.tars.subsystems.TurretPIDFConstants.p_right;
 
 import androidx.annotation.NonNull;
 
@@ -26,7 +33,9 @@ public final class Turret extends Subsystem {
     private Turret() {}
 
     private final static double DEGREES_TO_SERVO = 1.0 / 320.0;
-    private final static double VELOCITY_TOLERANCE = 10.0;
+
+    private final static double TICKS_TO_ROTATION = 1.5 / 7.0;
+    private final static double VELOCITY_TOLERANCE = 60.0;
 
     private double velocity = 0.0;
 
@@ -43,16 +52,20 @@ public final class Turret extends Subsystem {
         leftTurretMotor = new StellarDcMotor(hardwareMap, "leftTurretMotor" );
         rightTurretMotor = new StellarDcMotor(hardwareMap, "rightTurretMotor");
 
-        leftTurretMotor.setDirection(DcMotorEx.Direction.FORWARD);
-        rightTurretMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftTurretMotor.setDirection(DcMotorEx.Direction.REVERSE);
+        rightTurretMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         leftTurretMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        rightTurretMotor.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
-        leftTurretMotor.setVelocityPIDFCoefficents(p,i,d,f);
-        rightTurretMotor.setVelocityPIDFCoefficents(p,i,d,f);
+        rightTurretMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        leftTurretMotor.setVelocityPIDFCoefficents(p_left,i_left,d_left,f_left);
+        rightTurretMotor.setVelocityPIDFCoefficents(p_right,i_right,d_right,f_right);
+
     }
 
     @Override
-    public void update() {}
+    public void update() {
+        leftTurretMotor.setVelocityPIDFCoefficents(p_left,i_left,d_left,f_left);
+        rightTurretMotor.setVelocityPIDFCoefficents(p_right,i_right,d_right,f_right);
+    }
 
     public StellarServo getTurretServo() {
         return turretServo;
@@ -91,12 +104,15 @@ public final class Turret extends Subsystem {
         return String.format(
                 "Turret Servo Pos: %f\n" +
                     "   Hood Pos: %f\n" +
-                    "   Turret Motor Vel: %f\n" +
+                    "   Turret Left/Right Motor Vel: %f, %f\n" +
                 "Turret Target Velocity: %f\n" +
                     "   TurretAtTargetVelocity?: %b",
                 turretServo.getPosition(),
                 turretHoodServo.getPosition(),
-                leftTurretMotor.getVelocity(), velocity, velocityWithinTolerance()
+                leftTurretMotor.getVelocity(),
+                rightTurretMotor.getVelocity(),
+                velocity,
+                velocityWithinTolerance()
         );
     }
 }

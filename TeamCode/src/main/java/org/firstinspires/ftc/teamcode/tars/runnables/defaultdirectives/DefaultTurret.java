@@ -22,7 +22,9 @@ public class DefaultTurret extends DefaultDirective {
     private final Turret turret = Turret.getInstance();
     private double velocity = 0.0;
     private double position = 0.0;
-    public DefaultTurret(Gamepad gamepad1) {
+
+    private double hoodposition = 0.0;
+    public DefaultTurret(Gamepad gamepad1, Gamepad gamepad2) {
         super(Turret.getInstance());
 
         addTrigger(new Trigger(
@@ -47,9 +49,9 @@ public class DefaultTurret extends DefaultDirective {
                 }
         ));
 
-        /*addTrigger(new Trigger(
+        addTrigger(new Trigger(
                 new StatefulCondition(
-                        new GamepadButtonMap(gamepad1, GamepadButtonMap.Button.DPAD_LEFT),
+                        new GamepadButtonMap(gamepad2, GamepadButtonMap.Button.DPAD_LEFT),
                         StatefulCondition.Edge.RISING),
                 () -> {
                     position = position + 0.05;
@@ -58,16 +60,34 @@ public class DefaultTurret extends DefaultDirective {
 
         addTrigger(new Trigger(
                 new StatefulCondition(
-                        new GamepadButtonMap(gamepad1, GamepadButtonMap.Button.DPAD_RIGHT),
+                        new GamepadButtonMap(gamepad2, GamepadButtonMap.Button.DPAD_RIGHT),
                         StatefulCondition.Edge.RISING),
                 () -> {
                     position = position - 0.05;
                 }
-        ));*/
+        ));
+        addTrigger(new Trigger(
+                new StatefulCondition(
+                        new GamepadButtonMap(gamepad2, GamepadButtonMap.Button.DPAD_UP),
+                        StatefulCondition.Edge.RISING),
+                () -> {
+                    hoodposition = hoodposition + 0.05;
+                }
+        ));
+
+        addTrigger(new Trigger(
+                new StatefulCondition(
+                        new GamepadButtonMap(gamepad2, GamepadButtonMap.Button.DPAD_DOWN),
+                        StatefulCondition.Edge.RISING),
+                () -> {
+                    hoodposition = hoodposition - 0.05;
+                }
+        ));
     }
     @Override
     public void update() {
         turret.setTurretVelocity(velocity);
-        turret.getTurretHoodServo().setPosition(position);
+        turret.getTurretHoodServo().setPosition(hoodposition);
+        turret.getTurretServo().setPosition(position);
     }
 }

@@ -44,7 +44,7 @@ import org.firstinspires.ftc.teamcode.tars.subsystems.Turret;
             intake.setDefaultDirective(new DefaultIntake(gamepad1));
             leverTransfer.setDefaultDirective(new DefaultLeverTransfer(gamepad1));
             spindexer.setDefaultDirective(new DefaultSpindexer(gamepad1));
-            turret.setDefaultDirective(new DefaultTurret(gamepad1));
+            turret.setDefaultDirective(new DefaultTurret(gamepad1, gamepad2));
 
             // print telemetry
             try {

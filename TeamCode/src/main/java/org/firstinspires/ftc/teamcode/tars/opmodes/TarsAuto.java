@@ -10,22 +10,30 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import  com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.pedroPathing.Constants;
+import org.firstinspires.ftc.teamcode.stellarstructure.runnables.InstantlyDo;
 import org.firstinspires.ftc.teamcode.tars.runnables.directives.FollowPath;
 import org.firstinspires.ftc.teamcode.tars.runnables.defaultdirectives.DefaultIntake;
 import org.firstinspires.ftc.teamcode.tars.runnables.defaultdirectives.DefaultLeverTransfer;
 import org.firstinspires.ftc.teamcode.tars.runnables.defaultdirectives.DefaultSpindexer;
+import org.firstinspires.ftc.teamcode.tars.runnables.procedures.FullIntake;
 import org.firstinspires.ftc.teamcode.tars.runnables.procedures.FullOuttake;
 import org.firstinspires.ftc.teamcode.stellarstructure.StellarBot;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Procedure;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.SetPosition;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Sleep;
+import org.firstinspires.ftc.teamcode.tars.runnables.procedures.FullPatternOuttake;
+import org.firstinspires.ftc.teamcode.tars.runnables.procedures.IntakeAt;
 import org.firstinspires.ftc.teamcode.tars.subsystems.Drivebase;
 import org.firstinspires.ftc.teamcode.tars.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.tars.subsystems.LeverTransfer;
 import org.firstinspires.ftc.teamcode.tars.subsystems.Spindexer;
+import org.firstinspires.ftc.teamcode.tars.subsystems.Turret;
 
 @Autonomous(name = "Pedro-", group = "Auto")
 public class TarsAuto extends OpMode {
+    final double FLYWHEEL_LAUNCH = 1000;
+    final double TURRET_LAUNCH = .5;
+    final double HOOD_LAUNCH = .5;
     private Follower follower;
     private Timer pathTimer, actionTimer, opmodeTimer;
     final StellarBot tars = new StellarBot(
@@ -97,12 +105,16 @@ public class TarsAuto extends OpMode {
                 "AutoDrive",
                 new SetPosition(LeverTransfer.getInstance().getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION),
                 new Sleep(0.03),
-
-                        new FollowPath(path1, follower, collect1Pose, true),
+                new InstantlyDo(()-> Turret.getInstance().setTurretVelocity(FLYWHEEL_LAUNCH)),
+                new FullIntake(),
+                new InstantlyDo(()-> Turret.getInstance().getTurretServo().setPosition(TURRET_LAUNCH)),
+                new InstantlyDo(()-> Turret.getInstance().getTurretHoodServo().setPosition(HOOD_LAUNCH)),
+                new FullPatternOuttake(),
+                new FollowPath(path1, follower, collect1Pose, true)
                         //new FullIntake(),
                         //new SetPower(Intake.getInstance().getIntakeMotor(), 0.5),
-                new FollowPath(path2, follower, launchFarPose, true),
-                new FullOuttake()
+                //new FollowPath(path2, follower, launchFarPose, true),
+                //new FullOuttake()
         ).schedule();
     }
 

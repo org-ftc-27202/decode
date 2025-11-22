@@ -30,11 +30,17 @@ public final class PedroDrivebase extends Subsystem {
 
     public final static double CARDINAL_SPEED = 0.70;
     public final static double TURN_SPEED = 0.55;
-    public final static double FAR_LAUNCH_FACTOR = .2;
-    public final static double NEAR_LAUNCH_FACTOR = .4;
+    public final static double FAR_LAUNCH_FACTOR = 0.2;
+    public final static double NEAR_LAUNCH_FACTOR = 0.4;
     public final static double LAUNCH_ZONE_SCALE = 6.2;
+    public final static double GOAL_X= 11;
+    public final static double GOAL_Y = 141;
 
-    public double speedScale = 1;
+
+
+    public double distanceFromGoal;
+
+    public double speedScale = 1.0;
 
     private DcMotorEx leftFrontDrive, leftBackDrive, rightFrontDrive, rightBackDrive;
     private StellarLight light;
@@ -64,7 +70,10 @@ public final class PedroDrivebase extends Subsystem {
     }
 
     @Override
-    public void update() {follower.update();}
+    public void update() {
+        follower.update();
+        distanceFromGoal = Math.sqrt(Math.pow(follower.getPose().getX()-GOAL_X, 2)+Math.pow(follower.getPose().getY()-GOAL_Y,2));
+    }
 
 
     public boolean checkForLaunchPose() {
@@ -112,6 +121,7 @@ public final class PedroDrivebase extends Subsystem {
                         "X: %.3f\n" +
                         "Y: %.3f\n" +
                         "Heading(degrees): %.2f\n" +
+                                "Distance From Goal: %.3f\n"+
                         "In Launch Zone: %b\n "+
                         "Light Color: %f",
                 leftFrontDrive.getPower(),
@@ -121,6 +131,7 @@ public final class PedroDrivebase extends Subsystem {
                 follower.getPose().getX(),
                 follower.getPose().getY(),
                 Math.toDegrees(follower.getPose().getHeading()),
+                distanceFromGoal,
                 checkForLaunchPose(),
                 light.getPosition());
     }
