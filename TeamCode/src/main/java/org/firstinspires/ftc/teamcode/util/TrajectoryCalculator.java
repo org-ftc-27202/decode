@@ -41,9 +41,9 @@ public class TrajectoryCalculator {
          * time to X velocity
          */
         double estimateNaughtvx = (xFinal / timeFinal) - inertialPOVX;
-        double estimate1vx = estimateNaughtvx - ((xApproxvx(estimateNaughtvx, timeFinal, inertialPOVX) - xFinal) / ((xApproxvx(estimateNaughtvx - 0.0005, timeFinal, inertialPOVX) - xApproxvx(estimateNaughtvx - 0.0005, timeFinal, inertialPOVX)) / 0.001));
-        double estimate2vx = estimate1vx - ((xApproxvx(estimate1vx, timeFinal, inertialPOVX) - xFinal) / ((xApproxvx(estimate1vx - 0.0005, timeFinal, inertialPOVX) - xApproxvx(estimate1vx - 0.0005, timeFinal, inertialPOVX)) / 0.001));
-        double estimateFinalvx = estimate2vx - ((xApproxvx(estimate2vx, timeFinal, inertialPOVX) - xFinal) / ((xApproxvx(estimate2vx - 0.0005, timeFinal, inertialPOVX) - xApproxvx(estimate2vx - 0.0005, timeFinal, inertialPOVX)) / 0.001));
+        double estimate1vx = estimateNaughtvx - ((xApproxvx(estimateNaughtvx, timeFinal, inertialPOVX) - xFinal) / ((xApproxvx(estimateNaughtvx + 0.0005, timeFinal, inertialPOVX) - xApproxvx(estimateNaughtvx - 0.0005, timeFinal, inertialPOVX)) / 0.001));
+        double estimate2vx = estimate1vx - ((xApproxvx(estimate1vx, timeFinal, inertialPOVX) - xFinal) / ((xApproxvx(estimate1vx + 0.0005, timeFinal, inertialPOVX) - xApproxvx(estimate1vx - 0.0005, timeFinal, inertialPOVX)) / 0.001));
+        double estimateFinalvx = estimate2vx - ((xApproxvx(estimate2vx, timeFinal, inertialPOVX) - xFinal) / ((xApproxvx(estimate2vx + 0.0005, timeFinal, inertialPOVX) - xApproxvx(estimate2vx - 0.0005, timeFinal, inertialPOVX)) / 0.001));
 
         /* ------
          * Part 3
@@ -52,9 +52,9 @@ public class TrajectoryCalculator {
          * X velocity to Y velocity
          */
         double estimateNaughtvy = (height / timeFinal) + ((GRAVITY * timeFinal) / 2);
-        double estimate1vy = estimateNaughtvy - ((yApproxvx(estimateNaughtvy, timeFinal, estimateFinalvx, slipConstant) - height) / ((yApproxvx(estimateNaughtvy - 0.0005, timeFinal, estimateFinalvx, slipConstant) - yApproxvx(estimateNaughtvy - 0.0005, timeFinal, estimateFinalvx, slipConstant)) / 0.001));
-        double estimate2vy = estimate1vy - ((yApproxvx(estimate1vy, timeFinal, estimateFinalvx, slipConstant) - height) / ((yApproxvx(estimate1vy - 0.0005, timeFinal, estimateFinalvx, slipConstant) - yApproxvx(estimate1vy - 0.0005, timeFinal, estimateFinalvx, slipConstant)) / 0.001));
-        double estimateFinalvy = estimate2vy - ((yApproxvx(estimate2vy, timeFinal, estimateFinalvx, slipConstant) - height) / ((yApproxvx(estimate2vy - 0.0005, timeFinal, estimateFinalvx, slipConstant) - yApproxvx(estimate2vy - 0.0005, timeFinal, estimateFinalvx, slipConstant)) / 0.001));
+        double estimate1vy = estimateNaughtvy - ((yApproxvx(estimateNaughtvy, timeFinal, estimateFinalvx, slipConstant) - height) / ((yApproxvx(estimateNaughtvy + 0.0005, timeFinal, estimateFinalvx, slipConstant) - yApproxvx(estimateNaughtvy - 0.0005, timeFinal, estimateFinalvx, slipConstant)) / 0.001));
+        double estimate2vy = estimate1vy - ((yApproxvx(estimate1vy, timeFinal, estimateFinalvx, slipConstant) - height) / ((yApproxvx(estimate1vy + 0.0005, timeFinal, estimateFinalvx, slipConstant) - yApproxvx(estimate1vy - 0.0005, timeFinal, estimateFinalvx, slipConstant)) / 0.001));
+        double estimateFinalvy = estimate2vy - ((yApproxvx(estimate2vy, timeFinal, estimateFinalvx, slipConstant) - height) / ((yApproxvx(estimate2vy + 0.0005, timeFinal, estimateFinalvx, slipConstant) - yApproxvx(estimate2vy - 0.0005, timeFinal, estimateFinalvx, slipConstant)) / 0.001));
 
         /* ------
          * Part 4
