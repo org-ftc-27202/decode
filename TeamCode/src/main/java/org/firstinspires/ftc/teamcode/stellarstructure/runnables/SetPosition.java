@@ -20,7 +20,9 @@ public class SetPosition extends Directive {
 	}
 
 	@Override
-	public void update() {}
+	public void update() {
+		servo.setPosition(targetPosition);
+	}
 
 	@Override
 	public void stop(boolean interrupted) {}
