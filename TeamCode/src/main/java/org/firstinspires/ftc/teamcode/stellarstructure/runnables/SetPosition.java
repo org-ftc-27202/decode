@@ -27,7 +27,7 @@ public class SetPosition extends Directive {
 
 	@Override
 	public boolean isFinished() {
-		return true;
+		return targetPosition == servo.getPosition();
 	}
 
 	@NonNull
