@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 
 import androidx.annotation.NonNull;
-
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
+import com.qualcomm.robotcore.hardware.CRServoImplEx;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorImplEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public final class botIntake {
@@ -12,13 +14,14 @@ public final class botIntake {
     final double INTAKE_OUTWARDS_POWER = -0.5;
     final double INTAKE_OFF_POWER = 0.0;
     final double intakePower = INTAKE_OFF_POWER;
-
-    private DcMotorEx intake;
+    private final DcMotorEx intake;
 
     public botIntake(HardwareMap hardwareMap){
-        intake = hardwareMap.get(DcMotorEx.class, "intake");
+        intake = hardwareMap.get(DcMotorImplEx.class, "intake");
+
         intake.setDirection(DcMotorEx.Direction.REVERSE);
-        intake.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        intake.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
+        intake.setPower(0);
     }
 
     public class RotateInwards implements Action {
@@ -32,7 +35,7 @@ public final class botIntake {
             }
 
             packet.put("intakePower", intake.getPower());
-            return true;
+            return false;
         }
     }
 
@@ -51,7 +54,7 @@ public final class botIntake {
             }
 
             packet.put("intakePower", intake.getPower());
-            return true;
+            return false;
         }
     }
 
@@ -70,7 +73,7 @@ public final class botIntake {
             }
 
             packet.put("intakePower", intake.getPower());
-            return true;
+            return false;
         }
     }
 
