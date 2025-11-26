@@ -35,7 +35,7 @@ public class MoveTo extends Directive {
 
 	@Override
 	public boolean isFinished() {
-		return true;
+		return targetPosition == motor.getTargetPosition();
 	}
 
 	@NonNull
