@@ -11,6 +11,7 @@ import com.qualcomm.hardware.limelightvision.LLStatus;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 
@@ -31,8 +32,8 @@ public abstract class baseTeleOp extends LinearOpMode {
     public void runOpMode() {
         TelemetryPacket packet = new TelemetryPacket();
 
-        double speedAdjustment = 0.60;
-        double turnSpeedAdjustment = 0.40;
+        double speedAdjustment = 1.0;
+        double turnSpeedAdjustment = 0.80;
         double max, axial, lateral, yaw;
         double leftFrontPower, rightFrontPower, leftBackPower, rightBackPower;
 
@@ -42,10 +43,10 @@ public abstract class baseTeleOp extends LinearOpMode {
         rightFrontDrive = hardwareMap.get(DcMotorEx.class, "rightFront");
         rightBackDrive = hardwareMap.get(DcMotorEx.class, "rightRear");
 
-        leftFrontDrive.setDirection(DcMotorEx.Direction.REVERSE);
-        leftBackDrive.setDirection(DcMotorEx.Direction.REVERSE);
-        rightFrontDrive.setDirection(DcMotorEx.Direction.FORWARD);
-        rightBackDrive.setDirection(DcMotorEx.Direction.FORWARD);
+        leftFrontDrive.setDirection(DcMotorSimple.Direction.FORWARD);
+        leftBackDrive.setDirection(DcMotorSimple.Direction.FORWARD);
+        rightFrontDrive.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightBackDrive.setDirection(DcMotorSimple.Direction.REVERSE);
 
         leftFrontDrive.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         leftBackDrive.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
@@ -95,6 +96,11 @@ public abstract class baseTeleOp extends LinearOpMode {
                 rightBackPower /= max;
             }
 
+            // Send calculated power to wheels
+            leftFrontDrive.setPower(leftFrontPower);
+            rightFrontDrive.setPower(rightFrontPower);
+            leftBackDrive.setPower(leftBackPower);
+            rightBackDrive.setPower(rightBackPower);
             // intake
             if (gamepad1.x) {
                 runningActions.add(new SequentialAction(
