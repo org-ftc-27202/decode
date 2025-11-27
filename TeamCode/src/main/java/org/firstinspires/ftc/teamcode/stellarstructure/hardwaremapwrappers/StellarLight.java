@@ -9,7 +9,7 @@ public class StellarLight {
     private final Servo light;
     private final String lightName;
 
-    public StellarLight(HardwareMap hardwareMap, String lightName) {
+    public StellarLight(HardwareMap hardwareMap, @NonNull String lightName) {
         this.light = hardwareMap.get(Servo.class, lightName);
         this.lightName = lightName;
     }

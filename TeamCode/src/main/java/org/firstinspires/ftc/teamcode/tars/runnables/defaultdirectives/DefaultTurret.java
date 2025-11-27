@@ -8,14 +8,12 @@ import org.firstinspires.ftc.teamcode.stellarstructure.runnables.DefaultDirectiv
 import org.firstinspires.ftc.teamcode.stellarstructure.triggers.ActionTrigger;
 import org.firstinspires.ftc.teamcode.tars.subsystems.Turret;
 
-import java.util.Set;
-
 public class DefaultTurret extends DefaultDirective {
     private final Turret turret = Turret.getInstance();
     private double velocity = 0.0;
     private double position = 0.0;
 
-    private double hoodposition = 0.0;
+    private double hoodPosition = 0.0;
     public DefaultTurret(Gamepad gamepad1, Gamepad gamepad2) {
         super(Turret.getInstance());
 
@@ -63,7 +61,7 @@ public class DefaultTurret extends DefaultDirective {
                         new GamepadButtonMap(gamepad2, GamepadButtonMap.Button.DPAD_UP),
                         StatefulCondition.Edge.RISING),
                 () -> {
-                    hoodposition = hoodposition + 0.05;
+                    hoodPosition = hoodPosition + 0.05;
                 }
         ));
 
@@ -72,14 +70,14 @@ public class DefaultTurret extends DefaultDirective {
                         new GamepadButtonMap(gamepad2, GamepadButtonMap.Button.DPAD_DOWN),
                         StatefulCondition.Edge.RISING),
                 () -> {
-                    hoodposition = hoodposition - 0.05;
+                    hoodPosition = hoodPosition - 0.05;
                 }
         ));
     }
     @Override
     public void update() {
         turret.setTurretVelocity(velocity);
-        turret.getTurretHoodServo().setPosition(hoodposition);
+        turret.getTurretHoodServo().setPosition(hoodPosition);
         turret.getTurretServo().setPosition(position);
     }
 }

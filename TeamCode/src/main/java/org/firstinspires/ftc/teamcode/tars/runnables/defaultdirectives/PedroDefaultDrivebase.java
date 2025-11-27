@@ -46,10 +46,10 @@ public class PedroDefaultDrivebase extends DefaultDirective {
 
 		// send calculated power to wheels
 		pedroDrivebase.setDrivePower(
-				leftFrontPower*PedroDrivebase.getInstance().speedScale,
-				rightFrontPower*PedroDrivebase.getInstance().speedScale,
-				leftBackPower*PedroDrivebase.getInstance().speedScale,
-				rightBackPower*PedroDrivebase.getInstance().speedScale
+				leftFrontPower * PedroDrivebase.getInstance().speedScale,
+				rightFrontPower * PedroDrivebase.getInstance().speedScale,
+				leftBackPower * PedroDrivebase.getInstance().speedScale,
+				rightBackPower * PedroDrivebase.getInstance().speedScale
 		);
 	}
 }

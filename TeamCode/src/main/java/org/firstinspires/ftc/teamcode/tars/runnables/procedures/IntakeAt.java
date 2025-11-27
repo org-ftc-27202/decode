@@ -17,7 +17,7 @@ public class IntakeAt extends Procedure {
 
                 new SetPosition(Spindexer.getInstance().getSpindexerServo(), Spindexer.getInstance().getDegreesForSegmentPosition(segment, Spindexer.Position.INTAKE)),
 
-                new Sleep(0.5),
+                new Sleep(0.3),
                 new WaitUntil(() ->
                         !Spindexer.getInstance().getBeamBreak().getState() &&
                         Spindexer.getInstance().setArtifactColorAtSegmentToColorSensor(segment) != DecodeDataTypes.ArtifactColor.NONE

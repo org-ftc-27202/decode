@@ -9,7 +9,7 @@ public class StellarServo {
 	private final Servo servo;
 	private final String servoName;
 
-	public StellarServo(HardwareMap hardwareMap, String servoName) {
+	public StellarServo(HardwareMap hardwareMap, @NonNull String servoName) {
 		this.servo = hardwareMap.get(Servo.class, servoName);
 		this.servoName = servoName;
 	}

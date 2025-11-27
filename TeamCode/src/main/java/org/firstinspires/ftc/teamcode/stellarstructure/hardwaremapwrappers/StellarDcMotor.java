@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import dev.nextftc.control.KineticState;
 
@@ -12,7 +13,7 @@ public class StellarDcMotor {
 	private final DcMotorEx dcMotorEx;
 	private final String dcMotorExName;
 
-	public StellarDcMotor(HardwareMap hardwareMap, String dcMotorExName) {
+	public StellarDcMotor(HardwareMap hardwareMap, @NonNull String dcMotorExName) {
 		this.dcMotorEx = hardwareMap.get(DcMotorEx.class, dcMotorExName);
 		this.dcMotorExName = dcMotorExName;
 	}

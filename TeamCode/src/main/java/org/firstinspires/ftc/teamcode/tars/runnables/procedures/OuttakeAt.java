@@ -22,7 +22,7 @@ public class OuttakeAt extends Procedure {
 
                 new SetSpindexerPosition(Spindexer.getInstance().getSpindexerServo(), () -> Spindexer.getInstance().getDegreesForSegmentSupplierAndPosition(segmentSupplier, Spindexer.Position.TRANSFER)),
                 //new SetPosition(Spindexer.getInstance().getSpindexerServo(), Spindexer.getInstance().getDegreesForSegmentSupplierAndPosition(segmentSupplier, Spindexer.Position.TRANSFER)),
-                new Sleep(0.15),
+                new Sleep(0.05),
 
                 new WaitUntil(() -> Turret.getInstance().velocityWithinTolerance()),
                 new PulseTransferLever(),

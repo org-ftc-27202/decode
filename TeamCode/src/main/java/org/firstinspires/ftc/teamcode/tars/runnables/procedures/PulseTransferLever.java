@@ -13,15 +13,15 @@ public class PulseTransferLever extends Procedure {
 				"PulseTransferLever",
 				// down
 				new SetPosition(LeverTransfer.getInstance().getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION),
-				new Sleep(0.1),
+				new Sleep(0.05),
 
 				// up
 				new SetPosition(LeverTransfer.getInstance().getLeverTransferServo(), LeverTransfer.LEVER_UP_POSITION),
-				new Sleep(0.1),
+				new Sleep(0.05),
 
 				// down
-				new SetPosition(LeverTransfer.getInstance().getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION),
-				new Sleep(0.1)
+				new SetPosition(LeverTransfer.getInstance().getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION)//,
+				//new Sleep(0.05)
 		);
 
 		setRequiredSubsystems(LeverTransfer.getInstance());

@@ -56,15 +56,15 @@ public final class Turret extends Subsystem {
         rightTurretMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         leftTurretMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         rightTurretMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        leftTurretMotor.setVelocityPIDFCoefficents(p_left,i_left,d_left,f_left);
-        rightTurretMotor.setVelocityPIDFCoefficents(p_right,i_right,d_right,f_right);
+        leftTurretMotor.setVelocityPIDFCoefficents(p_left, i_left, d_left, f_left);
+        rightTurretMotor.setVelocityPIDFCoefficents(p_right, i_right, d_right, f_right);
 
     }
 
     @Override
     public void update() {
-        leftTurretMotor.setVelocityPIDFCoefficents(p_left,i_left,d_left,f_left);
-        rightTurretMotor.setVelocityPIDFCoefficents(p_right,i_right,d_right,f_right);
+        leftTurretMotor.setVelocityPIDFCoefficents(p_left, i_left, d_left, f_left);
+        rightTurretMotor.setVelocityPIDFCoefficents(p_right, i_right, d_right, f_right);
     }
 
     public StellarServo getTurretServo() {
