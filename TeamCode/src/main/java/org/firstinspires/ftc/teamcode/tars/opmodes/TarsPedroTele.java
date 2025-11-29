@@ -2,10 +2,8 @@ package org.firstinspires.ftc.teamcode.tars.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.stellarstructure.StellarBot;
-import org.firstinspires.ftc.teamcode.tars.runnables.defaultdirectives.DefaultDrivebase;
 import org.firstinspires.ftc.teamcode.tars.runnables.defaultdirectives.DefaultIntake;
 import org.firstinspires.ftc.teamcode.tars.runnables.defaultdirectives.DefaultLeverTransfer;
 import org.firstinspires.ftc.teamcode.tars.runnables.defaultdirectives.DefaultSpindexer;
@@ -16,10 +14,12 @@ import org.firstinspires.ftc.teamcode.tars.subsystems.LeverTransfer;
 import org.firstinspires.ftc.teamcode.tars.subsystems.PedroDrivebase;
 import org.firstinspires.ftc.teamcode.tars.subsystems.Spindexer;
 import org.firstinspires.ftc.teamcode.tars.subsystems.Turret;
+import org.firstinspires.ftc.teamcode.util.bootscreen.BootScreen;
 import org.firstinspires.ftc.teamcode.util.TrajectoryCalculator;
+import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
 
-@TeleOp(name = "TARS +Pedro", group = "Robot")
-    public class TarsPedroTele extends LinearOpMode {
+@TeleOp(name = "-TARS +Pedro", group = "Robot")
+    public final class TarsPedroTele extends LinearOpMode {
         private final PedroDrivebase pedroDrivebase = PedroDrivebase.getInstance();
         private final Intake intake = Intake.getInstance();
         private final LeverTransfer leverTransfer = LeverTransfer.getInstance();
@@ -48,21 +48,11 @@ import org.firstinspires.ftc.teamcode.util.TrajectoryCalculator;
             turret.setDefaultDirective(new DefaultTurret(gamepad1, gamepad2));
 
             // print telemetry
+            // print telemetry
+            BootScreen bootScreen = new BootScreen(telemetry, new TerminalVelocityLogo(), true);
             try {
-                telemetry.addLine(
-                        "\n                                 █\n" +
-                        "                                 █              █\n" +
-                        "                                 █              █              █\n" +
-                        "                                                  █              █\n" +
-                        "                       ▄███▄                             █\n" +
-                        "                    ▐█████▌██████▄\n" +
-                        "        ▌            ▀███▀▄███████▄                  ▄▄\n" +
-                        "        █                  ▄███████████▌     ▄▄███▀\n" +
-                        "        ▐▄    ▐██████▀      ▀▀▀▀████████▀\n" +
-                        "              ▀▀▀▀                                          ▀▀"
-                );
-
-                //telemetry.addLine(tars.getScheduler().toString());
+                bootScreen.updateBootScreen();
+                sleep(bootScreen.getMillisBetweenFrames());
             } catch (Exception e) {
                 telemetry.addData("telemetry didn't work", e);
             }

@@ -9,30 +9,27 @@ import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import  com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.firstinspires.ftc.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.InstantlyDo;
-import org.firstinspires.ftc.teamcode.tars.runnables.directives.FollowPath;
 import org.firstinspires.ftc.teamcode.tars.runnables.defaultdirectives.DefaultIntake;
 import org.firstinspires.ftc.teamcode.tars.runnables.defaultdirectives.DefaultLeverTransfer;
 import org.firstinspires.ftc.teamcode.tars.runnables.defaultdirectives.DefaultSpindexer;
 import org.firstinspires.ftc.teamcode.tars.runnables.procedures.FullIntake;
-import org.firstinspires.ftc.teamcode.tars.runnables.procedures.FullOuttake;
 import org.firstinspires.ftc.teamcode.stellarstructure.StellarBot;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Procedure;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.SetPosition;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Sleep;
 import org.firstinspires.ftc.teamcode.tars.runnables.procedures.FullPatternOuttake;
-import org.firstinspires.ftc.teamcode.tars.runnables.procedures.IntakeAt;
-import org.firstinspires.ftc.teamcode.tars.subsystems.Drivebase;
 import org.firstinspires.ftc.teamcode.tars.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.tars.subsystems.LeverTransfer;
 import org.firstinspires.ftc.teamcode.tars.subsystems.PedroDrivebase;
 import org.firstinspires.ftc.teamcode.tars.subsystems.Spindexer;
 import org.firstinspires.ftc.teamcode.tars.subsystems.Turret;
+import org.firstinspires.ftc.teamcode.util.bootscreen.BootScreen;
 import org.firstinspires.ftc.teamcode.util.DecodeDataTypes;
+import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
 
-@Autonomous(name = "Pedro-", group = "Auto")
-public class TarsAuto extends OpMode {
+@Autonomous(name = "-Pedro", group = "Auto")
+public final class TarsAuto extends OpMode {
     private final double FLYWHEEL_LAUNCH = 1080;
     private final double TURRET_LAUNCH = 0;
     private final double HOOD_LAUNCH = 0;
@@ -93,18 +90,14 @@ public class TarsAuto extends OpMode {
         spindexer.setArtifactColorInSpindexer(0, DecodeDataTypes.ArtifactColor.GREEN);
         spindexer.setArtifactColorInSpindexer(0, DecodeDataTypes.ArtifactColor.PURPLE);
 
-        telemetry.addLine(
-                "\n                                 █\n" +
-                        "                                 █              █\n" +
-                        "                                 █              █              █\n" +
-                        "                                                  █              █\n" +
-                        "                       ▄███▄                             █\n" +
-                        "                    ▐█████▌██████▄\n" +
-                        "        ▌            ▀███▀▄███████▄                  ▄▄\n" +
-                        "        █                  ▄███████████▌     ▄▄███▀\n" +
-                        "        ▐▄    ▐██████▀      ▀▀▀▀████████▀\n" +
-                        "              ▀▀▀▀                                          ▀▀"
-        );
+        // print telemetry
+        BootScreen bootScreen = new BootScreen(telemetry, new TerminalVelocityLogo(), true);
+        try {
+            bootScreen.updateBootScreen();
+        } catch (Exception e) {
+            telemetry.addData("telemetry didn't work", e);
+        }
+        telemetry.update();
     }
 
     @Override

@@ -9,13 +9,14 @@ import org.firstinspires.ftc.teamcode.tars.subsystems.Drivebase;
 import org.firstinspires.ftc.teamcode.tars.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.tars.subsystems.LeverTransfer;
 import org.firstinspires.ftc.teamcode.tars.subsystems.Spindexer;
-import org.firstinspires.ftc.teamcode.util.BadApple;
+import org.firstinspires.ftc.teamcode.util.bootscreen.BootScreen;
+import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@TeleOp(name = "TARS +Ethan's Approval", group = "Robot")
-public class TarsTele extends LinearOpMode {
+@TeleOp(name = "-TARS +Ethan's Approval", group = "Robot")
+public final class TarsTele extends LinearOpMode {
 	private final Drivebase drivebase = Drivebase.getInstance();
 	private final Intake intake = Intake.getInstance();
 	private final LeverTransfer leverTransfer = LeverTransfer.getInstance();
@@ -39,42 +40,17 @@ public class TarsTele extends LinearOpMode {
 		leverTransfer.setDefaultDirective(new DefaultLeverTransfer(gamepad1));
 		spindexer.setDefaultDirective(new DefaultSpindexer(gamepad1));
 
-		int iteration = 0;
-		//long startTime = System.currentTimeMillis();
-		//long currentTime = System.currentTimeMillis();
-		//long lastTime = System.currentTimeMillis() - 333;
-
-		while (!opModeIsActive()) {
-			// print telemetry
-			try {
-				//lastTime = currentTime;
-				//currentTime = System.currentTimeMillis();
-
-				//telemetry.addLine(String.format("Time: %.3f", (currentTime - startTime) / 1000.0));
-				//telemetry.addLine(String.format("Time Since: %.3f", (currentTime - lastTime) / 1000.0));
-				telemetry.addLine(String.format("Frame %d / %d", iteration, BadApple.FRAMES.length));
-
-				telemetry.addLine(
-						BadApple.FRAMES[iteration]
-				);
-
-				//telemetry.addLine(tars.getScheduler().toString());
-				sleep(328); // around 3 fps
-
-				iteration++;
-				if (iteration >= BadApple.FRAMES.length) {
-					iteration = 0;
-				}
-			} catch (Exception e) {
-				telemetry.addData("telemetry didn't work", e);
-			}
-			telemetry.update();
-
-			//waitForStart();
-
-			if (isStopRequested()) return;
+		// print telemetry
+		BootScreen bootScreen = new BootScreen(telemetry, new TerminalVelocityLogo(), true);
+		try {
+			bootScreen.updateBootScreen();
+			sleep(bootScreen.getMillisBetweenFrames());
+		} catch (Exception e) {
+			telemetry.addData("telemetry didn't work", e);
 		}
+		telemetry.update();
 
+		waitForStart();
 
 		while (opModeIsActive()) {
 			// panic cancel
