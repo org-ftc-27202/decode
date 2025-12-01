@@ -11,18 +11,21 @@ import org.firstinspires.ftc.teamcode.tars.subsystems.PedroDrivebase;
 import org.firstinspires.ftc.teamcode.tars.subsystems.Spindexer;
 import org.firstinspires.ftc.teamcode.util.DecodeDataTypes;
 
-public class IntakeAt extends Procedure {
-    public IntakeAt(int segment) {
+public class IntakeAtWaitForColor extends Procedure {
+    public IntakeAtWaitForColor(int segment) {
         super(
-                "IntakeAt",
+                "IntakeAtWaitForColor",
                 new SetPosition(LeverTransfer.getInstance().getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION),
 
                 new SetPosition(Spindexer.getInstance().getSpindexerServo(), Spindexer.getInstance().getDegreesForSegmentPosition(segment, Spindexer.Position.INTAKE)),
 
                 new Sleep(0.3),
                 new WaitUntil(() ->
-                        !Spindexer.getInstance().getBeamBreak1().getState() ||
-                        !Spindexer.getInstance().getBeamBreak2().getState()
+                        (
+                                !Spindexer.getInstance().getBeamBreak1().getState() ||
+                                !Spindexer.getInstance().getBeamBreak2().getState()
+                        ) &&
+                        Spindexer.getInstance().setArtifactColorAtSegmentToColorSensor(segment) != DecodeDataTypes.ArtifactColor.NONE
                 )
         );
 

@@ -13,7 +13,7 @@ public class BeamBreak extends LinearOpMode {
     public void runOpMode() {
 
         // get a reference to our touchSensor object.
-        digitalTouch = hardwareMap.get(DigitalChannel.class, "beamBreak");
+        digitalTouch = hardwareMap.get(DigitalChannel.class, "beamBreak1");
 
         digitalTouch.setMode(DigitalChannel.Mode.INPUT);
         telemetry.addData("Beam Break", "Press START to continue...");

@@ -17,8 +17,7 @@ public class FullIntake extends Procedure {
 
 		setRequiredSubsystems(
 				LeverTransfer.getInstance(),
-				Spindexer.getInstance(),
-				LeverTransfer.getInstance()
+				Spindexer.getInstance()
 		);
 	}
 }

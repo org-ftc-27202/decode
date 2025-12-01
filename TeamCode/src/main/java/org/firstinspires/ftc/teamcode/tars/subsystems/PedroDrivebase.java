@@ -10,7 +10,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.stellarstructure.Subsystem;
 import org.firstinspires.ftc.teamcode.stellarstructure.hardwaremapwrappers.StellarLight;
-import org.firstinspires.ftc.teamcode.stellarstructure.hardwaremapwrappers.StellarServo;
 import org.firstinspires.ftc.teamcode.tars.runnables.directives.SetLight;
 
 import java.util.function.BooleanSupplier;
@@ -28,13 +27,13 @@ public final class PedroDrivebase extends Subsystem {
 
     private PedroDrivebase() {}
 
-    public final static double CARDINAL_SPEED = 0.70;
-    public final static double TURN_SPEED = 0.55;
+    public final static double CARDINAL_SPEED = 1.00;
+    public final static double TURN_SPEED = 0.70;
     public final static double FAR_LAUNCH_FACTOR = 0.2;
     public final static double NEAR_LAUNCH_FACTOR = 0.4;
     public final static double LAUNCH_ZONE_SCALE = 6.2;
-    public final static double GOAL_X= 11;
-    public final static double GOAL_Y = 141;
+    public final static double GOAL_X = 11.0;
+    public final static double GOAL_Y = 141.0;
 
 
 
@@ -43,13 +42,14 @@ public final class PedroDrivebase extends Subsystem {
     public double speedScale = 1.0;
 
     private DcMotorEx leftFrontDrive, leftBackDrive, rightFrontDrive, rightBackDrive;
-    private StellarLight light;
+    private StellarLight lightLeft, lightRight;
 
     @Override
     public void init(HardwareMap hardwareMap) {
         this.follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(new Pose(56.75,7, Math.toRadians(180)));
-        light = new StellarLight(hardwareMap, "light");
+        lightLeft = new StellarLight(hardwareMap, "lightLeft");
+        lightRight = new StellarLight(hardwareMap, "lightRight");
         //todo: make omni wheel directive
         leftFrontDrive = hardwareMap.get(DcMotorEx.class, "leftFront");
         leftBackDrive = hardwareMap.get(DcMotorEx.class, "leftBack");
@@ -66,7 +66,8 @@ public final class PedroDrivebase extends Subsystem {
         rightFrontDrive.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         rightBackDrive.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
-        new SetLight(light, "AZURE");
+        new SetLight(lightLeft, "AZURE").schedule();
+        new SetLight(lightRight, "AZURE").schedule();
     }
 
     @Override
@@ -100,8 +101,12 @@ public final class PedroDrivebase extends Subsystem {
             return false;
 
     }
-    public StellarLight getLight() {
-        return light;
+    public StellarLight getLeftLight() {
+        return lightLeft;
+    }
+
+    public StellarLight getRightLight() {
+        return lightRight;
     }
 
     public void setSpeedScale(double speedScale){
@@ -128,7 +133,8 @@ public final class PedroDrivebase extends Subsystem {
                         "Heading(degrees): %.2f\n" +
                                 "Distance From Goal: %.3f\n"+
                         "In Launch Zone: %b\n "+
-                        "Light Color: %f",
+                        "Left Light Color: %f" +
+                        "Right Light Color: %f",
                 leftFrontDrive.getPower(),
                 rightFrontDrive.getPower(),
                 leftBackDrive.getPower(),
@@ -138,6 +144,7 @@ public final class PedroDrivebase extends Subsystem {
                 Math.toDegrees(follower.getPose().getHeading()),
                 distanceFromGoal,
                 checkForLaunchPose(),
-                light.getPosition());
+                lightLeft.getPosition(),
+                lightRight.getPosition());
     }
 }

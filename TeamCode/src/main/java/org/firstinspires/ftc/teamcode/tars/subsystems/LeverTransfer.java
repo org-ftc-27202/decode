@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.tars.subsystems;
 
 import androidx.annotation.NonNull;
 
+import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.stellarstructure.hardwaremapwrappers.StellarServo;
@@ -20,31 +21,19 @@ public final class LeverTransfer extends Subsystem {
 
 	private StellarServo leverTransferServo;
 
-	public final static double LEVER_DOWN_POSITION = 0.47;
-	public final static double LEVER_UP_POSITION = 0.0;
-
-	private boolean isLeverTargetUp = false;
+	public final static double LEVER_DOWN_POSITION = 0.01;
+	public final static double LEVER_UP_POSITION = 0.41;
 
 	@Override
 	public void init(HardwareMap hardwareMap) {
-		leverTransferServo = new StellarServo(hardwareMap, "leverTransfer");
+		leverTransferServo = new StellarServo(hardwareMap, "leverTransferServo");
+
+		//todo
+		leverTransferServo.setPosition(LEVER_DOWN_POSITION);
 	}
 
 	@Override
 	public void update() {}
-
-	public void setLeverPositionIsUp(boolean isUpPosition) {
-		isLeverTargetUp = isUpPosition;
-	}
-
-	public void updateServoPosition() {
-		new SetPosition(
-				leverTransferServo,
-				isLeverTargetUp ? LEVER_UP_POSITION : LEVER_DOWN_POSITION
-		);/*.setStartingConditions(
-				() -> Spindexer.getInstance().getIsTransferPosition()
-		).schedule();*/
-	}
 
 	public StellarServo getLeverTransferServo() {
 		return this.leverTransferServo;
@@ -53,6 +42,6 @@ public final class LeverTransfer extends Subsystem {
 	@NonNull
 	@Override
 	public String toString() {
-		return String.format("Lever Position: %f\nLever Is Up: %b", leverTransferServo.getPosition(), isLeverTargetUp);
+		return String.format("Lever Target Position: %f", leverTransferServo.getPosition());
 	}
 }

@@ -19,7 +19,6 @@ public class OuttakeColor extends Procedure {
         setStartingConditions(() -> Spindexer.getInstance().getHasArtifactColor(artifactColor));
 
         setRequiredSubsystems(
-                Intake.getInstance(),
                 Spindexer.getInstance(),
                 LeverTransfer.getInstance()
         );
