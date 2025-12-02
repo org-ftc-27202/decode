@@ -119,6 +119,10 @@ public final class PedroDrivebase extends Subsystem {
         leftBackDrive.setPower(leftBackPower);
         rightBackDrive.setPower(rightBackPower);
     }
+    public double getDistanceFromGoal(){
+        return distanceFromGoal;
+    }
+
 
 	@NonNull
     @Override
