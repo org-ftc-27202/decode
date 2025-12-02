@@ -24,7 +24,7 @@ public abstract class baseTeleOp extends LinearOpMode {
     private List<Action> runningActions = new ArrayList<>();
     public DcMotorEx leftFrontDrive, leftBackDrive, rightFrontDrive, rightBackDrive;
 
-    private DigitalChannel switchDown02;
+//    private DigitalChannel switchDown02;
     public void setAllianceColor(String inAllianceColor) {
         allianceColor = inAllianceColor;
     }
@@ -55,9 +55,13 @@ public abstract class baseTeleOp extends LinearOpMode {
 
         botIntake intake = new botIntake(hardwareMap);
 //        botHolder holder02 = new botHolder(hardwareMap, "holder02");
-        botCatapult catapult02 = new botCatapult(hardwareMap, "catapult02", "switchUp02");
-        switchDown02 = hardwareMap.get(DigitalChannel.class, "switchDown02");
-        switchDown02.setMode(DigitalChannel.Mode.INPUT);
+        botCatapult catapult02 = new botCatapult(hardwareMap, "catapult02", "encoder02");
+//        switchDown02 = hardwareMap.get(DigitalChannel.class, "switchDown02");
+//        switchDown02.setMode(DigitalChannel.Mode.INPUT);
+
+//        encoder02 = new AnalogEncoder(hardwareMap, "encoder02");
+//        encoder02.setInverted(true);
+//        encoder02.setZeroPosition();
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -66,10 +70,6 @@ public abstract class baseTeleOp extends LinearOpMode {
 
         if (isStopRequested()) return;
 
-//        runningActions.add(new SequentialAction(
-//                holder02.ReleasePosition()
-//        ));
-//
         while (opModeIsActive()) {
             // POV Mode uses left joystick to go forward & strafe, and right joystick to rotate.
             axial = -gamepad1.left_stick_y * speedAdjustment;
@@ -101,35 +101,38 @@ public abstract class baseTeleOp extends LinearOpMode {
             rightFrontDrive.setPower(rightFrontPower);
             leftBackDrive.setPower(leftBackPower);
             rightBackDrive.setPower(rightBackPower);
+
             // intake
-            if (gamepad1.x) {
+            if (gamepad1.a) {
                 runningActions.add(new SequentialAction(
                         intake.RotateInwards()
                 ));
-            } else if (gamepad1.b) {
-                runningActions.add(new SequentialAction(
-                        intake.RotateOutwards()
-                ));
-            } else if (gamepad1.y) {
+            }
+            else if (gamepad1.left_trigger > 0.1) {
                 runningActions.add(new SequentialAction(
                         intake.Stop()
                 ));
+            }
+            else if (gamepad1.left_bumper) {
+                runningActions.add(new SequentialAction(
+                        intake.RotateOutwards()
+                ));
             };
 
-            if (gamepad1.a) {
+            // Catapults
+            if (gamepad1.y) {
                 // Launch
                 runningActions.add(new SequentialAction(
-//                        catapult02.PreLaunch(),
-//                        new SleepAction(0.1),
                         catapult02.Launch()
                 ));
             }
 
-            if (!switchDown02.getState()) {
-                runningActions.add(new SequentialAction(
-                        catapult02.StopCatapult()
-                ));
-            }
+            catapult02.CheckToStopCatapult();
+//            if (!switchDown02.getState()) {
+//                runningActions.add(new SequentialAction(
+//                        catapult02.StopCatapult()
+//                ));
+//            }
 
             // update running actions
             List<Action> newActions = new ArrayList<>();
@@ -150,10 +153,20 @@ public abstract class baseTeleOp extends LinearOpMode {
             telemetry.addData("yaw", "%.2f", yaw);
             telemetry.addData("catapult02",  "%.2f", catapult02.getPower());
 //            telemetry.addData("holder02",  "%.2f", holder02.getPosition());
-            if (switchDown02.getState()) {
-                telemetry.addData("switchDown02", "Off");
-            } else {
-                telemetry.addData("switchDown02", "On");
+//            if (switchDown02.getState()) {
+//                telemetry.addData("switchDown02", "Off");
+//            } else {
+//                telemetry.addData("switchDown02", "On");
+//            }
+            telemetry.addData("angle 02", "%f", catapult02.encoder.getAngle());
+            if (intake.intakeMode == botIntake.intakeModes.INWARDS) {
+                telemetry.addData("intake: ", "%s", "Inwards");
+            }
+            else if (intake.intakeMode == botIntake.intakeModes.OUTWARDS) {
+                telemetry.addData("intake: ", "%s", "Outwards");
+            }
+            else if (intake.intakeMode == botIntake.intakeModes.STOP) {
+                telemetry.addData("intake: ", "%s", "Stop");
             }
 //            if (switchUp02.getState()) {
 //                telemetry.addData("switchUp02", "Off");

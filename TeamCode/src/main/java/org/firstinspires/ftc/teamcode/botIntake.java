@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.robotcore.hardware.CRServoImplEx;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorImplEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -15,12 +16,15 @@ public final class botIntake {
     final double INTAKE_OFF_POWER = 0.0;
     final double intakePower = INTAKE_OFF_POWER;
     private final DcMotorEx intake;
+    public enum intakeModes {INWARDS, OUTWARDS, STOP};
+    public intakeModes intakeMode = intakeModes.STOP;
 
     public botIntake(HardwareMap hardwareMap){
         intake = hardwareMap.get(DcMotorImplEx.class, "intake");
 
-        intake.setDirection(DcMotorEx.Direction.REVERSE);
+        intake.setDirection(DcMotorEx.Direction.FORWARD);
         intake.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
+        intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         intake.setPower(0);
     }
 
@@ -30,6 +34,7 @@ public final class botIntake {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             if (!initialized) {
+                intakeMode = intakeModes.INWARDS;
                 intake.setPower(INTAKE_INWARDS_POWER);
                 initialized = true;
             }
@@ -49,6 +54,7 @@ public final class botIntake {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             if (!initialized) {
+                intakeMode = intakeModes.OUTWARDS;
                 intake.setPower(INTAKE_OUTWARDS_POWER);
                 initialized = true;
             }
@@ -68,6 +74,7 @@ public final class botIntake {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             if (!initialized) {
+                intakeMode = intakeModes.STOP;
                 intake.setPower(INTAKE_OFF_POWER);
                 initialized = true;
             }
