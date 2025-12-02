@@ -61,8 +61,8 @@ public final class Spindexer extends Subsystem {
 
 	@Override
 	public void init(HardwareMap hardwareMap) {
-		spindexerServo = new StellarServo(hardwareMap, "spindexerServo");
-		spindexerServoEncoder = hardwareMap.get(AnalogInput.class, "spindexerServoEncoder");
+		spindexerServo = new StellarServo(hardwareMap, "spindexer");
+		spindexerServoEncoder = hardwareMap.get(AnalogInput.class, "spindexerServo");
 
 		beamBreak = hardwareMap.get(DigitalChannel.class, "beamBreak");
 		beamBreak.setMode(DigitalChannel.Mode.INPUT);
