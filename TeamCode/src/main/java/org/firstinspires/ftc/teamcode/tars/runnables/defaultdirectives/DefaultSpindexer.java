@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.stellarstructure.triggers.ActionTrigger;
 import org.firstinspires.ftc.teamcode.tars.runnables.procedures.FullIntake;
-import org.firstinspires.ftc.teamcode.tars.runnables.procedures.FullIntakeWaitForColor;
 import org.firstinspires.ftc.teamcode.tars.runnables.procedures.FullOuttake;
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.GamepadButtonMap;
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.StatefulCondition;
@@ -37,18 +36,6 @@ public class DefaultSpindexer extends DefaultDirective {
 				() -> {
 					// intake 3
 					new FullIntake().schedule();
-				}
-		));
-
-		addTrigger(new ActionTrigger(
-				// when b just first pressed
-				new StatefulCondition(
-						new GamepadButtonMap(gamepad1, GamepadButtonMap.Button.B),
-						StatefulCondition.Edge.RISING
-				),
-				() -> {
-					// intake 3
-					new FullIntakeWaitForColor().schedule();
 				}
 		));
 

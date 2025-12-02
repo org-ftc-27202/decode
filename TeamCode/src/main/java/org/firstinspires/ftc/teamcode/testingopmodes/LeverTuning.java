@@ -11,7 +11,7 @@ public class LeverTuning extends LinearOpMode {
 
 	@Override
 	public void runOpMode() {
-		leverTransfer = hardwareMap.get(Servo.class, "leverTransferServo");
+		leverTransfer = hardwareMap.get(Servo.class, "leverTransfer");
 
 		telemetry.addData("Lever", "Press START to continue...");
 		telemetry.update();

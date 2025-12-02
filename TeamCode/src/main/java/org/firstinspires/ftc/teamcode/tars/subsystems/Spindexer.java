@@ -10,7 +10,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.stellarstructure.Subsystem;
 
 import org.firstinspires.ftc.teamcode.stellarstructure.hardwaremapwrappers.StellarServo;
-import org.firstinspires.ftc.teamcode.tars.runnables.directives.SetLight;
 import org.firstinspires.ftc.teamcode.util.DecodeDataTypes;
 
 import java.util.function.Supplier;
@@ -24,8 +23,8 @@ public final class Spindexer extends Subsystem {
 
 	private Spindexer() {}
 
-	private final static double DEGREES_TO_SERVO = 1.0 / 325.0;
-	private final static double SPINDEXER_OFFSET = 1.0;
+	private final static double DEGREES_TO_SERVO = 1.0 / 320.0;
+	private final static double SPINDEXER_OFFSET = 0.0;
 	private final static double[] INTAKE_DEGREE_POSITIONS = {0.0 + SPINDEXER_OFFSET, 120.0 + SPINDEXER_OFFSET, 240.0 + SPINDEXER_OFFSET};
 	private final static double[] TRANSFER_DEGREE_POSITIONS = {180.0 + SPINDEXER_OFFSET, 300.0 + SPINDEXER_OFFSET, 60.0 + SPINDEXER_OFFSET};
 
@@ -56,7 +55,7 @@ public final class Spindexer extends Subsystem {
 	 */
 
 	private StellarServo spindexerServo;
-	private DigitalChannel beamBreak1, beamBreak2;
+	private DigitalChannel beamBreak;
 	private ColorSensor colorSensor;
 	private AnalogInput spindexerServoEncoder;
 
@@ -65,14 +64,8 @@ public final class Spindexer extends Subsystem {
 		spindexerServo = new StellarServo(hardwareMap, "spindexerServo");
 		spindexerServoEncoder = hardwareMap.get(AnalogInput.class, "spindexerServoEncoder");
 
-		//todo
-		spindexerServo.setPosition(getDegreesForSegmentPosition(0, Position.INTAKE));
-
-		beamBreak1 = hardwareMap.get(DigitalChannel.class, "beamBreak1");
-		beamBreak1.setMode(DigitalChannel.Mode.INPUT);
-
-		beamBreak2 = hardwareMap.get(DigitalChannel.class, "beamBreak2");
-		beamBreak2.setMode(DigitalChannel.Mode.INPUT);
+		beamBreak = hardwareMap.get(DigitalChannel.class, "beamBreak");
+		beamBreak.setMode(DigitalChannel.Mode.INPUT);
 
 		colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");
 
@@ -86,20 +79,16 @@ public final class Spindexer extends Subsystem {
 	@Override
 	public void update() {}
 
-	public double getSpindexerEncoderPosition() {
-		return spindexerServoEncoder.getVoltage() / 3.3 * 360.0;
-	}
-
 	public StellarServo getSpindexerServo() {
 		return spindexerServo;
 	}
 
-	public DigitalChannel getBeamBreak1() {
-		return beamBreak1;
+	public AnalogInput getSpindexerServoEncoder() {
+		return spindexerServoEncoder;
 	}
 
-	public DigitalChannel getBeamBreak2() {
-		return beamBreak2;
+	public DigitalChannel getBeamBreak() {
+		return beamBreak;
 	}
 
 	public ColorSensor getColorSensor() {
@@ -116,8 +105,6 @@ public final class Spindexer extends Subsystem {
 
 	public void setArtifactColorInSpindexer(int index, DecodeDataTypes.ArtifactColor artifactColor) {
 		artifactColorsInSpindexer[index] = artifactColor;
-		new SetLight(PedroDrivebase.getInstance().getLeftLight(), artifactColor.toString());
-		new SetLight(PedroDrivebase.getInstance().getRightLight(), artifactColor.toString());
 	}
 
 	public DecodeDataTypes.ArtifactColor setArtifactColorAtSegmentToColorSensor(int segment) {
@@ -199,22 +186,20 @@ public final class Spindexer extends Subsystem {
 	@Override
 	public String toString() {
 		return String.format(
-				"beamBreak1: %b\n" +
-				"beamBreak2: %b\n" +
+				"beamBreak: %b\n" +
 				"colorSensorRGB: %d, %d, %d\n"+
 				"Artifact Storage: %s, %s, %s\n"+
 				"G/B ratio: %f\n" +
 				"Total RGB: %f\n" +
 				"Spindexer Servo: %f\n" +
 				"Spindexer Encoder: %f\n",
-				beamBreak1.getState(),
-				beamBreak2.getState(),
+				beamBreak.getState(),
 				colorSensor.red(), colorSensor.green(), colorSensor.blue(),
 				artifactColorsInSpindexer[0].toString(), artifactColorsInSpindexer[1].toString(), artifactColorsInSpindexer[2].toString(),
 				getGreenToBlueRatio(),
 				getRGBSum(),
 				spindexerServo.getPosition(),
-				getSpindexerEncoderPosition()
+				spindexerServoEncoder.getVoltage()
 		);
 	}
 }

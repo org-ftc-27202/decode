@@ -10,8 +10,8 @@ public class ServoEncoderCalibration extends LinearOpMode {
 	@Override
 	public void runOpMode() throws InterruptedException {
 		// get the hardware components directly
-		Servo spindexer = hardwareMap.get(Servo.class, "spindexerServo");
-		AnalogInput encoder = hardwareMap.get(AnalogInput.class, "spindexerServoEncoder");
+		Servo spindexer = hardwareMap.get(Servo.class, "spindexer");
+		AnalogInput encoder = hardwareMap.get(AnalogInput.class, "spindexerServo");
 
 		telemetry.addLine("Press DPAD UP/DOWN to change servo position.");
 		telemetry.addLine("Watch the telemetry for voltage values.");
