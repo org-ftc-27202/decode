@@ -1,0 +1,47 @@
+package org.firstinspires.ftc.teamcode.tars.subsystems;
+
+import androidx.annotation.NonNull;
+
+import com.qualcomm.robotcore.hardware.AnalogInput;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+
+import org.firstinspires.ftc.teamcode.stellarstructure.hardwaremapwrappers.StellarServo;
+
+import org.firstinspires.ftc.teamcode.stellarstructure.Subsystem;
+import org.firstinspires.ftc.teamcode.stellarstructure.runnables.SetPosition;
+
+public final class LeverTransfer extends Subsystem {
+	private static final LeverTransfer leverTransfer = new LeverTransfer();
+
+	public static LeverTransfer getInstance() {
+		return leverTransfer;
+	}
+
+	private LeverTransfer() {}
+
+	private StellarServo leverTransferServo;
+
+	public final static double LEVER_DOWN_POSITION = 0.01;
+	public final static double LEVER_UP_POSITION = 0.41;
+
+	@Override
+	public void init(HardwareMap hardwareMap) {
+		leverTransferServo = new StellarServo(hardwareMap, "leverTransferServo");
+
+		//todo
+		leverTransferServo.setPosition(LEVER_DOWN_POSITION);
+	}
+
+	@Override
+	public void update() {}
+
+	public StellarServo getLeverTransferServo() {
+		return this.leverTransferServo;
+	}
+
+	@NonNull
+	@Override
+	public String toString() {
+		return String.format("Lever Target Position: %f", leverTransferServo.getPosition());
+	}
+}

@@ -1,0 +1,17 @@
+{
+  "artifactSequence": ["GREEN", "PURPLE", "PURPLE"],
+  "endingPosition": {
+    "x": 1.0,
+    "y": 1.0,
+    "z": 1.0,
+    "pitch": 1.0,
+    "roll": 1.0,
+    "yaw": 1.0
+  },
+  "motorPositions": [
+    ["hoodedShooter", 1.0],
+    ["intake", 1.0],
+    ["arm", 1.0]
+  ],
+  "saveDateMillis": 1757604875092
+}
