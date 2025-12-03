@@ -95,6 +95,16 @@ public final class PedroDrivebase extends Subsystem {
             return false;
 
     }
+    public double getLaunchYaw() {
+        double x = GOAL_X - follower.getPose().getX();
+        double y = GOAL_Y - follower.getPose().getY();
+
+        // Use atan2(y, x) to get the correct angle in radians (-PI to +PI)
+        double angleRadians = Math.atan2(y, x);
+
+        // Convert to degrees (-180 to +180)
+        return Math.toDegrees(angleRadians);
+    }
     public StellarLight getLeftLight() {
         return lightLeft;
     }
@@ -130,6 +140,7 @@ public final class PedroDrivebase extends Subsystem {
                         "Y: %.3f\n" +
                         "Heading(degrees): %.2f\n" +
                                 "Distance From Goal: %.3f\n"+
+                                "Launch Yaw: %.3f\n"+
                         "In Launch Zone: %b\n "+
                         "Left Light Color: %f" +
                         "Right Light Color: %f",
@@ -141,6 +152,7 @@ public final class PedroDrivebase extends Subsystem {
                 follower.getPose().getY(),
                 Math.toDegrees(follower.getPose().getHeading()),
                 distanceFromGoal,
+                getLaunchYaw(),
                 checkForLaunchPose(),
                 lightLeft.getPosition(),
                 lightRight.getPosition());

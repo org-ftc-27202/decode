@@ -41,7 +41,7 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
             caseBot.init(hardwareMap);
 
             // set up default directives
-            pedroDrivebase.setDefaultDirective(new PedroDefaultDrivebase(gamepad1));
+            pedroDrivebase.setDefaultDirective(new PedroDefaultDrivebase(gamepad1, gamepad2));
             intake.setDefaultDirective(new DefaultIntake(gamepad1));
             leverTransfer.setDefaultDirective(new DefaultLeverTransfer(gamepad1));
             spindexer.setDefaultDirective(new DefaultSpindexer(gamepad1));

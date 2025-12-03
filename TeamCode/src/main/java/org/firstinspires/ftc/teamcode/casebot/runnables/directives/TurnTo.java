@@ -7,26 +7,25 @@ import com.pedropathing.paths.PathChain;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.PedroDrivebase;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Directive;
 
-public class FollowPath extends Directive {
-    private final PathChain path;
+public class TurnTo extends Directive {
+
     private final Follower follower;
-    private final Pose endPose;
+    private double turnAngle;
 
-    private final boolean holdEnd;
 
-    public FollowPath(PathChain path, Follower follower, Pose endPose, boolean holdEnd) {
+
+    public TurnTo(double turnAngle, Follower follower){
         setInterruptible(true);
-        this.path = path;
         this.follower = follower;
-        this.endPose = endPose;
-        this.holdEnd = holdEnd;
+        this.turnAngle = turnAngle;
+
 
         setRequiredSubsystems(PedroDrivebase.getInstance());
     }
 
     @Override
     public void start(boolean hadToInterruptToStart) {
-        follower.followPath(path, holdEnd);
+        follower.turnTo(turnAngle);
     }
 
     @Override
@@ -36,9 +35,9 @@ public class FollowPath extends Directive {
 
     @Override
     public void stop(boolean interrupted) {}
-
+    //(Math.abs(follower.getHeadingError())< Math.toDegrees(.05))
     @Override
     public boolean isFinished() {
-        return follower.atPose(endPose, 2,2) && !follower.isBusy();
+        return false;
     }
 }

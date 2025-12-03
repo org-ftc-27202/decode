@@ -2,18 +2,34 @@ package org.firstinspires.ftc.teamcode.casebot.runnables.defaultdirectives;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+import org.firstinspires.ftc.teamcode.casebot.runnables.directives.TurnTo;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Drivebase;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.PedroDrivebase;
+import org.firstinspires.ftc.teamcode.stellarstructure.conditions.GamepadButtonMap;
+import org.firstinspires.ftc.teamcode.stellarstructure.conditions.StatefulCondition;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.DefaultDirective;
+import org.firstinspires.ftc.teamcode.stellarstructure.triggers.ActionTrigger;
 
 public class PedroDefaultDrivebase extends DefaultDirective {
 	private final PedroDrivebase pedroDrivebase = PedroDrivebase.getInstance();
 	private final Gamepad gamepad1;
+	private final Gamepad gamepad2;
 
-	public PedroDefaultDrivebase(Gamepad gamepad1) {
+	public PedroDefaultDrivebase(Gamepad gamepad1, Gamepad gamepad2) {
 		super(Drivebase.getInstance());
 
 		this.gamepad1 = gamepad1;
+		this.gamepad2 = gamepad2;
+		addTrigger(new ActionTrigger(
+				// when dpad up just first pressed
+				new StatefulCondition(
+						new GamepadButtonMap(this.gamepad2, GamepadButtonMap.Button.A),
+						StatefulCondition.Edge.RISING
+				),
+				() -> {
+					new TurnTo(Math.toRadians(PedroDrivebase.getInstance().getLaunchYaw()), PedroDrivebase.getInstance().getFollower()).schedule();
+				}
+		));
 	}
 
 	@Override
