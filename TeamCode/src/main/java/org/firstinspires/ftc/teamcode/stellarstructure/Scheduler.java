@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class Scheduler {
+	// todo: make the scheduler check to see if a directive finishes instantly or smt
 	private static Scheduler activeSchedulerInstance;
 
 	public static void setGlobalInstance(Scheduler scheduler) {
