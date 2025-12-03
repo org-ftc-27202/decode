@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.DefaultDirective;
 import org.firstinspires.ftc.teamcode.tars.subsystems.Drivebase;
 import org.firstinspires.ftc.teamcode.tars.subsystems.PedroDrivebase;
-import org.firstinspires.ftc.teamcode.tars.subsystems.Turret;
 
 public class PedroDefaultDrivebase extends DefaultDirective {
 	private final PedroDrivebase pedroDrivebase = PedroDrivebase.getInstance();
@@ -52,11 +51,5 @@ public class PedroDefaultDrivebase extends DefaultDirective {
 				leftBackPower * PedroDrivebase.getInstance().speedScale,
 				rightBackPower * PedroDrivebase.getInstance().speedScale
 		);
-		if (Turret.getInstance().velocityWithinTolerance()){
-			pedroDrivebase.getLeftLight().setPosition(0.59);
-		} else{
-			pedroDrivebase.getLeftLight().setPosition(0.333);
-
-		}
 	}
 }

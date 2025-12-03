@@ -14,21 +14,19 @@ public class PedroFullOuttake extends Procedure {
     public PedroFullOuttake(){
         super(
                 "PedroOuttake",
-                new SetLight(PedroDrivebase.getInstance().getLeftLight(), "YELLOW"),
-                new SetLight(PedroDrivebase.getInstance().getRightLight(), "YELLOW"),
+
+                new SetLight(PedroDrivebase.getInstance().getLight(), "YELLOW"),
 
                 new WaitUntil(() -> PedroDrivebase.getInstance().checkForLaunchPose()),
                 new SetSpeedScale(0.5),
-                new SetLight(PedroDrivebase.getInstance().getLeftLight(), "RED"),
-                new SetLight(PedroDrivebase.getInstance().getRightLight(), "RED"),
+                new SetLight(PedroDrivebase.getInstance().getLight(), "RED"),
                 new OuttakeAt(() -> 0),
                 new OuttakeAt(() -> 1),
                 new OuttakeAt(() -> 2),
 
                 new Sleep(1.0),
                 new SetSpeedScale(1.0),
-                new SetLight(PedroDrivebase.getInstance().getLeftLight(), "BLUE"),
-                new SetLight(PedroDrivebase.getInstance().getRightLight(), "BLUE")
+                new SetLight(PedroDrivebase.getInstance().getLight(), "BLUE")
         );
 
         setRequiredSubsystems(

@@ -54,7 +54,7 @@ public final class TarsTele extends LinearOpMode {
 
 		while (opModeIsActive()) {
 			// panic cancel
-			if (gamepad2.left_bumper && gamepad2.right_bumper) {
+			if (gamepad1.left_bumper && gamepad1.right_bumper) {
 				tars.cancelAll();
 			}
 

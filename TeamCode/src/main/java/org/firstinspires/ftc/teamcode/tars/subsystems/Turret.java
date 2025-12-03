@@ -52,8 +52,8 @@ public final class Turret extends Subsystem {
         leftTurretMotor = new StellarDcMotor(hardwareMap, "leftTurretMotor" );
         rightTurretMotor = new StellarDcMotor(hardwareMap, "rightTurretMotor");
 
-        leftTurretMotor.setDirection(DcMotorEx.Direction.FORWARD);
-        rightTurretMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftTurretMotor.setDirection(DcMotorEx.Direction.REVERSE);
+        rightTurretMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         leftTurretMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         rightTurretMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         leftTurretMotor.setVelocityPIDFCoefficents(p_left, i_left, d_left, f_left);

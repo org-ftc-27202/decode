@@ -4,10 +4,8 @@ import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Procedure;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.SetPosition;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Sleep;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.WaitUntil;
-import org.firstinspires.ftc.teamcode.tars.runnables.directives.SetLight;
 import org.firstinspires.ftc.teamcode.tars.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.tars.subsystems.LeverTransfer;
-import org.firstinspires.ftc.teamcode.tars.subsystems.PedroDrivebase;
 import org.firstinspires.ftc.teamcode.tars.subsystems.Spindexer;
 import org.firstinspires.ftc.teamcode.util.DecodeDataTypes;
 
@@ -21,8 +19,8 @@ public class IntakeAt extends Procedure {
 
                 new Sleep(0.3),
                 new WaitUntil(() ->
-                        !Spindexer.getInstance().getBeamBreak1().getState() ||
-                        !Spindexer.getInstance().getBeamBreak2().getState()
+                        !Spindexer.getInstance().getBeamBreak().getState() &&
+                        Spindexer.getInstance().setArtifactColorAtSegmentToColorSensor(segment) != DecodeDataTypes.ArtifactColor.NONE
                 )
         );
 

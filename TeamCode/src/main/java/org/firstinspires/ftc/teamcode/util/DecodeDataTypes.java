@@ -9,21 +9,9 @@ import java.util.Map;
 
 public class DecodeDataTypes {
     public enum ArtifactColor {
-        GREEN("GREEN"),
-        PURPLE("VIOLET"),
-        NONE("WHITE");
-
-        private final String displayName;
-
-        ArtifactColor(String displayName) {
-            this.displayName = displayName;
-        }
-
-        @NonNull
-        @Override
-        public String toString() {
-            return this.displayName;
-        }
+        GREEN,
+        PURPLE,
+        NONE
     }
     public static class ArtifactSequence {
         private ArtifactColor[] sequence = new ArtifactColor[3];
