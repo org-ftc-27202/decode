@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.casebot.runnables.defaultdirectives;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.casebot.runnables.directives.TurnTo;
+import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FarLaunch;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Drivebase;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.PedroDrivebase;
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.GamepadButtonMap;
@@ -27,7 +28,7 @@ public class PedroDefaultDrivebase extends DefaultDirective {
 						StatefulCondition.Edge.RISING
 				),
 				() -> {
-					new TurnTo(Math.toRadians(PedroDrivebase.getInstance().getLaunchYaw()), PedroDrivebase.getInstance().getFollower()).schedule();
+					new FarLaunch().schedule();
 				}
 		));
 	}

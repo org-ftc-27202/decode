@@ -38,6 +38,6 @@ public class TurnTo extends Directive {
     //(Math.abs(follower.getHeadingError())< Math.toDegrees(.05))
     @Override
     public boolean isFinished() {
-        return false;
+        return true;
     }
 }

@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.casebot.runnables.defaultdirectives;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+import org.firstinspires.ftc.teamcode.casebot.subsystems.PedroDrivebase;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Turret;
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.GamepadButtonMap;
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.StatefulCondition;
@@ -17,7 +18,7 @@ public class DefaultTurret extends DefaultDirective {
     public DefaultTurret(Gamepad gamepad1, Gamepad gamepad2) {
         super(Turret.getInstance());
 
-        addTrigger(new ActionTrigger(
+        /*addTrigger(new ActionTrigger(
                 // when dpad up just first pressed
                 new StatefulCondition(
                         new GamepadButtonMap(gamepad1, GamepadButtonMap.Button.DPAD_UP),
@@ -72,10 +73,16 @@ public class DefaultTurret extends DefaultDirective {
                 () -> {
                     hoodPosition = hoodPosition - 0.05;
                 }
-        ));
+        ));*/
+
     }
     @Override
     public void update() {
+        if (PedroDrivebase.getInstance().getFollower().getPose().getY() >= 44){
+            velocity = 1300.0;
+        } else {
+            velocity = 1700.0;
+        }
         turret.setTurretVelocity(velocity);
         turret.getTurretHoodServo().setPosition(hoodPosition);
         turret.getTurretServo().setPosition(position);
