@@ -34,6 +34,7 @@ public final class PedroDrivebase extends Subsystem {
     public double distanceFromGoal;
 
     public double speedScale = 1.0;
+    private boolean needsToStart = true;
 
     private DcMotorEx leftFrontDrive, leftBackDrive, rightFrontDrive, rightBackDrive;
     private StellarLight lightLeft, lightRight;
@@ -64,8 +65,13 @@ public final class PedroDrivebase extends Subsystem {
         new SetLight(lightRight, "AZURE").schedule();
     }
 
+
     @Override
     public void update() {
+        if (needsToStart){
+            follower.startTeleopDrive(true);
+            needsToStart = false;
+        }
         follower.update();
         distanceFromGoal = Math.sqrt(Math.pow(follower.getPose().getX()-GOAL_X, 2)+Math.pow(follower.getPose().getY()-GOAL_Y,2));
     }

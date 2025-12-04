@@ -32,11 +32,21 @@ public class PedroDefaultDrivebase extends DefaultDirective {
 				}
 		));
 	}
-
 	@Override
 	public void update() {
 		double max, axial, lateral, yaw;
 		double leftFrontPower, rightFrontPower, leftBackPower, rightBackPower;
+			//Make the last parameter false for field-centric
+			//In case the drivers want to use a "slowMode" you can scale the vectors
+			//This is the normal version to use in the TeleOp
+
+			PedroDrivebase.getInstance().getFollower().setTeleOpDrive(
+					-gamepad1.left_stick_y,
+					-gamepad1.left_stick_x,
+					-gamepad1.right_stick_x,
+					true);// Robot Centric
+
+
 		axial = -gamepad1.left_stick_y * Drivebase.CARDINAL_SPEED;  // Note: pushing stick forward gives negative value
 		lateral = gamepad1.left_stick_x * Drivebase.CARDINAL_SPEED;
 		yaw = gamepad1.right_stick_x * Drivebase.TURN_SPEED;
@@ -62,11 +72,11 @@ public class PedroDefaultDrivebase extends DefaultDirective {
 		}
 
 		// send calculated power to wheels
-		pedroDrivebase.setDrivePower(
+		/*pedroDrivebase.setDrivePower(
 				leftFrontPower * PedroDrivebase.getInstance().speedScale,
 				rightFrontPower * PedroDrivebase.getInstance().speedScale,
 				leftBackPower * PedroDrivebase.getInstance().speedScale,
 				rightBackPower * PedroDrivebase.getInstance().speedScale
-		);
+		);*/
 	}
 }
