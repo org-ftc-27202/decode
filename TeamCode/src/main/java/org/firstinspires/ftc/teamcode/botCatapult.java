@@ -13,22 +13,20 @@ public final class botCatapult {
     final double CATAPULT_LAUNCH_POWER = 0.75;  // for 3 springs -> near launch zone
 //    final double CATAPULT_LAUNCH_POWER = 0.9;  // for 4 springs -> far launch zone
     private final DcMotorEx catapult;
-//    private DigitalChannel switchUp;
-//    private boolean flagLaunching = false;
     public AnalogEncoder encoder;
     private double maxAngle = 0.0;
     private double currentAngle = 0;
     private double toleranceAngle = 2.5;
 
 
-    public botCatapult(HardwareMap hardwareMap, String inCatapultDeviceName, String inEncoderDeviceName){
+    public botCatapult(HardwareMap hardwareMap, String inCatapultDeviceName, String inEncoderDeviceName, boolean inEncoderInverted){
         catapult = hardwareMap.get(DcMotorEx.class, inCatapultDeviceName);
         catapult.setDirection(DcMotorEx.Direction.REVERSE);
         catapult.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
         catapult.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         encoder = new AnalogEncoder(hardwareMap, inEncoderDeviceName);
-        encoder.setInverted(true);
+        encoder.setInverted(inEncoderInverted);
         encoder.setZeroPosition();
 //        switchUp = hardwareMap.get(DigitalChannel.class, inSwitchUpDeviceName);
 //        switchUp.setMode(DigitalChannel.Mode.INPUT);
