@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.DefaultDirective;
 
 public abstract class Subsystem {
+	//todo: maybe add start() or smt
 	private DefaultDirective defaultDirective;
 
 	@Override

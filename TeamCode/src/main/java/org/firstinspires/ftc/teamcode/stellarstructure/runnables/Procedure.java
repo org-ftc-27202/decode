@@ -11,7 +11,7 @@ import java.util.Set;
 
 public class Procedure extends Runnable {
     private final Runnable[] runnables;
-    private int currentDirectiveIndex = 0;
+    private int currentRunnableIndex = 0;
     private final String nameId;
     private boolean hasScheduledFirst = false;
     private boolean shouldStop = false;
@@ -80,35 +80,35 @@ public class Procedure extends Runnable {
             return;
         }
 
-        if (runnables[currentDirectiveIndex].hasBeenInterrupted()) {
+        if (runnables[currentRunnableIndex].hasBeenInterrupted()) {
             shouldStop = true;
             return;
         }
 
         // if current directive finished
-        if (runnables[currentDirectiveIndex].getHasFinished()) {
+        if (runnables[currentRunnableIndex].getHasFinished()) {
             // increase directive index
-            currentDirectiveIndex++;
+            currentRunnableIndex++;
 
-            if (currentDirectiveIndex >= runnables.length) {
+            if (currentRunnableIndex >= runnables.length) {
                 return;
             }
 
             // schedule next directive
-            runnables[currentDirectiveIndex].schedule();
+            runnables[currentRunnableIndex].schedule();
         }
     }
 
     @Override
     public final void stop(boolean interrupted) {
-        if (interrupted && currentDirectiveIndex >= 0 && currentDirectiveIndex < runnables.length) {
-            runnables[currentDirectiveIndex].stop(true);
+        if (interrupted && currentRunnableIndex >= 0 && currentRunnableIndex < runnables.length) {
+            runnables[currentRunnableIndex].stop(true);
         }
     }
 
     @Override
     public final boolean isFinished() {
-        return currentDirectiveIndex >= runnables.length || shouldStop;
+        return currentRunnableIndex >= runnables.length || shouldStop;
     }
 
     @NonNull
@@ -121,7 +121,7 @@ public class Procedure extends Runnable {
         for (int i = 0; i < runnables.length; i++) {
             stringBuilder.append("    ")
                     .append(runnables[i].getClass().getSimpleName())
-                    .append((i == currentDirectiveIndex ? " <-- " : ""))
+                    .append((i == currentRunnableIndex ? " <--" : ""))
                     .append("\n");
         }
 

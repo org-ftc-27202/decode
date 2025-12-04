@@ -63,7 +63,7 @@ public final class Spindexer extends Subsystem {
 		spindexerServoEncoder = hardwareMap.get(AnalogInput.class, "spindexerServoEncoder");
 
 		//todo
-		spindexerServo.setPosition(getDegreesForSegmentPosition(0, Position.INTAKE));
+		spindexerServo.setPosition(getServoPositionFromSegment(0, Position.INTAKE));
 
 		beamBreak1 = hardwareMap.get(DigitalChannel.class, "beamBreak1");
 		beamBreak1.setMode(DigitalChannel.Mode.INPUT);
@@ -84,7 +84,12 @@ public final class Spindexer extends Subsystem {
 	public void update() {}
 
 	public double getSpindexerEncoderPosition() {
-		return spindexerServoEncoder.getVoltage() / 3.3 * 360.0;
+		//return (spindexerServoEncoder.getVoltage() / 3.3) - (15.0 / 360.0);
+		return (spindexerServoEncoder.getVoltage() / 3.10) - (15.0 / 360.0);
+	}
+
+	public boolean spindexerEncoderIsWithinTolerance(double position, double tolerance) {
+		return Math.abs(getSpindexerEncoderPosition() - position) <= tolerance;
 	}
 
 	public StellarServo getSpindexerServo() {
@@ -135,7 +140,7 @@ public final class Spindexer extends Subsystem {
 		double greenToBlueRatio = getGreenToBlueRatio();
 		double total = getRGBSum();
 
-		if (total < 300) {
+		if (total < 300.0) {
 			return DecodeDataTypes.ArtifactColor.NONE;
 		}
 
@@ -166,10 +171,10 @@ public final class Spindexer extends Subsystem {
 	}
 
 	public double getDegreesForSegmentSupplierAndPosition(Supplier<Integer> segmentSupplier, @NonNull Position position) {
-		return getDegreesForSegmentPosition(segmentSupplier.get(), position);
+		return getServoPositionFromSegment(segmentSupplier.get(), position);
 	}
 
-	public double getDegreesForSegmentPosition(int segment, @NonNull Position position) {
+	public double getServoPositionFromSegment(int segment, @NonNull Position position) {
 		if (position == Position.INTAKE) {
 			return INTAKE_DEGREE_POSITIONS[segment] * DEGREES_TO_SERVO;
 		} else if (position == Position.TRANSFER) {

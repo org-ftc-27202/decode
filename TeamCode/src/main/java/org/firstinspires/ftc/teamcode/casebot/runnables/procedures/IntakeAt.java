@@ -13,9 +13,9 @@ public class IntakeAt extends Procedure {
                 "IntakeAt",
                 new SetPosition(LeverTransfer.getInstance().getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION),
 
-                new SetPosition(Spindexer.getInstance().getSpindexerServo(), Spindexer.getInstance().getDegreesForSegmentPosition(segment, Spindexer.Position.INTAKE)),
+                new SetPosition(Spindexer.getInstance().getSpindexerServo(), Spindexer.getInstance().getServoPositionFromSegment(segment, Spindexer.Position.INTAKE)),
 
-                new Sleep(0.3),
+                new WaitUntil(() -> Spindexer.getInstance().spindexerEncoderIsWithinTolerance(Spindexer.getInstance().getServoPositionFromSegment(segment, Spindexer.Position.INTAKE), 0.05)),
                 new WaitUntil(() ->
                         !Spindexer.getInstance().getBeamBreak1().getState() ||
                         !Spindexer.getInstance().getBeamBreak2().getState()

@@ -12,7 +12,7 @@ public class FullIntake extends Procedure {
 				new IntakeAt(0),
 				new IntakeAt(1),
 				new IntakeAt(2),
-				new SetPosition(Spindexer.getInstance().getSpindexerServo(), Spindexer.getInstance().getDegreesForSegmentPosition(0, Spindexer.Position.TRANSFER))
+				new SetPosition(Spindexer.getInstance().getSpindexerServo(), Spindexer.getInstance().getServoPositionFromSegment(0, Spindexer.Position.TRANSFER))
 		);
 
 		setRequiredSubsystems(

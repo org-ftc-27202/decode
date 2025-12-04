@@ -12,7 +12,7 @@ public class FullIntakeWaitForColor extends Procedure {
                 new IntakeAtWaitForColor(0),
                 new IntakeAtWaitForColor(1),
                 new IntakeAtWaitForColor(2),
-                new SetPosition(Spindexer.getInstance().getSpindexerServo(), Spindexer.getInstance().getDegreesForSegmentPosition(0, Spindexer.Position.TRANSFER))
+                new SetPosition(Spindexer.getInstance().getSpindexerServo(), Spindexer.getInstance().getServoPositionFromSegment(0, Spindexer.Position.TRANSFER))
         );
 
         setRequiredSubsystems(
