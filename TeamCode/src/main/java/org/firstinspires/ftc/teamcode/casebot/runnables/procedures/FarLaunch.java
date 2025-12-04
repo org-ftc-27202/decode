@@ -17,7 +17,7 @@ public class FarLaunch extends Procedure {
                 new InstantlyDo(()->
                         Turret.getInstance().setTurretVelocity(1600)),
                 new SetPosition(Turret.getInstance().getTurretHoodServo(), 0.0),
-                new FullOuttake()
+                new FullOuttake(),
                 new InstantlyDo(()-> {
                     PedroDrivebase.getInstance().getFollower().startTeleopDrive(true);
                 })
