@@ -20,7 +20,7 @@ public final class PedroDrivebase extends Subsystem {
     }
     private PedroDrivebase() {}
 
-    private Follower follower;
+    private static Follower follower;
     public final static double CARDINAL_SPEED = 1.00;
     public final static double TURN_SPEED = 0.70;
     public final static double FAR_LAUNCH_FACTOR = 0.2;
@@ -41,7 +41,8 @@ public final class PedroDrivebase extends Subsystem {
 
     @Override
     public void init(HardwareMap hardwareMap) {
-        this.follower = Constants.createFollower(hardwareMap);
+        needsToStart = true;
+        follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(new Pose(56.75,7, Math.toRadians(180)));
         lightLeft = new StellarLight(hardwareMap, "lightLeft");
         lightRight = new StellarLight(hardwareMap, "lightRight");
@@ -132,6 +133,8 @@ public final class PedroDrivebase extends Subsystem {
     public double getDistanceFromGoal(){
         return distanceFromGoal;
     }
+
+
 
 
 	@NonNull
