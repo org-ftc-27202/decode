@@ -11,10 +11,9 @@ import java.util.Set;
 
 public class Procedure extends Runnable {
     private final Runnable[] runnables;
+    private int currentDirectiveIndex = 0;
     private final String nameId;
-    private int currentRunnableIndex = 0;
-    private boolean currentRunnableStarted = false;
-    private boolean hasScheduledThisUpdate = false;
+    private boolean hasScheduledFirst = false;
     private boolean shouldStop = false;
 
 
@@ -70,60 +69,63 @@ public class Procedure extends Runnable {
 
     @Override
     public final void update() {
-        if (isFinished()) return;
-
-        hasScheduledThisUpdate = false;
-
-        Runnable currentRunnable = runnables[currentRunnableIndex];
-
-        if (currentRunnable.hasBeenInterrupted()) {
-            throw new RuntimeException(String.format("Runnable %s has been interrupted inside procedure %s somehow", currentRunnable, nameId));
-        }
-
-        // if the current runnable hasn't started then
-        if (!currentRunnableStarted) {
-            // if the current runnable is still waiting for starting conditions, then return
-            if (!currentRunnable.getWaitForStartingConditions()) return;
-
-            currentRunnable.startInScheduler();
-            hasScheduledThisUpdate = true;
-            currentRunnableStarted = true;
-        }
-
-        if (currentRunnable.getHasFinished()) {
-            currentRunnable.stopInScheduler();
-            currentRunnableIndex++;
-            currentRunnable = runnables[currentRunnableIndex];
-
-            if (!currentRunnable.getWaitForStartingConditions()) return;
-
-            currentRunnable.startInScheduler();
-            //hasScheduledThisUpdate = true;
-            currentRunnableStarted = true;
+        if (isFinished()) {
             return;
         }
 
-        if (!hasScheduledThisUpdate) {
-            currentRunnable.update();
+        // todo:
+        if (!hasScheduledFirst) {
+            runnables[0].schedule();
+            hasScheduledFirst = true;
+            return;
+        }
+
+        if (runnables[currentDirectiveIndex].hasBeenInterrupted()) {
+            shouldStop = true;
+            return;
+        }
+
+        // if current directive finished
+        if (runnables[currentDirectiveIndex].getHasFinished()) {
+            // increase directive index
+            currentDirectiveIndex++;
+
+            if (currentDirectiveIndex >= runnables.length) {
+                return;
+            }
+
+            // schedule next directive
+            runnables[currentDirectiveIndex].schedule();
         }
     }
 
     @Override
     public final void stop(boolean interrupted) {
-        if (interrupted && currentRunnableIndex >= 0 && currentRunnableIndex < runnables.length) {
-            runnables[currentRunnableIndex].stop(true);
+        if (interrupted && currentDirectiveIndex >= 0 && currentDirectiveIndex < runnables.length) {
+            runnables[currentDirectiveIndex].stop(true);
         }
     }
 
     @Override
     public final boolean isFinished() {
-        return currentRunnableIndex >= runnables.length || shouldStop;
+        return currentDirectiveIndex >= runnables.length || shouldStop;
     }
 
     @NonNull
     @Override
     public String toString() {
-        return "Procedure: " + nameId;
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append("Procedure: ").append(nameId).append("\n");
+
+        for (int i = 0; i < runnables.length; i++) {
+            stringBuilder.append("    ")
+                    .append(runnables[i].getClass().getSimpleName())
+                    .append((i == currentDirectiveIndex ? " <-- " : ""))
+                    .append("\n");
+        }
+
+        return stringBuilder.toString();
     }
 }
 
