@@ -57,7 +57,7 @@ public class DefaultTurret extends DefaultDirective {
                     position = position - 0.05;
                 }
         ));*/
-        addTrigger(new ActionTrigger(
+        /*addTrigger(new ActionTrigger(
                 new StatefulCondition(
                         new GamepadButtonMap(gamepad2, GamepadButtonMap.Button.DPAD_UP),
                         StatefulCondition.Edge.RISING),
@@ -73,16 +73,17 @@ public class DefaultTurret extends DefaultDirective {
                 () -> {
                     hoodPosition = hoodPosition - 0.05;
                 }
-        ));
+        ));*/
 
     }
     @Override
     public void update() {
-        if (PedroDrivebase.getInstance().getFollower().getPose().getY() >= 44){
+        /*if (PedroDrivebase.getInstance().getFollower().getPose().getY() >= 44){
             velocity = 1300.0;
         } else {
             velocity = 1600.0;
-        }
+        }*/
+        velocity = 1460;
         turret.setTurretVelocity(velocity);
         turret.getTurretHoodServo().setPosition(hoodPosition);
         turret.getTurretServo().setPosition(position);

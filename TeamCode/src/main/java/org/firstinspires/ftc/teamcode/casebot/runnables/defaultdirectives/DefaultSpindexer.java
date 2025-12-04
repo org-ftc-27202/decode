@@ -2,10 +2,12 @@ package org.firstinspires.ftc.teamcode.casebot.runnables.defaultdirectives;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FarLaunch;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FullIntake;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FullIntakeWaitForColor;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FullOuttake;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FullPatternOuttake;
+import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.ShortLaunch;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Spindexer;
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.GamepadButtonMap;
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.StatefulCondition;
@@ -24,7 +26,7 @@ public class DefaultSpindexer extends DefaultDirective {
 				),
 				() -> {
 					// outtake 3 in pattern order (PGP for now)
-					new FullPatternOuttake().schedule();
+					new FarLaunch().schedule();
 				}
 		));
 
@@ -39,7 +41,7 @@ public class DefaultSpindexer extends DefaultDirective {
 					new FullIntake().schedule();
 				}
 		));
-
+		/// TODO: 12/3/2025 Add toggle for color/no color 
 		addTrigger(new ActionTrigger(
 				// when b just first pressed
 				new StatefulCondition(
@@ -60,7 +62,7 @@ public class DefaultSpindexer extends DefaultDirective {
 				),
 				() -> {
 					// outtake 3
-					new FullOuttake().schedule();
+					new ShortLaunch().schedule();
 				}
 		));
 

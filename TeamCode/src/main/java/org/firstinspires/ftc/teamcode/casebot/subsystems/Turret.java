@@ -15,6 +15,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.TurretStartup;
 import org.firstinspires.ftc.teamcode.stellarstructure.Subsystem;
 import org.firstinspires.ftc.teamcode.stellarstructure.hardwaremapwrappers.StellarDcMotor;
 import org.firstinspires.ftc.teamcode.stellarstructure.hardwaremapwrappers.StellarServo;
@@ -38,9 +39,14 @@ public final class Turret extends Subsystem {
     private StellarDcMotor rightTurretMotor;
     private StellarServo turretHoodServo;
 
+    private double PIDFScale;
+    private boolean needsToStart = true;
+
 
     @Override
     public void init(HardwareMap hardwareMap) {
+        PIDFScale = 1;
+        needsToStart = true;
         turretServo = new StellarServo(hardwareMap, "turretServo");
         turretHoodServo = new StellarServo(hardwareMap, "turretHoodServo");
         leftTurretMotor = new StellarDcMotor(hardwareMap, "leftTurretMotor" );
@@ -57,8 +63,12 @@ public final class Turret extends Subsystem {
 
     @Override
     public void update() {
-        leftTurretMotor.setVelocityPIDFCoefficents(p_left, i_left, d_left, f_left);
-        rightTurretMotor.setVelocityPIDFCoefficents(p_right, i_right, d_right, f_right);
+        if (needsToStart){
+            new TurretStartup().schedule();
+            needsToStart = false;
+        }
+    //leftTurretMotor.setVelocityPIDFCoefficents(p_left*PIDFScale, i_left*PIDFScale, d_left*PIDFScale, f_left*PIDFScale);
+        //rightTurretMotor.setVelocityPIDFCoefficents(p_right*PIDFScale, i_right*PIDFScale, d_right*PIDFScale, f_right*PIDFScale);
     }
 
     public StellarServo getTurretServo() {
@@ -82,6 +92,11 @@ public final class Turret extends Subsystem {
 
         leftTurretMotor.setTargetVelocity(velocity);
         rightTurretMotor.setTargetVelocity(velocity);
+    }
+    public void setPIDFScale(double scale){
+        PIDFScale = scale;
+        leftTurretMotor.setVelocityPIDFCoefficents(p_left*PIDFScale, i_left*PIDFScale, d_left*PIDFScale, f_left*PIDFScale);
+        rightTurretMotor.setVelocityPIDFCoefficents(p_right*PIDFScale, i_right*PIDFScale, d_right*PIDFScale, f_right*PIDFScale);
     }
 
     public double getVelocityOffOfTarget() {

@@ -23,6 +23,6 @@ public class FarLaunch extends Procedure {
                 })
         );
 
-        setRequiredSubsystems(PedroDrivebase.getInstance());
+        setRequiredSubsystems(PedroDrivebase.getInstance(), Turret.getInstance());
     }
 }
