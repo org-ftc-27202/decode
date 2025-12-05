@@ -38,7 +38,7 @@ public final class CaseTele extends LinearOpMode {
 		drivebase.setDefaultDirective(new DefaultDrivebase(gamepad1));
 		intake.setDefaultDirective(new DefaultIntake(gamepad1));
 		leverTransfer.setDefaultDirective(new DefaultLeverTransfer(gamepad1));
-		spindexer.setDefaultDirective(new DefaultSpindexer(gamepad1));
+		spindexer.setDefaultDirective(new DefaultSpindexer(gamepad1, gamepad2));
 
 		// print telemetry
 		BootScreen bootScreen = new BootScreen(telemetry, new TerminalVelocityLogo(), true);

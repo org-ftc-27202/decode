@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.casebot.runnables.defaultdirectives;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+import org.firstinspires.ftc.teamcode.casebot.runnables.directives.GetMotifSequence;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FarLaunch;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FullIntake;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FullIntakeWaitForColor;
@@ -15,7 +16,7 @@ import org.firstinspires.ftc.teamcode.stellarstructure.runnables.DefaultDirectiv
 import org.firstinspires.ftc.teamcode.stellarstructure.triggers.ActionTrigger;
 
 public class DefaultSpindexer extends DefaultDirective {
-	public DefaultSpindexer(Gamepad gamepad1) {
+	public DefaultSpindexer(Gamepad gamepad1, Gamepad gamepad2) {
 		super(Spindexer.getInstance());
 
 		addTrigger(new ActionTrigger(
@@ -63,6 +64,19 @@ public class DefaultSpindexer extends DefaultDirective {
 				() -> {
 					// outtake 3
 					new ShortLaunch().schedule();
+				}
+		));
+
+		//todo:
+		addTrigger(new ActionTrigger(
+				// when y just first pressed
+				new StatefulCondition(
+						new GamepadButtonMap(gamepad2, GamepadButtonMap.Button.Y),
+						StatefulCondition.Edge.RISING
+				),
+				() -> {
+					// outtake 3
+					new GetMotifSequence().schedule();
 				}
 		));
 

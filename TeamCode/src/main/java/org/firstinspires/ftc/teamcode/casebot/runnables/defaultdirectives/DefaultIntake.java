@@ -40,6 +40,11 @@ public class DefaultIntake extends DefaultDirective {
 		));
 
 		addTrigger(new ActionTrigger(
+				() -> gamepad1.left_bumper, //when right trigger pressed
+				() -> {intake.setIntakeSpeed(-1.0);} //set intake to right trigger
+		));
+
+		addTrigger(new ActionTrigger(
 				// when dpad right just first pressed
 				new StatefulCondition(
 						new GamepadButtonMap(gamepad1, GamepadButtonMap.Button.DPAD_RIGHT),

@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.casebot.runnables.directives.SetLight;
 import org.firstinspires.ftc.teamcode.stellarstructure.Subsystem;
 import org.firstinspires.ftc.teamcode.stellarstructure.hardwaremapwrappers.StellarServo;
 import org.firstinspires.ftc.teamcode.util.DecodeDataTypes;
+import org.firstinspires.ftc.teamcode.util.GameState;
 
 import java.util.function.Supplier;
 
@@ -209,6 +210,7 @@ public final class Spindexer extends Subsystem {
 				"Total RGB: %f\n" +
 				"Spindexer Servo: %f\n" +
 				"Spindexer Encoder: %f\n",
+				"Motif Sequence: %s, %s, %s\n",
 				beamBreak1.getState(),
 				beamBreak2.getState(),
 				colorSensor.red(), colorSensor.green(), colorSensor.blue(),
@@ -216,7 +218,10 @@ public final class Spindexer extends Subsystem {
 				getGreenToBlueRatio(),
 				getRGBSum(),
 				spindexerServo.getPosition(),
-				getSpindexerEncoderPosition()
+				getSpindexerEncoderPosition(),
+				GameState.getMotifPatternAt(0),
+				GameState.getMotifPatternAt(1),
+				GameState.getMotifPatternAt(2)
 		);
 	}
 }

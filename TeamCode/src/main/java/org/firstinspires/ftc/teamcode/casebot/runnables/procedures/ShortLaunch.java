@@ -14,12 +14,13 @@ public class ShortLaunch extends Procedure {
                     PedroDrivebase.getInstance().getFollower().turnTo(Math.toRadians(PedroDrivebase.getInstance().getLaunchYaw()));
                 }),
                 new InstantlyDo(()->
-                        Turret.getInstance().setTurretVelocity(1300)),
+                        Turret.getInstance().setTurretVelocity(1300)
+                ),
                 new SetPosition(Turret.getInstance().getTurretHoodServo(), 0.25),
                 new FullOuttake(),
-                new InstantlyDo(()-> {
-                    PedroDrivebase.getInstance().getFollower().startTeleopDrive(true);
-                })
+                new InstantlyDo(()->
+                    PedroDrivebase.getInstance().getFollower().startTeleopDrive(true)
+                )
         );
 
         setRequiredSubsystems(PedroDrivebase.getInstance(), Turret.getInstance());

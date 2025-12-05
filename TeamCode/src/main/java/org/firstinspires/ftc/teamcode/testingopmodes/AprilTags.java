@@ -50,7 +50,7 @@ public final class AprilTags extends LinearOpMode {
                 .setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
                 .setTagLibrary(gameTagLibrary)
                 .setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES)
-                .setLensIntrinsics(397.917, 397.917, 666.941, 358.274) // Calibrated at 1280x720
+                //.setLensIntrinsics(397.917, 397.917, 666.941, 358.274) // Calibrated at 1280x720
                 .build();
 
         VisionPortal.Builder builder = new VisionPortal.Builder()

@@ -69,11 +69,8 @@ public class Procedure extends Runnable {
 
     @Override
     public final void update() {
-        if (isFinished()) {
-            return;
-        }
+        if (isFinished()) return;
 
-        // todo:
         if (!hasScheduledFirst) {
             runnables[0].schedule();
             hasScheduledFirst = true;
@@ -121,7 +118,7 @@ public class Procedure extends Runnable {
         for (int i = 0; i < runnables.length; i++) {
             stringBuilder.append("    ")
                     .append(runnables[i].getClass().getSimpleName())
-                    .append((i == currentRunnableIndex ? " <--" : ""))
+                    .append(i == currentRunnableIndex ? " <--" : "")
                     .append("\n");
         }
 

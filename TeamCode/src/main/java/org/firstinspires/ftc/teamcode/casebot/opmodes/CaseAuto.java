@@ -44,7 +44,7 @@ public final class CaseAuto extends OpMode {
     //DefaultDrivebase defaultDrivebase = new DefaultDrivebase(gamepad1);
     private DefaultIntake defaultIntake = new DefaultIntake(gamepad1);
     private DefaultLeverTransfer defaultLeverTransfer = new DefaultLeverTransfer(gamepad1);
-    private DefaultSpindexer defaultSpindexer = new DefaultSpindexer(gamepad1);
+    private DefaultSpindexer defaultSpindexer = new DefaultSpindexer(gamepad1, gamepad2);
 
     private final PedroDrivebase pedroDrivebase = PedroDrivebase.getInstance();
     private final Intake intake = Intake.getInstance();

@@ -15,6 +15,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.TurretStartup;
 import org.firstinspires.ftc.teamcode.stellarstructure.Subsystem;
 import org.firstinspires.ftc.teamcode.stellarstructure.hardwaremapwrappers.StellarDcMotor;
@@ -38,6 +39,7 @@ public final class Turret extends Subsystem {
     private StellarDcMotor leftTurretMotor;
     private StellarDcMotor rightTurretMotor;
     private StellarServo turretHoodServo;
+    private WebcamName webcamName;
 
     private double PIDFScale;
     private boolean needsToStart = true;
@@ -51,6 +53,8 @@ public final class Turret extends Subsystem {
         turretHoodServo = new StellarServo(hardwareMap, "turretHoodServo");
         leftTurretMotor = new StellarDcMotor(hardwareMap, "leftTurretMotor" );
         rightTurretMotor = new StellarDcMotor(hardwareMap, "rightTurretMotor");
+
+        webcamName = hardwareMap.get(WebcamName.class, "camera");
 
         leftTurretMotor.setDirection(DcMotorEx.Direction.FORWARD);
         rightTurretMotor.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -85,6 +89,10 @@ public final class Turret extends Subsystem {
 
     public StellarDcMotor getRightTurretMotor() {
         return rightTurretMotor;
+    }
+
+    public WebcamName getWebcamName() {
+        return this.webcamName;
     }
 
     public void setTurretVelocity(double velocity) {
