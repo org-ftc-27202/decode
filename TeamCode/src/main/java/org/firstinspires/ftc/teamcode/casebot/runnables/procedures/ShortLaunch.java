@@ -3,8 +3,10 @@ package org.firstinspires.ftc.teamcode.casebot.runnables.procedures;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.PedroDrivebase;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Turret;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.InstantlyDo;
+import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Parallel;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Procedure;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.SetPosition;
+import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Sleep;
 
 public class ShortLaunch extends Procedure {
     public ShortLaunch() {
@@ -17,9 +19,16 @@ public class ShortLaunch extends Procedure {
                         Turret.getInstance().setTurretVelocity(1300)
                 ),
                 new SetPosition(Turret.getInstance().getTurretHoodServo(), 0.25),
-                new FullOuttake(),
-                new InstantlyDo(()->
-                    PedroDrivebase.getInstance().getFollower().startTeleopDrive(true)
+                new Parallel(
+                        "Launch+Stop",
+                        new FullOuttake(),
+                        new Procedure(
+                                "Start Driving",
+                                new Sleep(.5),
+                                new InstantlyDo(()->
+                                        PedroDrivebase.getInstance().getFollower().startTeleopDrive(true)
+                                )
+                        )
                 )
         );
 

@@ -87,8 +87,8 @@ public final class CaseAuto extends OpMode {
         buildPaths();
         follower.setStartingPose(startPose);
         spindexer.setArtifactColorInSpindexer(0, DecodeDataTypes.ArtifactColor.PURPLE);
-        spindexer.setArtifactColorInSpindexer(0, DecodeDataTypes.ArtifactColor.GREEN);
-        spindexer.setArtifactColorInSpindexer(0, DecodeDataTypes.ArtifactColor.PURPLE);
+        spindexer.setArtifactColorInSpindexer(1, DecodeDataTypes.ArtifactColor.GREEN);
+        spindexer.setArtifactColorInSpindexer(2, DecodeDataTypes.ArtifactColor.PURPLE);
 
         // print telemetry
         BootScreen bootScreen = new BootScreen(telemetry, new TerminalVelocityLogo(), true);

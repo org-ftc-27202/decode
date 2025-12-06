@@ -209,7 +209,7 @@ public final class Spindexer extends Subsystem {
 				"G/B ratio: %f\n" +
 				"Total RGB: %f\n" +
 				"Spindexer Servo: %f\n" +
-				"Spindexer Encoder: %f\n",
+				"Spindexer Encoder: %f\n"+
 				"Motif Sequence: %s, %s, %s\n",
 				beamBreak1.getState(),
 				beamBreak2.getState(),

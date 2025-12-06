@@ -16,7 +16,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import java.util.List;
 
-public class GetMotifSequence extends Directive {
+/*public class GetMotifSequence extends Directive {
     private AprilTagLibrary gameTagLibrary;
     private AprilTagProcessor aprilTag;
     private VisionPortal.Builder builder;
@@ -47,7 +47,8 @@ public class GetMotifSequence extends Directive {
                 .setCameraResolution(new Size(1280, 720))
                 .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
                 //.addProcessor(positionalPipeline)
-                .addProcessor(aprilTag);
+                .addProcessor(aprilTag)
+        ;
     }
 
     @Override
@@ -100,5 +101,91 @@ public class GetMotifSequence extends Directive {
     @Override
     public boolean isFinished() {
         return false;
+    }
+}*/
+public class GetMotifSequence extends Directive {
+    private AprilTagLibrary gameTagLibrary;
+    private AprilTagProcessor aprilTag;
+    private VisionPortal visionPortal; // Field to hold the portal
+    private boolean isTargetFound = false; // Flag to finish the command
+
+    public GetMotifSequence() {
+        setInterruptible(false);
+        setRequiredSubsystems(); // Ideally, require the Turret/Camera subsystem here if you have one
+    }
+
+    @Override
+    public void start(boolean hadToInterruptToStart) {
+        gameTagLibrary = AprilTagGameDatabase.getDecodeTagLibrary();
+
+        aprilTag = new AprilTagProcessor.Builder()
+                .setDrawAxes(true)
+                .setDrawCubeProjection(true)
+                .setDrawTagOutline(true)
+                .setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
+                .setTagLibrary(gameTagLibrary)
+                .setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES)
+                .build();
+
+        // FIX 1: Actually build the portal and assign it to the variable
+        visionPortal = new VisionPortal.Builder()
+                .setCamera(Turret.getInstance().getWebcamName())
+                .setCameraResolution(new Size(1280, 720))
+                .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
+                .addProcessor(aprilTag)
+                .build();
+
+        isTargetFound = false;
+    }
+
+    @Override
+    public void update() {
+        // If we already found it, don't keep processing
+        if (isTargetFound) return;
+
+        List<AprilTagDetection> currentDetections = aprilTag.getDetections();
+
+        // Loop through detections
+        for (AprilTagDetection detection : currentDetections) {
+            if (detection.metadata != null) {
+                // Check ID
+                if (detection.metadata.id == 21) {
+                    GameState.setMotifPattern(DecodeDataTypes.ArtifactColor.GREEN, DecodeDataTypes.ArtifactColor.PURPLE, DecodeDataTypes.ArtifactColor.PURPLE);
+                    isTargetFound = true;
+                    break;
+                } else if (detection.metadata.id == 22) {
+                    GameState.setMotifPattern(DecodeDataTypes.ArtifactColor.PURPLE, DecodeDataTypes.ArtifactColor.GREEN, DecodeDataTypes.ArtifactColor.PURPLE);
+                    isTargetFound = true;
+                    break;
+                } else if (detection.metadata.id == 23) {
+                    GameState.setMotifPattern(DecodeDataTypes.ArtifactColor.PURPLE, DecodeDataTypes.ArtifactColor.PURPLE, DecodeDataTypes.ArtifactColor.GREEN);
+                    isTargetFound = true;
+                    break;
+                }
+            }
+        }
+    }
+
+    @Override
+    public void stop(boolean interrupted) {
+        // FIX 2: Close the camera to prevent crashes
+            // Check if the portal exists before trying to close it
+            if (visionPortal != null) {
+
+                // Optional: Stop streaming first to ensure a clean shutdown
+                if (visionPortal.getCameraState() == VisionPortal.CameraState.STREAMING) {
+                    visionPortal.stopStreaming();
+                }
+
+                // CRITICAL: Release the camera hardware so it can be used again
+                visionPortal.close();
+            }
+
+    }
+
+    @Override
+    public boolean isFinished() {
+        // FIX 3: Return true when we have found the tag
+        return isTargetFound;
     }
 }
