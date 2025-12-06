@@ -4,6 +4,7 @@ import android.util.Size;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.casebot.subsystems.Camera;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Turret;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Directive;
 import org.firstinspires.ftc.teamcode.util.DecodeDataTypes;
@@ -110,8 +111,8 @@ public class GetMotifSequence extends Directive {
     private boolean isTargetFound = false; // Flag to finish the command
 
     public GetMotifSequence() {
-        setInterruptible(false);
-        setRequiredSubsystems(); // Ideally, require the Turret/Camera subsystem here if you have one
+        setInterruptible(true);
+        setRequiredSubsystems(Camera.getInstance()); // Ideally, require the Turret/Camera subsystem here if you have one
     }
 
     @Override

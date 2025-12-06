@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.casebot.runnables.defaultdirectives.Defaul
 import org.firstinspires.ftc.teamcode.casebot.runnables.defaultdirectives.DefaultSpindexer;
 import org.firstinspires.ftc.teamcode.casebot.runnables.defaultdirectives.DefaultTurret;
 import org.firstinspires.ftc.teamcode.casebot.runnables.defaultdirectives.PedroDefaultDrivebase;
+import org.firstinspires.ftc.teamcode.casebot.subsystems.Camera;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.LeverTransfer;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.PedroDrivebase;
@@ -24,6 +25,7 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
         private final Intake intake = Intake.getInstance();
         private final LeverTransfer leverTransfer = LeverTransfer.getInstance();
         private final Spindexer spindexer = Spindexer.getInstance();
+        private final Camera camera = Camera.getInstance();
 
         private final Turret turret = Turret.getInstance();
 
@@ -32,7 +34,8 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
                 intake,
                 leverTransfer,
                 spindexer,
-                turret
+                turret,
+                camera
         );
 
         @Override

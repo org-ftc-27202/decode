@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.casebot.runnables.defaultdirectives.Defaul
 import org.firstinspires.ftc.teamcode.casebot.runnables.defaultdirectives.DefaultSpindexer;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FullIntake;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FullPatternOuttake;
+import org.firstinspires.ftc.teamcode.casebot.subsystems.Camera;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.LeverTransfer;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.PedroDrivebase;
@@ -25,6 +26,7 @@ import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Procedure;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.SetPosition;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Sleep;
 import org.firstinspires.ftc.teamcode.util.DecodeDataTypes;
+import org.firstinspires.ftc.teamcode.util.GameState;
 import org.firstinspires.ftc.teamcode.util.bootscreen.BootScreen;
 import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
 
@@ -36,6 +38,7 @@ public final class CaseAuto extends OpMode {
     private Timer pathTimer, actionTimer, opmodeTimer;
     private final StellarBot caseBot = new StellarBot(
             PedroDrivebase.getInstance(),
+            Camera.getInstance(),
             Intake.getInstance(),
             LeverTransfer.getInstance(),
             Spindexer.getInstance(),

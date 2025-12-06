@@ -3,16 +3,20 @@ package org.firstinspires.ftc.teamcode.casebot.runnables.defaultdirectives;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.casebot.runnables.directives.GetMotifSequence;
+import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FarColorLaunch;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FarLaunch;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FullIntake;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FullIntakeWaitForColor;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FullPatternOuttake;
+import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.OuttakeColor;
+import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.ShortColorLaunch;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.ShortLaunch;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Spindexer;
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.GamepadButtonMap;
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.StatefulCondition;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.DefaultDirective;
 import org.firstinspires.ftc.teamcode.stellarstructure.triggers.ActionTrigger;
+import org.firstinspires.ftc.teamcode.util.DecodeDataTypes;
 
 public class DefaultSpindexer extends DefaultDirective {
 	public DefaultSpindexer(Gamepad gamepad1, Gamepad gamepad2) {
@@ -33,7 +37,7 @@ public class DefaultSpindexer extends DefaultDirective {
 		addTrigger(new ActionTrigger(
 				// when x just first pressed
 				new StatefulCondition(
-						new GamepadButtonMap(gamepad1, GamepadButtonMap.Button.X),
+						new GamepadButtonMap(gamepad1, GamepadButtonMap.Button.RIGHT_BUMPER),
 						StatefulCondition.Edge.RISING
 				),
 				() -> {
@@ -41,11 +45,10 @@ public class DefaultSpindexer extends DefaultDirective {
 					new FullIntake().schedule();
 				}
 		));
-		/// TODO: 12/3/2025 Add toggle for color/no color
 		addTrigger(new ActionTrigger(
 				// when b just first pressed
 				new StatefulCondition(
-						new GamepadButtonMap(gamepad1, GamepadButtonMap.Button.B),
+						new GamepadButtonMap(gamepad1, GamepadButtonMap.Button.LEFT_BUMPER),
 						StatefulCondition.Edge.RISING
 				),
 				() -> {
@@ -66,7 +69,29 @@ public class DefaultSpindexer extends DefaultDirective {
 				}
 		));
 
-		//todo:
+		addTrigger(new ActionTrigger(
+				new StatefulCondition(
+						new GamepadButtonMap(gamepad1, GamepadButtonMap.Button.B),
+						StatefulCondition.Edge.RISING
+				),
+				()->{
+					new ShortColorLaunch().schedule();
+				}
+		));
+		addTrigger(new ActionTrigger(
+				new StatefulCondition(
+						new GamepadButtonMap(gamepad1, GamepadButtonMap.Button.X),
+						StatefulCondition.Edge.RISING
+				),
+				()->{
+					new FarColorLaunch().schedule();
+				}
+		));
+
+		//GAMEPAD 2 CONTROLS:
+
+
+
 		addTrigger(new ActionTrigger(
 				// when y just first pressed
 				new StatefulCondition(
@@ -78,15 +103,27 @@ public class DefaultSpindexer extends DefaultDirective {
 					new GetMotifSequence().schedule();
 				}
 		));
+
 		addTrigger(new ActionTrigger(
 				new StatefulCondition(
-						new GamepadButtonMap(gamepad2, GamepadButtonMap.Button.X),
+						new GamepadButtonMap(gamepad1, GamepadButtonMap.Button.A),
 						StatefulCondition.Edge.RISING
 				),
 				()->{
-					new FullPatternOuttake().schedule();
+					new OuttakeColor(DecodeDataTypes.ArtifactColor.PURPLE).schedule();
 				}
 		));
+
+		addTrigger(new ActionTrigger(
+				new StatefulCondition(
+						new GamepadButtonMap(gamepad1, GamepadButtonMap.Button.B),
+						StatefulCondition.Edge.RISING
+				),
+				()->{
+					new OuttakeColor(DecodeDataTypes.ArtifactColor.GREEN).schedule();
+				}
+		));
+
 
 		/*
 		// thomas
