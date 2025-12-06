@@ -161,26 +161,6 @@ public final class Spindexer extends Subsystem {
 		return -1;
 	}
 
-	public int getFirstArtifactLocation() {
-		for (int segment = 0; segment < 3; segment++) {
-			if (artifactColorsInSpindexer[segment] != DecodeDataTypes.ArtifactColor.NONE) {
-				return segment;
-			}
-		}
-
-		// no segments
-		return -1;
-	}
-
-	public int getMotifSegmentOrFirstArtifact(int motifIndex) {
-		int firstColorSegment = getFirstColorSegmentLocation(GameState.getMotifPatternAt(motifIndex));
-		if (firstColorSegment != -1) {
-			return firstColorSegment;
-		}
-
-		return getFirstArtifactLocation();
-	}
-
 	public boolean getHasArtifactColor(DecodeDataTypes.ArtifactColor artifactColor) {
 		for (int i = 0; i < 3; i++) {
 			if (artifactColorsInSpindexer[i] == artifactColor) {

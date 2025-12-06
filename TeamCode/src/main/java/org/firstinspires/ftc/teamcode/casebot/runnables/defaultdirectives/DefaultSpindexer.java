@@ -6,6 +6,8 @@ import org.firstinspires.ftc.teamcode.casebot.runnables.directives.GetMotifSeque
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FarLaunch;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FullIntake;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FullIntakeWaitForColor;
+import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FullOuttake;
+import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FullPatternOuttake;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.ShortLaunch;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Spindexer;
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.GamepadButtonMap;
@@ -29,7 +31,7 @@ public class DefaultSpindexer extends DefaultDirective {
 				}
 		));
 
-		/*addTrigger(new ActionTrigger(
+		addTrigger(new ActionTrigger(
 				// when x just first pressed
 				new StatefulCondition(
 						new GamepadButtonMap(gamepad1, GamepadButtonMap.Button.X),
@@ -39,8 +41,8 @@ public class DefaultSpindexer extends DefaultDirective {
 					// intake 3
 					new FullIntake().schedule();
 				}
-		));*/
-		/// TODO: 12/3/2025 Add toggle for color/no color
+		));
+		/// TODO: 12/3/2025 Add toggle for color/no color 
 		addTrigger(new ActionTrigger(
 				// when b just first pressed
 				new StatefulCondition(

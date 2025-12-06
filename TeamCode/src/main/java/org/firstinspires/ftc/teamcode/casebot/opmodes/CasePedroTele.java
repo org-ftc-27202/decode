@@ -48,6 +48,7 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
             turret.setDefaultDirective(new DefaultTurret(gamepad1, gamepad2));
 
             // print telemetry
+            // print telemetry
             BootScreen bootScreen = new BootScreen(telemetry, new TerminalVelocityLogo(), true);
             try {
                 bootScreen.updateBootScreen();
