@@ -20,7 +20,7 @@ public final class Intake extends Subsystem {
 
 	private StellarDcMotor intakeMotor;
 
-	private double intakeSpeed = 0;
+	private double intakeSpeed = 0.5;
 
 	private ControlSystem controller;
 
@@ -42,16 +42,9 @@ public final class Intake extends Subsystem {
 	public void setIntakeSpeed(double intakeSpeed) {
 		this.intakeSpeed = intakeSpeed;
 	}
-	public void setIntakeTarget(KineticState targetState){
-		controller.setGoal(targetState);
-	}
 
 	public void setMotorSpeed() {
 		intakeMotor.setPower(intakeSpeed);
-	}
-	public void setMotorPID(){
-		intakePower = (controller.calculate(new KineticState(0, intakeMotor.getVelocity())));
-		intakeMotor.setPower(intakePower);
 	}
 
 	@NonNull

@@ -31,7 +31,7 @@ public class DefaultIntake extends DefaultDirective {
 
 		addTrigger(new ActionTrigger(
 				() -> gamepad1.left_trigger > 0.05, //when left trigger pressed
-				() -> {intake.setIntakeSpeed(0);} //set intake to left trigger
+				() -> {intake.setIntakeSpeed(0.5);} //set intake to left trigger
 		));
 
 		addTrigger(new ActionTrigger(
