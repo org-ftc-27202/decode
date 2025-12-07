@@ -6,6 +6,7 @@ import org.firstinspires.ftc.teamcode.casebot.runnables.directives.TurnTo;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FarLaunch;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Drivebase;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.PedroDrivebase;
+import org.firstinspires.ftc.teamcode.casebot.subsystems.Turret;
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.GamepadButtonMap;
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.StatefulCondition;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.DefaultDirective;
@@ -20,22 +21,20 @@ public class PedroDefaultDrivebase extends DefaultDirective {
 
 		this.gamepad1 = gamepad1;
 		this.gamepad2 = gamepad2;
-		addTrigger(new ActionTrigger(
-				// when dpad up just first pressed
-				new StatefulCondition(
-						new GamepadButtonMap(this.gamepad2, GamepadButtonMap.Button.A),
-						StatefulCondition.Edge.RISING
-				),
-				() -> {
-					new FarLaunch().schedule();
-				}
-		));
+
 	}
 	@Override
 	public void update() {
 		double max, axial, lateral, yaw;
 		double leftFrontPower, rightFrontPower, leftBackPower, rightBackPower;
-			// make the last parameter false for field-centric
+		if (Turret.getInstance().velocityWithinTolerance()){
+			PedroDrivebase.getInstance().getLeftLight().setPosition(.611);
+		} else if (Turret.getInstance().getRealVelocityOffOfTarget()>0) {
+			PedroDrivebase.getInstance().getLeftLight().setPosition(.677);
+		}else if(Turret.getInstance().getRealVelocityOffOfTarget()<=0){
+			PedroDrivebase.getInstance().getLeftLight().setPosition(.388);
+		}
+		// make the last parameter false for field-centric
 			// in case the drivers want to use a "slowMode" you can scale the vectors
 			// this is the normal version to use in the teleop
 

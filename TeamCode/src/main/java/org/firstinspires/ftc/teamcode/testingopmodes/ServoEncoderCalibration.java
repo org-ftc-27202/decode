@@ -39,6 +39,7 @@ public class ServoEncoderCalibration extends LinearOpMode {
 
 			telemetry.addData("Servo Commanded Position", position);
 			telemetry.addData("Encoder Voltage", encoder.getVoltage());
+			telemetry.addData("Encoder Calculated Angle", encoder.getVoltage()/3.13);
 			telemetry.update();
 		}
 	}

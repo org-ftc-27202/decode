@@ -76,7 +76,9 @@ public final class Turret extends Subsystem {
     //leftTurretMotor.setVelocityPIDFCoefficents(p_left*PIDFScale, i_left*PIDFScale, d_left*PIDFScale, f_left*PIDFScale);
         //rightTurretMotor.setVelocityPIDFCoefficents(p_right*PIDFScale, i_right*PIDFScale, d_right*PIDFScale, f_right*PIDFScale);
     }
-
+    public boolean getNeedsToStart(){
+        return needsToStart;
+    }
     public StellarServo getTurretServo() {
         return turretServo;
     }
@@ -111,6 +113,9 @@ public final class Turret extends Subsystem {
 
     public double getVelocityOffOfTarget() {
         return Math.abs(leftTurretMotor.getVelocity() - velocity);
+    }
+    public double getRealVelocityOffOfTarget(){
+        return leftTurretMotor.getVelocity()-velocity;
     }
 
     public boolean velocityWithinTolerance() {

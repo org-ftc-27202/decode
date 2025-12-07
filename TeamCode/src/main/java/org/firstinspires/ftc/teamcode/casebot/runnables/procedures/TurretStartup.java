@@ -8,19 +8,25 @@ import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Sleep;
 public class TurretStartup extends Procedure {
     public TurretStartup() {
         super("TurretStartup",
-                new InstantlyDo(()-> Turret.getInstance().setTurretVelocity(300)),
-                new Sleep(0.5),
+                new InstantlyDo(()-> Turret.getInstance().setTurretVelocity(160)),
+                new Sleep(.06),
 
-                new InstantlyDo(()-> Turret.getInstance().setTurretVelocity(600)),
-                new Sleep(0.5),
+                new InstantlyDo(()-> Turret.getInstance().setTurretVelocity(400)),
+                new Sleep(.06),
+                new InstantlyDo(()-> Turret.getInstance().setTurretVelocity(620)),
+                new Sleep(.06),
 
-                new InstantlyDo(()-> Turret.getInstance().setTurretVelocity(900)),
-                new Sleep(0.5),
+                new InstantlyDo(()-> Turret.getInstance().setTurretVelocity(860)),
+                new Sleep(.06),
+                new InstantlyDo(()-> Turret.getInstance().setTurretVelocity(1000)),
+                new Sleep(.06),
 
                 new InstantlyDo(()-> Turret.getInstance().setTurretVelocity(1200)),
-                new Sleep(0.5)
+                new Sleep(.06),
+                new InstantlyDo(()-> Turret.getInstance().setTurretVelocity(1400))
         );
 
-        setRequiredSubsystems(Turret.getInstance());
+
+        setRequiredSubsystems();
     }
 }

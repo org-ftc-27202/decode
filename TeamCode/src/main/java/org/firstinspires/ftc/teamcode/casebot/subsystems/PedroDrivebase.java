@@ -26,8 +26,8 @@ public final class PedroDrivebase extends Subsystem {
     public final static double FAR_LAUNCH_FACTOR = 0.2;
     public final static double NEAR_LAUNCH_FACTOR = 0.4;
     public final static double LAUNCH_ZONE_SCALE = 6.2;
-    public final static double GOAL_X = 11.0;
-    public final static double GOAL_Y = 141.0;
+    public final static double GOAL_X = 8.0;
+    public final static double GOAL_Y = 143.0;
 
 
 
@@ -62,8 +62,8 @@ public final class PedroDrivebase extends Subsystem {
         rightFrontDrive.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         rightBackDrive.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
-        new SetLight(lightLeft, "AZURE").schedule();
-        new SetLight(lightRight, "AZURE").schedule();
+        lightLeft.setPosition(0.555);
+        lightRight.setPosition(0.555);
     }
 
 

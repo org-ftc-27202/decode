@@ -12,8 +12,9 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.casebot.runnables.defaultdirectives.DefaultIntake;
 import org.firstinspires.ftc.teamcode.casebot.runnables.defaultdirectives.DefaultLeverTransfer;
 import org.firstinspires.ftc.teamcode.casebot.runnables.defaultdirectives.DefaultSpindexer;
-import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FullIntake;
-import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FullPatternOuttake;
+import org.firstinspires.ftc.teamcode.casebot.runnables.directives.FollowPath;
+import org.firstinspires.ftc.teamcode.casebot.runnables.directives.GetMotifSequence;
+import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.ShortColorLaunch;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Camera;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.LeverTransfer;
@@ -21,17 +22,15 @@ import org.firstinspires.ftc.teamcode.casebot.subsystems.PedroDrivebase;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Spindexer;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Turret;
 import org.firstinspires.ftc.teamcode.stellarstructure.StellarBot;
-import org.firstinspires.ftc.teamcode.stellarstructure.runnables.InstantlyDo;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Procedure;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.SetPosition;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Sleep;
 import org.firstinspires.ftc.teamcode.util.DecodeDataTypes;
-import org.firstinspires.ftc.teamcode.util.GameState;
 import org.firstinspires.ftc.teamcode.util.bootscreen.BootScreen;
 import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
 
 @Autonomous(name = "-Case Auto Pedro", group = "Auto")
-public final class CaseAuto extends OpMode {
+public final class RedCaseFarAuto extends OpMode {
     private final double FLYWHEEL_LAUNCH = 1080;
     private final double TURRET_LAUNCH = 0;
     private final double HOOD_LAUNCH = 0;
@@ -45,7 +44,7 @@ public final class CaseAuto extends OpMode {
             Turret.getInstance()
     );
     //DefaultDrivebase defaultDrivebase = new DefaultDrivebase(gamepad1);
-    private DefaultIntake defaultIntake = new DefaultIntake(gamepad1);
+    private DefaultIntake defaultIntake = new DefaultIntake(gamepad1, gamepad2);
     private DefaultLeverTransfer defaultLeverTransfer = new DefaultLeverTransfer(gamepad1);
     private DefaultSpindexer defaultSpindexer = new DefaultSpindexer(gamepad1, gamepad2);
 
@@ -55,15 +54,22 @@ public final class CaseAuto extends OpMode {
     private final Spindexer spindexer = Spindexer.getInstance();
     private final Turret turret = Turret.getInstance();
 
-    private Follower follower = pedroDrivebase.getFollower();
+    private Follower follower;
 
-    private final Pose startPose = new Pose(56.75,7, Math.toRadians(180));
-    private final Pose collect1Pose = new Pose(19, 35.5);
-    private final Pose collect1Control = new Pose(56,35.5);
-    private final Pose launchFarPose = new Pose(60,21);
-    private PathChain path1, path2, path3, path4, path5;
+    private final Pose startPose = new Pose(56.75,7, Math.toRadians(180)).mirror();
+    private final Pose collect1Pose = new Pose(19, 35.5).mirror();
+    private final Pose collect1Control = new Pose(56,35.5).mirror();
+    private final Pose launchFarPose = new Pose(60,21).mirror();
+    private PathChain path1, path2, path3, path4, path5, cameraPath;
 
     public void buildPaths() {
+        this.cameraPath= follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(new Pose(56.750, 7.000).mirror(), new Pose(56.750, 80.000).mirror())
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(82.5))
+                .build();
         this.path1 = follower.pathBuilder()
                 .addPath(
                         new BezierCurve(startPose, collect1Control, collect1Pose)
@@ -87,8 +93,8 @@ public final class CaseAuto extends OpMode {
     public void init() {
         //this.follower = Constants.createFollower(hardwareMap);
         caseBot.init(hardwareMap);
+        follower = pedroDrivebase.getFollower();
         buildPaths();
-        follower.setStartingPose(startPose);
         spindexer.setArtifactColorInSpindexer(0, DecodeDataTypes.ArtifactColor.PURPLE);
         spindexer.setArtifactColorInSpindexer(1, DecodeDataTypes.ArtifactColor.GREEN);
         spindexer.setArtifactColorInSpindexer(2, DecodeDataTypes.ArtifactColor.PURPLE);
@@ -107,13 +113,17 @@ public final class CaseAuto extends OpMode {
     public void start() {
         new Procedure(
                 "AutoDrive",
+                //new TurretStartup(),
                 new SetPosition(LeverTransfer.getInstance().getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION),
-                new Sleep(0.03),
-                new InstantlyDo(()-> turret.setTurretVelocity(FLYWHEEL_LAUNCH)),
-                new FullIntake(),
+                new FollowPath(cameraPath, follower, new Pose(56.750, 80.000), true),
+                new GetMotifSequence(),
+                new Sleep(2.0),
+                new ShortColorLaunch()
+
+                //new FullIntake(),
                 //new InstantlyDo(()-> Turret.getInstance().getTurretServo().setPosition(TURRET_LAUNCH)),
                 //new InstantlyDo(()-> Turret.getInstance().getTurretHoodServo().setPosition(HOOD_LAUNCH)),
-                new FullPatternOuttake()
+                //new FullPatternOuttake()
                 //new FollowPath(path1, follower, collect1Pose, true)
                         //new FullIntake(),
                         //new SetPower(Intake.getInstance().getIntakeMotor(), 0.5),

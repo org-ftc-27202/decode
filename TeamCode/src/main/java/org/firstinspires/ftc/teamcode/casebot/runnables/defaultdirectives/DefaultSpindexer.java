@@ -3,12 +3,16 @@ package org.firstinspires.ftc.teamcode.casebot.runnables.defaultdirectives;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.casebot.runnables.directives.GetMotifSequence;
+import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.CloseSingleLaunch;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FarColorLaunch;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FarLaunch;
+import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FarSingleLaunch;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FullIntake;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FullIntakeWaitForColor;
+import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FullMotifOuttake;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FullPatternOuttake;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.OuttakeColor;
+import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.OuttakeMotifOrArtifactAt;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.ShortColorLaunch;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.ShortLaunch;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Spindexer;
@@ -100,29 +104,51 @@ public class DefaultSpindexer extends DefaultDirective {
 				),
 				() -> {
 					// outtake 3
+					new FarSingleLaunch(DecodeDataTypes.ArtifactColor.PURPLE);
+				}
+		));
+
+		addTrigger(new ActionTrigger(
+				new StatefulCondition(
+						new GamepadButtonMap(gamepad2, GamepadButtonMap.Button.B),
+						StatefulCondition.Edge.RISING
+				),
+				()->{
+					new CloseSingleLaunch(DecodeDataTypes.ArtifactColor.PURPLE);
+				}
+		));
+
+		addTrigger(new ActionTrigger(
+				new StatefulCondition(
+						new GamepadButtonMap(gamepad2, GamepadButtonMap.Button.A),
+						StatefulCondition.Edge.RISING
+				),
+				()->{
+					new CloseSingleLaunch(DecodeDataTypes.ArtifactColor.GREEN);
+				}
+		));
+		addTrigger(new ActionTrigger(
+				// when y just first pressed
+				new StatefulCondition(
+						new GamepadButtonMap(gamepad2, GamepadButtonMap.Button.X),
+						StatefulCondition.Edge.RISING
+				),
+				() -> {
+					// outtake 3
+					new FarSingleLaunch(DecodeDataTypes.ArtifactColor.GREEN);
+				}
+		));
+		addTrigger(new ActionTrigger(
+				new StatefulCondition(
+						new GamepadButtonMap(gamepad2, GamepadButtonMap.Button.DPAD_UP),
+						StatefulCondition.Edge.RISING
+				),
+				()->{
 					new GetMotifSequence().schedule();
 				}
 		));
 
-		addTrigger(new ActionTrigger(
-				new StatefulCondition(
-						new GamepadButtonMap(gamepad1, GamepadButtonMap.Button.A),
-						StatefulCondition.Edge.RISING
-				),
-				()->{
-					new OuttakeColor(DecodeDataTypes.ArtifactColor.PURPLE).schedule();
-				}
-		));
 
-		addTrigger(new ActionTrigger(
-				new StatefulCondition(
-						new GamepadButtonMap(gamepad1, GamepadButtonMap.Button.B),
-						StatefulCondition.Edge.RISING
-				),
-				()->{
-					new OuttakeColor(DecodeDataTypes.ArtifactColor.GREEN).schedule();
-				}
-		));
 
 
 		/*

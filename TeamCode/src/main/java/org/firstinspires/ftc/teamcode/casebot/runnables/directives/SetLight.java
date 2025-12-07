@@ -4,19 +4,27 @@ import androidx.annotation.NonNull;
 
 import org.firstinspires.ftc.teamcode.stellarstructure.hardwaremapwrappers.StellarLight;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Directive;
+import org.firstinspires.ftc.teamcode.util.DecodeDataTypes;
 
 public class SetLight extends Directive {
     public StellarLight light;
     public double color;
 
 
-    public SetLight(StellarLight light, String color) {
+    public SetLight(StellarLight light, DecodeDataTypes.ArtifactColor color) {
         setInterruptible(true);
         setRequiredSubsystems();
 
         this.light = light;
+        if (color == DecodeDataTypes.ArtifactColor.GREEN){
+            this.color = 0.500;
+        } else if (color == DecodeDataTypes.ArtifactColor.PURPLE){
+            this.color = 0.721;
+        } else if (color == DecodeDataTypes.ArtifactColor.NONE){
+            this.color =0.000;
+        }
         //color to power
-        switch (color) {
+        /*switch (color) {
             case "RED":
                 this.color = 0.277;
                 break;
@@ -47,7 +55,7 @@ public class SetLight extends Directive {
             case "OFF":
                 this.color = 0.000;
                 break;
-        }
+        }*/
 
     }
 

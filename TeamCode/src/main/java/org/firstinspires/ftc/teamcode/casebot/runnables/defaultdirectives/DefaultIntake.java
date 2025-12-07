@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.stellarstructure.triggers.ActionTrigger;
 public class DefaultIntake extends DefaultDirective {
 	private final Intake intake = Intake.getInstance();
 
-	public DefaultIntake(Gamepad gamepad1) {
+	public DefaultIntake(Gamepad gamepad1, Gamepad gamepad2) {
 		super(Intake.getInstance());
 
 		/*addTrigger(new IteratorTrigger(
@@ -38,11 +38,15 @@ public class DefaultIntake extends DefaultDirective {
 				() -> gamepad1.right_trigger > 0.05, //when right trigger pressed
 				() -> {intake.setIntakeSpeed(1.0);} //set intake to right trigger
 		));
-
 		addTrigger(new ActionTrigger(
+				()-> gamepad2.right_trigger > 0.05,
+				() -> {intake.setIntakeSpeed(-1.0);}
+		));
+
+		/*addTrigger(new ActionTrigger(
 				() -> gamepad1.left_bumper, //when right trigger pressed
 				() -> {intake.setIntakeSpeed(-1.0);} //set intake to right trigger
-		));
+		));*/
 
 		addTrigger(new ActionTrigger(
 				// when dpad right just first pressed

@@ -22,10 +22,10 @@ public final class Spindexer extends Subsystem {
 	}
 	private Spindexer() {}
 
-	private final static double DEGREES_TO_SERVO = 1.0 / 331.0;
-	private final static double SPINDEXER_OFFSET = 9.0;
-	private final static double[] INTAKE_DEGREE_POSITIONS = {0.0 + SPINDEXER_OFFSET, 120.0 + SPINDEXER_OFFSET, 240.0 + SPINDEXER_OFFSET};
-	private final static double[] TRANSFER_DEGREE_POSITIONS = {180.0 + SPINDEXER_OFFSET, 300.0 + SPINDEXER_OFFSET, 60.0 + SPINDEXER_OFFSET};
+	private final static double DEGREES_TO_SERVO = 1;
+	private final static double SPINDEXER_OFFSET = 0;
+	private final static double[] INTAKE_DEGREE_POSITIONS = {0.0 + SPINDEXER_OFFSET, 0.369 + SPINDEXER_OFFSET, 0.737 + SPINDEXER_OFFSET};
+	private final static double[] TRANSFER_DEGREE_POSITIONS = {0.556 + SPINDEXER_OFFSET, .934 + SPINDEXER_OFFSET, 0.179 + SPINDEXER_OFFSET};
 
 	private DecodeDataTypes.ArtifactColor[] artifactColorsInSpindexer = new DecodeDataTypes.ArtifactColor[]{
 		DecodeDataTypes.ArtifactColor.NONE,
@@ -86,8 +86,14 @@ public final class Spindexer extends Subsystem {
 
 	public double getSpindexerEncoderPosition() {
 		//return (spindexerServoEncoder.getVoltage() / 3.3) - (15.0 / 360.0);
-		return (spindexerServoEncoder.getVoltage() / 3.10) - (15.0 / 360.0);
+		double pos = ((spindexerServoEncoder.getVoltage()-.170) / 2.96);
+		double realpos = pos;
+		if (pos>=1){
+			realpos = pos-1;
+		}
+		return realpos;
 	}
+
 
 	public boolean spindexerEncoderIsWithinTolerance(double position, double tolerance) {
 		return Math.abs(getSpindexerEncoderPosition() - position) <= tolerance;
@@ -119,8 +125,8 @@ public final class Spindexer extends Subsystem {
 
 	public void setArtifactColorInSpindexer(int index, DecodeDataTypes.ArtifactColor artifactColor) {
 		artifactColorsInSpindexer[index] = artifactColor;
-		new SetLight(PedroDrivebase.getInstance().getLeftLight(), artifactColor.toString());
-		new SetLight(PedroDrivebase.getInstance().getRightLight(), artifactColor.toString());
+		//new SetLight(PedroDrivebase.getInstance().getLeftLight(), artifactColor.toString());
+		//new SetLight(PedroDrivebase.getInstance().getRightLight(), artifactColor.toString());
 	}
 
 	public DecodeDataTypes.ArtifactColor setArtifactColorAtSegmentToColorSensor(int segment) {
@@ -170,6 +176,9 @@ public final class Spindexer extends Subsystem {
 
 		return false;
 	}
+	public DecodeDataTypes.ArtifactColor getArtifactColorAt(int i){
+		return artifactColorsInSpindexer[i];
+	}
 
 	public double getDegreesForSegmentSupplierAndPosition(Supplier<Integer> segmentSupplier, @NonNull Position position) {
 		return getServoPositionFromSegment(segmentSupplier.get(), position);
@@ -183,6 +192,25 @@ public final class Spindexer extends Subsystem {
 		} else {
 			throw new IllegalArgumentException("Invalid Spindexer.Position provided: " + position);
 		}
+	}
+	public int getFirstArtifactLocation() {
+		for (int segment = 0; segment < 3; segment++) {
+			if (artifactColorsInSpindexer[segment] != DecodeDataTypes.ArtifactColor.NONE) {
+				return segment;
+			}
+		}
+
+		// no segments
+		return -1;
+	}
+
+	public int getMotifSegmentOrFirstArtifact(int motifIndex) {
+		int firstColorSegment = getFirstColorSegmentLocation(GameState.getMotifPatternAt(motifIndex));
+		if (firstColorSegment != -1) {
+			return firstColorSegment;
+		}
+
+		return getFirstArtifactLocation();
 	}
 	/*
 	public boolean getIsTransferPosition() {

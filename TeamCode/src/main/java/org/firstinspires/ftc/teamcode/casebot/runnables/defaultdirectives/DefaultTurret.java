@@ -83,8 +83,7 @@ public class DefaultTurret extends DefaultDirective {
         } else {
             velocity = 1600.0;
         }*/
-        velocity = 1460;
-        turret.setTurretVelocity(velocity);
+
         turret.getTurretHoodServo().setPosition(hoodPosition);
         turret.getTurretServo().setPosition(position);
     }

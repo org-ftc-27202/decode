@@ -36,7 +36,7 @@ public final class CaseTele extends LinearOpMode {
 
 		// set up default directives
 		drivebase.setDefaultDirective(new DefaultDrivebase(gamepad1));
-		intake.setDefaultDirective(new DefaultIntake(gamepad1));
+		intake.setDefaultDirective(new DefaultIntake(gamepad1, gamepad2));
 		leverTransfer.setDefaultDirective(new DefaultLeverTransfer(gamepad1));
 		spindexer.setDefaultDirective(new DefaultSpindexer(gamepad1, gamepad2));
 
