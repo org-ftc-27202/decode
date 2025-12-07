@@ -26,10 +26,38 @@ public final class PedroDrivebase extends Subsystem {
     public final static double FAR_LAUNCH_FACTOR = 0.2;
     public final static double NEAR_LAUNCH_FACTOR = 0.4;
     public final static double LAUNCH_ZONE_SCALE = 6.2;
-    public final static double GOAL_X = 8.0;
-    public final static double GOAL_Y = 143.0;
+    private boolean hasSetAllianceColor = false;
+    private double GOAL_X, GOAL_Y, STARTING_X, STARTING_Y;
 
+    // BLUE LAUNCH
+    // GOAL X 8.0
+    // GOAL Y 143.0
 
+    // RED LAUNCH
+    // GOAL X 136.0
+    // GOAL Y 143.0
+
+    public enum AllianceColor {
+        BLUE,
+        RED
+    }
+    public void setAllianceColor(@NonNull AllianceColor allianceColor) {
+        if (allianceColor == AllianceColor.BLUE) {
+            GOAL_X = 8.0;
+            GOAL_Y = 143.0;
+
+            STARTING_X = 56.75;
+            STARTING_Y = 7.0;
+        } else if (allianceColor == AllianceColor.RED) {
+            GOAL_X = 136.0;
+            GOAL_Y = 143.0;
+
+            STARTING_X = 87.25;
+            STARTING_Y = 7.0;
+        } else {
+            throw new IllegalArgumentException("setAllianceColor() set to ");
+        }
+    }
 
     public double distanceFromGoal;
 
@@ -41,9 +69,13 @@ public final class PedroDrivebase extends Subsystem {
 
     @Override
     public void init(HardwareMap hardwareMap) {
+        if (!hasSetAllianceColor) {
+            throw new IllegalStateException("setAllianceColor() needs to be called in PedroDrivebase before init()");
+        }
+
         needsToStart = true;
         follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(new Pose(56.75,7, Math.toRadians(180)));
+        follower.setStartingPose(new Pose(STARTING_X, STARTING_Y, Math.toRadians(180)));
         lightLeft = new StellarLight(hardwareMap, "lightLeft");
         lightRight = new StellarLight(hardwareMap, "lightRight");
         //todo: make omni wheel directive
@@ -74,7 +106,7 @@ public final class PedroDrivebase extends Subsystem {
             needsToStart = false;
         }
         follower.update();
-        distanceFromGoal = Math.sqrt(Math.pow(follower.getPose().getX()-GOAL_X, 2)+Math.pow(follower.getPose().getY()-GOAL_Y,2));
+        distanceFromGoal = Math.sqrt(Math.pow(follower.getPose().getX() - GOAL_X, 2) + Math.pow(follower.getPose().getY() - GOAL_Y, 2));
     }
     public Follower getFollower(){
         return follower;
@@ -82,7 +114,6 @@ public final class PedroDrivebase extends Subsystem {
 
 
     public boolean checkForLaunchPose() {
-
             double x = follower.getPose().getX();
             double y = follower.getPose().getY();
 
@@ -133,9 +164,6 @@ public final class PedroDrivebase extends Subsystem {
     public double getDistanceFromGoal(){
         return distanceFromGoal;
     }
-
-
-
 
 	@NonNull
     @Override

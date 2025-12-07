@@ -9,9 +9,7 @@ import java.util.List;
 
 public class StellarBot {
 	private final Subsystem[] subsystems;
-
 	private final Scheduler scheduler = new Scheduler();
-
 	public StellarBot(Subsystem... subsystems) {
 		this.subsystems = subsystems;
 

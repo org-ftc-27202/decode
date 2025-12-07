@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.casebot.opmodes;
+package org.firstinspires.ftc.teamcode.casebot.opmodes.tele;
 
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -21,7 +21,7 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.BootScreen;
 import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
 
 @TeleOp(name = "-Case +Pedro", group = "Robot")
-    public final class BlueCasePedroTele extends LinearOpMode {
+    public final class BlueCaseTele extends LinearOpMode {
         private final PedroDrivebase pedroDrivebase = PedroDrivebase.getInstance();
         private final Intake intake = Intake.getInstance();
         private final LeverTransfer leverTransfer = LeverTransfer.getInstance();
@@ -44,6 +44,8 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
 
         @Override
         public void runOpMode() {
+            PedroDrivebase.getInstance().setAllianceColor(PedroDrivebase.AllianceColor.BLUE);
+
             // set up subsystems
             caseBot.init(hardwareMap);
 

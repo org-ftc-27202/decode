@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.casebot.opmodes;// make sure this aligns with class location
+package org.firstinspires.ftc.teamcode.casebot.opmodes.farauto;// make sure this aligns with class location
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
@@ -30,7 +30,7 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.BootScreen;
 import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
 
 @Autonomous(name = "-Case Auto Pedro", group = "Auto")
-public final class RedCaseFarAuto extends OpMode {
+public final class BlueCaseFarAuto extends OpMode {
     private final double FLYWHEEL_LAUNCH = 1080;
     private final double TURRET_LAUNCH = 0;
     private final double HOOD_LAUNCH = 0;
@@ -56,17 +56,17 @@ public final class RedCaseFarAuto extends OpMode {
 
     private Follower follower;
 
-    private final Pose startPose = new Pose(56.75,7, Math.toRadians(180)).mirror();
-    private final Pose collect1Pose = new Pose(19, 35.5).mirror();
-    private final Pose collect1Control = new Pose(56,35.5).mirror();
-    private final Pose launchFarPose = new Pose(60,21).mirror();
+    private final Pose startPose = new Pose(56.75,7, Math.toRadians(180));
+    private final Pose collect1Pose = new Pose(19, 35.5);
+    private final Pose collect1Control = new Pose(56,35.5);
+    private final Pose launchFarPose = new Pose(60,21);
     private PathChain path1, path2, path3, path4, path5, cameraPath;
 
     public void buildPaths() {
         this.cameraPath= follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(56.750, 7.000).mirror(), new Pose(56.750, 80.000).mirror())
+                        new BezierLine(new Pose(56.750, 7.000), new Pose(56.750, 80.000))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(82.5))
                 .build();
@@ -92,6 +92,7 @@ public final class RedCaseFarAuto extends OpMode {
     @Override
     public void init() {
         //this.follower = Constants.createFollower(hardwareMap);
+        PedroDrivebase.getInstance().setAllianceColor(PedroDrivebase.AllianceColor.BLUE);
         caseBot.init(hardwareMap);
         follower = pedroDrivebase.getFollower();
         buildPaths();
@@ -113,7 +114,6 @@ public final class RedCaseFarAuto extends OpMode {
     public void start() {
         new Procedure(
                 "AutoDrive",
-                //new TurretStartup(),
                 new SetPosition(LeverTransfer.getInstance().getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION),
                 new FollowPath(cameraPath, follower, new Pose(56.750, 80.000), true),
                 new GetMotifSequence(),
