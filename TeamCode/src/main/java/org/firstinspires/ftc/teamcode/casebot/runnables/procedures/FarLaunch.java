@@ -12,10 +12,10 @@ import org.firstinspires.ftc.teamcode.stellarstructure.runnables.WaitUntil;
 public class FarLaunch extends Procedure {
     public FarLaunch() {
         super("FarLaunch",
-                new InstantlyDo(()-> {
+                /*new InstantlyDo(()-> {
                     //PedroDrivebase.getInstance().getFollower().activateAllPIDFs();
                     PedroDrivebase.getInstance().getFollower().turnTo(Math.toRadians(PedroDrivebase.getInstance().getLaunchYaw()));
-                }),
+                }),*/
                 new InstantlyDo(()->
                         Turret.getInstance().setTurretVelocity(1600)
                 ),

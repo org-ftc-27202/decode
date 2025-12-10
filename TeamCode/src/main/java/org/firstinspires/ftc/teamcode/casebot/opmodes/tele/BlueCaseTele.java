@@ -20,7 +20,7 @@ import org.firstinspires.ftc.teamcode.util.TrajectoryCalculator;
 import org.firstinspires.ftc.teamcode.util.bootscreen.BootScreen;
 import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
 
-@TeleOp(name = "-Case +Pedro", group = "Robot")
+@TeleOp(name = "-BLUECase +Pedro", group = "Robot")
     public final class BlueCaseTele extends LinearOpMode {
         private final PedroDrivebase pedroDrivebase = PedroDrivebase.getInstance();
         private final Intake intake = Intake.getInstance();

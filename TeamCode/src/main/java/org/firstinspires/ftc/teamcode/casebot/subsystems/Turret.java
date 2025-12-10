@@ -31,7 +31,7 @@ public final class Turret extends Subsystem {
     private final static double DEGREES_TO_SERVO = 1.0 / 320.0;
 
     private final static double TICKS_TO_ROTATION = 1.5 / 7.0;
-    private final static double VELOCITY_TOLERANCE = 60.0;
+    private final static double VELOCITY_TOLERANCE = 41.0;
 
     private double velocity = 0.0;
 

@@ -43,17 +43,19 @@ public final class PedroDrivebase extends Subsystem {
     }
     public void setAllianceColor(@NonNull AllianceColor allianceColor) {
         if (allianceColor == AllianceColor.BLUE) {
-            GOAL_X = 8.0;
-            GOAL_Y = 143.0;
+            GOAL_X = -18;
+            GOAL_Y = 144.0;
 
-            STARTING_X = 56.75;
-            STARTING_Y = 7.0;
+            STARTING_X = 55.25;
+            STARTING_Y = 9.0;
+            hasSetAllianceColor = true;
         } else if (allianceColor == AllianceColor.RED) {
-            GOAL_X = 136.0;
-            GOAL_Y = 143.0;
+            GOAL_X = 155.0;
+            GOAL_Y = 144.0;
 
-            STARTING_X = 87.25;
-            STARTING_Y = 7.0;
+            STARTING_X = 88.75;
+            STARTING_Y = 9.0;
+            hasSetAllianceColor = true;
         } else {
             throw new IllegalArgumentException("setAllianceColor() set to ");
         }
@@ -75,7 +77,7 @@ public final class PedroDrivebase extends Subsystem {
 
         needsToStart = true;
         follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(new Pose(STARTING_X, STARTING_Y, Math.toRadians(180)));
+        follower.setStartingPose(new Pose(STARTING_X, STARTING_Y, Math.toRadians(90)));
         lightLeft = new StellarLight(hardwareMap, "lightLeft");
         lightRight = new StellarLight(hardwareMap, "lightRight");
         //todo: make omni wheel directive

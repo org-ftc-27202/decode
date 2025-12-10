@@ -10,13 +10,13 @@ import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Sleep;
 
 public class FarMotifLaunch extends Procedure {
     public FarMotifLaunch() {
-        super("ShortLaunch",
+        super("farmotiflaunch",
                 new InstantlyDo(()-> {
                     //PedroDrivebase.getInstance().getFollower().activateAllPIDFs();
                     PedroDrivebase.getInstance().getFollower().turnTo(Math.toRadians(PedroDrivebase.getInstance().getLaunchYaw()));
                 }),
                 new InstantlyDo(()->
-                        Turret.getInstance().setTurretVelocity(1600)
+                        Turret.getInstance().setTurretVelocity(1560)
                 ),
                 new SetPosition(Turret.getInstance().getTurretHoodServo(), 0.0),
                 new Parallel(

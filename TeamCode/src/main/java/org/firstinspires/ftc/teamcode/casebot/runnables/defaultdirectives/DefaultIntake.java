@@ -42,6 +42,11 @@ public class DefaultIntake extends DefaultDirective {
 				()-> gamepad2.right_trigger > 0.05,
 				() -> {intake.setIntakeSpeed(-1.0);}
 		));
+		addTrigger(new ActionTrigger(
+				()-> gamepad2.left_trigger > 0.05,
+				() -> {intake.setIntakeSpeed(1.0);}
+		));
+
 
 		/*addTrigger(new ActionTrigger(
 				() -> gamepad1.left_bumper, //when right trigger pressed
