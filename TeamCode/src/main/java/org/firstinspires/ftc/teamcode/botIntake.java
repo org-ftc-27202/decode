@@ -14,7 +14,6 @@ public final class botIntake {
     final double INTAKE_INWARDS_POWER = 1.0;
     final double INTAKE_OUTWARDS_POWER = -0.5;
     final double INTAKE_OFF_POWER = 0.0;
-    final double intakePower = INTAKE_OFF_POWER;
     private final DcMotorEx intake;
     public enum intakeModes {INWARDS, OUTWARDS, STOP};
     public intakeModes intakeMode = intakeModes.STOP;
@@ -38,8 +37,6 @@ public final class botIntake {
                 intake.setPower(INTAKE_INWARDS_POWER);
                 initialized = true;
             }
-
-            packet.put("intakePower", intake.getPower());
             return false;
         }
     }
@@ -58,8 +55,6 @@ public final class botIntake {
                 intake.setPower(INTAKE_OUTWARDS_POWER);
                 initialized = true;
             }
-
-            packet.put("intakePower", intake.getPower());
             return false;
         }
     }
@@ -78,8 +73,6 @@ public final class botIntake {
                 intake.setPower(INTAKE_OFF_POWER);
                 initialized = true;
             }
-
-            packet.put("intakePower", intake.getPower());
             return false;
         }
     }

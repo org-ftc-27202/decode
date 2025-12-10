@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode;
 
-import static org.firstinspires.ftc.teamcode.auto_00_base.patternMatch;
+import static org.firstinspires.ftc.teamcode.auto_00_NearFromGoal.patternMatch;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.SleepAction;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -49,9 +51,9 @@ public abstract class TeleOp_00_base extends LinearOpMode {
         rightBackDrive.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
         botIntake intake = new botIntake(hardwareMap);
-        botCatapult catapult01 = new botCatapult(hardwareMap, "catapult01", "encoder01", true);
-        botCatapult catapult02 = new botCatapult(hardwareMap, "catapult02", "encoder02", true);
-        botCatapult catapult03 = new botCatapult(hardwareMap, "catapult03", "encoder03", false);
+        botCatapult catapult01 = new botCatapult(hardwareMap, "catapult01");
+        botCatapult catapult02 = new botCatapult(hardwareMap, "catapult02");
+        botCatapult catapult03 = new botCatapult(hardwareMap, "catapult03");
         botVisionFront visionFront = new botVisionFront(hardwareMap, allianceColor);
 
         telemetry.addData("Status", "Initialized");
@@ -111,6 +113,26 @@ public abstract class TeleOp_00_base extends LinearOpMode {
             };
 
             // Catapults
+            if (gamepad1.right_trigger > 0) {
+                // Launch
+                runningActions.add(new SequentialAction(
+                        intake.Stop(),
+                        new ParallelAction(
+                            catapult01.Launch(),
+                            catapult02.Launch(),
+                            catapult03.Launch())
+                ));
+            }
+            else if (gamepad1.right_bumper) {
+                runningActions.add(new SequentialAction(
+                        intake.Stop(),
+                        new SequentialAction(
+                                catapult01.Launch(),
+                                catapult02.Launch(),
+                                catapult03.Launch())
+                ));
+            }
+
             if (gamepad1.x) {
                 // Launch
                 runningActions.add(new SequentialAction(
@@ -133,10 +155,6 @@ public abstract class TeleOp_00_base extends LinearOpMode {
                 ));
             }
 
-            catapult01.CheckToStopCatapult();
-            catapult02.CheckToStopCatapult();
-            catapult03.CheckToStopCatapult();
-
             // update running actions
             List<Action> newActions = new ArrayList<>();
             for (Action action : runningActions) {
@@ -149,7 +167,6 @@ public abstract class TeleOp_00_base extends LinearOpMode {
 
             dash.sendTelemetryPacket(packet);
 
- //            telemetry.addData("packet", packet);
             if (allianceColor == AllianceColors.RED) {
                 telemetry.addData("alliance: ", "%s", "RED");
             }
@@ -157,6 +174,15 @@ public abstract class TeleOp_00_base extends LinearOpMode {
                 telemetry.addData("alliance: ", "%s", "BLUE");
             }
             telemetry.addData("runningActions.size()", runningActions.size());
+            if (patternMatch == botVisionFront.PatternOptions.GPP) {
+                telemetry.addData("pattern: ", "%s", "GPP");
+            }
+            else if (patternMatch == botVisionFront.PatternOptions.PGP) {
+                telemetry.addData("pattern: ", "%s", "PGP");
+            }
+            else if (patternMatch == botVisionFront.PatternOptions.PPG) {
+                telemetry.addData("pattern: ", "%s", "PPG");
+            }
             telemetry.addData("axial",  "%.2f", axial);
             telemetry.addData("lateral", "%.2f", lateral);
             telemetry.addData("yaw", "%.2f", yaw);
@@ -169,23 +195,12 @@ public abstract class TeleOp_00_base extends LinearOpMode {
             else if (intake.intakeMode == botIntake.intakeModes.STOP) {
                 telemetry.addData("intake: ", "%s", "Stop");
             }
-            telemetry.addData("catapult 01",  "%.0f", catapult01.getPower());
-            telemetry.addData("angle 01", "%.0f", catapult01.encoder.getAngle());
-            telemetry.addData("catapult 02",  "%.0f", catapult02.getPower());
-            telemetry.addData("angle 02", "%.0f", catapult02.encoder.getAngle());
-            telemetry.addData("catapult 03",  "%.0f", catapult03.getPower());
-            telemetry.addData("angle 03", "%.0f", catapult03.encoder.getAngle());
+            telemetry.addData("catapult 01", "%.0f", catapult01.pos);
+            telemetry.addData("catapult 02", "%.0f", catapult02.pos);
+            telemetry.addData("catapult 03", "%.0f", catapult03.pos);
+
             telemetry.addData("visionFront status", visionFront.flagStatus);
             telemetry.addData("visionFront block length", visionFront.blockLength);
-            if (patternMatch == botVisionFront.PatternOptions.GPP) {
-                telemetry.addData("pattern: ", "%s", "GPP");
-            }
-            else if (patternMatch == botVisionFront.PatternOptions.PGP) {
-                telemetry.addData("pattern: ", "%s", "PGP");
-            }
-            else if (patternMatch == botVisionFront.PatternOptions.PPG) {
-                telemetry.addData("pattern: ", "%s", "PPG");
-            }
             telemetry.update();
         }
     }

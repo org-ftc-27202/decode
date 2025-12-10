@@ -45,7 +45,7 @@ public final class botVisionFront {
         huskylens.selectAlgorithm(HuskyLens.Algorithm.TAG_RECOGNITION);
     }
 
-    public class getPattern implements Action {
+    public class capturePattern implements Action {
         private boolean initialized = false;
         private int blockIndex = 0;
         private int minX = 0;
@@ -54,47 +54,49 @@ public final class botVisionFront {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             if (!initialized) {
+                initialized = true;
+
                 HuskyLens.Block[] blocks = huskylens.blocks();
 
                 blockLength = blocks.length;
-                blockIndex = 0;
-                minX = blocks[0].x;
-                maxX = blocks[0].x;
-                // if RED alliance, then get the leftmost, otherwise, go rightmost
-                if (allianceColor == TeleOp_00_base.AllianceColors.RED) {
-                    for (int i = 0; i < blockLength; i++) {
-                        if (blocks[i].x < minX) {
-                            minX = blocks[i].x;
-                            blockIndex = i;
+                if (blockLength != 0) {
+                    blockIndex = 0;
+                    minX = blocks[0].x;
+                    maxX = blocks[0].x;
+
+                    // if RED alliance, then get the leftmost, otherwise, go rightmost
+                    if (allianceColor == TeleOp_00_base.AllianceColors.RED) {
+                        for (int i = 0; i < blockLength; i++) {
+                            if (blocks[i].x < minX) {
+                                minX = blocks[i].x;
+                                blockIndex = i;
+                            }
+                        }
+                    } else if (allianceColor == TeleOp_00_base.AllianceColors.BLUE) {
+                        for (int i = 0; i < blockLength; i++) {
+                            if (blocks[i].x > maxX) {
+                                maxX = blocks[i].x;
+                                blockIndex = i;
+                            }
                         }
                     }
-                }
-                else if (allianceColor == TeleOp_00_base.AllianceColors.BLUE) {
-                    for (int i = 0; i < blockLength; i++) {
-                        if (blocks[i].x > maxX) {
-                            maxX = blocks[i].x;
-                            blockIndex = i;
-                        }
+
+                    if (blocks[blockIndex].id == 1) {
+                        pattern = botVisionFront.PatternOptions.GPP;
+                    } else if (blocks[blockIndex].id == 2) {
+                        pattern = botVisionFront.PatternOptions.PGP;
+                    } else if (blocks[blockIndex].id == 3) {
+                        pattern = botVisionFront.PatternOptions.PPG;
                     }
                 }
-
-                if (blocks[blockIndex].id == 1) {
-                    pattern = botVisionFront.PatternOptions.GPP;
-                } else if (blocks[blockIndex].id == 2) {
-                    pattern = botVisionFront.PatternOptions.PGP;
-                } else if (blocks[blockIndex].id == 3) {
-                    pattern = botVisionFront.PatternOptions.PPG;
-                }
-
-                initialized = true;
             }
 
             return false;
         }
     }
 
-    public Action getPattern() {
-        return new botVisionFront.getPattern();
+    public Action capturePattern() {
+        return new botVisionFront.capturePattern();
     }
 }
 
