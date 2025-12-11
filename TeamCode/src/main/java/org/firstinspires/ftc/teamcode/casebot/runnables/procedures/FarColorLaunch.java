@@ -12,10 +12,10 @@ import org.firstinspires.ftc.teamcode.stellarstructure.runnables.WaitUntil;
 public class FarColorLaunch extends Procedure {
     public FarColorLaunch() {
         super("FarColorLaunch",
-                new InstantlyDo(()-> {
+                /*new InstantlyDo(()-> {
                     //PedroDrivebase.getInstance().getFollower().activateAllPIDFs();
-                    PedroDrivebase.getInstance().getFollower().turnTo(Math.toRadians(PedroDrivebase.getInstance().getLaunchYaw()));
-                }),
+                    //PedroDrivebase.getInstance().getFollower().turnTo(Math.toRadians(PedroDrivebase.getInstance().getLaunchYaw()));
+                }),*/
                 new InstantlyDo(()->
                         Turret.getInstance().setTurretVelocity(1600)
                 ),

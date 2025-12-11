@@ -20,7 +20,7 @@ import org.firstinspires.ftc.teamcode.util.TrajectoryCalculator;
 import org.firstinspires.ftc.teamcode.util.bootscreen.BootScreen;
 import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
 
-@TeleOp(name = "-Case +Pedro", group = "Robot")
+@TeleOp(name = "-RED Case +Pedro", group = "Robot")
     public final class RedCaseTele extends LinearOpMode {
         private final PedroDrivebase pedroDrivebase = PedroDrivebase.getInstance();
         private final Intake intake = Intake.getInstance();
@@ -83,7 +83,7 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
                 }
                 // Define inputs and the single reset pose
                 boolean triggersDown = (gamepad2.left_trigger > 0.05) && (gamepad2.right_trigger > 0.05);
-                Pose resetPose = new Pose(56.75, 7, Math.toRadians(180)).mirror();
+                Pose resetPose = new Pose(56.75, 7, Math.toRadians(90)).mirror();
 
 // --- RISING EDGE / ONE-SHOT LOGIC ---
 // This block runs ONLY on the moment the triggers are pressed (rising edge)

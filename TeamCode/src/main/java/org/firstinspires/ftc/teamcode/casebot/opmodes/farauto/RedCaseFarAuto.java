@@ -14,6 +14,8 @@ import org.firstinspires.ftc.teamcode.casebot.runnables.defaultdirectives.Defaul
 import org.firstinspires.ftc.teamcode.casebot.runnables.defaultdirectives.DefaultSpindexer;
 import org.firstinspires.ftc.teamcode.casebot.runnables.directives.FollowPath;
 import org.firstinspires.ftc.teamcode.casebot.runnables.directives.GetMotifSequence;
+import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FarMotifLaunch;
+import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FullIntakeWaitForColor;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.ShortColorLaunch;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Camera;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Intake;
@@ -22,6 +24,8 @@ import org.firstinspires.ftc.teamcode.casebot.subsystems.PedroDrivebase;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Spindexer;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Turret;
 import org.firstinspires.ftc.teamcode.stellarstructure.StellarBot;
+import org.firstinspires.ftc.teamcode.stellarstructure.runnables.InstantlyDo;
+import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Parallel;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Procedure;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.SetPosition;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Sleep;
@@ -29,7 +33,7 @@ import org.firstinspires.ftc.teamcode.util.DecodeDataTypes;
 import org.firstinspires.ftc.teamcode.util.bootscreen.BootScreen;
 import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
 
-@Autonomous(name = "-Case Auto Pedro", group = "Auto")
+@Autonomous(name = "-RED Case Auto Pedro", group = "Auto")
 public final class RedCaseFarAuto extends OpMode {
     private final double FLYWHEEL_LAUNCH = 1080;
     private final double TURRET_LAUNCH = 0;
@@ -62,32 +66,53 @@ public final class RedCaseFarAuto extends OpMode {
     private final Pose collect1Pose = new Pose(19, 35.5).mirror();
     private final Pose collect1Control = new Pose(56,35.5).mirror();
     private final Pose launchFarPose = new Pose(60,21).mirror();
-    private PathChain path1, path2, path3, path4, path5, cameraPath;
+    private PathChain path1, path2, path3, path4, path5, path6, cameraPath;
 
     public void buildPaths() {
-        this.cameraPath= follower
+        path1 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(56.750, 7.000).mirror(), new Pose(56.750, 80.000).mirror())
+                        new BezierLine(new Pose(55.300, 7.000).mirror(), new Pose(61.000, 24.000).mirror())
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(82.5))
+                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(90))
                 .build();
-        this.path1 = follower.pathBuilder()
+        path2 = follower
+                .pathBuilder()
                 .addPath(
-                        new BezierCurve(startPose, collect1Control, collect1Pose)
+                        new BezierLine(new Pose(61.000, 24.000).mirror(), new Pose(43.000, 35.500).mirror())
                 )
-                .setLinearHeadingInterpolation(startPose.getHeading(), Math.toRadians(180))
-                .setBrakingStart(2)
-                .setBrakingStrength(2)
+                .setLinearHeadingInterpolation(Math.toRadians(85), Math.toRadians(0))
                 .build();
-        this.path2 = follower.pathBuilder()
+        path3 = follower
+                .pathBuilder()
                 .addPath(
-                        new BezierLine(collect1Pose, launchFarPose)
+                        new BezierLine(new Pose(43.000, 35.500).mirror(), new Pose(27.000, 35.500).mirror())
+                )
+                .setConstantHeadingInterpolation(Math.toRadians(0))
+                .build();
+
+        path4 = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(new Pose(27.000, 35.500).mirror(), new Pose(11.000, 35.500).mirror())
+                )
+                .setConstantHeadingInterpolation(Math.toRadians(0))
+                .build();
+
+        path5 = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(new Pose(11.000, 35.500).mirror(), new Pose(30.000, 30.000).mirror())
                 )
                 .setTangentHeadingInterpolation()
-                .setBrakingStart(2)
-                .setBrakingStrength(2)
                 .setReversed()
+                .build();
+        path6 = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(new Pose(61.000, 24.000).mirror(), new Pose(61.000, 44.000).mirror())
+                )
+                .setTangentHeadingInterpolation()
                 .build();
     }
 
@@ -116,20 +141,35 @@ public final class RedCaseFarAuto extends OpMode {
     public void start() {
         new Procedure(
                 "AutoDrive",
-                //new TurretStartup(),
                 new SetPosition(LeverTransfer.getInstance().getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION),
-                new FollowPath(cameraPath, follower, new Pose(56.750, 80.000), true),
-                new GetMotifSequence(),
-                new Sleep(2.0),
-                new ShortColorLaunch()
+                new InstantlyDo(()->intake.setIntakeSpeed(1)),
+                new InstantlyDo(()->
+                        new GetMotifSequence().schedule()),
+                new Sleep(5.0),
+                new FollowPath(path1, follower, new Pose(61.000, 24.000).mirror(), true),
+                new FarMotifLaunch(),
+                new FollowPath(path2, follower, new Pose(43.000, 35.500).mirror(), true),
+                new Parallel("pickup1",
+                        new FullIntakeWaitForColor(),
+                        new Procedure ("pickup",
+                                new FollowPath(path3, follower, new Pose(27.000, 35.500).mirror(), true),
+                                new Sleep(.5),
+                                new FollowPath(path4, follower, new Pose(11.000, 35.500).mirror(), true),
+                                new Sleep(.5)
+                        )),
+                new FollowPath(path5, follower, new Pose(30.000, 30.000).mirror(), true)
+                //new FarMotifLaunch(),
+                //new FollowPath(path6, follower, new Pose(61.000, 44.000), true)
 
+                //new FollowPath(cameraPath, follower, new Pose(56.750, 80.000), true),
+                //                new Sleep(2.0),
                 //new FullIntake(),
                 //new InstantlyDo(()-> Turret.getInstance().getTurretServo().setPosition(TURRET_LAUNCH)),
                 //new InstantlyDo(()-> Turret.getInstance().getTurretHoodServo().setPosition(HOOD_LAUNCH)),
-                //new FullPatternOuttake()
+                //new FullPattern+Outtake()
                 //new FollowPath(path1, follower, collect1Pose, true)
-                        //new FullIntake(),
-                        //new SetPower(Intake.getInstance().getIntakeMotor(), 0.5),
+                //new FullIntake(),
+                //new SetPower(Intake.getInstance().getIntakeMotor(), 0.5),
                 //new FollowPath(path2, follower, launchFarPose, true),
                 //new FullOuttake()
         ).schedule();

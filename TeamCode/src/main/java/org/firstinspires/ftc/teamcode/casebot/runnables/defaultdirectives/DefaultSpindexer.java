@@ -15,10 +15,12 @@ import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.OuttakeColor;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.OuttakeMotifOrArtifactAt;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.ShortColorLaunch;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.ShortLaunch;
+import org.firstinspires.ftc.teamcode.casebot.subsystems.PedroDrivebase;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Spindexer;
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.GamepadButtonMap;
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.StatefulCondition;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.DefaultDirective;
+import org.firstinspires.ftc.teamcode.stellarstructure.runnables.InstantlyDo;
 import org.firstinspires.ftc.teamcode.stellarstructure.triggers.ActionTrigger;
 import org.firstinspires.ftc.teamcode.util.DecodeDataTypes;
 
@@ -147,6 +149,16 @@ public class DefaultSpindexer extends DefaultDirective {
 					new GetMotifSequence().schedule();
 				}
 		));
+		addTrigger(new ActionTrigger(
+				new StatefulCondition(
+						new GamepadButtonMap(gamepad2, GamepadButtonMap.Button.DPAD_LEFT),
+						StatefulCondition.Edge.RISING
+				),
+				()->{
+					new InstantlyDo(()-> PedroDrivebase.getInstance().getFollower().startTeleopDrive(true));
+				}
+		));
+
 
 
 

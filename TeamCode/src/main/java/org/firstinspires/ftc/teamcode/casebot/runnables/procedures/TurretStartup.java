@@ -23,7 +23,9 @@ public class TurretStartup extends Procedure {
 
                 new InstantlyDo(()-> Turret.getInstance().setTurretVelocity(1200)),
                 new Sleep(.06),
-                new InstantlyDo(()-> Turret.getInstance().setTurretVelocity(1400))
+                new InstantlyDo(()-> Turret.getInstance().setTurretVelocity(1400)),
+                new Sleep(.06),
+                new InstantlyDo(()-> Turret.getInstance().setTurretVelocity(1600))
         );
 
 
