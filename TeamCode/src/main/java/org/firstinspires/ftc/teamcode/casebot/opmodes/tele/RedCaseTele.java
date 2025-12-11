@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.casebot.opmodes.tele;
 
 import com.pedropathing.geometry.Pose;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -20,6 +21,8 @@ import org.firstinspires.ftc.teamcode.util.TrajectoryCalculator;
 import org.firstinspires.ftc.teamcode.util.bootscreen.BootScreen;
 import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
 
+//todo
+@Disabled
 @TeleOp(name = "-RED Case +Pedro", group = "Robot")
     public final class RedCaseTele extends LinearOpMode {
         private final PedroDrivebase pedroDrivebase = PedroDrivebase.getInstance();
@@ -57,7 +60,6 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
             turret.setDefaultDirective(new DefaultTurret(gamepad1, gamepad2));
 
             // print telemetry
-            // print telemetry
             BootScreen bootScreen = new BootScreen(telemetry, new TerminalVelocityLogo(), true);
             try {
                 bootScreen.updateBootScreen();
@@ -83,7 +85,7 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
                 }
                 // Define inputs and the single reset pose
                 boolean triggersDown = (gamepad2.left_trigger > 0.05) && (gamepad2.right_trigger > 0.05);
-                Pose resetPose = new Pose(56.75, 7, Math.toRadians(90)).mirror();
+                Pose resetPose = new Pose(56.75, 7.0, Math.toRadians(90.0)).mirror();
 
 // --- RISING EDGE / ONE-SHOT LOGIC ---
 // This block runs ONLY on the moment the triggers are pressed (rising edge)
@@ -100,7 +102,7 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
                 // run scheduler and subsystems logic
                 caseBot.update();
 
-                //print telemetry
+                // print telemetry
                 try {
                     telemetry.addLine(caseBot.toString());
                 } catch (Exception e) {

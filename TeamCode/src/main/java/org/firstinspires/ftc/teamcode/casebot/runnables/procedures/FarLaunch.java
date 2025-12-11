@@ -7,7 +7,6 @@ import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Parallel;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Procedure;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.SetPosition;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Sleep;
-import org.firstinspires.ftc.teamcode.stellarstructure.runnables.WaitUntil;
 
 public class FarLaunch extends Procedure {
     public FarLaunch() {

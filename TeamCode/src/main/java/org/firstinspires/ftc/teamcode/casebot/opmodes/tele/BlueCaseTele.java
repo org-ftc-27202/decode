@@ -33,7 +33,9 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
         private boolean poseResetToggled = false; // Tracks if the reset command has been run for the current press
         private boolean currentResetState = false; // Tracks the state of the toggle (Optional: for alternate poses)
 
-        private final StellarBot caseBot = new StellarBot(
+    private long lastCycleTime = 0;
+
+    private final StellarBot caseBot = new StellarBot(
                 pedroDrivebase,
                 intake,
                 leverTransfer,
@@ -56,7 +58,6 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
             spindexer.setDefaultDirective(new DefaultSpindexer(gamepad1, gamepad2));
             turret.setDefaultDirective(new DefaultTurret(gamepad1, gamepad2));
 
-            // print telemetry
             // print telemetry
             BootScreen bootScreen = new BootScreen(telemetry, new TerminalVelocityLogo(), true);
             try {
@@ -83,7 +84,7 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
                 }
                 // Define inputs and the single reset pose
                 boolean triggersDown = (gamepad2.left_trigger > 0.05) && (gamepad2.right_trigger > 0.05);
-                Pose resetPose = new Pose(56.75, 7, Math.toRadians(180));
+                Pose resetPose = new Pose(56.75, 7, Math.toRadians(180.0));
 
 // --- RISING EDGE / ONE-SHOT LOGIC ---
 // This block runs ONLY on the moment the triggers are pressed (rising edge)
@@ -100,9 +101,14 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
                 // run scheduler and subsystems logic
                 caseBot.update();
 
-                //print telemetry
+                // print telemetry
                 try {
                     telemetry.addLine(caseBot.toString());
+
+                    telemetry.addLine(
+                            String.format("Cycle Time: %d", System.currentTimeMillis() - lastCycleTime)
+                    );
+                    lastCycleTime = System.currentTimeMillis();
                 } catch (Exception e) {
                     telemetry.addData("telemetry didn't work", e);
                 }

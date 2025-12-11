@@ -1,12 +1,12 @@
 package org.firstinspires.ftc.teamcode.casebot.opmodes.farauto;// make sure this aligns with class location
 
 import com.pedropathing.follower.Follower;
-import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.casebot.runnables.defaultdirectives.DefaultIntake;
@@ -16,7 +16,6 @@ import org.firstinspires.ftc.teamcode.casebot.runnables.directives.FollowPath;
 import org.firstinspires.ftc.teamcode.casebot.runnables.directives.GetMotifSequence;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FarMotifLaunch;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FullIntakeWaitForColor;
-import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.ShortColorLaunch;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Camera;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.LeverTransfer;
@@ -33,6 +32,8 @@ import org.firstinspires.ftc.teamcode.util.DecodeDataTypes;
 import org.firstinspires.ftc.teamcode.util.bootscreen.BootScreen;
 import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
 
+//todo
+@Disabled
 @Autonomous(name = "-RED Case Auto Pedro", group = "Auto")
 public final class RedCaseFarAuto extends OpMode {
     private final double FLYWHEEL_LAUNCH = 1080;

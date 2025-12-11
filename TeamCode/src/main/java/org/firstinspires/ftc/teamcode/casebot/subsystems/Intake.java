@@ -8,7 +8,6 @@ import org.firstinspires.ftc.teamcode.stellarstructure.Subsystem;
 import org.firstinspires.ftc.teamcode.stellarstructure.hardwaremapwrappers.StellarDcMotor;
 
 import dev.nextftc.control.ControlSystem;
-import dev.nextftc.control.KineticState;
 
 
 public final class Intake extends Subsystem {

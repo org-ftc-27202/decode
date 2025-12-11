@@ -2,15 +2,10 @@ package org.firstinspires.ftc.teamcode.casebot.runnables.defaultdirectives;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.teamcode.casebot.runnables.directives.TurnTo;
-import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FarLaunch;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Drivebase;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.PedroDrivebase;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Turret;
-import org.firstinspires.ftc.teamcode.stellarstructure.conditions.GamepadButtonMap;
-import org.firstinspires.ftc.teamcode.stellarstructure.conditions.StatefulCondition;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.DefaultDirective;
-import org.firstinspires.ftc.teamcode.stellarstructure.triggers.ActionTrigger;
 
 public class PedroDefaultDrivebase extends DefaultDirective {
 	private final Gamepad gamepad1;
