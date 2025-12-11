@@ -7,6 +7,7 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
+import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -28,7 +29,8 @@ public abstract class auto_00_NearFromGoal extends LinearOpMode {
         TelemetryPacket packet = new TelemetryPacket();
 
         if (allianceColor == TeleOp_00_base.AllianceColors.RED) {
-            initialPose = new Pose2d(39, 61, Math.toRadians(90));
+//            initialPose = new Pose2d(39, 61, Math.toRadians(90));
+            initialPose = new Pose2d(24, 11, Math.toRadians(0));
         }
         else if (allianceColor == TeleOp_00_base.AllianceColors.BLUE) {
             // ToDo
@@ -49,8 +51,8 @@ public abstract class auto_00_NearFromGoal extends LinearOpMode {
                     .strafeToSplineHeading(new Vector2d(30, 34), Math.toRadians(40));
             trajDriveToSpike1_Start = trajDriveToLaunchPositionNear.endTrajectory().fresh()
                     .strafeToSplineHeading(new Vector2d(24, 11), Math.toRadians(0));
-            trajDriveToSpike1_End = trajDriveToSpike1_Start.endTrajectory().fresh()
-                    .strafeToConstantHeading(new Vector2d(54, 11));
+            trajDriveToSpike1_End = drive.actionBuilder(initialPose)
+                    .strafeToConstantHeading(new Vector2d(54, 7), new TranslationalVelConstraint(8.0));
         }
 //        else if (allianceColor == TeleOp_00_base.AllianceColors.BLUE) {
 //            // ToDo
@@ -73,18 +75,19 @@ public abstract class auto_00_NearFromGoal extends LinearOpMode {
 
         Actions.runBlocking(
             new SequentialAction(
-                    actDriveToSeePatternNear,
-                    visionFront.capturePattern(),
-                    actDriveToLaunchPositionNear,
+//                    actDriveToSeePatternNear,
+//                    visionFront.capturePattern(),
+//                    actDriveToLaunchPositionNear,
 //                    new ParallelAction(
 //                            catapult01.Launch(),
 //                            catapult02.Launch(),
 //                            catapult03.Launch()),
+//                    new ParallelAction(
+//                            actDriveToSpike1_Start,
+//                            intake.RotateInwards()),
                     new ParallelAction(
-                            actDriveToSpike1_Start,
-                            intake.RotateInwards()),
-                    actDriveToSpike1_End,
-                    new SleepAction(3)
+                                intake.RotateInwards(),
+                            actDriveToSpike1_End)
         ));
 
         patternMatch = visionFront.pattern;
