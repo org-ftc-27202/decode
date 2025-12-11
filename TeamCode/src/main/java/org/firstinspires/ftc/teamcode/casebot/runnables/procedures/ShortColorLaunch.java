@@ -11,10 +11,10 @@ import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Sleep;
 public class ShortColorLaunch extends Procedure {
     public ShortColorLaunch() {
         super("ShortColorLaunch",
-                new InstantlyDo(()-> {
+                /*new InstantlyDo(()-> {
                     //PedroDrivebase.getInstance().getFollower().activateAllPIDFs();
-                    PedroDrivebase.getInstance().getFollower().turnTo(Math.toRadians(PedroDrivebase.getInstance().getLaunchYaw()));
-                }),
+                    //PedroDrivebase.getInstance().getFollower().turnTo(Math.toRadians(PedroDrivebase.getInstance().getLaunchYaw()));
+                }),*/
                 new InstantlyDo(()->
                         Turret.getInstance().setTurretVelocity(1300)
                 ),

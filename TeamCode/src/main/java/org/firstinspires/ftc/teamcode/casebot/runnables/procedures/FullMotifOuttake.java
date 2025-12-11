@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.util.GameState;
 public class FullMotifOuttake extends Procedure {
     public FullMotifOuttake() {
         super(
-                "FullPatternOuttake",
+                "FullmotifOuttake",
                 new OuttakeMotifOrArtifactAt(0),
                 new OuttakeMotifOrArtifactAt(1),
                 new OuttakeMotifOrArtifactAt(2)
