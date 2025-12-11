@@ -39,15 +39,9 @@ android {
 }
 
 repositories {
-    maven {
-        url = "https://repo.dairy.foundation/releases"
-    }
-}
-
-repositories {
-    maven {
-        url = 'https://maven.brott.dev/'
-    }
+    maven {url = "https://repo.dairy.foundation/releases"}
+    maven { url = "https://mymaven.bylazar.com/releases" }
+    maven {url = 'https://maven.brott.dev/'}
 }
 
 dependencies {
@@ -57,7 +51,12 @@ dependencies {
     implementation "com.acmerobotics.roadrunner:core:1.0.1"
     implementation "com.acmerobotics.roadrunner:actions:1.0.1"
     implementation "com.acmerobotics.dashboard:dashboard:0.5.1"
+    implementation 'dev.nextftc:ftc:1.0.1'
+    implementation 'dev.nextftc:hardware:1.0.1' // If you would like to use the hardware module
+    implementation 'dev.nextftc:control:1.0.0'
+    implementation 'dev.nextftc:bindings:1.0.1'
+    implementation 'dev.nextftc.extensions:pedro:1.0.0'
+    implementation 'com.pedropathing:ftc:2.0.4'
+    implementation 'com.pedropathing:telemetry:1.0.0'
+    implementation 'com.bylazar:fullpanels:1.0.11'
 }
-
-
-
