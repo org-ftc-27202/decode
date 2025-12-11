@@ -27,6 +27,7 @@ public final class PedroDrivebase extends Subsystem {
     public final static double LAUNCH_ZONE_SCALE = 6.2;
     private boolean hasSetAllianceColor = false;
     private double GOAL_X, GOAL_Y, STARTING_X, STARTING_Y;
+    private opModeType opMode;
 
     // BLUE LAUNCH
     // GOAL X 8.0
@@ -39,6 +40,10 @@ public final class PedroDrivebase extends Subsystem {
     public enum AllianceColor {
         BLUE,
         RED
+    }
+    public enum opModeType {
+        AUTO,
+        TELEOP
     }
     public void setAllianceColor(@NonNull AllianceColor allianceColor) {
         if (allianceColor == AllianceColor.BLUE) {
@@ -60,6 +65,9 @@ public final class PedroDrivebase extends Subsystem {
         }
     }
 
+    public void setOpMode(@NonNull opModeType opMode) {
+        this.opMode = opMode;
+    }
     public double distanceFromGoal;
 
     public double speedScale = 1.0;

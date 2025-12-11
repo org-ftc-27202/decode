@@ -14,13 +14,13 @@ import org.firstinspires.ftc.teamcode.util.GameState;
 
 import java.util.function.Supplier;
 
+
 public final class Spindexer extends Subsystem {
 	private static final Spindexer spindexer = new Spindexer();
 	public static Spindexer getInstance() {
 		return spindexer;
 	}
 	private Spindexer() {}
-
 	private final static double DEGREES_TO_SERVO = 1;
 	private final static double SPINDEXER_OFFSET = 0;
 	private final static double[] INTAKE_DEGREE_POSITIONS = {0.0 + SPINDEXER_OFFSET, 0.369 + SPINDEXER_OFFSET, 0.737 + SPINDEXER_OFFSET};
