@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.pedropathing.control.FilteredPIDFCoefficients;
+import com.pedropathing.control.PIDFCoefficients;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.follower.FollowerConstants;
 import com.pedropathing.ftc.FollowerBuilder;
@@ -14,9 +16,18 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class Constants {
     public static FollowerConstants followerConstants = new FollowerConstants()
-            .mass(14.5);
+            .mass(14.5)
+            .forwardZeroPowerAcceleration(-30.192933133003475)
+            .lateralZeroPowerAcceleration(-72.14447267145638)
+            .translationalPIDFCoefficients(new PIDFCoefficients(0.08, 0, 0.0001, 0.026))
+            .headingPIDFCoefficients(new PIDFCoefficients(1.0, 0, 0.01, 0.024))
+            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.008,0.0,0.001,0.6,0.025))
+            .centripetalScaling(0.00065);
 
-    public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);
+    public static PathConstraints pathConstraints = new PathConstraints(0.99,
+        100,
+        1.6,
+        1);
 
     public static MecanumConstants driveConstants = new MecanumConstants()
             .maxPower(1)
@@ -27,11 +38,14 @@ public class Constants {
             .leftFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
             .leftRearMotorDirection(DcMotorSimple.Direction.FORWARD)
             .rightFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
-            .rightRearMotorDirection(DcMotorSimple.Direction.REVERSE);
+            .rightRearMotorDirection(DcMotorSimple.Direction.REVERSE)
+            .xVelocity(72.17493012195499)
+            .yVelocity(57.08356337659941)
+            ;
 
     public static PinpointConstants localizerConstants = new PinpointConstants()
-            .forwardPodY(24)
-            .strafePodX(-24)
+            .forwardPodY(24/2.54)
+            .strafePodX(-24/2.54)
             .distanceUnit(DistanceUnit.MM)
             .hardwareMapName("pinpoint")
             .encoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD)

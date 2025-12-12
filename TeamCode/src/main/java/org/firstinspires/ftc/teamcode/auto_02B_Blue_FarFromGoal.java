@@ -8,9 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 public class auto_02B_Blue_FarFromGoal extends auto_00_NearFromGoal {
 
-    @Override
     public void runOpMode() {
-        super.setAllianceColor(TeleOp_00_base.AllianceColors.BLUE);
-        super.runOpMode();
+        super.setAllianceColor(AllianceColors.BLUE);
     }
 }

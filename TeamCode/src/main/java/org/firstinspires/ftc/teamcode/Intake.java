@@ -13,15 +13,15 @@ public class Intake implements Subsystem {
     public static final Intake INSTANCE = new Intake();
     private Intake() { }
 
-    private final MotorEx intakeMotor = new MotorEx("intake");
+    public final MotorEx intakeMotor = new MotorEx("intake");
 
     private final ControlSystem controlSystem = ControlSystem.builder()
             .velPid(0.001, 0.0, 0.0)
             .build();
 
-    public Command Inwards = new RunToVelocity(controlSystem, 2000.0);
-    public Command Stop = new RunToVelocity(controlSystem, 0);
-    public Command Outwards = new RunToVelocity(controlSystem, -750.0);
+    public Command Inwards = new RunToVelocity(controlSystem, 2000.0).requires(this);
+    public Command Stop = new RunToVelocity(controlSystem, 0).requires(this);
+    public Command Outwards = new RunToVelocity(controlSystem, -750.0).requires(this);
 
     @Override
     public void periodic() {

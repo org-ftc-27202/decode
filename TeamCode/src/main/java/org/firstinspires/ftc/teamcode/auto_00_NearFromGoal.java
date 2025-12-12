@@ -1,112 +1,108 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
-import com.acmerobotics.roadrunner.Action;
-import com.acmerobotics.roadrunner.ParallelAction;
-import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.SequentialAction;
-import com.acmerobotics.roadrunner.SleepAction;
-import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
-import com.acmerobotics.roadrunner.TranslationalVelConstraint;
-import com.acmerobotics.roadrunner.Vector2d;
-import com.acmerobotics.roadrunner.ftc.Actions;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.BezierLine;
+import com.pedropathing.geometry.Pose;
+import com.pedropathing.paths.PathChain;
+import com.pedropathing.util.Timer;
 
-public abstract class auto_00_NearFromGoal extends LinearOpMode {
+public abstract class auto_00_NearFromGoal extends OpMode {
+    private final double CENTER_X = 72.0;
     public enum AllianceColors {RED, BLUE};
-    private TeleOp_00_base.AllianceColors allianceColor = TeleOp_00_base.AllianceColors.RED;
+    public static AllianceColors allianceColor = AllianceColors.RED;
     public static botVisionFront.PatternOptions patternMatch = botVisionFront.PatternOptions.GPP;
-    private TrajectoryActionBuilder trajDriveToSeePatternPositionNear, trajDriveToLaunchPositionNear, trajDriveToSpike1_Start, trajDriveToSpike1_End;
-
-    private Pose2d initialPose = null;
-
-    public void setAllianceColor(TeleOp_00_base.AllianceColors inAllianceColor) {
+    public void setAllianceColor(AllianceColors inAllianceColor) {
         allianceColor = inAllianceColor;
+    }
+    private Follower follower;
+    private Timer pathTimer, opModeTimer;
+
+    public enum PathState {
+        // Start POSITION_END Position
+        // Drive
+        // Shoot
+        DRIVE_STARTPOS_TO_GETPATTERNPOS, GETPATTERN, LAUNCHPOS1
+    }
+
+    PathState pathState;
+
+    private Pose startPose = new Pose(112, 135.5, Math.toRadians(90));
+    private Pose getPatternPose = new Pose(92, 92, Math.toRadians(90));
+    private Pose Launch1Pose = new Pose(92, 92, Math.toRadians(45));
+
+    private PathChain driveFromStartToGetPattern;
+
+    public void buildPaths() {
+        if (allianceColor == AllianceColors.BLUE) {
+            // mirror the x coordinate and heading
+            startPose = new Pose(CENTER_X - (startPose.getX() - CENTER_X), startPose.getY(), Math.toRadians(90));
+            getPatternPose = new Pose(CENTER_X - (getPatternPose.getX() - CENTER_X), getPatternPose.getY(), Math.toRadians(90));
+        };
+
+        driveFromStartToGetPattern = follower.pathBuilder()
+                .addPath(new BezierLine(startPose, getPatternPose))
+                .setLinearHeadingInterpolation(startPose.getHeading(), getPatternPose.getHeading())
+                .setLinearHeadingInterpolation(getPatternPose.getHeading(), Launch1Pose.getHeading())
+                .build();
+    }
+
+    public void statePathUpdate() {
+        switch (pathState) {
+            case DRIVE_STARTPOS_TO_GETPATTERNPOS:
+                follower.followPath(driveFromStartToGetPattern, true);
+                setPathState(PathState.GETPATTERN);
+                break;
+            case GETPATTERN:
+                if (!follower.isBusy()) {
+                    telemetry.addData("Done", pathState.toString());
+                }
+                break;
+            case LAUNCHPOS1:
+                if (!follower.isBusy()) {
+                    telemetry.addData("Done", pathState.toString());
+                }
+                break;
+            default:
+                telemetry.addLine("No State Commanded");
+                break;
+        }
+
+    }
+
+    public void setPathState(PathState newState) {
+        pathState = newState;
+        pathTimer.resetTimer();
     }
 
     @Override
-    public void runOpMode() {
-        TelemetryPacket packet = new TelemetryPacket();
+    public void init() {
+        pathState = PathState.DRIVE_STARTPOS_TO_GETPATTERNPOS;
+        pathTimer = new Timer();
+        opModeTimer = new Timer();
 
-        if (allianceColor == TeleOp_00_base.AllianceColors.RED) {
-//            initialPose = new Pose2d(39, 61, Math.toRadians(90));
-            initialPose = new Pose2d(24, 11, Math.toRadians(0));
-        }
-        else if (allianceColor == TeleOp_00_base.AllianceColors.BLUE) {
-            // ToDo
-            initialPose = new Pose2d(-14, 61, Math.toRadians(90));
-        }
+        follower = Constants.createFollower(hardwareMap);
+        // ToDo: other init tasks
 
-        MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
-        botIntake intake = new botIntake(hardwareMap);
-        botCatapult catapult01 = new botCatapult(hardwareMap, "catapult01");
-        botCatapult catapult02 = new botCatapult(hardwareMap, "catapult02");
-        botCatapult catapult03 = new botCatapult(hardwareMap, "catapult03");
-        botVisionFront visionFront = new botVisionFront(hardwareMap, allianceColor);
-
-        if (allianceColor == TeleOp_00_base.AllianceColors.RED) {
-            trajDriveToSeePatternPositionNear = drive.actionBuilder(initialPose)
-                    .strafeToConstantHeading(new Vector2d(8, 36));
-            trajDriveToLaunchPositionNear = trajDriveToSeePatternPositionNear.endTrajectory().fresh()
-                    .strafeToSplineHeading(new Vector2d(30, 34), Math.toRadians(40));
-            trajDriveToSpike1_Start = trajDriveToLaunchPositionNear.endTrajectory().fresh()
-                    .strafeToSplineHeading(new Vector2d(24, 11), Math.toRadians(0));
-            trajDriveToSpike1_End = drive.actionBuilder(initialPose)
-                    .strafeToConstantHeading(new Vector2d(54, 7), new TranslationalVelConstraint(8.0));
-        }
-//        else if (allianceColor == TeleOp_00_base.AllianceColors.BLUE) {
-//            // ToDo
-//        }
-
-        while (!isStopRequested() && !opModeIsActive()) {
-            telemetry.update();
-        }
-
-        Action actDriveToSeePatternNear = trajDriveToSeePatternPositionNear.build();
-        Action actDriveToLaunchPositionNear = trajDriveToLaunchPositionNear.build();
-        Action actDriveToSpike1_Start = trajDriveToSpike1_Start.build();
-        Action actDriveToSpike1_End = trajDriveToSpike1_End.build();
-
-        waitForStart();
-
-        this.resetRuntime();
-
-        if (isStopRequested()) return;
-
-        Actions.runBlocking(
-            new SequentialAction(
-//                    actDriveToSeePatternNear,
-//                    visionFront.capturePattern(),
-//                    actDriveToLaunchPositionNear,
-//                    new ParallelAction(
-//                            catapult01.Launch(),
-//                            catapult02.Launch(),
-//                            catapult03.Launch()),
-//                    new ParallelAction(
-//                            actDriveToSpike1_Start,
-//                            intake.RotateInwards()),
-                    new ParallelAction(
-                                intake.RotateInwards(),
-                            actDriveToSpike1_End)
-        ));
-
-        patternMatch = visionFront.pattern;
-
-        telemetry.addData("Duration", this.getRuntime());
-        if (patternMatch == botVisionFront.PatternOptions.GPP) {
-            telemetry.addData("pattern: ", "%s", "GPP");
-        }
-        else if (patternMatch == botVisionFront.PatternOptions.PGP) {
-            telemetry.addData("pattern: ", "%s", "PGP");
-        }
-        else if (patternMatch == botVisionFront.PatternOptions.PPG) {
-            telemetry.addData("pattern: ", "%s", "PPG");
-        }
-        telemetry.update();
-
-        Actions.runBlocking(
-                new SequentialAction(
-                        new SleepAction(5)
-                        ));
+        buildPaths();
+        follower.setPose(startPose);
     }
-}
+
+    @Override
+    public void start() {
+        opModeTimer.resetTimer();
+        setPathState(pathState);
+    }
+
+    @Override
+    public void loop() {
+        follower.update();
+        statePathUpdate();
+
+        telemetry.addData("Alliance", allianceColor.toString());
+        telemetry.addData("path state", pathState.toString());
+        telemetry.addData("x", follower.getPose().getX());
+        telemetry.addData("y", follower.getPose().getY());
+        telemetry.addData("heading", follower.getPose().getHeading());
+        telemetry.addData("path time", pathTimer.getElapsedTimeSeconds());
+    }}
