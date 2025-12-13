@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 public class TeleOp_02_Blue extends TeleOp_00_base {
     @Override
     public void onInit() {
-        super.setAllianceColor(auto_00_NearFromGoal.AllianceColors.BLUE);
+        Config.allianceColor = Config.AllianceColors.BLUE;
         super.init();
     }
 }

@@ -30,15 +30,13 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
 TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.history;
 
 import com.qualcomm.hardware.dfrobot.HuskyLens;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
 import org.firstinspires.ftc.robotcore.internal.system.Deadline;
-
 import java.util.concurrent.TimeUnit;
 
 /*
@@ -63,20 +61,18 @@ import java.util.concurrent.TimeUnit;
 @Disabled
 public class SensorHuskyLens extends LinearOpMode {
 
-    private final int READ_PERIOD = 1;  // value of 1 in sample code, but mentioned that it is not needed for typical applications
-
-    private HuskyLens huskyLens;
-
     @Override
     public void runOpMode()
     {
-        huskyLens = hardwareMap.get(HuskyLens.class, "huskylens");
+        HuskyLens huskyLens = hardwareMap.get(HuskyLens.class, "huskylens");
 
         /*
          * This sample rate limits the reads solely to allow a user time to observe
          * what is happening on the Driver Station telemetry.  Typical applications
          * would not likely rate limit.
          */
+        // value of 1 in sample code, but mentioned that it is not needed for typical applications
+        int READ_PERIOD = 1;
         Deadline rateLimit = new Deadline(READ_PERIOD, TimeUnit.SECONDS);
 
         /*
@@ -141,8 +137,8 @@ public class SensorHuskyLens extends LinearOpMode {
              */
             HuskyLens.Block[] blocks = huskyLens.blocks();
             telemetry.addData("Block count", blocks.length);
-            for (int i = 0; i < blocks.length; i++) {
-                telemetry.addData("Block", blocks[i].toString());
+            for (HuskyLens.Block block : blocks) {
+                telemetry.addData("Block", block.toString());
                 /*
                  * Here inside the FOR loop, you could save or evaluate specific info for the currently recognized Bounding Box:
                  * - blocks[i].width and blocks[i].height   (size of box, in pixels)
@@ -152,13 +148,13 @@ public class SensorHuskyLens extends LinearOpMode {
                  *
                  * These values have Java type int (integer).
                  */
-                telemetry.addData("id", blocks[i].id);
-                telemetry.addData("x",  blocks[i].x);
-                telemetry.addData("y",  blocks[i].y);
-                telemetry.addData("width", blocks[i].width);
-                telemetry.addData("height",  blocks[i].height);
-                telemetry.addData("left",  blocks[i].left);
-                telemetry.addData("top",  blocks[i].top);
+                telemetry.addData("id", block.id);
+                telemetry.addData("x", block.x);
+                telemetry.addData("y", block.y);
+                telemetry.addData("width", block.width);
+                telemetry.addData("height", block.height);
+                telemetry.addData("left", block.left);
+                telemetry.addData("top", block.top);
             }
 
             telemetry.update();

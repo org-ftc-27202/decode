@@ -1,11 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
 import dev.nextftc.control.ControlSystem;
-import dev.nextftc.control.KineticState;
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.subsystems.Subsystem;
-import dev.nextftc.hardware.controllable.RunToPosition;
-import dev.nextftc.hardware.controllable.RunToState;
 import dev.nextftc.hardware.controllable.RunToVelocity;
 import dev.nextftc.hardware.impl.MotorEx;
 

@@ -2,8 +2,6 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-
-import dev.nextftc.control.ControlSystem;
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
@@ -22,18 +20,10 @@ public class Catapult implements Subsystem {
     private final MotorEx catapult01Motor = new MotorEx("catapult01");
     private final MotorEx catapult02Motor = new MotorEx("catapult02");
     private final MotorEx catapult03Motor = new MotorEx("catapult03");
-
-
-    private final ControlSystem controlSystem = ControlSystem.builder()
-            .build();
-
-    public Command Launch01 = new LambdaCommand("Launch")
-        .setStart(() -> {
-            catapult01Motor.getMotor().setPower(CATAPULT_LAUNCH_POWER);})
-        .setUpdate(() -> {
-            catapult01Motor.getMotor().setTargetPosition(HALF_ROTATION);})
-        .setIsDone(() -> {
-            return catapult01Motor.getMotor().getCurrentPosition() >= HALF_ROTATION;})
+    public Command Launch01 = new LambdaCommand("Launch 01")
+        .setStart(() -> catapult01Motor.getMotor().setPower(CATAPULT_LAUNCH_POWER))
+        .setUpdate(() -> catapult01Motor.getMotor().setTargetPosition(HALF_ROTATION))
+        .setIsDone(() -> catapult01Motor.getMotor().getCurrentPosition() >= HALF_ROTATION)
         .setStop(interrupted -> {
             catapult01Motor.getMotor().setPower(0);
             catapult01Motor.getMotor().setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -42,13 +32,10 @@ public class Catapult implements Subsystem {
         .setInterruptible(false)
         .requires(this);
 
-    public Command Launch02 = new LambdaCommand("Launch")
-            .setStart(() -> {
-                catapult02Motor.getMotor().setPower(CATAPULT_LAUNCH_POWER);})
-            .setUpdate(() -> {
-                catapult02Motor.getMotor().setTargetPosition(HALF_ROTATION);})
-            .setIsDone(() -> {
-                return catapult02Motor.getMotor().getCurrentPosition() >= HALF_ROTATION;})
+    public Command Launch02 = new LambdaCommand("Launch 02")
+            .setStart(() -> catapult02Motor.getMotor().setPower(CATAPULT_LAUNCH_POWER))
+            .setUpdate(() -> catapult02Motor.getMotor().setTargetPosition(HALF_ROTATION))
+            .setIsDone(() -> catapult02Motor.getMotor().getCurrentPosition() >= HALF_ROTATION)
             .setStop(interrupted -> {
                 catapult02Motor.getMotor().setPower(0);
                 catapult02Motor.getMotor().setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -57,13 +44,10 @@ public class Catapult implements Subsystem {
             .setInterruptible(false)
             .requires(this);
 
-    public Command Launch03 = new LambdaCommand("Launch")
-            .setStart(() -> {
-                catapult03Motor.getMotor().setPower(CATAPULT_LAUNCH_POWER);})
-            .setUpdate(() -> {
-                catapult03Motor.getMotor().setTargetPosition(HALF_ROTATION);})
-            .setIsDone(() -> {
-                return catapult03Motor.getMotor().getCurrentPosition() >= HALF_ROTATION;})
+    public Command Launch03 = new LambdaCommand("Launch 03")
+            .setStart(() -> catapult03Motor.getMotor().setPower(CATAPULT_LAUNCH_POWER))
+            .setUpdate(() -> catapult03Motor.getMotor().setTargetPosition(HALF_ROTATION))
+            .setIsDone(() -> catapult03Motor.getMotor().getCurrentPosition() >= HALF_ROTATION)
             .setStop(interrupted -> {
                 catapult03Motor.getMotor().setPower(0);
                 catapult03Motor.getMotor().setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
