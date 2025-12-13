@@ -4,6 +4,7 @@ import org.firstinspires.ftc.teamcode.casebot.subsystems.LeverTransfer;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Spindexer;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Procedure;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.SetPosition;
+import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Sleep;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.WaitUntil;
 
 public class IntakeAt extends Procedure {
@@ -16,9 +17,11 @@ public class IntakeAt extends Procedure {
 
                 new WaitUntil(() -> Spindexer.getInstance().spindexerEncoderIsWithinTolerance(Spindexer.getInstance().getServoPositionFromSegment(segment, Spindexer.Position.INTAKE), 0.05)),
                 new WaitUntil(() ->
-                        !Spindexer.getInstance().getBeamBreak1().getState() ||
-                        !Spindexer.getInstance().getBeamBreak2().getState()
-                )
+                        Spindexer.getInstance().getBreamBreak1Broken() ||
+                        Spindexer.getInstance().getBeamBreak2Broken()
+                ),
+
+                new Sleep(0.02)
         );
 
         setRequiredSubsystems(

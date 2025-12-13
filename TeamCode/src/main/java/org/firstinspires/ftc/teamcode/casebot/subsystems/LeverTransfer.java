@@ -16,7 +16,7 @@ public final class LeverTransfer extends Subsystem {
 
 	private StellarServo leverTransferServo;
 
-	public final static double LEVER_DOWN_POSITION = 0.01;
+	public final static double LEVER_DOWN_POSITION = 0.00;
 	public final static double LEVER_UP_POSITION = 0.41;
 
 	@Override

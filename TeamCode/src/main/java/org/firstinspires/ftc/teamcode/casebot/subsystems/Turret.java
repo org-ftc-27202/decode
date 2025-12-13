@@ -105,6 +105,7 @@ public final class Turret extends Subsystem {
         leftTurretMotor.setTargetVelocity(velocity);
         rightTurretMotor.setTargetVelocity(velocity);
     }
+
     public void setPIDFScale(double scale){
         PIDFScale = scale;
         leftTurretMotor.setVelocityPIDFCoefficents(p_left*PIDFScale, i_left*PIDFScale, d_left*PIDFScale, f_left*PIDFScale);
@@ -114,6 +115,7 @@ public final class Turret extends Subsystem {
     public double getVelocityOffOfTarget() {
         return Math.abs(leftTurretMotor.getVelocity() - velocity);
     }
+
     public double getRealVelocityOffOfTarget(){
         return leftTurretMotor.getVelocity()-velocity;
     }

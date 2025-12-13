@@ -36,7 +36,7 @@ public final class TestTele extends LinearOpMode {
     private long lastCycleTime = 0;
 
     private final StellarBot caseBot = new StellarBot(
-            pedroDrivebase,
+            //pedroDrivebase,
             intake,
             leverTransfer,
             spindexer,

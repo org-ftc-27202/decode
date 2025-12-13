@@ -201,6 +201,7 @@ public final class PedroDrivebase extends Subsystem {
                 getLaunchYaw(),
                 checkForLaunchPose(),
                 lightLeft.getPosition(),
-                lightRight.getPosition());
+                lightRight.getPosition()
+          );
     }
 }

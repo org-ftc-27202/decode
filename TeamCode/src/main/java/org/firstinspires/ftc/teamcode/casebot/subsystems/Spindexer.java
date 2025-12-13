@@ -3,9 +3,10 @@ package org.firstinspires.ftc.teamcode.casebot.subsystems;
 import androidx.annotation.NonNull;
 
 import com.qualcomm.robotcore.hardware.AnalogInput;
-import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
+import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 
 import org.firstinspires.ftc.teamcode.stellarstructure.Subsystem;
 import org.firstinspires.ftc.teamcode.stellarstructure.hardwaremapwrappers.StellarServo;
@@ -21,10 +22,8 @@ public final class Spindexer extends Subsystem {
 		return spindexer;
 	}
 	private Spindexer() {}
-	private final static double DEGREES_TO_SERVO = 1.0;
-	private final static double SPINDEXER_OFFSET = 0.0;
-	private final static double[] INTAKE_DEGREE_POSITIONS = {0.0 + SPINDEXER_OFFSET, 0.369 + SPINDEXER_OFFSET, 0.737 + SPINDEXER_OFFSET};
-	private final static double[] TRANSFER_DEGREE_POSITIONS = {0.556 + SPINDEXER_OFFSET, 0.934 + SPINDEXER_OFFSET, 0.179 + SPINDEXER_OFFSET};
+	private final static double[] INTAKE_POSITIONS = {0.014, 0.382, 0.747};
+	private final static double[] TRANSFER_POSITIONS = {0.567, 0.938, 0.193};
 
 	private DecodeDataTypes.ArtifactColor[] artifactColorsInSpindexer = new DecodeDataTypes.ArtifactColor[]{
 		DecodeDataTypes.ArtifactColor.NONE,
@@ -52,7 +51,7 @@ public final class Spindexer extends Subsystem {
 
 	private StellarServo spindexerServo;
 	private DigitalChannel beamBreak1, beamBreak2;
-	private ColorSensor colorSensor;
+	private NormalizedColorSensor colorSensor;
 	private AnalogInput spindexerServoEncoder;
 
 	@Override
@@ -69,7 +68,7 @@ public final class Spindexer extends Subsystem {
 		beamBreak2 = hardwareMap.get(DigitalChannel.class, "beamBreak2");
 		beamBreak2.setMode(DigitalChannel.Mode.INPUT);
 
-		colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");
+		colorSensor = hardwareMap.get(NormalizedColorSensor.class, "colorSensor");
 
 		artifactColorsInSpindexer = new DecodeDataTypes.ArtifactColor[] {
 				DecodeDataTypes.ArtifactColor.NONE,
@@ -83,12 +82,12 @@ public final class Spindexer extends Subsystem {
 
 	public double getSpindexerEncoderPosition() {
 		//return (spindexerServoEncoder.getVoltage() / 3.3) - (15.0 / 360.0);
-		double pos = ((spindexerServoEncoder.getVoltage()-.170) / 2.96);
-		double realpos = pos;
-		if (pos>=1){
-			realpos = pos-1;
+		double pos = ((spindexerServoEncoder.getVoltage() - 0.170) / 2.96);
+		double realPos = pos;
+		if (pos >= 1){
+			realPos = pos - 1;
 		}
-		return realpos;
+		return realPos;
 	}
 
 
@@ -100,16 +99,12 @@ public final class Spindexer extends Subsystem {
 		return spindexerServo;
 	}
 
-	public DigitalChannel getBeamBreak1() {
-		return beamBreak1;
+	public boolean getBreamBreak1Broken() {
+		return !beamBreak1.getState();
 	}
 
-	public DigitalChannel getBeamBreak2() {
-		return beamBreak2;
-	}
-
-	public ColorSensor getColorSensor() {
-		return colorSensor;
+	public boolean getBeamBreak2Broken() {
+		return !beamBreak2.getState();
 	}
 
 	public DecodeDataTypes.ArtifactColor[] getArtifactColorsInSpindexer() {
@@ -132,19 +127,13 @@ public final class Spindexer extends Subsystem {
 		return getColorSensorArtifactColor();
 	}
 
-	public double getGreenToBlueRatio() {
-		return (double) colorSensor.green() / colorSensor.blue();
-	}
-
-	public double getRGBSum() {
-		return colorSensor.red() + colorSensor.green() + colorSensor.blue();
-	}
-
 	public DecodeDataTypes.ArtifactColor getColorSensorArtifactColor() {
-		double greenToBlueRatio = getGreenToBlueRatio();
-		double total = getRGBSum();
+		NormalizedRGBA colorSensorColors = colorSensor.getNormalizedColors();
 
-		if (total < 300.0) {
+		float greenToBlueRatio = colorSensorColors.green / colorSensorColors.blue;
+		float total = colorSensorColors.red + colorSensorColors.green + colorSensorColors.blue;
+
+		if (total < 0.03) {
 			return DecodeDataTypes.ArtifactColor.NONE;
 		}
 
@@ -183,11 +172,11 @@ public final class Spindexer extends Subsystem {
 
 	public double getServoPositionFromSegment(int segment, @NonNull Position position) {
 		if (position == Position.INTAKE) {
-			return INTAKE_DEGREE_POSITIONS[segment] * DEGREES_TO_SERVO;
+			return INTAKE_POSITIONS[segment];
 		} else if (position == Position.TRANSFER) {
-			return TRANSFER_DEGREE_POSITIONS[segment] * DEGREES_TO_SERVO;
+			return TRANSFER_POSITIONS[segment];
 		} else {
-			throw new IllegalArgumentException("Invalid Spindexer.Position provided: " + position);
+			throw new IllegalArgumentException("Invalid Spindexer Position provided: " + position);
 		}
 	}
 	public int getFirstArtifactLocation() {
@@ -226,22 +215,25 @@ public final class Spindexer extends Subsystem {
 	@NonNull
 	@Override
 	public String toString() {
+		//NormalizedRGBA colorSensorColors = colorSensor.getNormalizedColors();
 		return String.format(
 				"beamBreak1: %b\n" +
 				"beamBreak2: %b\n" +
-				"colorSensorRGB: %d, %d, %d\n"+
+				//"colorSensorRGB: %f, %f, %f\n"+
 				"Artifact Storage: %s, %s, %s\n"+
-				"G/B ratio: %f\n" +
-				"Total RGB: %f\n" +
+				//"G/B ratio: %f\n" +
+				//"Total RGB: %f\n" +
 				"Spindexer Servo: %f\n" +
 				"Spindexer Encoder: %f\n"+
 				"Motif Sequence: %s, %s, %s\n",
-				beamBreak1.getState(),
-				beamBreak2.getState(),
-				colorSensor.red(), colorSensor.green(), colorSensor.blue(),
+				getBreamBreak1Broken(),
+				getBeamBreak2Broken(),
+				//colorSensorColors.red, colorSensorColors.green, colorSensorColors.blue,
+				//colorSensor.red(), colorSensor.green(), colorSensor.blue(),
 				artifactColorsInSpindexer[0].toString(), artifactColorsInSpindexer[1].toString(), artifactColorsInSpindexer[2].toString(),
-				getGreenToBlueRatio(),
-				getRGBSum(),
+				//colorSensorColors.green / colorSensorColors.blue,
+				//getGreenToBlueRatio(),
+				//getRGBSum(),
 				spindexerServo.getPosition(),
 				getSpindexerEncoderPosition(),
 				GameState.getMotifPatternAt(0),

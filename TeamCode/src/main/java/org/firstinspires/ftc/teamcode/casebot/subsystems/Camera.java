@@ -12,12 +12,8 @@ public final class Camera extends Subsystem {
     private Camera() {}
 
     @Override
-    public void init(HardwareMap hardwareMap) {
-
-    }
+    public void init(HardwareMap hardwareMap) {}
 
     @Override
-    public void update() {
-
-    }
+    public void update() {}
 }

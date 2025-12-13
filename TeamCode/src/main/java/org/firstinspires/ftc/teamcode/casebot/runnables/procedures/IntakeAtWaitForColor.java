@@ -20,8 +20,8 @@ public class IntakeAtWaitForColor extends Procedure {
                 new WaitUntil(() -> Spindexer.getInstance().spindexerEncoderIsWithinTolerance(Spindexer.getInstance().getServoPositionFromSegment(segment, Spindexer.Position.INTAKE), 0.05)),
                 new WaitUntil(() ->
                         (
-                                !Spindexer.getInstance().getBeamBreak1().getState() ||
-                                !Spindexer.getInstance().getBeamBreak2().getState()
+                                Spindexer.getInstance().getBreamBreak1Broken() ||
+                                Spindexer.getInstance().getBeamBreak2Broken()
                         ) &&
                         Spindexer.getInstance().setArtifactColorAtSegmentToColorSensor(segment) != DecodeDataTypes.ArtifactColor.NONE
                 ),

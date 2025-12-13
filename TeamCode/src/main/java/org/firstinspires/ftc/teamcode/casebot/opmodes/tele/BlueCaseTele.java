@@ -36,13 +36,13 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
     private long lastCycleTime = 0;
 
     private final StellarBot caseBot = new StellarBot(
-                pedroDrivebase,
-                intake,
-                leverTransfer,
-                spindexer,
-                turret,
-                camera
-        );
+            pedroDrivebase,
+            intake,
+            leverTransfer,
+            spindexer,
+            turret,
+            camera
+    );
 
         @Override
         public void runOpMode() {

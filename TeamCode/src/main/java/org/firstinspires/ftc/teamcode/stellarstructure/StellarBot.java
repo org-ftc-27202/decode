@@ -10,6 +10,8 @@ import java.util.List;
 public class StellarBot {
 	private final Subsystem[] subsystems;
 	private final Scheduler scheduler = new Scheduler();
+	private boolean printDebug = false;
+
 	public StellarBot(Subsystem... subsystems) {
 		this.subsystems = subsystems;
 
@@ -37,13 +39,23 @@ public class StellarBot {
 		}
 	}
 
+	public final void setPrintDebug(boolean printDebug) {
+		this.printDebug = printDebug;
+	}
+
 	@NonNull
 	@Override
 	public final String toString() {
 		StringBuilder telemetry = new StringBuilder();
 
-		for (Subsystem subsystem: subsystems) {
-			telemetry.append(subsystem).append('\n');
+		if (printDebug) {
+			for (Subsystem subsystem: subsystems) {
+				try {
+					telemetry.append(subsystem).append('\n');
+				} catch (Error error) {
+					telemetry.append(subsystem.getClass().getSimpleName()).append("'s Telemetry Failed!\n");
+				}
+			}
 		}
 
 		telemetry.append(scheduler);
