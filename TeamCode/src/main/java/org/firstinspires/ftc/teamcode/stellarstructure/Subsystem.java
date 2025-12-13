@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.stellarstructure.runnables.DefaultDirectiv
 
 public abstract class Subsystem {
 	//todo: maybe add start() or smt
+	//todo: make subsystems say what motors/other stuff they use
 	private DefaultDirective defaultDirective;
 
 	@Override

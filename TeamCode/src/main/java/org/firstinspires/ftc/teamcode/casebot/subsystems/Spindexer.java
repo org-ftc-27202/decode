@@ -21,18 +21,16 @@ public final class Spindexer extends Subsystem {
 		return spindexer;
 	}
 	private Spindexer() {}
-	private final static double DEGREES_TO_SERVO = 1;
-	private final static double SPINDEXER_OFFSET = 0;
+	private final static double DEGREES_TO_SERVO = 1.0;
+	private final static double SPINDEXER_OFFSET = 0.0;
 	private final static double[] INTAKE_DEGREE_POSITIONS = {0.0 + SPINDEXER_OFFSET, 0.369 + SPINDEXER_OFFSET, 0.737 + SPINDEXER_OFFSET};
-	private final static double[] TRANSFER_DEGREE_POSITIONS = {0.556 + SPINDEXER_OFFSET, .934 + SPINDEXER_OFFSET, 0.179 + SPINDEXER_OFFSET};
+	private final static double[] TRANSFER_DEGREE_POSITIONS = {0.556 + SPINDEXER_OFFSET, 0.934 + SPINDEXER_OFFSET, 0.179 + SPINDEXER_OFFSET};
 
 	private DecodeDataTypes.ArtifactColor[] artifactColorsInSpindexer = new DecodeDataTypes.ArtifactColor[]{
 		DecodeDataTypes.ArtifactColor.NONE,
 		DecodeDataTypes.ArtifactColor.NONE,
 		DecodeDataTypes.ArtifactColor.NONE
 	};
-
-
 
 	public enum Position {
 		INTAKE, TRANSFER
