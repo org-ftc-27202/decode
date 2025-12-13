@@ -9,6 +9,6 @@ public class TeleOp_01_Red extends TeleOp_00_base {
     @Override
     public void onInit() {
         Config.allianceColor = Config.AllianceColors.RED;
-        super.init();
+        super.onInit();
     }
 }

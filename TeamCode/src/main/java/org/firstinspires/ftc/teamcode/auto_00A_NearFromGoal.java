@@ -82,11 +82,11 @@ public abstract class auto_00A_NearFromGoal extends NextFTCOpMode {
         Config.autoEndPose = PedroComponent.follower().getPose();
         telemetry.addData("run #", 1);
         telemetry.addData("alliance", Config.allianceColor.toString());
-        telemetry.addData("pattern", Config.pattern.toString());
+        telemetry.addData("pattern", Config.motifPattern.toString());
         telemetry.addData("pos", "x: %.0f | y: %.0f | heading: %.0f", PedroComponent.follower().getPose().getX(), PedroComponent.follower().getPose().getX(), Math.toDegrees(PedroComponent.follower().getPose().getHeading()));
         telemetry.addData("intake", "%.0f", Intake.INSTANCE.intakeMotor.getPower());
-        telemetry.addData("catapults", "01: %.0f | 02: %.0f | 03: %.0f", Catapult.INSTANCE.getPosition01(), Catapult.INSTANCE.getPosition02(), Catapult.INSTANCE.getPosition03());
-        telemetry.addData("camera (front)", Camera.INSTANCE.flagCaptured);
+        telemetry.addData("catapults (pos)", "01: %.0f | 02: %.0f | 03: %.0f", Catapult.INSTANCE.getPosition01(), Catapult.INSTANCE.getPosition02(), Catapult.INSTANCE.getPosition03());
+        telemetry.addData("catapults (color)", "01: %s | 02: %s | 03: %s", Config.catapult01Color.toString(), Config.catapult02Color.toString(), Config.catapult03Color.toString());
         telemetry.addData("Timer", "%.2f", opModeTimer.getElapsedTimeSeconds());
         telemetry.update();
     }
