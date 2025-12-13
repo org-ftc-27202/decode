@@ -67,8 +67,7 @@ public final class TestTele extends LinearOpMode {
             telemetry.addData("telemetry didn't work", e);
         }
 
-        TrajectoryCalculator trajectoryCalculator = new TrajectoryCalculator();
-        double[] radiansAndVelocity = trajectoryCalculator.calculateTrajectory(0.1, 3.6576, 0.9906, 20.0, 1.0, 2.7);
+        double[] radiansAndVelocity = TrajectoryCalculator.calculateTrajectory(0.1, 3.6576, 1.0, 2.7);
         telemetry.addLine(String.format("Radians: %f, Velocity: %f", radiansAndVelocity[0], radiansAndVelocity[1]));
 
         telemetry.update();

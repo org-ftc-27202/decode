@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.util;
 
 public class TrajectoryCalculator {
+    private TrajectoryCalculator(){};
     private final static double RADIUS = 0.12;
     private final static double MASS = 0.05;
     private final static double DRAG_CONSTANT = 0.4;
@@ -10,7 +11,7 @@ public class TrajectoryCalculator {
 
 
     // 1.0, 3.6576, 0.9906, 20.0, 1.0, 2.7
-    public double[] calculateTrajectory(double initialRadians, double totalDistance, double height, double slipConstant, double inertialTotalX, double inertialTotalZ) {
+    public static double[] calculateTrajectory(double initialRadians, double totalDistance, double inertialTotalX, double inertialTotalZ) {
         // desired air time
         double timeFinal = 0.7;
 
