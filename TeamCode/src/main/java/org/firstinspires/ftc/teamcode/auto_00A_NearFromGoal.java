@@ -59,7 +59,7 @@ public abstract class auto_00A_NearFromGoal extends NextFTCOpMode {
                 Camera.INSTANCE.capturePattern,
                 new FollowPath(driveFromGetPatternToLaunch1, true)
                 ,
-                Catapult.INSTANCE.LaunchAllInParallel
+                Catapult.INSTANCE.LaunchInParallel
         );
     }
     @Override
@@ -87,6 +87,7 @@ public abstract class auto_00A_NearFromGoal extends NextFTCOpMode {
         telemetry.addData("intake", "%.0f", Intake.INSTANCE.intakeMotor.getPower());
         telemetry.addData("catapults (pos)", "01: %.0f | 02: %.0f | 03: %.0f", Catapult.INSTANCE.getPosition01(), Catapult.INSTANCE.getPosition02(), Catapult.INSTANCE.getPosition03());
         telemetry.addData("catapults (color)", "01: %s | 02: %s | 03: %s", Config.catapult01Color.toString(), Config.catapult02Color.toString(), Config.catapult03Color.toString());
+        telemetry.addData("catapults (pattern)", "%s%s%s", Config.catapult01Color.toString().charAt(0), Config.catapult02Color.toString().charAt(0), Config.catapult03Color.toString().charAt(0));
         telemetry.addData("Timer", "%.2f", opModeTimer.getElapsedTimeSeconds());
         telemetry.update();
     }

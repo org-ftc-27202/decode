@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import dev.nextftc.core.commands.Command;
+import dev.nextftc.core.commands.conditionals.WGIfElseCommand;
+import dev.nextftc.core.commands.delays.Delay;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.commands.utility.LambdaCommand;
@@ -13,6 +15,7 @@ public class Catapult implements Subsystem {
     final double CATAPULT_LAUNCH_POWER = 0.8;  // for 3 springs -> near launch zone
     //    final double CATAPULT_LAUNCH_POWER = 1.0;  // for 4 springs -> far launch zone
     final int HALF_ROTATION = 700;  // smaller slip gear
+    final double LaunchingDelayInSeconds = 0.250;  // delay in between catapult launches
 
     public static final Catapult INSTANCE = new Catapult();
     private Catapult() { }
@@ -20,6 +23,7 @@ public class Catapult implements Subsystem {
     private final MotorEx catapult01Motor = new MotorEx("catapult01");
     private final MotorEx catapult02Motor = new MotorEx("catapult02");
     private final MotorEx catapult03Motor = new MotorEx("catapult03");
+    private boolean flagLaunchByPatternComplete = false;
     public Command Launch01 = new LambdaCommand("Launch 01")
         .setStart(() -> catapult01Motor.getMotor().setPower(CATAPULT_LAUNCH_POWER))
         .setUpdate(() -> catapult01Motor.getMotor().setTargetPosition(HALF_ROTATION))
@@ -56,18 +60,67 @@ public class Catapult implements Subsystem {
             .setInterruptible(false)
             .requires(this);
 
-    public Command LaunchAllInParallel = new ParallelGroup(
-            Launch01, Launch02, Launch03);
-    public Command LaunchAllInPattern = new ParallelGroup(
-            Launch01, Launch02, Launch03);
+//    public Command LaunchInParallel = new ParallelGroup(
+//            Launch01, Launch02, Launch03);
+    public Command LaunchInParallel = new ParallelGroup(
+            Launch01,
+            new SequentialGroup(
+                    new Delay(LaunchingDelayInSeconds),
+                    Launch02),
+            new SequentialGroup(
+                    new Delay(LaunchingDelayInSeconds * 2),
+                    Launch03))
+            .requires(this);;
+    public Command Launch123 = new SequentialGroup(
+            Launch01, new Delay(LaunchingDelayInSeconds),
+            Launch02, new Delay(LaunchingDelayInSeconds),
+            Launch03)
+            .requires(this);
 
-    //    public Command LaunchAllInPattern = new LambdaCommand("LaunchAllInPattern")
-//            .setStart(() -> {})
-//            .setUpdate(() -> {})
-//            .setIsDone(() -> catapult02Motor.getMotor().getCurrentPosition() >= HALF_ROTATION)
-//            .setStop(interrupted -> {})
-//            .setInterruptible(false)
-//            .requires(this);
+    public Command Launch213 = new SequentialGroup(
+            Launch02, new Delay(LaunchingDelayInSeconds),
+            Launch01, new Delay(LaunchingDelayInSeconds),
+            Launch03)
+            .requires(this);
+    public Command Launch312 = new SequentialGroup(
+            Launch03, new Delay(LaunchingDelayInSeconds),
+            Launch01, new Delay(LaunchingDelayInSeconds),
+            Launch02)
+            .requires(this);
+    public Command Launch132 = new SequentialGroup(
+            Launch01, new Delay(LaunchingDelayInSeconds),
+            Launch03, new Delay(LaunchingDelayInSeconds),
+            Launch02)
+            .requires(this);
+    public Command Launch231 = new SequentialGroup(
+            Launch02, new Delay(LaunchingDelayInSeconds),
+            Launch03, new Delay(LaunchingDelayInSeconds),
+            Launch01)
+            .requires(this);
+    public Command LaunchByPattern =
+            new WGIfElseCommand(() -> Config.motifPattern == Config.MotifPatterns.GPP,
+                    new WGIfElseCommand(() -> Config.catapult01Color == Config.Colors.GREEN,
+                            Launch123,
+                            new WGIfElseCommand(() -> Config.catapult02Color == Config.Colors.GREEN,
+                                    Launch213,
+                                    Launch312
+                            )),
+                    new WGIfElseCommand(() -> Config.motifPattern == Config.MotifPatterns.PGP,
+                            new WGIfElseCommand(() -> Config.catapult01Color == Config.Colors.GREEN,
+                                    Launch213,
+                                    new WGIfElseCommand(() -> Config.catapult02Color == Config.Colors.GREEN,
+                                            Launch123,
+                                            Launch132
+                                    )),
+                            new WGIfElseCommand(() -> Config.motifPattern == Config.MotifPatterns.PPG,
+                                    new WGIfElseCommand(() -> Config.catapult01Color == Config.Colors.GREEN,
+                                            Launch231,
+                                            new WGIfElseCommand(() -> Config.catapult02Color == Config.Colors.GREEN,
+                                                    Launch132,
+                                                    Launch123
+                                            ))
+                            )))
+                    .requires(this);
 
     public double getPosition01() {
         return catapult01Motor.getMotor().getCurrentPosition();

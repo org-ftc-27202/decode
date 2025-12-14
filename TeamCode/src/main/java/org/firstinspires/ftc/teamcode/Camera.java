@@ -80,7 +80,7 @@ public class Camera implements Subsystem {
                 Config.catapult03Color = Config.Colors.PURPLE;
 
                 // Right-Side Camera
-                if (huskylensRightBlocks != null) {
+                if (huskylensRightBlocks != null && huskylensRightBlocks.length > 0) {
                     int huskylensRightBlockLength = huskylensRightBlocks.length;
                     int minX, maxX, blockMinIndex, blockMaxIndex;
 
@@ -116,7 +116,7 @@ public class Camera implements Subsystem {
                 }
 
                 // Left-Side Camera
-                if (huskylensLeftBlocks != null) {
+                if (huskylensLeftBlocks != null && huskylensLeftBlocks.length > 0) {
                     int huskylensLeftBlockLength = huskylensLeftBlocks.length;
                     int minX, maxX, blockMinIndex, blockMaxIndex;
 

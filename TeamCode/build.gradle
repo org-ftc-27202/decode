@@ -28,10 +28,13 @@ buildscript {
 apply from: '../build.common.gradle'
 apply from: '../build.dependencies.gradle'
 apply plugin: 'dev.frozenmilk.sinister.sloth.load'
+apply plugin: 'org.jetbrains.kotlin.android'
 
 android {
     namespace = 'org.firstinspires.ftc.teamcode'
-
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
     packagingOptions {
         jniLibs.useLegacyPackaging true
     }
@@ -54,4 +57,5 @@ dependencies {
     implementation 'com.pedropathing:telemetry:1.0.0'
     implementation 'com.bylazar:fullpanels:1.0.12'
     implementation "com.bylazar:configurables:1.0.5"
+//    implementation 'androidx.core:core-ktx:1.15.0'
 }
