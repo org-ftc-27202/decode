@@ -116,6 +116,7 @@ public final class BlueCaseFarAuto extends OpMode {
     public void init() {
         //this.follower = Constants.createFollower(hardwareMap);
         PedroDrivebase.getInstance().setAllianceColor(PedroDrivebase.AllianceColor.BLUE);
+        PedroDrivebase.getInstance().setOpMode(PedroDrivebase.opModeType.AUTO);
         caseBot.init(hardwareMap);
         follower = pedroDrivebase.getFollower();
         buildPaths();

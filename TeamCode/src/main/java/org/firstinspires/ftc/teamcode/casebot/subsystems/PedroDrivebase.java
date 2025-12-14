@@ -72,6 +72,7 @@ public final class PedroDrivebase extends Subsystem {
 
     public double speedScale = 1.0;
     private boolean needsToStart = true;
+    private static boolean firstInit = true;
 
     private DcMotorEx leftFrontDrive, leftBackDrive, rightFrontDrive, rightBackDrive;
     private StellarLight lightLeft, lightRight;
@@ -84,7 +85,15 @@ public final class PedroDrivebase extends Subsystem {
 
         needsToStart = true;
         follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(new Pose(STARTING_X, STARTING_Y, Math.toRadians(90)));
+        if (opMode == opModeType.AUTO){
+            follower.setStartingPose(new Pose(STARTING_X, STARTING_Y, Math.toRadians(90)));
+            firstInit = false;
+
+        }else if (opMode == opModeType.TELEOP && firstInit){
+            follower.setStartingPose(new Pose(STARTING_X, STARTING_Y, Math.toRadians(90)));
+            firstInit = false;
+
+        }
         lightLeft = new StellarLight(hardwareMap, "lightLeft");
         lightRight = new StellarLight(hardwareMap, "lightRight");
         //todo: make omni wheel directive

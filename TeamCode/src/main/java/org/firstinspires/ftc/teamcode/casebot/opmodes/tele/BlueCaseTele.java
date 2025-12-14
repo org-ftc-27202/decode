@@ -50,6 +50,7 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
 
             // set up subsystems
             caseBot.init(hardwareMap);
+            PedroDrivebase.getInstance().setOpMode(PedroDrivebase.opModeType.TELEOP);
 
             // set up default directives
             pedroDrivebase.setDefaultDirective(new PedroDefaultDrivebase(gamepad1, gamepad2));
