@@ -42,25 +42,6 @@ public class LaunchInterpolator {
             return (y1);
         }
 
-        // x
-        // x - x1
-        // x2 - x
-
-        /*
-        x - x1
-        x2 - x
-
-        ((x - x1) / (x) * y1 +
-        ((x2 - x) / (x)) * y2
-
-
-        (x1 / x) * y1 +
-        (x2 / x) * y2
-         */
-
-
-        return (
-                    ((y2 - y1) * (x - x1)) / (x2 - x1)
-                ) + y1;
+        return (((y2 - y1) * (x - x1)) / (x2 - x1)) + y1;
     }
 }
