@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.pedropathing.geometry.Pose;
 
+import dev.nextftc.core.commands.delays.Delay;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.components.BindingsComponent;
@@ -62,8 +63,7 @@ public abstract class TeleOp_00_base extends NextFTCOpMode {
         Gamepads.gamepad1().rightBumper().whenBecomesTrue(new ParallelGroup(
                 Intake.INSTANCE.Stop
                 , Catapult.INSTANCE.LaunchAllInPattern));
-        Gamepads.gamepad1().a().whenBecomesTrue(new SequentialGroup(
-                Camera.INSTANCE.getCatapultArtifactColors));
+        Gamepads.gamepad1().a().whenBecomesTrue(Camera.INSTANCE.getCatapultArtifactColors);
     }
 
     @Override
@@ -74,7 +74,7 @@ public abstract class TeleOp_00_base extends NextFTCOpMode {
         telemetry.addData("pos", "x: %.0f | y: %.0f | heading: %.0f", PedroComponent.follower().getPose().getX(), PedroComponent.follower().getPose().getX(), Math.toDegrees(PedroComponent.follower().getPose().getHeading()));
         telemetry.addData("intake", "%.0f", Intake.INSTANCE.intakeMotor.getPower());
         telemetry.addData("catapults (pos)", "01: %.0f | 02: %.0f | 03: %.0f", Catapult.INSTANCE.getPosition01(), Catapult.INSTANCE.getPosition02(), Catapult.INSTANCE.getPosition03());
-        telemetry.addData("catapults (color)", "01: %s | 02: %s | 03: %s", Config.catapult01Color.toString(), Config.catapult02Color.toString(), Config.catapult03Color.toString());
+        telemetry.addData("catapults (color)", "%s%s%s", Config.catapult01Color.toString().charAt(0), Config.catapult02Color.toString().charAt(0), Config.catapult03Color.toString().charAt(0));
         telemetry.update();
     }
 }

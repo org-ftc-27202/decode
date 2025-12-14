@@ -72,89 +72,91 @@ public class Camera implements Subsystem {
     public Command getCatapultArtifactColors = new LambdaCommand("getCatapultArtifactColors")
             .setStart(() -> {
                 flagGetCatapultArtifactColors = false;
-                HuskyLens.Block[] huskylensLeftBlocks = huskylensLeft.blocks();
                 HuskyLens.Block[] huskylensRightBlocks = huskylensRight.blocks();
-                int huskylensLeftBlockLength = huskylensLeftBlocks.length;
-                int huskylensRightBlockLength = huskylensRightBlocks.length;
-                int minX, maxX, blockMinIndex, blockMaxIndex;
+                HuskyLens.Block[] huskylensLeftBlocks = huskylensLeft.blocks();
 
                 Config.catapult01Color = Config.Colors.PURPLE;
                 Config.catapult02Color = Config.Colors.PURPLE;
                 Config.catapult03Color = Config.Colors.PURPLE;
 
-                // Right-side Camera to get Catapult01 and Catapult02 colors
-                minX = 0;
-                maxX = 0;
-                blockMinIndex = 0;
-                blockMaxIndex = 0;
-                for (int i = 0; i < huskylensRightBlockLength; i++) {
-                    if (huskylensRightBlocks[i].x < minX) {
-                        minX = huskylensRightBlocks[i].x;
-                        blockMinIndex = i;
+                // Right-Side Camera
+                if (huskylensRightBlocks != null) {
+                    int huskylensRightBlockLength = huskylensRightBlocks.length;
+                    int minX, maxX, blockMinIndex, blockMaxIndex;
+
+                    // Right-side Camera to get Catapult01 and Catapult02 colors
+                    minX = huskylensRightBlocks[0].x;
+                    maxX = huskylensRightBlocks[0].x;
+                    blockMinIndex = 0;
+                    blockMaxIndex = 0;
+                    for (int i = 0; i < huskylensRightBlockLength; i++) {
+                        if (huskylensRightBlocks[i].x < minX) {
+                            minX = huskylensRightBlocks[i].x;
+                            blockMinIndex = i;
+                        }
+                        if (huskylensRightBlocks[i].x > maxX) {
+                            maxX = huskylensRightBlocks[i].x;
+                            blockMaxIndex = i;
+                        }
                     }
-                    if (huskylensRightBlocks[i].x > maxX) {
-                        maxX = huskylensRightBlocks[i].x;
-                        blockMaxIndex = i;
+
+                    if (huskylensRightBlockLength == 2) {
+                        if (huskylensRightBlocks[blockMinIndex].id == 2) {
+                            Config.catapult02Color = Config.Colors.GREEN;
+                        }
+                        if (huskylensRightBlocks[blockMaxIndex].id == 2) {
+                            Config.catapult01Color = Config.Colors.GREEN;
+                        }
+                    }
+                    else if (huskylensRightBlockLength == 1) {
+                        if (huskylensRightBlocks[0].id == 2) {
+                            Config.catapult02Color = Config.Colors.GREEN;
+                        }
                     }
                 }
 
-                if (huskylensRightBlockLength == 2) {
-                    if (huskylensRightBlocks[blockMinIndex].id == 2) {
-                        Config.catapult02Color = Config.Colors.GREEN;
+                // Left-Side Camera
+                if (huskylensLeftBlocks != null) {
+                    int huskylensLeftBlockLength = huskylensLeftBlocks.length;
+                    int minX, maxX, blockMinIndex, blockMaxIndex;
+
+                    // Right-side Camera to get Catapult01 and Catapult02 colors
+                    minX = huskylensLeftBlocks[0].x;
+                    maxX = huskylensLeftBlocks[0].x;
+                    blockMinIndex = 0;
+                    blockMaxIndex = 0;
+                    for (int i = 0; i < huskylensLeftBlockLength; i++) {
+                        if (huskylensLeftBlocks[i].x < minX) {
+                            minX = huskylensLeftBlocks[i].x;
+                            blockMinIndex = i;
+                        }
+                        if (huskylensLeftBlocks[i].x > maxX) {
+                            maxX = huskylensLeftBlocks[i].x;
+                            blockMaxIndex = i;
+                        }
                     }
-                    if (huskylensRightBlocks[blockMaxIndex].id == 2) {
-                        Config.catapult01Color = Config.Colors.GREEN;
+
+                    if (huskylensLeftBlockLength == 2) {
+                        if (huskylensLeftBlocks[blockMinIndex].id == 2) {
+                            Config.catapult03Color = Config.Colors.GREEN;
+                        }
+                        if (huskylensLeftBlocks[blockMaxIndex].id == 2) {
+                            Config.catapult02Color = Config.Colors.GREEN;
+                        }
                     }
-                } else if (huskylensRightBlockLength == 1) {
-                    if (huskylensRightBlocks[0].id == 2) {
-                        Config.catapult02Color = Config.Colors.GREEN;
+                    else if (huskylensLeftBlockLength == 1) {
+                        if (huskylensLeftBlocks[0].id == 2) {
+                            Config.catapult02Color = Config.Colors.GREEN;
+                        }
                     }
                 }
-
-//                // Left-side Camera to get Catapult02 and Catapult03 colors
-//                minX = 0;
-//                maxX = 0;
-//                blockMinIndex = 0;
-//                blockMaxIndex = 0;
-//                for (int i = 0; i < huskylensLeftBlockLength; i++) {
-//                    if (huskylensLeftBlocks[i].x < minX) {
-//                        minX = huskylensLeftBlocks[i].x;
-//                        blockMinIndex = i;
-//                    }
-//                    if (huskylensLeftBlocks[i].x > maxX) {
-//                        maxX = huskylensLeftBlocks[i].x;
-//                        blockMaxIndex = i;
-//                    }
-//                }
-//
-//                if (huskylensLeftBlockLength == 2) {
-//                    if (huskylensLeftBlocks[blockMinIndex].id == 1) {
-//                        Config.catapult03Color = Config.Colors.PURPLE;
-//                    } else if (huskylensLeftBlocks[blockMinIndex].id == 2) {
-//                        Config.catapult03Color = Config.Colors.GREEN;
-//                    }
-//                    if (huskylensLeftBlocks[blockMaxIndex].id == 1) {
-//                        Config.catapult02Color = Config.Colors.PURPLE;
-//                    } else if (huskylensLeftBlocks[blockMaxIndex].id == 2) {
-//                        Config.catapult02Color = Config.Colors.GREEN;
-//                    }
-//                } else if (huskylensLeftBlockLength == 1) {
-//                    if (huskylensLeftBlocks[0].id == 1) {
-//                        Config.catapult02Color = Config.Colors.PURPLE;
-//                    } else if (huskylensLeftBlocks[0].id == 2) {
-//                        Config.catapult02Color = Config.Colors.GREEN;
-//                    }
-//                    Config.catapult03Color = Config.Colors.PURPLE;
-//                }
-//                else {
-//                    Config.catapult02Color = Config.Colors.PURPLE;
-//                    Config.catapult03Color = Config.Colors.PURPLE;
-//                }
-
                 flagGetCatapultArtifactColors = true;
+
             })
             .setUpdate(() -> {})
-            .setIsDone(() -> flagGetCatapultArtifactColors)
+            .setIsDone(() -> {
+                return flagGetCatapultArtifactColors;
+            })
             .setStop(interrupted -> {})
             .setInterruptible(false)
             .requires(this);

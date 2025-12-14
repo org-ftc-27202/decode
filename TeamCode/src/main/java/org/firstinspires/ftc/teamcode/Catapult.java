@@ -58,8 +58,17 @@ public class Catapult implements Subsystem {
 
     public Command LaunchAllInParallel = new ParallelGroup(
             Launch01, Launch02, Launch03);
-    public Command LaunchAllInPattern = new SequentialGroup(
+    public Command LaunchAllInPattern = new ParallelGroup(
             Launch01, Launch02, Launch03);
+
+    //    public Command LaunchAllInPattern = new LambdaCommand("LaunchAllInPattern")
+//            .setStart(() -> {})
+//            .setUpdate(() -> {})
+//            .setIsDone(() -> catapult02Motor.getMotor().getCurrentPosition() >= HALF_ROTATION)
+//            .setStop(interrupted -> {})
+//            .setInterruptible(false)
+//            .requires(this);
+
     public double getPosition01() {
         return catapult01Motor.getMotor().getCurrentPosition();
     }

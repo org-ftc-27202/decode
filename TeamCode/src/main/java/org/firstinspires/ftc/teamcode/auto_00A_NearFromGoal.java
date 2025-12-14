@@ -28,7 +28,7 @@ public abstract class auto_00A_NearFromGoal extends NextFTCOpMode {
     private Timer opModeTimer;
     private Pose startPose = new Pose(112, 135.5, Math.toRadians(90));
     private Pose getPatternPose = new Pose(92, 92, Math.toRadians(110));
-    private Pose Launch1Pose = new Pose(100, 100, Math.toRadians(45));
+    private Pose Launch1Pose = new Pose(92, 102, Math.toRadians(42));
 
     private PathChain driveFromStartToGetPattern, driveFromGetPatternToLaunch1;
 
@@ -58,8 +58,8 @@ public abstract class auto_00A_NearFromGoal extends NextFTCOpMode {
                 new Delay(0.1),
                 Camera.INSTANCE.capturePattern,
                 new FollowPath(driveFromGetPatternToLaunch1, true)
-//                ,
-//                Catapult.INSTANCE.LaunchAllInParallel
+                ,
+                Catapult.INSTANCE.LaunchAllInParallel
         );
     }
     @Override
