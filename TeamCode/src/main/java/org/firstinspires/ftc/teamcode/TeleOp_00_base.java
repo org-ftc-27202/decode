@@ -25,26 +25,39 @@ public abstract class TeleOp_00_base extends NextFTCOpMode {
                 BindingsComponent.INSTANCE
         );
     }
-    private Pose BasePose, launchNear1Pose;
-    private PathChain driveLatestToBase, driveToLaunchNear1Pose;
+    private Pose relocalizePose, basePose, launchNear1Pose, loadingZonePose;
+    private PathChain driveToBase, driveToLaunchNear1Pose, driveToLoadingZone;
     public void buildPaths() {
-//        BasePose = new Pose(38, 33, Math.toRadians(0));;
-        BasePose = new Pose(112, 120, Math.toRadians(90));;
+        // Robot Length: 17"; Robot Width: 17.5"
+        // ToDo: This is correct pose in the official field
+//        relocalizePose = new Pose(8.75, 8.5, Math.toRadians(0));
+        // ToDo: This is pose temporarily at custom half field
+        relocalizePose = new Pose(112, 135.5, Math.toRadians(90));
+
+        basePose = new Pose(38, 32, Math.toRadians(0));
         launchNear1Pose = new Pose(92, 102, Math.toRadians(42));
+        loadingZonePose = new Pose(26, 28, Math.toRadians(90));
 
         if (Config.allianceColor == Config.AllianceColors.BLUE) {
-            BasePose = BasePose.mirror();
+            relocalizePose = relocalizePose.mirror();
+            basePose = basePose.mirror();
             launchNear1Pose = launchNear1Pose.mirror();
+            loadingZonePose = loadingZonePose.mirror();
         }
 
-        driveLatestToBase = PedroComponent.follower().pathBuilder()
-                .addPath(new BezierLine(PedroComponent.follower().getPose(), BasePose))
-                .setLinearHeadingInterpolation(PedroComponent.follower().getHeading(), BasePose.getHeading())
+        driveToBase = PedroComponent.follower().pathBuilder()
+                .addPath(new BezierLine(PedroComponent.follower().getPose(), basePose))
+                .setLinearHeadingInterpolation(PedroComponent.follower().getHeading(), basePose.getHeading())
                 .build();
 
         driveToLaunchNear1Pose = PedroComponent.follower().pathBuilder()
                 .addPath(new BezierLine(PedroComponent.follower().getPose(), launchNear1Pose))
                 .setLinearHeadingInterpolation(PedroComponent.follower().getHeading(), launchNear1Pose.getHeading())
+                .build();
+
+        driveToLoadingZone = PedroComponent.follower().pathBuilder()
+                .addPath(new BezierLine(PedroComponent.follower().getPose(), loadingZonePose))
+                .setLinearHeadingInterpolation(PedroComponent.follower().getHeading(), loadingZonePose.getHeading())
                 .build();
     }
     @Override
@@ -59,8 +72,7 @@ public abstract class TeleOp_00_base extends NextFTCOpMode {
             Gamepads.gamepad1().leftStickY().negate(),
             Gamepads.gamepad1().leftStickX().negate(),
             Gamepads.gamepad1().rightStickX().negate());
-//        PedroComponent.follower().setStartingPose(Config.autoEndPose == null ? new Pose() : Config.autoEndPose);
-        PedroComponent.follower().setStartingPose(new Pose(112, 135.5, Math.toRadians(90)));
+        PedroComponent.follower().setStartingPose(Config.autoEndPose == null ? new Pose() : Config.autoEndPose);
         driverControlled.schedule();
 
         // Intake
@@ -77,25 +89,29 @@ public abstract class TeleOp_00_base extends NextFTCOpMode {
         Gamepads.gamepad1().dpadRight().whenBecomesTrue(
                 new ParallelGroup(Intake.INSTANCE.Stop, Catapult.INSTANCE.Launch03));
         Gamepads.gamepad1().rightTrigger().greaterThan(0.2).whenBecomesTrue(
-                new ParallelGroup(Intake.INSTANCE.Stop, Catapult.INSTANCE.LaunchInParallel));
-        Gamepads.gamepad1().rightBumper().whenBecomesTrue(
                 new SequentialGroup(
                     new ParallelGroup(Intake.INSTANCE.Stop, Camera.INSTANCE.getCatapultArtifactColors),
                     Catapult.INSTANCE.LaunchByPattern));
-//        Gamepads.gamepad1().a().whenBecomesTrue(Camera.INSTANCE.getCatapultArtifactColors);
+        Gamepads.gamepad1().rightBumper().whenBecomesTrue(
+                new SequentialGroup(
+                        new ParallelGroup(Intake.INSTANCE.Stop, Camera.INSTANCE.getCatapultArtifactColors),
+                        Catapult.INSTANCE.LaunchByPattern));
+
+        // Manual Settings
+        Gamepads.gamepad1().dpadDown().and(Gamepads.gamepad1().a()).whenBecomesTrue(new InstantCommand(() -> PedroComponent.follower().setPose(relocalizePose)));
+        Gamepads.gamepad1().dpadDown().and(Gamepads.gamepad1().b()).whenBecomesTrue(Camera.INSTANCE.capturePattern);
+        Gamepads.gamepad1().dpadDown().and(Gamepads.gamepad1().y()).whenBecomesTrue(Camera.INSTANCE.getCatapultArtifactColors);
 
         // Automated Driving Towards Target Pose
         // cancel automated driving and restart back to TeleOp drive
-        Gamepads.gamepad1().x().whenBecomesTrue(
-                new InstantCommand(() -> {
-                    PedroComponent.follower().startTeleopDrive();}));
+        Gamepads.gamepad1().x().whenBecomesTrue(new InstantCommand(() -> PedroComponent.follower().startTeleopDrive()));
+        // Drive to Loading Zone
+        Gamepads.gamepad1().a().whenBecomesTrue(new FollowPath(driveToLoadingZone,true, 1.0));
+        // Drive to Launch Near 1, then ToDo: Launch
+        Gamepads.gamepad1().b().whenBecomesTrue(new FollowPath(driveToLaunchNear1Pose,true, 1.0));
         // Drive to Base (parking)
-        Gamepads.gamepad1().y().whenBecomesTrue(
-                new SequentialGroup(
-                        new FollowPath(driveLatestToBase,true, 1.0)
-                ));
+        Gamepads.gamepad1().y().whenBecomesTrue(new FollowPath(driveToBase,true, 1.0));
     }
-
     @Override
     public void onUpdate() {
         telemetry.addData("run #", 1);
