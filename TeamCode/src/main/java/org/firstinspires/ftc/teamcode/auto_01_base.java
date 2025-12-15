@@ -14,8 +14,8 @@ import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 
-public abstract class auto_00_base extends NextFTCOpMode {
-    public auto_00_base() {
+public abstract class auto_01_base extends NextFTCOpMode {
+    public auto_01_base() {
         addComponents(
                 new PedroComponent(Constants::createFollower),
                 new SubsystemComponent(Intake.INSTANCE),
