@@ -26,40 +26,54 @@ public abstract class TeleOp_00_base extends NextFTCOpMode {
         );
     }
     private Pose relocalizePose;
-    private PathChain driveToBase, driveToLaunchNear1Pose, driveToLoadingZone;
+    private PathChain driveToBaseEndGame, driveToLoadingZone, driveToGate, driveToLaunchNear1Pose;
     public void buildPaths() {
-        Pose basePose, launchNear1Pose, loadingZonePose;
+        Pose baseEndGamePose, loadingZonePose, loadingZonePose2, gatePose, launch1Pose;
         // Robot Length: 17"; Robot Width: 17.5"
-        // ToDo: This is correct pose in the official field
-//        relocalizePose = new Pose(8.75, 8.5, Math.toRadians(0));
-        // ToDo: This is pose temporarily at custom half field
-        relocalizePose = new Pose(112, 135.5, Math.toRadians(90));
+        relocalizePose = new Pose(8.75, 8.5, Math.toRadians(0));
 
-        basePose = new Pose(38, 32, Math.toRadians(0));
-        launchNear1Pose = new Pose(92, 102, Math.toRadians(42));
-        loadingZonePose = new Pose(26, 28, Math.toRadians(90));
+        baseEndGamePose = new Pose(38, 32, Math.toRadians(0));
+        gatePose = new Pose(128, 60, Math.toRadians(0));
+        loadingZonePose = new Pose(20, 20, Math.toRadians(45));
+        loadingZonePose2 = new Pose(24, 16, Math.toRadians(45));
+        if (Config.goalOption == Config.GoalOptions.FAR) {
+//            launch1Pose = new Pose(84, 20, Math.toRadians(65));  // good for auto
+            launch1Pose = new Pose(68, 30, Math.toRadians(57));
+        } else { // NEAR
+            launch1Pose = new Pose(92, 102, Math.toRadians(42));  //ToDo
+        }
 
         if (Config.allianceColor == Config.AllianceColors.BLUE) {
             relocalizePose = relocalizePose.mirror();
-            basePose = basePose.mirror();
-            launchNear1Pose = launchNear1Pose.mirror();
+            baseEndGamePose = baseEndGamePose.mirror();
+            gatePose = gatePose.mirror();
+            launch1Pose = launch1Pose.mirror();
             loadingZonePose = loadingZonePose.mirror();
+            loadingZonePose2 = loadingZonePose2.mirror();
         }
 
-        driveToBase = PedroComponent.follower().pathBuilder()
-                .addPath(new BezierLine(PedroComponent.follower().getPose(), basePose))
-                .setLinearHeadingInterpolation(PedroComponent.follower().getHeading(), basePose.getHeading())
+        driveToBaseEndGame = PedroComponent.follower().pathBuilder()
+                .addPath(new BezierLine(PedroComponent.follower().getPose(), baseEndGamePose))
+                .setLinearHeadingInterpolation(PedroComponent.follower().getHeading(), baseEndGamePose.getHeading(), 0.5)
                 .build();
 
-        driveToLaunchNear1Pose = PedroComponent.follower().pathBuilder()
-                .addPath(new BezierLine(PedroComponent.follower().getPose(), launchNear1Pose))
-                .setLinearHeadingInterpolation(PedroComponent.follower().getHeading(), launchNear1Pose.getHeading())
+        driveToGate = PedroComponent.follower().pathBuilder()
+                .addPath(new BezierLine(PedroComponent.follower().getPose(), gatePose))
+                .setLinearHeadingInterpolation(PedroComponent.follower().getHeading(), gatePose.getHeading(), 0.5)
                 .build();
 
         driveToLoadingZone = PedroComponent.follower().pathBuilder()
                 .addPath(new BezierLine(PedroComponent.follower().getPose(), loadingZonePose))
-                .setLinearHeadingInterpolation(PedroComponent.follower().getHeading(), loadingZonePose.getHeading())
+                .setLinearHeadingInterpolation(PedroComponent.follower().getHeading(), loadingZonePose.getHeading(), 0.5)
                 .build();
+
+        driveToLaunchNear1Pose = PedroComponent.follower().pathBuilder()
+                .addPath(new BezierLine(PedroComponent.follower().getPose(), loadingZonePose2))
+                .setLinearHeadingInterpolation(PedroComponent.follower().getHeading(), loadingZonePose2.getHeading(), 0.5)
+                .addPath(new BezierLine(loadingZonePose2, launch1Pose))
+                .setLinearHeadingInterpolation(loadingZonePose2.getHeading(), launch1Pose.getHeading(), 0.5)
+                .build();
+
     }
     @Override
     public void onInit() {
@@ -99,19 +113,20 @@ public abstract class TeleOp_00_base extends NextFTCOpMode {
                         Catapult.INSTANCE.LaunchByPattern));
 
         // Manual Settings
-        Gamepads.gamepad1().dpadDown().and(Gamepads.gamepad1().a()).whenBecomesTrue(new InstantCommand(() -> PedroComponent.follower().setPose(relocalizePose)));
-        Gamepads.gamepad1().dpadDown().and(Gamepads.gamepad1().b()).whenBecomesTrue(Camera.INSTANCE.capturePattern);
-        Gamepads.gamepad1().dpadDown().and(Gamepads.gamepad1().y()).whenBecomesTrue(Camera.INSTANCE.getCatapultArtifactColors);
+        Gamepads.gamepad1().dpadDown().and(Gamepads.gamepad1().b()).whenBecomesTrue(new InstantCommand(() -> PedroComponent.follower().setPose(relocalizePose)));
+        Gamepads.gamepad1().dpadDown().and(Gamepads.gamepad1().y()).whenBecomesTrue(Camera.INSTANCE.capturePattern);
 
-        // Automated Driving Towards Target Pose
-        // cancel automated driving and restart back to TeleOp drive
-        Gamepads.gamepad1().x().whenBecomesTrue(new InstantCommand(() -> PedroComponent.follower().startTeleopDrive()));
+        // Auto-Drive
+        // Cancel automated driving and restart back to TeleOp drive
+        Gamepads.gamepad1().dpadDown().not().and(Gamepads.gamepad1().x()).whenBecomesTrue(new InstantCommand(() -> PedroComponent.follower().startTeleopDrive()));
         // Drive to Loading Zone
-        Gamepads.gamepad1().a().whenBecomesTrue(new FollowPath(driveToLoadingZone,true, 1.0));
-        // Drive to Launch Near 1, then ToDo: Launch
-        Gamepads.gamepad1().b().whenBecomesTrue(new FollowPath(driveToLaunchNear1Pose,true, 1.0));
+        Gamepads.gamepad1().dpadDown().not().and(Gamepads.gamepad1().a()).whenBecomesTrue(new FollowPath(driveToLoadingZone,true, 1.0));
+        // Drive to Launch 1
+        Gamepads.gamepad1().dpadDown().not().and(Gamepads.gamepad1().b()).whenBecomesTrue(new FollowPath(driveToLaunchNear1Pose,true, 1.0));
+        // Drive to Gate
+        Gamepads.gamepad1().dpadDown().not().and(Gamepads.gamepad1().y()).whenBecomesTrue(new FollowPath(driveToGate,true, 1.0));
         // Drive to Base (parking)
-        Gamepads.gamepad1().y().whenBecomesTrue(new FollowPath(driveToBase,true, 1.0));
+        Gamepads.gamepad1().dpadDown().and(Gamepads.gamepad1().a()).whenBecomesTrue(new FollowPath(driveToBaseEndGame,true, 1.0));
     }
     @Override
     public void onUpdate() {
@@ -122,6 +137,8 @@ public abstract class TeleOp_00_base extends NextFTCOpMode {
         telemetry.addData("intake", "%.0f", Intake.INSTANCE.intakeMotor.getPower());
         telemetry.addData("catapults (pos)", "01: %.0f | 02: %.0f | 03: %.0f", Catapult.INSTANCE.getPosition01(), Catapult.INSTANCE.getPosition02(), Catapult.INSTANCE.getPosition03());
         telemetry.addData("catapults (pattern)", "%s%s%s", Config.catapult01Color.toString().charAt(0), Config.catapult02Color.toString().charAt(0), Config.catapult03Color.toString().charAt(0));
+        telemetry.addLine("Auto-Drive: a=Load | b=Launch | y=Gate | x=Cancel");
+        telemetry.addLine("dpadDown+: a=Base | b=Relocalize | y=GetMotif");
         telemetry.update();
     }
 }

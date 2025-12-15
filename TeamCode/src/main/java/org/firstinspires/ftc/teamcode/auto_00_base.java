@@ -7,7 +7,6 @@ import com.pedropathing.util.Timer;
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.delays.Delay;
 import dev.nextftc.core.commands.groups.SequentialGroup;
-import dev.nextftc.core.commands.utility.NullCommand;
 import dev.nextftc.core.components.BindingsComponent;
 import dev.nextftc.core.components.SubsystemComponent;
 import dev.nextftc.extensions.pedro.FollowPath;
@@ -15,8 +14,8 @@ import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 
-public abstract class auto_00A_NearFromGoal extends NextFTCOpMode {
-    public auto_00A_NearFromGoal() {
+public abstract class auto_00_base extends NextFTCOpMode {
+    public auto_00_base() {
         addComponents(
                 new PedroComponent(Constants::createFollower),
                 new SubsystemComponent(Intake.INSTANCE),
