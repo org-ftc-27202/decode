@@ -7,6 +7,7 @@ import com.pedropathing.util.Timer;
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.delays.Delay;
 import dev.nextftc.core.commands.groups.SequentialGroup;
+import dev.nextftc.core.commands.utility.NullCommand;
 import dev.nextftc.core.components.BindingsComponent;
 import dev.nextftc.core.components.SubsystemComponent;
 import dev.nextftc.extensions.pedro.FollowPath;
@@ -26,20 +27,18 @@ public abstract class auto_00A_NearFromGoal extends NextFTCOpMode {
         );
     }
     private Timer opModeTimer;
-    private Pose startPose = new Pose(112, 135.5, Math.toRadians(90));
-    private Pose getPatternPose = new Pose(92, 92, Math.toRadians(110));
-    private Pose Launch1Pose = new Pose(92, 102, Math.toRadians(42));
-
     private PathChain driveFromStartToGetPattern, driveFromGetPatternToLaunch1;
+    private Pose startPose, getPatternPose, launchNear1Pose;
 
     public void buildPaths() {
-        final double CENTER_X = 72.0;
+        startPose = new Pose(112, 135.5, Math.toRadians(90));
+        getPatternPose = new Pose(92, 92, Math.toRadians(110));
+        launchNear1Pose = new Pose(92, 102, Math.toRadians(42));
 
         if (Config.allianceColor == Config.AllianceColors.BLUE) {
-            // mirror the x coordinate and heading
-            startPose = new Pose(CENTER_X - (startPose.getX() - CENTER_X), startPose.getY(), Math.toRadians(90));
-            getPatternPose = new Pose(CENTER_X - (getPatternPose.getX() - CENTER_X), getPatternPose.getY(), Math.toRadians(110));
-            Launch1Pose = new Pose(CENTER_X - (Launch1Pose.getX() - CENTER_X), Launch1Pose.getY(), Math.toRadians(45));
+            startPose = startPose.mirror();
+            getPatternPose = getPatternPose.mirror();
+            launchNear1Pose = launchNear1Pose.mirror();
         }
 
         driveFromStartToGetPattern = PedroComponent.follower().pathBuilder()
@@ -48,8 +47,8 @@ public abstract class auto_00A_NearFromGoal extends NextFTCOpMode {
                 .build();
 
         driveFromGetPatternToLaunch1 = PedroComponent.follower().pathBuilder()
-                .addPath(new BezierLine(getPatternPose, Launch1Pose))
-                .setLinearHeadingInterpolation(getPatternPose.getHeading(), Launch1Pose.getHeading())
+                .addPath(new BezierLine(getPatternPose, launchNear1Pose))
+                .setLinearHeadingInterpolation(getPatternPose.getHeading(), launchNear1Pose.getHeading())
                 .build();
     }
     private Command autonomousRoutine() {
@@ -57,16 +56,15 @@ public abstract class auto_00A_NearFromGoal extends NextFTCOpMode {
                 new FollowPath(driveFromStartToGetPattern, true),
                 new Delay(0.1),
                 Camera.INSTANCE.capturePattern,
-                new FollowPath(driveFromGetPatternToLaunch1, true)
-                ,
+                new FollowPath(driveFromGetPatternToLaunch1, true),
                 Catapult.INSTANCE.LaunchInParallel
         );
     }
     @Override
     public void onInit() {
-        Camera.INSTANCE.mapCameraHardware(hardwareMap);
         opModeTimer = new Timer();
 
+        Camera.INSTANCE.mapCameraHardware(hardwareMap);
         buildPaths();
         PedroComponent.follower().setPose(startPose);
     }
@@ -83,10 +81,9 @@ public abstract class auto_00A_NearFromGoal extends NextFTCOpMode {
         telemetry.addData("run #", 1);
         telemetry.addData("alliance", Config.allianceColor.toString());
         telemetry.addData("pattern", Config.motifPattern.toString());
-        telemetry.addData("pos", "x: %.0f | y: %.0f | heading: %.0f", PedroComponent.follower().getPose().getX(), PedroComponent.follower().getPose().getX(), Math.toDegrees(PedroComponent.follower().getPose().getHeading()));
+        telemetry.addData("pos", "x: %.1f | y: %.1f | heading: %.0f", PedroComponent.follower().getPose().getX(), PedroComponent.follower().getPose().getY(), Math.toDegrees(PedroComponent.follower().getPose().getHeading()));
         telemetry.addData("intake", "%.0f", Intake.INSTANCE.intakeMotor.getPower());
         telemetry.addData("catapults (pos)", "01: %.0f | 02: %.0f | 03: %.0f", Catapult.INSTANCE.getPosition01(), Catapult.INSTANCE.getPosition02(), Catapult.INSTANCE.getPosition03());
-        telemetry.addData("catapults (color)", "01: %s | 02: %s | 03: %s", Config.catapult01Color.toString(), Config.catapult02Color.toString(), Config.catapult03Color.toString());
         telemetry.addData("catapults (pattern)", "%s%s%s", Config.catapult01Color.toString().charAt(0), Config.catapult02Color.toString().charAt(0), Config.catapult03Color.toString().charAt(0));
         telemetry.addData("Timer", "%.2f", opModeTimer.getElapsedTimeSeconds());
         telemetry.update();

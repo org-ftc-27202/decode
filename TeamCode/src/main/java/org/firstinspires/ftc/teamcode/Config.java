@@ -5,7 +5,7 @@ import com.pedropathing.geometry.Pose;
 public class Config {
     public enum AllianceColors {RED, BLUE}
     public static AllianceColors allianceColor = AllianceColors.RED;
-    public static Pose autoEndPose = null;
+    public static Pose autoEndPose = new Pose(112, 135.5, Math.toRadians(90));;
     public enum MotifPatterns {GPP, PGP, PPG}
     public static MotifPatterns motifPattern = MotifPatterns.GPP;
     public enum Colors {PURPLE, GREEN}

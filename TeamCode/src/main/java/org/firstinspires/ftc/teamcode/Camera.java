@@ -110,7 +110,9 @@ public class Camera implements Subsystem {
                     }
                     else if (huskylensRightBlockLength == 1) {
                         if (huskylensRightBlocks[0].id == 2) {
-                            Config.catapult02Color = Config.Colors.GREEN;
+                            if (huskylensRightBlocks[0].x < 140)  // huskylens's center position is (160, 120)
+                                Config.catapult02Color = Config.Colors.GREEN;
+                            else Config.catapult01Color = Config.Colors.GREEN;
                         }
                     }
                 }
@@ -146,7 +148,9 @@ public class Camera implements Subsystem {
                     }
                     else if (huskylensLeftBlockLength == 1) {
                         if (huskylensLeftBlocks[0].id == 2) {
-                            Config.catapult02Color = Config.Colors.GREEN;
+                            if (huskylensLeftBlocks[0].x < 140)  // huskylens's center position is (160, 120)
+                                Config.catapult03Color = Config.Colors.GREEN;
+                            else Config.catapult02Color = Config.Colors.GREEN;
                         }
                     }
                 }

@@ -15,7 +15,7 @@ public class Catapult implements Subsystem {
     final double CATAPULT_LAUNCH_POWER = 0.8;  // for 3 springs -> near launch zone
     //    final double CATAPULT_LAUNCH_POWER = 1.0;  // for 4 springs -> far launch zone
     final int HALF_ROTATION = 700;  // smaller slip gear
-    final double LaunchingDelayInSeconds = 0.250;  // delay in between catapult launches
+    final double LaunchingDelayInSeconds = 0.150;  // delay in between catapult launches
 
     public static final Catapult INSTANCE = new Catapult();
     private Catapult() { }
@@ -23,7 +23,36 @@ public class Catapult implements Subsystem {
     private final MotorEx catapult01Motor = new MotorEx("catapult01");
     private final MotorEx catapult02Motor = new MotorEx("catapult02");
     private final MotorEx catapult03Motor = new MotorEx("catapult03");
-    private boolean flagLaunchByPatternComplete = false;
+
+    @Override
+    public void initialize() {
+        catapult01Motor.getMotor().setDirection(DcMotorEx.Direction.REVERSE);
+        catapult01Motor.getMotor().setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
+        catapult01Motor.getMotor().setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        catapult01Motor.getMotor().setTargetPosition(0);
+        catapult01Motor.getMotor().setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        catapult02Motor.getMotor().setDirection(DcMotorEx.Direction.REVERSE);
+        catapult02Motor.getMotor().setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
+        catapult02Motor.getMotor().setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        catapult02Motor.getMotor().setTargetPosition(0);
+        catapult02Motor.getMotor().setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        catapult03Motor.getMotor().setDirection(DcMotorEx.Direction.REVERSE);
+        catapult03Motor.getMotor().setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
+        catapult03Motor.getMotor().setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        catapult03Motor.getMotor().setTargetPosition(0);
+        catapult03Motor.getMotor().setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+    public double getPosition01() {
+        return catapult01Motor.getMotor().getCurrentPosition();
+    }
+    public double getPosition02() {
+        return catapult02Motor.getMotor().getCurrentPosition();
+    }
+    public double getPosition03() {
+        return catapult03Motor.getMotor().getCurrentPosition();
+    }
     public Command Launch01 = new LambdaCommand("Launch 01")
         .setStart(() -> catapult01Motor.getMotor().setPower(CATAPULT_LAUNCH_POWER))
         .setUpdate(() -> catapult01Motor.getMotor().setTargetPosition(HALF_ROTATION))
@@ -60,42 +89,36 @@ public class Catapult implements Subsystem {
             .setInterruptible(false)
             .requires(this);
 
-//    public Command LaunchInParallel = new ParallelGroup(
-//            Launch01, Launch02, Launch03);
     public Command LaunchInParallel = new ParallelGroup(
             Launch01,
-            new SequentialGroup(
-                    new Delay(LaunchingDelayInSeconds),
-                    Launch02),
-            new SequentialGroup(
-                    new Delay(LaunchingDelayInSeconds * 2),
-                    Launch03))
+            new SequentialGroup(new Delay(LaunchingDelayInSeconds), Launch02),
+            new SequentialGroup(new Delay(LaunchingDelayInSeconds * 2), Launch03))
             .requires(this);;
-    public Command Launch123 = new SequentialGroup(
-            Launch01, new Delay(LaunchingDelayInSeconds),
-            Launch02, new Delay(LaunchingDelayInSeconds),
-            Launch03)
+    public Command Launch123 = new ParallelGroup(
+            Launch01,
+            new SequentialGroup(new Delay(LaunchingDelayInSeconds), Launch02),
+            new SequentialGroup(new Delay(LaunchingDelayInSeconds * 2), Launch03))
             .requires(this);
 
-    public Command Launch213 = new SequentialGroup(
-            Launch02, new Delay(LaunchingDelayInSeconds),
-            Launch01, new Delay(LaunchingDelayInSeconds),
-            Launch03)
+    public Command Launch213 = new ParallelGroup(
+            Launch02,
+            new SequentialGroup(new Delay(LaunchingDelayInSeconds), Launch01),
+            new SequentialGroup(new Delay(LaunchingDelayInSeconds * 2), Launch03))
             .requires(this);
-    public Command Launch312 = new SequentialGroup(
-            Launch03, new Delay(LaunchingDelayInSeconds),
-            Launch01, new Delay(LaunchingDelayInSeconds),
-            Launch02)
+    public Command Launch312 = new ParallelGroup(
+            Launch03,
+            new SequentialGroup(new Delay(LaunchingDelayInSeconds), Launch01),
+            new SequentialGroup(new Delay(LaunchingDelayInSeconds * 2), Launch02))
             .requires(this);
-    public Command Launch132 = new SequentialGroup(
-            Launch01, new Delay(LaunchingDelayInSeconds),
-            Launch03, new Delay(LaunchingDelayInSeconds),
-            Launch02)
+    public Command Launch132 = new ParallelGroup(
+            Launch01,
+            new SequentialGroup(new Delay(LaunchingDelayInSeconds), Launch03),
+            new SequentialGroup(new Delay(LaunchingDelayInSeconds * 2), Launch02))
             .requires(this);
-    public Command Launch231 = new SequentialGroup(
-            Launch02, new Delay(LaunchingDelayInSeconds),
-            Launch03, new Delay(LaunchingDelayInSeconds),
-            Launch01)
+    public Command Launch231 = new ParallelGroup(
+            Launch02,
+            new SequentialGroup(new Delay(LaunchingDelayInSeconds), Launch03),
+            new SequentialGroup(new Delay(LaunchingDelayInSeconds * 2), Launch01))
             .requires(this);
     public Command LaunchByPattern =
             new WGIfElseCommand(() -> Config.motifPattern == Config.MotifPatterns.GPP,
@@ -121,35 +144,4 @@ public class Catapult implements Subsystem {
                                             ))
                             )))
                     .requires(this);
-
-    public double getPosition01() {
-        return catapult01Motor.getMotor().getCurrentPosition();
-    }
-    public double getPosition02() {
-        return catapult02Motor.getMotor().getCurrentPosition();
-    }
-    public double getPosition03() {
-        return catapult03Motor.getMotor().getCurrentPosition();
-    }
-
-    @Override
-    public void initialize() {
-        catapult01Motor.getMotor().setDirection(DcMotorEx.Direction.REVERSE);
-        catapult01Motor.getMotor().setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
-        catapult01Motor.getMotor().setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        catapult01Motor.getMotor().setTargetPosition(0);
-        catapult01Motor.getMotor().setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        catapult02Motor.getMotor().setDirection(DcMotorEx.Direction.REVERSE);
-        catapult02Motor.getMotor().setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
-        catapult02Motor.getMotor().setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        catapult02Motor.getMotor().setTargetPosition(0);
-        catapult02Motor.getMotor().setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        catapult03Motor.getMotor().setDirection(DcMotorEx.Direction.REVERSE);
-        catapult03Motor.getMotor().setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
-        catapult03Motor.getMotor().setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        catapult03Motor.getMotor().setTargetPosition(0);
-        catapult03Motor.getMotor().setMode(DcMotor.RunMode.RUN_TO_POSITION);
-    }
 }
