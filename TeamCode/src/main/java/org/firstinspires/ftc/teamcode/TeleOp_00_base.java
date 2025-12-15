@@ -25,9 +25,10 @@ public abstract class TeleOp_00_base extends NextFTCOpMode {
                 BindingsComponent.INSTANCE
         );
     }
-    private Pose relocalizePose, basePose, launchNear1Pose, loadingZonePose;
+    private Pose relocalizePose;
     private PathChain driveToBase, driveToLaunchNear1Pose, driveToLoadingZone;
     public void buildPaths() {
+        Pose basePose, launchNear1Pose, loadingZonePose;
         // Robot Length: 17"; Robot Width: 17.5"
         // ToDo: This is correct pose in the official field
 //        relocalizePose = new Pose(8.75, 8.5, Math.toRadians(0));
@@ -91,7 +92,7 @@ public abstract class TeleOp_00_base extends NextFTCOpMode {
         Gamepads.gamepad1().rightTrigger().greaterThan(0.2).whenBecomesTrue(
                 new SequentialGroup(
                     new ParallelGroup(Intake.INSTANCE.Stop, Camera.INSTANCE.getCatapultArtifactColors),
-                    Catapult.INSTANCE.LaunchByPattern));
+                    Catapult.INSTANCE.LaunchInParallel));
         Gamepads.gamepad1().rightBumper().whenBecomesTrue(
                 new SequentialGroup(
                         new ParallelGroup(Intake.INSTANCE.Stop, Camera.INSTANCE.getCatapultArtifactColors),

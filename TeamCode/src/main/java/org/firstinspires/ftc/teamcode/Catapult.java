@@ -12,10 +12,11 @@ import dev.nextftc.core.subsystems.Subsystem;
 import dev.nextftc.hardware.impl.MotorEx;
 
 public class Catapult implements Subsystem {
-    final double CATAPULT_LAUNCH_POWER = 0.8;  // for 3 springs -> near launch zone
-    //    final double CATAPULT_LAUNCH_POWER = 1.0;  // for 4 springs -> far launch zone
-    final int HALF_ROTATION = 700;  // smaller slip gear
-    final double LaunchingDelayInSeconds = 0.150;  // delay in between catapult launches
+    //    final double CATAPULT_LAUNCH_POWER = 0.8;  // for 3 springs -> near launch zone
+    final double CATAPULT_LAUNCH_POWER = 1.0;  // for 5 springs -> far launch zone
+    final int HALF_ROTATION = 710;
+    final double LAUNCHING_IN_PARALLEL_DELAY_IN_SECONDS = 0.100;  // delay in between catapult launches
+    final double LAUNCHING_DELAY_IN_SECONDS = 0.250;  // delay in between catapult launches
 
     public static final Catapult INSTANCE = new Catapult();
     private Catapult() { }
@@ -91,34 +92,34 @@ public class Catapult implements Subsystem {
 
     public Command LaunchInParallel = new ParallelGroup(
             Launch01,
-            new SequentialGroup(new Delay(LaunchingDelayInSeconds), Launch02),
-            new SequentialGroup(new Delay(LaunchingDelayInSeconds * 2), Launch03))
-            .requires(this);;
+            new SequentialGroup(new Delay(LAUNCHING_IN_PARALLEL_DELAY_IN_SECONDS), Launch02),
+            new SequentialGroup(new Delay(LAUNCHING_IN_PARALLEL_DELAY_IN_SECONDS * 2), Launch03))
+            .requires(this);
     public Command Launch123 = new ParallelGroup(
             Launch01,
-            new SequentialGroup(new Delay(LaunchingDelayInSeconds), Launch02),
-            new SequentialGroup(new Delay(LaunchingDelayInSeconds * 2), Launch03))
+            new SequentialGroup(new Delay(LAUNCHING_DELAY_IN_SECONDS), Launch02),
+            new SequentialGroup(new Delay(LAUNCHING_DELAY_IN_SECONDS * 2), Launch03))
             .requires(this);
 
     public Command Launch213 = new ParallelGroup(
             Launch02,
-            new SequentialGroup(new Delay(LaunchingDelayInSeconds), Launch01),
-            new SequentialGroup(new Delay(LaunchingDelayInSeconds * 2), Launch03))
+            new SequentialGroup(new Delay(LAUNCHING_DELAY_IN_SECONDS), Launch01),
+            new SequentialGroup(new Delay(LAUNCHING_DELAY_IN_SECONDS * 2), Launch03))
             .requires(this);
     public Command Launch312 = new ParallelGroup(
             Launch03,
-            new SequentialGroup(new Delay(LaunchingDelayInSeconds), Launch01),
-            new SequentialGroup(new Delay(LaunchingDelayInSeconds * 2), Launch02))
+            new SequentialGroup(new Delay(LAUNCHING_DELAY_IN_SECONDS), Launch01),
+            new SequentialGroup(new Delay(LAUNCHING_DELAY_IN_SECONDS * 2), Launch02))
             .requires(this);
     public Command Launch132 = new ParallelGroup(
             Launch01,
-            new SequentialGroup(new Delay(LaunchingDelayInSeconds), Launch03),
-            new SequentialGroup(new Delay(LaunchingDelayInSeconds * 2), Launch02))
+            new SequentialGroup(new Delay(LAUNCHING_DELAY_IN_SECONDS), Launch03),
+            new SequentialGroup(new Delay(LAUNCHING_DELAY_IN_SECONDS * 2), Launch02))
             .requires(this);
     public Command Launch231 = new ParallelGroup(
             Launch02,
-            new SequentialGroup(new Delay(LaunchingDelayInSeconds), Launch03),
-            new SequentialGroup(new Delay(LaunchingDelayInSeconds * 2), Launch01))
+            new SequentialGroup(new Delay(LAUNCHING_DELAY_IN_SECONDS), Launch03),
+            new SequentialGroup(new Delay(LAUNCHING_DELAY_IN_SECONDS * 2), Launch01))
             .requires(this);
     public Command LaunchByPattern =
             new WGIfElseCommand(() -> Config.motifPattern == Config.MotifPatterns.GPP,
