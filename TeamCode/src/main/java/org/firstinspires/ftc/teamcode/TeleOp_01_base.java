@@ -98,7 +98,7 @@ public abstract class TeleOp_01_base extends NextFTCOpMode {
         DriverControlledCommand driverControlled = new PedroDriverControlled(
             Gamepads.gamepad1().leftStickY().negate(),
             Gamepads.gamepad1().leftStickX().negate(),
-            Gamepads.gamepad1().rightStickX().negate());
+            Gamepads.gamepad1().rightStickX().negate().map(x -> x * 0.5));  // Scalar to reduce turn power
         PedroComponent.follower().setStartingPose(Config.autoEndPose == null ? new Pose() : Config.autoEndPose);
         driverControlled.schedule();
 
