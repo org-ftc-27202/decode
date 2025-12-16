@@ -1,27 +1,47 @@
 package org.firstinspires.ftc.teamcode;
 
-import dev.nextftc.control.ControlSystem;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import dev.nextftc.core.commands.Command;
+import dev.nextftc.core.commands.utility.LambdaCommand;
 import dev.nextftc.core.subsystems.Subsystem;
-import dev.nextftc.hardware.controllable.RunToVelocity;
 import dev.nextftc.hardware.impl.MotorEx;
 
 public class Intake implements Subsystem {
     public static final Intake INSTANCE = new Intake();
     private Intake() { }
-
-    public final MotorEx intakeMotor = new MotorEx("intake");
-
-    private final ControlSystem controlSystem = ControlSystem.builder()
-            .velPid(0.001, 0.0, 0.0)
-            .build();
-
-    public Command Inwards = new RunToVelocity(controlSystem, 2000.0).requires(this);
-    public Command Stop = new RunToVelocity(controlSystem, 0).requires(this);
-    public Command Outwards = new RunToVelocity(controlSystem, -750.0).requires(this);
+    private final MotorEx intakeMotor = new MotorEx("intake");
 
     @Override
-    public void periodic() {
-        intakeMotor.setPower(controlSystem.calculate());
+    public void initialize() {
+        intakeMotor.getMotor().setDirection(DcMotorEx.Direction.FORWARD);
+        intakeMotor.getMotor().setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
+        intakeMotor.getMotor().setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
+    public double getPower() {
+        return intakeMotor.getMotor().getPower();
+    }
+    public Command Inwards = new LambdaCommand("Inwards")
+            .setStart(() -> intakeMotor.getMotor().setPower(1.0))
+            .setUpdate(() -> {})
+            .setIsDone(() -> true)
+            .setStop(interrupted -> {})
+            .setInterruptible(true)
+            .requires(this);
+
+    public Command Stop = new LambdaCommand("Stop")
+            .setStart(() -> intakeMotor.getMotor().setPower(0))
+            .setUpdate(() -> {})
+            .setIsDone(() -> true)
+            .setStop(interrupted -> {})
+            .setInterruptible(true)
+            .requires(this);
+
+    public Command Outwards = new LambdaCommand("Outwards")
+            .setStart(() -> intakeMotor.getMotor().setPower(0.5))
+            .setUpdate(() -> {})
+            .setIsDone(() -> true)
+            .setStop(interrupted -> {})
+            .setInterruptible(true)
+            .requires(this);
 }

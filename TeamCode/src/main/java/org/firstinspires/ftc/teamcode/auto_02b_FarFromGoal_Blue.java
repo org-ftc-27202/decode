@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 @Autonomous(name = "02B Blue Far From Goal (Auto)", group = "00 Robot", preselectTeleOp = "02B Blue Far From Goal (TeleOp)")
 
-public class auto_02b_FarFromGoal_Blue extends auto_01_base {
+public class auto_02b_FarFromGoal_Blue extends auto_01_NearFromGoal_base {
     @Override
     public void onInit() {
         Config.allianceColor = Config.AllianceColors.BLUE;

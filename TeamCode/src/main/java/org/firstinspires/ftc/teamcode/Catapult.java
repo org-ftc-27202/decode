@@ -15,8 +15,8 @@ public class Catapult implements Subsystem {
     //    final double CATAPULT_LAUNCH_POWER = 0.8;  // for 3 springs -> near launch zone
     final double CATAPULT_LAUNCH_POWER = 1.0;  // for 5 springs -> far launch zone
     final int HALF_ROTATION = 710;
-    final double LAUNCHING_IN_PARALLEL_DELAY_IN_SECONDS = 0.300;  // delay in between catapult launches
-    final double LAUNCHING_DELAY_IN_SECONDS = 0.300;  // delay in between catapult launches
+    final double LAUNCHING_IN_PARALLEL_DELAY_IN_SECONDS = 0.250;  // delay in between catapult launches
+    final double LAUNCHING_DELAY_IN_SECONDS = 0.350;  // delay in between catapult launches
 
     public static final Catapult INSTANCE = new Catapult();
     private Catapult() { }
