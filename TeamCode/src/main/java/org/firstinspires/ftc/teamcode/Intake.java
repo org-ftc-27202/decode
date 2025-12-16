@@ -38,7 +38,7 @@ public class Intake implements Subsystem {
             .requires(this);
 
     public Command Outwards = new LambdaCommand("Outwards")
-            .setStart(() -> intakeMotor.getMotor().setPower(0.5))
+            .setStart(() -> intakeMotor.getMotor().setPower(-0.55))
             .setUpdate(() -> {})
             .setIsDone(() -> true)
             .setStop(interrupted -> {})

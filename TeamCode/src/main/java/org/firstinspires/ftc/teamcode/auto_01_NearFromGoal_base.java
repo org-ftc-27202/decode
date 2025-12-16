@@ -108,7 +108,7 @@ public abstract class auto_01_NearFromGoal_base extends NextFTCOpMode {
         telemetry.addData("alliance", Config.allianceColor.toString());
         telemetry.addData("pattern", Config.motifPattern.toString());
         telemetry.addData("pos", "x: %.1f | y: %.1f | heading: %.0f", PedroComponent.follower().getPose().getX(), PedroComponent.follower().getPose().getY(), Math.toDegrees(PedroComponent.follower().getPose().getHeading()));
-        telemetry.addData("intake", "%.0f", Intake.INSTANCE.getPower());
+        telemetry.addData("intake (power)", "%.0f", Intake.INSTANCE.getPower());
         telemetry.addData("catapults (pos)", "01: %.0f | 02: %.0f | 03: %.0f", Catapult.INSTANCE.getPosition01(), Catapult.INSTANCE.getPosition02(), Catapult.INSTANCE.getPosition03());
         telemetry.addData("catapults (pattern)", "%s%s%s", Config.catapult01Color.toString().charAt(0), Config.catapult02Color.toString().charAt(0), Config.catapult03Color.toString().charAt(0));
         telemetry.addData("Timer", "%.2f", opModeTimer.getElapsedTimeSeconds());
