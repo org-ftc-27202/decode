@@ -103,8 +103,7 @@ public abstract class TeleOp_01_base extends NextFTCOpMode {
         driverControlled.schedule();
 
         // Intake
-        Gamepads.gamepad1().leftBumper().toggleOnBecomesTrue().whenBecomesTrue(Intake.INSTANCE.Inwards);
-        Gamepads.gamepad1().leftBumper().toggleOnBecomesFalse().whenBecomesTrue(Intake.INSTANCE.Stop);
+        Gamepads.gamepad1().leftBumper().whenBecomesTrue(Intake.INSTANCE.Inwards);
         Gamepads.gamepad1().leftTrigger().greaterThan(0.2).whenBecomesTrue(Intake.INSTANCE.Outwards);
         Gamepads.gamepad1().leftTrigger().lessThan(0.2).whenBecomesTrue(Intake.INSTANCE.Stop);
 
