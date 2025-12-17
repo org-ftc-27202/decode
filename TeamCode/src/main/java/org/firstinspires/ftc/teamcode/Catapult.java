@@ -12,9 +12,8 @@ import dev.nextftc.core.subsystems.Subsystem;
 import dev.nextftc.hardware.impl.MotorEx;
 
 public class Catapult implements Subsystem {
-    //    final double CATAPULT_LAUNCH_POWER = 0.8;  // for 3 springs -> near launch zone
-    final double CATAPULT_LAUNCH_POWER = 1.0;  // for 5 springs -> far launch zone
-    final int HALF_ROTATION = 710;
+    private double CATAPULT_LAUNCH_POWER = 1.0;
+    private int HALF_ROTATION = 710;
     final double LAUNCHING_IN_PARALLEL_DELAY_IN_SECONDS = 0.250;  // delay in between catapult launches
     final double LAUNCHING_DELAY_IN_SECONDS = 0.350;  // delay in between catapult launches
 
@@ -27,6 +26,14 @@ public class Catapult implements Subsystem {
 
     @Override
     public void initialize() {
+        if (Config.goalOption == Config.GoalOptions.FAR) {
+            CATAPULT_LAUNCH_POWER = 1.0;
+            HALF_ROTATION = 710;
+        } else {    // NEAR
+            CATAPULT_LAUNCH_POWER = 0.80;
+            HALF_ROTATION = 700;
+        }
+
         catapult01Motor.getMotor().setDirection(DcMotorEx.Direction.REVERSE);
         catapult01Motor.getMotor().setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
         catapult01Motor.getMotor().setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
