@@ -141,17 +141,15 @@ public abstract class TeleOp_01_base extends NextFTCOpMode {
         // Cancel automated driving and restart back to TeleOp drive
         Gamepads.gamepad1().dpadDown().not().and(Gamepads.gamepad1().x()).whenBecomesTrue(new InstantCommand(() -> PedroComponent.follower().startTeleopDrive()));
         // Drive to Loading Zone
-        Gamepads.gamepad1().dpadDown().not().and(Gamepads.gamepad1().a()).whenBecomesTrue(new FollowPath(driveToLoadingZone,true, 1.0));
+        Gamepads.gamepad1().dpadDown().not().and(Gamepads.gamepad1().a()).whenBecomesTrue(
+                new SequentialGroup(
+                        new FollowPath(driveToLoadingZone,true, 1.0),
+                        new InstantCommand(() -> PedroComponent.follower().startTeleopDrive())));
         // Drive to Launch 1
         Gamepads.gamepad1().dpadDown().not().and(Gamepads.gamepad1().b()).whenBecomesTrue(new FollowPath(driveToLaunch1Pose,true, 1.0));
-        // Drive to Gate
+        // Drive to Launch 2
         Gamepads.gamepad1().dpadDown().not().and(Gamepads.gamepad1().y()).whenBecomesTrue(new FollowPath(driveToLaunch2Pose,true, 1.0));
         // Drive to Gate
-        Gamepads.gamepad1().dpadDown().not().and(Gamepads.gamepad1().y()).whenBecomesTrue(
-                new SequentialGroup(
-                    new FollowPath(driveToLaunch2Pose,true, 1.0),
-                    new InstantCommand(() -> PedroComponent.follower().startTeleopDrive())));
-        // Drive to Base (parking)
         Gamepads.gamepad1().dpadDown().and(Gamepads.gamepad1().a()).whenBecomesTrue(
                 new SequentialGroup(
                         new FollowPath(driveToGate,true, 1.0),
