@@ -35,6 +35,8 @@ public abstract class TeleOp_01_base extends NextFTCOpMode {
         baseEndGamePose = new Pose(38, 32, Math.toRadians(0));
         loadingZonePose = new Pose(20, 26, Math.toRadians(45));
         loadingZoneControlPose = new Pose(20, 36, Math.toRadians(45));
+        gatePose = new Pose(128, 66, Math.toRadians(0));
+        gateControlPose= new Pose(100, 66, Math.toRadians(0));
         if (Config.goalOption == Config.GoalOptions.FAR) {
             launch1Pose = new Pose(68, 30, Math.toRadians(57));
             launch1ControlPose = new Pose(60, 30, Math.toRadians(57));
@@ -48,20 +50,18 @@ public abstract class TeleOp_01_base extends NextFTCOpMode {
         }
 
         if (Config.allianceColor == Config.AllianceColors.BLUE) {
-            gatePose = new Pose(16, 80, Math.toRadians(180));
-            gateControlPose = new Pose(44, 72, Math.toRadians(180));
             relocalizePose = relocalizePose.mirror();
             baseEndGamePose = baseEndGamePose.mirror();
             loadingZonePose = loadingZonePose.mirror();
-            loadingZoneControlPose =loadingZoneControlPose.mirror();
+            loadingZoneControlPose = loadingZoneControlPose.mirror();
             launch1Pose = launch1Pose.mirror();
             launch1ControlPose = launch1ControlPose.mirror();
             launch2Pose = launch2Pose.mirror();
             launch2ControlPose = launch2ControlPose.mirror();
-        }  else {  // RED
-            gatePose = new Pose(128, 62, Math.toRadians(0));
-            gateControlPose= new Pose(100, 72, Math.toRadians(0));
+            gatePose = gatePose.mirror();
+            gateControlPose = gateControlPose.mirror();
         }
+
         driveToBaseEndGame = PedroComponent.follower().pathBuilder()
                 .addPath(new BezierCurve(PedroComponent.follower().getPose(), baseEndGamePose))
                 .setLinearHeadingInterpolation(PedroComponent.follower().getHeading(), baseEndGamePose.getHeading())
@@ -103,25 +103,35 @@ public abstract class TeleOp_01_base extends NextFTCOpMode {
         driverControlled.schedule();
 
         // Intake
-        Gamepads.gamepad1().leftBumper().whenBecomesTrue(Intake.INSTANCE.Inwards);
+        Gamepads.gamepad1().leftBumper().whenBecomesTrue(
+                new ParallelGroup(Intake.INSTANCE.Inwards,
+                        new InstantCommand(() -> PedroComponent.follower().startTeleopDrive())));
         Gamepads.gamepad1().leftTrigger().greaterThan(0.2).whenBecomesTrue(Intake.INSTANCE.Outwards);
         Gamepads.gamepad1().leftTrigger().lessThan(0.2).whenBecomesTrue(Intake.INSTANCE.Stop);
 
         // Catapults
         Gamepads.gamepad1().dpadLeft().whenBecomesTrue(
-                new ParallelGroup(Intake.INSTANCE.Stop, Catapult.INSTANCE.Launch01));
+                new SequentialGroup(
+                        new ParallelGroup(Intake.INSTANCE.Stop, Catapult.INSTANCE.Launch01),
+                        new InstantCommand(() -> PedroComponent.follower().startTeleopDrive())));
         Gamepads.gamepad1().dpadUp().whenBecomesTrue(
-                new ParallelGroup(Intake.INSTANCE.Stop, Catapult.INSTANCE.Launch02));
+                new SequentialGroup(
+                        new ParallelGroup(Intake.INSTANCE.Stop, Catapult.INSTANCE.Launch02),
+                        new InstantCommand(() -> PedroComponent.follower().startTeleopDrive())));
         Gamepads.gamepad1().dpadRight().whenBecomesTrue(
-                new ParallelGroup(Intake.INSTANCE.Stop, Catapult.INSTANCE.Launch03));
+                new SequentialGroup(
+                        new ParallelGroup(Intake.INSTANCE.Stop, Catapult.INSTANCE.Launch03),
+                        new InstantCommand(() -> PedroComponent.follower().startTeleopDrive())));
         Gamepads.gamepad1().rightBumper().whenBecomesTrue(
                new SequentialGroup(
                         new ParallelGroup(Intake.INSTANCE.Stop, Camera.INSTANCE.getCatapultArtifactColors),
-                        Catapult.INSTANCE.LaunchInParallel));
+                        Catapult.INSTANCE.LaunchInParallel,
+                        new InstantCommand(() -> PedroComponent.follower().startTeleopDrive())));
         Gamepads.gamepad1().rightTrigger().greaterThan(0.2).whenBecomesTrue(
                 new SequentialGroup(
                         new ParallelGroup(Intake.INSTANCE.Stop, Camera.INSTANCE.getCatapultArtifactColors),
-                        Catapult.INSTANCE.LaunchByPattern));
+                        Catapult.INSTANCE.LaunchByPattern,
+                        new InstantCommand(() -> PedroComponent.follower().startTeleopDrive())));
 
         // Manual Settings
         Gamepads.gamepad1().dpadDown().and(Gamepads.gamepad1().x()).whenBecomesTrue(new InstantCommand(() -> PedroComponent.follower().setPose(relocalizePose)));
@@ -136,10 +146,21 @@ public abstract class TeleOp_01_base extends NextFTCOpMode {
         Gamepads.gamepad1().dpadDown().not().and(Gamepads.gamepad1().b()).whenBecomesTrue(new FollowPath(driveToLaunch1Pose,true, 1.0));
         // Drive to Gate
         Gamepads.gamepad1().dpadDown().not().and(Gamepads.gamepad1().y()).whenBecomesTrue(new FollowPath(driveToLaunch2Pose,true, 1.0));
+        // Drive to Gate
+        Gamepads.gamepad1().dpadDown().not().and(Gamepads.gamepad1().y()).whenBecomesTrue(
+                new SequentialGroup(
+                    new FollowPath(driveToLaunch2Pose,true, 1.0),
+                    new InstantCommand(() -> PedroComponent.follower().startTeleopDrive())));
         // Drive to Base (parking)
-        Gamepads.gamepad1().dpadDown().and(Gamepads.gamepad1().a()).whenBecomesTrue(new FollowPath(driveToGate,true, 1.0));
+        Gamepads.gamepad1().dpadDown().and(Gamepads.gamepad1().a()).whenBecomesTrue(
+                new SequentialGroup(
+                        new FollowPath(driveToGate,true, 1.0),
+                        new InstantCommand(() -> PedroComponent.follower().startTeleopDrive())));
         // Drive to Base (parking)
-        Gamepads.gamepad1().dpadDown().and(Gamepads.gamepad1().b()).whenBecomesTrue(new FollowPath(driveToBaseEndGame,true, 1.0));
+        Gamepads.gamepad1().dpadDown().and(Gamepads.gamepad1().b()).whenBecomesTrue(
+            new SequentialGroup(
+                    new FollowPath(driveToBaseEndGame,true, 1.0),
+                    new InstantCommand(() -> PedroComponent.follower().startTeleopDrive())));
     }
     @Override
     public void onUpdate() {
