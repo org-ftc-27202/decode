@@ -98,9 +98,9 @@ public class Catapult implements Subsystem {
             .requires(this);
 
     public Command LaunchInParallel = new ParallelGroup(
-            Launch01,
-            new SequentialGroup(new Delay(LAUNCHING_IN_PARALLEL_DELAY_IN_SECONDS), Launch02),
-            new SequentialGroup(new Delay(LAUNCHING_IN_PARALLEL_DELAY_IN_SECONDS * 2), Launch03))
+            Launch02,
+            new SequentialGroup(new Delay(LAUNCHING_IN_PARALLEL_DELAY_IN_SECONDS), Launch01),
+            new SequentialGroup(new Delay(LAUNCHING_IN_PARALLEL_DELAY_IN_SECONDS), Launch03))
             .requires(this);
     public Command Launch123 = new ParallelGroup(
             Launch01,

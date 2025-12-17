@@ -26,18 +26,18 @@ public abstract class auto_01_NearFromGoal_base extends NextFTCOpMode {
         );
     }
     private Timer opModeTimer;
-    private PathChain driveToGetPattern, driveToLaunch1, driveToSpike1Start, driveToSpike1End, driveToLaunch1_2;
+    private PathChain driveToGetPattern, driveToLaunch1, driveToSpike1Start, driveToSpike1End, driveToLaunch1_2, driveToLeave;
     private Pose startPose;
 
     public void buildPaths() {
-        Pose getPatternPose, launchNear1Pose, spike1StartPose, spike1EndPose, launchNear1_2Pose;
+        Pose getPatternPose, launchNear1Pose, spike1StartPose, spike1EndPose, LeavePose;
 
         startPose = new Pose(112, 128, Math.toRadians(90));
         getPatternPose = new Pose(92, 92, Math.toRadians(110));
         launchNear1Pose = new Pose(86, 74, Math.toRadians(48));
         spike1StartPose = new Pose(100, 78, Math.toRadians(0));
         spike1EndPose = new Pose(130, 78, Math.toRadians(0));
-        launchNear1_2Pose = launchNear1Pose;
+        LeavePose = new Pose(100, 60, Math.toRadians(0));
 
         if (Config.allianceColor == Config.AllianceColors.BLUE) {
             startPose = startPose.mirror();
@@ -45,6 +45,7 @@ public abstract class auto_01_NearFromGoal_base extends NextFTCOpMode {
             launchNear1Pose = launchNear1Pose.mirror();
             spike1StartPose = spike1StartPose.mirror();
             spike1EndPose = spike1EndPose.mirror();
+            LeavePose = LeavePose.mirror();
         }
 
         driveToGetPattern = PedroComponent.follower().pathBuilder()
@@ -68,8 +69,13 @@ public abstract class auto_01_NearFromGoal_base extends NextFTCOpMode {
                 .build();
 
         driveToLaunch1_2 = PedroComponent.follower().pathBuilder()
-                .addPath(new BezierLine(spike1EndPose, launchNear1_2Pose))
-                .setLinearHeadingInterpolation(spike1EndPose.getHeading(), launchNear1_2Pose.getHeading())
+                .addPath(new BezierLine(spike1EndPose, launchNear1Pose))
+                .setLinearHeadingInterpolation(spike1EndPose.getHeading(), launchNear1Pose.getHeading())
+                .build();
+
+        driveToLeave = PedroComponent.follower().pathBuilder()
+                .addPath(new BezierLine(launchNear1Pose, LeavePose))
+                .setLinearHeadingInterpolation(launchNear1Pose.getHeading(), LeavePose.getHeading())
                 .build();
     }
     private Command autonomousRoutine() {
@@ -84,7 +90,8 @@ public abstract class auto_01_NearFromGoal_base extends NextFTCOpMode {
                 new FollowPath(driveToSpike1End),
                 new FollowPath(driveToLaunch1_2, true),
                 Intake.INSTANCE.Stop,
-                Catapult.INSTANCE.LaunchByPattern
+                Catapult.INSTANCE.LaunchByPattern,
+                new FollowPath(driveToLeave, true)
         );
     }
     @Override
@@ -111,7 +118,7 @@ public abstract class auto_01_NearFromGoal_base extends NextFTCOpMode {
         telemetry.addData("intake (power)", "%.0f", Intake.INSTANCE.getPower());
         telemetry.addData("catapults (pos)", "01: %.0f | 02: %.0f | 03: %.0f", Catapult.INSTANCE.getPosition01(), Catapult.INSTANCE.getPosition02(), Catapult.INSTANCE.getPosition03());
         telemetry.addData("catapults (pattern)", "%s%s%s", Config.catapult01Color.toString().charAt(0), Config.catapult02Color.toString().charAt(0), Config.catapult03Color.toString().charAt(0));
-        telemetry.addData("Timer", "%.2f", opModeTimer.getElapsedTimeSeconds());
+        telemetry.addData("Timer", "%.1f", opModeTimer.getElapsedTimeSeconds());
         telemetry.update();
     }
 }
