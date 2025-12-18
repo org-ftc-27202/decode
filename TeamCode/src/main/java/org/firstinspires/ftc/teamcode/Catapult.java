@@ -14,7 +14,7 @@ import dev.nextftc.hardware.impl.MotorEx;
 public class Catapult implements Subsystem {
     private double CATAPULT_LAUNCH_POWER = 1.0;
     private int HALF_ROTATION;
-    final double LAUNCHING_IN_PARALLEL_DELAY_IN_SECONDS = 0.100;  // delay in between catapult launches
+    final double LAUNCHING_IN_PARALLEL_DELAY_IN_SECONDS = 0.150;  // delay in between catapult launches
     final double LAUNCHING_BY_PATTERN_DELAY_IN_SECONDS = 0.550;  // delay in between catapult launches
 
     public static final Catapult INSTANCE = new Catapult();
@@ -28,10 +28,10 @@ public class Catapult implements Subsystem {
     public void initialize() {
         if (Config.goalOption == Config.GoalOptions.FAR) {
             CATAPULT_LAUNCH_POWER = 1.0;
-            HALF_ROTATION = 680;
+            HALF_ROTATION = 700;
         } else {    // NEAR
             CATAPULT_LAUNCH_POWER = 1.0;
-            HALF_ROTATION = 680;
+            HALF_ROTATION = 700;
         }
 
         catapult01Motor.getMotor().setDirection(DcMotorEx.Direction.REVERSE);
