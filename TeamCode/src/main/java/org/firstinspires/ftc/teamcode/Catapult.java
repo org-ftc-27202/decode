@@ -13,9 +13,9 @@ import dev.nextftc.hardware.impl.MotorEx;
 
 public class Catapult implements Subsystem {
     private double CATAPULT_LAUNCH_POWER = 1.0;
-    private int HALF_ROTATION = 710;
-    final double LAUNCHING_IN_PARALLEL_DELAY_IN_SECONDS = 0.250;  // delay in between catapult launches
-    final double LAUNCHING_DELAY_IN_SECONDS = 0.350;  // delay in between catapult launches
+    private int HALF_ROTATION;
+    final double LAUNCHING_IN_PARALLEL_DELAY_IN_SECONDS = 0.100;  // delay in between catapult launches
+    final double LAUNCHING_BY_PATTERN_DELAY_IN_SECONDS = 0.550;  // delay in between catapult launches
 
     public static final Catapult INSTANCE = new Catapult();
     private Catapult() { }
@@ -28,10 +28,10 @@ public class Catapult implements Subsystem {
     public void initialize() {
         if (Config.goalOption == Config.GoalOptions.FAR) {
             CATAPULT_LAUNCH_POWER = 1.0;
-            HALF_ROTATION = 710;
+            HALF_ROTATION = 680;
         } else {    // NEAR
-            CATAPULT_LAUNCH_POWER = 0.80;
-            HALF_ROTATION = 700;
+            CATAPULT_LAUNCH_POWER = 1.0;
+            HALF_ROTATION = 680;
         }
 
         catapult01Motor.getMotor().setDirection(DcMotorEx.Direction.REVERSE);
@@ -98,43 +98,62 @@ public class Catapult implements Subsystem {
             .requires(this);
 
     public Command LaunchInParallel = new ParallelGroup(
-            Launch02,
-            new SequentialGroup(new Delay(LAUNCHING_IN_PARALLEL_DELAY_IN_SECONDS), Launch01),
-            new SequentialGroup(new Delay(LAUNCHING_IN_PARALLEL_DELAY_IN_SECONDS), Launch03))
+            Launch01,
+            Launch03,
+            new SequentialGroup(new Delay(LAUNCHING_IN_PARALLEL_DELAY_IN_SECONDS), Launch02))
             .requires(this);
     public Command Launch123 = new ParallelGroup(
             Launch01,
-            new SequentialGroup(new Delay(LAUNCHING_DELAY_IN_SECONDS), Launch02),
-            new SequentialGroup(new Delay(LAUNCHING_DELAY_IN_SECONDS * 2), Launch03))
+            new SequentialGroup(new Delay(LAUNCHING_BY_PATTERN_DELAY_IN_SECONDS), Launch02),
+            new SequentialGroup(new Delay(LAUNCHING_BY_PATTERN_DELAY_IN_SECONDS * 2), Launch03))
             .requires(this);
-
     public Command Launch213 = new ParallelGroup(
             Launch02,
-            new SequentialGroup(new Delay(LAUNCHING_DELAY_IN_SECONDS), Launch01),
-            new SequentialGroup(new Delay(LAUNCHING_DELAY_IN_SECONDS * 2), Launch03))
-            .requires(this);
-    public Command Launch312 = new ParallelGroup(
-            Launch03,
-            new SequentialGroup(new Delay(LAUNCHING_DELAY_IN_SECONDS), Launch01),
-            new SequentialGroup(new Delay(LAUNCHING_DELAY_IN_SECONDS * 2), Launch02))
+            new SequentialGroup(new Delay(LAUNCHING_BY_PATTERN_DELAY_IN_SECONDS), Launch01),
+            new SequentialGroup(new Delay(LAUNCHING_BY_PATTERN_DELAY_IN_SECONDS * 2), Launch03))
             .requires(this);
     public Command Launch132 = new ParallelGroup(
             Launch01,
-            new SequentialGroup(new Delay(LAUNCHING_DELAY_IN_SECONDS), Launch03),
-            new SequentialGroup(new Delay(LAUNCHING_DELAY_IN_SECONDS * 2), Launch02))
+            new SequentialGroup(new Delay(LAUNCHING_BY_PATTERN_DELAY_IN_SECONDS), Launch03),
+            new SequentialGroup(new Delay(LAUNCHING_BY_PATTERN_DELAY_IN_SECONDS * 2), Launch02))
             .requires(this);
-    public Command Launch231 = new ParallelGroup(
+    public Command Launch1Then23 = new ParallelGroup(
+            Launch01,
+            new SequentialGroup(new Delay(LAUNCHING_BY_PATTERN_DELAY_IN_SECONDS), Launch02),
+            new SequentialGroup(new Delay(LAUNCHING_BY_PATTERN_DELAY_IN_SECONDS), Launch03))
+            .requires(this);
+    public Command Launch2Then13 = new ParallelGroup(
             Launch02,
-            new SequentialGroup(new Delay(LAUNCHING_DELAY_IN_SECONDS), Launch03),
-            new SequentialGroup(new Delay(LAUNCHING_DELAY_IN_SECONDS * 2), Launch01))
+            new SequentialGroup(new Delay(LAUNCHING_BY_PATTERN_DELAY_IN_SECONDS), Launch01),
+            new SequentialGroup(new Delay(LAUNCHING_BY_PATTERN_DELAY_IN_SECONDS), Launch03))
+            .requires(this);
+    public Command Launch3Then12 = new ParallelGroup(
+            Launch03,
+            new SequentialGroup(new Delay(LAUNCHING_BY_PATTERN_DELAY_IN_SECONDS), Launch01),
+            new SequentialGroup(new Delay(LAUNCHING_BY_PATTERN_DELAY_IN_SECONDS), Launch02))
+            .requires(this);
+    public Command Launch12Then3 = new ParallelGroup(
+            Launch01,
+            Launch02,
+            new SequentialGroup(new Delay(LAUNCHING_BY_PATTERN_DELAY_IN_SECONDS), Launch03))
+            .requires(this);
+    public Command Launch13Then2 = new ParallelGroup(
+            Launch01,
+            Launch03,
+            new SequentialGroup(new Delay(LAUNCHING_BY_PATTERN_DELAY_IN_SECONDS), Launch02))
+            .requires(this);
+    public Command Launch23Then1 = new ParallelGroup(
+            Launch02,
+            Launch03,
+            new SequentialGroup(new Delay(LAUNCHING_BY_PATTERN_DELAY_IN_SECONDS), Launch01))
             .requires(this);
     public Command LaunchByPattern =
             new WGIfElseCommand(() -> Config.motifPattern == Config.MotifPatterns.GPP,
                     new WGIfElseCommand(() -> Config.catapult01Color == Config.Colors.GREEN,
-                            Launch123,
+                            Launch1Then23,
                             new WGIfElseCommand(() -> Config.catapult02Color == Config.Colors.GREEN,
-                                    Launch213,
-                                    Launch312
+                                    Launch2Then13,
+                                    Launch3Then12
                             )),
                     new WGIfElseCommand(() -> Config.motifPattern == Config.MotifPatterns.PGP,
                             new WGIfElseCommand(() -> Config.catapult01Color == Config.Colors.GREEN,
@@ -145,10 +164,10 @@ public class Catapult implements Subsystem {
                                     )),
                             new WGIfElseCommand(() -> Config.motifPattern == Config.MotifPatterns.PPG,
                                     new WGIfElseCommand(() -> Config.catapult01Color == Config.Colors.GREEN,
-                                            Launch231,
+                                            Launch23Then1,
                                             new WGIfElseCommand(() -> Config.catapult02Color == Config.Colors.GREEN,
-                                                    Launch132,
-                                                    Launch123
+                                                    Launch13Then2,
+                                                    Launch12Then3
                                             ))
                             )))
                     .requires(this);

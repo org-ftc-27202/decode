@@ -35,7 +35,7 @@ public abstract class auto_02_FarFromGoal_base extends NextFTCOpMode {
 
         startPose = new Pose(86, 6, Math.toRadians(90));
         getPatternPose = new Pose(88, 18, Math.toRadians(90));
-        launchFar1Pose = new Pose(86, 18, Math.toRadians(67));
+        launchFar1Pose = new Pose(87, 18, Math.toRadians(67));
         spike3StartPose = new Pose(100, 36, Math.toRadians(0));
         spike3EndPose = new Pose(130, 36, Math.toRadians(0));
         LeavePose = new Pose(100, 60, Math.toRadians(0));
