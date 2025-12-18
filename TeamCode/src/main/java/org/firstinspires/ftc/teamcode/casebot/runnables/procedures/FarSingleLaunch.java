@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.casebot.runnables.procedures;
 
+import org.firstinspires.ftc.teamcode.casebot.subsystems.LeverTransfer;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.PedroDrivebase;
+import org.firstinspires.ftc.teamcode.casebot.subsystems.Spindexer;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Turret;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.InstantlyDo;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Parallel;
@@ -17,7 +19,7 @@ public class FarSingleLaunch extends Procedure {
                     PedroDrivebase.getInstance().getFollower().turnTo(Math.toRadians(PedroDrivebase.getInstance().getLaunchYaw()));
                 }),
                 new InstantlyDo(()->
-                        Turret.getInstance().setTurretVelocity(1600)
+                        Turret.getInstance().setTurretVelocity(1600.0)
                 ),
                 new SetPosition(Turret.getInstance().getTurretHoodServo(), 0.0),
                 new Parallel(
@@ -25,7 +27,7 @@ public class FarSingleLaunch extends Procedure {
                         new OuttakeColor(artifactColor),
                         new Procedure(
                                 "Start Driving",
-                                new Sleep(.5),
+                                new Sleep(1.5),
                                 new InstantlyDo(()->
                                         PedroDrivebase.getInstance().getFollower().startTeleopDrive(true)
                                 )
@@ -34,6 +36,11 @@ public class FarSingleLaunch extends Procedure {
 
         );
 
-        setRequiredSubsystems(PedroDrivebase.getInstance(), Turret.getInstance());
+        setRequiredSubsystems(
+                PedroDrivebase.getInstance(),
+                Turret.getInstance(),
+                LeverTransfer.getInstance(),
+                Spindexer.getInstance()
+        );
     }
 }

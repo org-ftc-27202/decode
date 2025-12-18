@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.util;
 
 public class TrajectoryCalculator {
-    private TrajectoryCalculator(){};
+    private TrajectoryCalculator() {}
     private final static double RADIUS = 0.12;
     private final static double MASS = 0.05;
     private final static double DRAG_CONSTANT = 0.4;
@@ -10,7 +10,7 @@ public class TrajectoryCalculator {
     private final static double CDAP = DRAG_CONSTANT * AREA * AIR_DENSITY / MASS;
 
 
-    // 1.0, 3.6576, 0.9906, 20.0, 1.0, 2.7
+    // 1.0, 20.0, 1.0, 2.7
     public static double[] calculateTrajectory(double initialRadians, double totalDistance, double inertialTotalX, double inertialTotalZ) {
         // desired air time
         double timeFinal = 0.7;

@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.casebot.runnables.procedures;
 
+import org.firstinspires.ftc.teamcode.casebot.subsystems.LeverTransfer;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.PedroDrivebase;
+import org.firstinspires.ftc.teamcode.casebot.subsystems.Spindexer;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Turret;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.InstantlyDo;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Parallel;
@@ -11,10 +13,10 @@ import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Sleep;
 public class FarColorLaunch extends Procedure {
     public FarColorLaunch() {
         super("FarColorLaunch",
-                /*new InstantlyDo(()-> {
+                new InstantlyDo(()-> {
                     //PedroDrivebase.getInstance().getFollower().activateAllPIDFs();
                     //PedroDrivebase.getInstance().getFollower().turnTo(Math.toRadians(PedroDrivebase.getInstance().getLaunchYaw()));
-                }),*/
+                }),
                 new InstantlyDo(()->
                         Turret.getInstance().setTurretVelocity(1600)
                 ),
@@ -33,6 +35,11 @@ public class FarColorLaunch extends Procedure {
 
         );
 
-        setRequiredSubsystems(PedroDrivebase.getInstance(), Turret.getInstance());
+        setRequiredSubsystems(
+                PedroDrivebase.getInstance(),
+                Turret.getInstance(),
+                LeverTransfer.getInstance(),
+                Spindexer.getInstance()
+        );
     }
 }

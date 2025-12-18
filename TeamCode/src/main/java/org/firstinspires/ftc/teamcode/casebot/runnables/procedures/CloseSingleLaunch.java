@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.casebot.runnables.procedures;
 
+import org.firstinspires.ftc.teamcode.casebot.subsystems.LeverTransfer;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.PedroDrivebase;
+import org.firstinspires.ftc.teamcode.casebot.subsystems.Spindexer;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Turret;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.InstantlyDo;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Parallel;
@@ -34,6 +36,11 @@ public class CloseSingleLaunch extends Procedure {
 
         );
 
-        setRequiredSubsystems(PedroDrivebase.getInstance(), Turret.getInstance());
+        setRequiredSubsystems(
+                PedroDrivebase.getInstance(),
+                Turret.getInstance(),
+                LeverTransfer.getInstance(),
+                Spindexer.getInstance()
+        );
     }
 }

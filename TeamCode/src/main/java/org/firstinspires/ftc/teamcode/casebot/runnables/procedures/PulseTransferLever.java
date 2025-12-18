@@ -10,12 +10,12 @@ public class PulseTransferLever extends Procedure {
 		super(
 				"PulseTransferLever",
 				// down
-				new SetPosition(LeverTransfer.getInstance().getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION),
-				new Sleep(0.05),
+				//new SetPosition(LeverTransfer.getInstance().getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION),
+				//new Sleep(0.10),
 
 				// up
 				new SetPosition(LeverTransfer.getInstance().getLeverTransferServo(), LeverTransfer.LEVER_UP_POSITION),
-				new Sleep(0.05),
+				new Sleep(0.10),
 
 				// down
 				new SetPosition(LeverTransfer.getInstance().getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION)//,

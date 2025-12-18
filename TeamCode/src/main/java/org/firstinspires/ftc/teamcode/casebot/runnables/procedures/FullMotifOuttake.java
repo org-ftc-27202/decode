@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Procedure;
 public class FullMotifOuttake extends Procedure {
     public FullMotifOuttake() {
         super(
-                "FullmotifOuttake",
+                "FullMotifOuttake",
                 new OuttakeMotifOrArtifactAt(0),
                 new OuttakeMotifOrArtifactAt(1),
                 new OuttakeMotifOrArtifactAt(2)

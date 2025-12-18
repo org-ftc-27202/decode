@@ -19,9 +19,7 @@ public class IntakeAt extends Procedure {
                 new WaitUntil(() ->
                         Spindexer.getInstance().getBreamBreak1Broken() ||
                         Spindexer.getInstance().getBeamBreak2Broken()
-                ),
-
-                new Sleep(0.02)
+                )
         );
 
         setRequiredSubsystems(

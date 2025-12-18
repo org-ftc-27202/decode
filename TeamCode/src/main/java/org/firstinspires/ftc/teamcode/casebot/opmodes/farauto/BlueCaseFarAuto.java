@@ -118,6 +118,7 @@ public final class BlueCaseFarAuto extends OpMode {
         PedroDrivebase.getInstance().setAllianceColor(PedroDrivebase.AllianceColor.BLUE);
         PedroDrivebase.getInstance().setOpMode(PedroDrivebase.opModeType.AUTO);
         caseBot.init(hardwareMap);
+        caseBot.setPrintDebug(true);
         follower = pedroDrivebase.getFollower();
         buildPaths();
         spindexer.setArtifactColorInSpindexer(0, DecodeDataTypes.ArtifactColor.PURPLE);

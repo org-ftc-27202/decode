@@ -46,11 +46,15 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
 
         @Override
         public void runOpMode() {
+            caseBot.setPrintDebug(true);
+
+            PedroDrivebase.getInstance().setOpMode(PedroDrivebase.opModeType.TELEOP);
+
             PedroDrivebase.getInstance().setAllianceColor(PedroDrivebase.AllianceColor.BLUE);
 
             // set up subsystems
             caseBot.init(hardwareMap);
-            PedroDrivebase.getInstance().setOpMode(PedroDrivebase.opModeType.TELEOP);
+
 
             // set up default directives
             pedroDrivebase.setDefaultDirective(new PedroDefaultDrivebase(gamepad1, gamepad2));
@@ -104,6 +108,13 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
                 // print telemetry
                 try {
                     telemetry.addLine(caseBot.toString());
+                    telemetry.addLine(
+                            String.format("%s, %s, %s",
+                                    Spindexer.getInstance().getArtifactColorAt(0),
+                                    Spindexer.getInstance().getArtifactColorAt(1),
+                                    Spindexer.getInstance().getArtifactColorAt(2)
+                            )
+                    );
 
                     telemetry.addLine(
                             String.format("Cycle Time: %d", System.currentTimeMillis() - lastCycleTime)

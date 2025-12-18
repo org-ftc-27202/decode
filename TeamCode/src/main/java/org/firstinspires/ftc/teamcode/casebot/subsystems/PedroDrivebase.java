@@ -77,6 +77,7 @@ public final class PedroDrivebase extends Subsystem {
     private DcMotorEx leftFrontDrive, leftBackDrive, rightFrontDrive, rightBackDrive;
     private StellarLight lightLeft, lightRight;
 
+
     @Override
     public void init(HardwareMap hardwareMap) {
         if (!hasSetAllianceColor) {
@@ -84,18 +85,21 @@ public final class PedroDrivebase extends Subsystem {
         }
 
         needsToStart = true;
-        follower = Constants.createFollower(hardwareMap);
-        if (opMode == opModeType.AUTO){
-            follower.setStartingPose(new Pose(STARTING_X, STARTING_Y, Math.toRadians(90)));
-            firstInit = false;
-
-        }else if (opMode == opModeType.TELEOP && firstInit){
-            follower.setStartingPose(new Pose(STARTING_X, STARTING_Y, Math.toRadians(90)));
-            firstInit = false;
-
+        if (follower == null || opMode == opModeType.AUTO) {
+            follower = Constants.createFollower(hardwareMap);
         }
+
+        if (opMode == opModeType.AUTO) {
+            follower.setStartingPose(new Pose(STARTING_X, STARTING_Y, Math.toRadians(90)));
+            firstInit = false;
+        } else if (opMode == opModeType.TELEOP && firstInit){
+            follower.setStartingPose(new Pose(STARTING_X, STARTING_Y, Math.toRadians(90)));
+            firstInit = false;
+        }
+
         lightLeft = new StellarLight(hardwareMap, "lightLeft");
         lightRight = new StellarLight(hardwareMap, "lightRight");
+
         //todo: make omni wheel directive
         leftFrontDrive = hardwareMap.get(DcMotorEx.class, "leftFront");
         leftBackDrive = hardwareMap.get(DcMotorEx.class, "leftBack");
