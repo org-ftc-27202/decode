@@ -28,10 +28,10 @@ public class Catapult implements Subsystem {
     public void initialize() {
         if (Config.goalOption == Config.GoalOptions.FAR) {
             CATAPULT_LAUNCH_POWER = 1.0;
-            HALF_ROTATION = 700;
+            HALF_ROTATION = 710;
         } else {    // NEAR
             CATAPULT_LAUNCH_POWER = 1.0;
-            HALF_ROTATION = 700;
+            HALF_ROTATION = 710;
         }
 
         catapult01Motor.getMotor().setDirection(DcMotorEx.Direction.REVERSE);
