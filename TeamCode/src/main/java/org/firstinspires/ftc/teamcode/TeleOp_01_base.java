@@ -137,9 +137,9 @@ public abstract class TeleOp_01_base extends NextFTCOpMode {
         Gamepads.gamepad1().dpadDown().not().and(Gamepads.gamepad1().x()).whenBecomesTrue(new InstantCommand(() -> PedroComponent.follower().startTeleopDrive()));
         // Drive to Loading Zone
         Gamepads.gamepad1().dpadDown().not().and(Gamepads.gamepad1().a()).whenBecomesTrue(new FollowPath(driveToLoadingZone, true, 1.0));
-        // Drive to Launch 1 and Launch in Parallel
+        // Drive to Launch 1
         Gamepads.gamepad1().dpadDown().not().and(Gamepads.gamepad1().b()).whenBecomesTrue(new FollowPath(driveToLaunch1Pose, true, 1.0));
-        // Drive to Launch 2 and Launch in Parallel
+        // Drive to Launch 2
         Gamepads.gamepad1().dpadDown().not().and(Gamepads.gamepad1().y()).whenBecomesTrue(new FollowPath(driveToLaunch2Pose, true, 1.0));
         // Drive to Gate
         Gamepads.gamepad1().dpadDown().and(Gamepads.gamepad1().a()).whenBecomesTrue(new FollowPath(driveToGate,true, 1.0));
@@ -158,10 +158,10 @@ public abstract class TeleOp_01_base extends NextFTCOpMode {
         telemetry.addData("Timer", "%.1f", opModeTimer.getElapsedTimeSeconds());
         telemetry.addLine("--------------------");
         telemetry.addLine("Intake: leftBumper=In/Off leftTrigger=Out/Off");
+        telemetry.addLine("Drive To: a=Load b=Launch1 y=Launch2 x=Cancel");
+        telemetry.addLine("dpadDown+: a=Gate b=End x=Relocalize y=Motif");
         telemetry.addLine("Launch: rightBumper=Parallel rightTrigger=Pattern");
         telemetry.addLine("Launch: dpadLeft=01 dpadUp=02 dpadRight=03");
-        telemetry.addLine("Drive: a=Load b=Launch1 y=Launch2 x=Cancel");
-        telemetry.addLine("dpadDown+: a=Gate b=End x=Relocalize y=Motif");
         telemetry.update();
     }
 }
