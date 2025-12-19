@@ -34,7 +34,7 @@ public abstract class auto_01_NearFromGoal_base extends NextFTCOpMode {
 
         startPose = new Pose(112, 128, Math.toRadians(90));
         getPatternPose = new Pose(92, 92, Math.toRadians(110));
-        launchNear1Pose = new Pose(94, 82, Math.toRadians(50));
+        launchNear1Pose = new Pose(92, 80, Math.toRadians(50));
         spike1StartPose = new Pose(100, 78, Math.toRadians(0));
         spike1EndPose = new Pose(130, 78, Math.toRadians(0));
         LeavePose = new Pose(100, 60, Math.toRadians(0));
