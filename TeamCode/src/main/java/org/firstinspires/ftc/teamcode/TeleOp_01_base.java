@@ -42,8 +42,8 @@ public abstract class TeleOp_01_base extends NextFTCOpMode {
             launch1Pose = new Pose(65.5, 26.5, Math.toRadians(58));
             launch2Pose = new Pose(87, 18, Math.toRadians(67));  // works for TeleOp and auto
         } else { // NEAR
-            launch1Pose = new Pose(91, 77, Math.toRadians(54));  // works for TeleOp and auto
-            launch2Pose = new Pose(78, 111, Math.toRadians(15));
+            launch1Pose = new Pose(94, 82, Math.toRadians(50));  // works for TeleOp and auto
+            launch2Pose = new Pose(72, 118, Math.toRadians(8));
         }
 
         if (Config.allianceColor == Config.AllianceColors.BLUE) {
