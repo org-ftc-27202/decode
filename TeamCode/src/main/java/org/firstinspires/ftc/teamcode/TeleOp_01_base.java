@@ -5,6 +5,7 @@ import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 
+import dev.nextftc.core.commands.delays.Delay;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.commands.utility.InstantCommand;
@@ -134,17 +135,32 @@ public abstract class TeleOp_01_base extends NextFTCOpMode {
 
         // Auto Mode
         // Cancel automated driving and restart back to TeleOp drive
-        Gamepads.gamepad1().dpadDown().not().and(Gamepads.gamepad1().x()).whenBecomesTrue(new InstantCommand(() -> PedroComponent.follower().startTeleopDrive()));
+        Gamepads.gamepad1().dpadDown().not().and(Gamepads.gamepad1().x()).whenBecomesTrue(
+                new ParallelGroup(
+                        Intake.INSTANCE.Stop,
+                        new InstantCommand(() -> PedroComponent.follower().startTeleopDrive())));
         // Drive to Loading Zone
-        Gamepads.gamepad1().dpadDown().not().and(Gamepads.gamepad1().a()).whenBecomesTrue(new FollowPath(driveToLoadingZone, true, 1.0));
+        Gamepads.gamepad1().dpadDown().not().and(Gamepads.gamepad1().a()).whenBecomesTrue(
+                new ParallelGroup(
+                        Intake.INSTANCE.Stop,
+                        new FollowPath(driveToLoadingZone, true, 1.0)));
         // Drive to Launch 1
-        Gamepads.gamepad1().dpadDown().not().and(Gamepads.gamepad1().b()).whenBecomesTrue(new FollowPath(driveToLaunch1Pose, true, 1.0));
+        Gamepads.gamepad1().dpadDown().not().and(Gamepads.gamepad1().b()).whenBecomesTrue(
+                new ParallelGroup(
+                        new SequentialGroup(new Delay(1.5), Intake.INSTANCE.Stop),
+                        new FollowPath(driveToLaunch1Pose, true, 1.0)));
         // Drive to Launch 2
-        Gamepads.gamepad1().dpadDown().not().and(Gamepads.gamepad1().y()).whenBecomesTrue(new FollowPath(driveToLaunch2Pose, true, 1.0));
-        // Drive to Gate
-        Gamepads.gamepad1().dpadDown().and(Gamepads.gamepad1().a()).whenBecomesTrue(new FollowPath(driveToGate,true, 1.0));
+        Gamepads.gamepad1().dpadDown().not().and(Gamepads.gamepad1().y()).whenBecomesTrue(
+                new ParallelGroup(
+                        new SequentialGroup(new Delay(1.5), Intake.INSTANCE.Stop),
+                        new FollowPath(driveToLaunch2Pose, true, 1.0)));
+        // Drive to driveToGate
+        Gamepads.gamepad1().dpadDown().and(Gamepads.gamepad1().a()).whenBecomesTrue(new FollowPath(driveToGate, true, 1.0));
         // Drive to Base (parking)
-        Gamepads.gamepad1().dpadDown().and(Gamepads.gamepad1().b()).whenBecomesTrue(new FollowPath(driveToBaseEndGame,true, 1.0));
+        Gamepads.gamepad1().dpadDown().and(Gamepads.gamepad1().b()).whenBecomesTrue(
+                new ParallelGroup(
+                        Intake.INSTANCE.Stop,
+                        new FollowPath(driveToBaseEndGame, true, 1.0)));
     }
     @Override
     public void onUpdate() {
