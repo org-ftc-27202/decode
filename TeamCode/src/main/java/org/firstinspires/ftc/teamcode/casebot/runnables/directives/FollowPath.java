@@ -1,10 +1,13 @@
 package org.firstinspires.ftc.teamcode.casebot.runnables.directives;
 
+import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
+
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 
-import org.firstinspires.ftc.teamcode.casebot.subsystems.PedroDrivebase;
+import org.firstinspires.ftc.teamcode.casebot.subsystems.Camera;
+import org.firstinspires.ftc.teamcode.casebot.subsystems.Drivebase;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Directive;
 
 public class FollowPath extends Directive {
@@ -21,7 +24,7 @@ public class FollowPath extends Directive {
         this.endPose = endPose;
         this.holdEnd = holdEnd;
 
-        setRequiredSubsystems(PedroDrivebase.getInstance());
+        setRequiredSubsystems(subsystem(Drivebase.class));
     }
 
     @Override

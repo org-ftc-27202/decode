@@ -99,6 +99,7 @@ public final class BlueCaseFarAuto extends OpMode {
     @Override
     public void init() {
         caseBot.setupBot(
+            StellarBot.AllianceColor.BLUE,
             pedroDrivebase,
             intake,
             leverTransfer,
@@ -107,7 +108,6 @@ public final class BlueCaseFarAuto extends OpMode {
         );
 
         //this.follower = Constants.createFollower(hardwareMap);
-        pedroDrivebase.setAllianceColor(PedroDrivebase.AllianceColor.BLUE);
         pedroDrivebase.setOpMode(PedroDrivebase.opModeType.AUTO);
         caseBot.init(hardwareMap);
         caseBot.setPrintDebug(true);
@@ -132,8 +132,8 @@ public final class BlueCaseFarAuto extends OpMode {
         new Procedure(
                 "AutoDrive",
                 new SetPosition(leverTransfer.getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION),
-                new InstantlyDo(()->intake.setIntakeSpeed(1.0)),
-                new InstantlyDo(()->new GetMotifSequence().schedule()),
+                new InstantlyDo(() -> intake.setIntakeSpeed(1.0)),
+                new InstantlyDo(() -> new GetMotifSequence().schedule()),
                 new Sleep(2.0),
                 new FollowPath(path1, follower, new Pose(61.000, 24.000), true),
                 new FarMotifLaunch(),
@@ -142,9 +142,9 @@ public final class BlueCaseFarAuto extends OpMode {
                         new FullIntakeWaitForColor(),
                         new Procedure ("pickup",
                                 new FollowPath(path3, follower, new Pose(27.000, 35.500), true),
-                                new Sleep(.5),
+                                new Sleep(0.5),
                                 new FollowPath(path4, follower, new Pose(11.000, 35.500), true),
-                                new Sleep(.5)
+                                new Sleep(0.5)
                 )),
                 new FollowPath(path5, follower, new Pose(30.000, 30.000), true)
                 //new FarMotifLaunch(),
@@ -173,6 +173,7 @@ public final class BlueCaseFarAuto extends OpMode {
         telemetry.addData("y: ", follower.getPose().getY());
         telemetry.addData("heading: ", follower.getPose().getHeading());
         telemetry.addData("T: ", follower.getCurrentTValue());*/
+        telemetry.addLine();
         telemetry.addLine(caseBot.toString());
         telemetry.update();
     }

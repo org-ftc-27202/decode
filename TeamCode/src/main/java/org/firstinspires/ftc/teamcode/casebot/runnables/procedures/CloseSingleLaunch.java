@@ -11,17 +11,19 @@ import org.firstinspires.ftc.teamcode.stellarstructure.runnables.SetPosition;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Sleep;
 import org.firstinspires.ftc.teamcode.util.DecodeDataTypes;
 
+import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
+
 public class CloseSingleLaunch extends Procedure {
     public CloseSingleLaunch(DecodeDataTypes.ArtifactColor artifactColor) {
         super("CloseSingleLaunch",
                 new InstantlyDo(()-> {
-                    //PedroDrivebase.getInstance().getFollower().activateAllPIDFs();
-                    PedroDrivebase.getInstance().getFollower().turnTo(Math.toRadians(PedroDrivebase.getInstance().getLaunchYaw()));
+                    //subsystem(PedroDrivebase).getFollower().activateAllPIDFs();
+                    subsystem(PedroDrivebase.class).getFollower().turnTo(Math.toRadians(subsystem(PedroDrivebase.class).getLaunchYaw()));
                 }),
                 new InstantlyDo(()->
-                        Turret.getInstance().setTurretVelocity(1300.0)
+                        subsystem(Turret.class).setTurretVelocity(1300.0)
                 ),
-                new SetPosition(Turret.getInstance().getTurretHoodServo(), 0.25),
+                new SetPosition(subsystem(Turret.class).getTurretHoodServo(), 0.25),
                 new Parallel(
                         "Launch+Stop",
                         new OuttakeColor(artifactColor),
@@ -29,7 +31,7 @@ public class CloseSingleLaunch extends Procedure {
                                 "Start Driving",
                                 new Sleep(0.5),
                                 new InstantlyDo(()->
-                                        PedroDrivebase.getInstance().getFollower().startTeleopDrive(true)
+                                        subsystem(PedroDrivebase.class).getFollower().startTeleopDrive(true)
                                 )
                         )
                 )
@@ -37,10 +39,10 @@ public class CloseSingleLaunch extends Procedure {
         );
 
         setRequiredSubsystems(
-                PedroDrivebase.getInstance(),
-                Turret.getInstance(),
-                LeverTransfer.getInstance(),
-                Spindexer.getInstance()
+                subsystem(PedroDrivebase.class),
+                subsystem(Turret.class),
+                subsystem(LeverTransfer.class),
+                subsystem(Spindexer.class)
         );
     }
 }

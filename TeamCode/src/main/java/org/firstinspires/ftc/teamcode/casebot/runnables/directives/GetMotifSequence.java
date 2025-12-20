@@ -1,10 +1,13 @@
 package org.firstinspires.ftc.teamcode.casebot.runnables.directives;
 
+import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
+
 import android.util.Size;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Camera;
+import org.firstinspires.ftc.teamcode.casebot.subsystems.Spindexer;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Turret;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Directive;
 import org.firstinspires.ftc.teamcode.util.DecodeDataTypes;
@@ -112,7 +115,7 @@ public class GetMotifSequence extends Directive {
 
     public GetMotifSequence() {
         setInterruptible(true);
-        setRequiredSubsystems(Camera.getInstance()); // Ideally, require the Turret/Camera subsystem here if you have one
+        setRequiredSubsystems(subsystem(Camera.class)); // Ideally, require the Turret/Camera subsystem here if you have one
     }
 
     @Override
@@ -130,7 +133,7 @@ public class GetMotifSequence extends Directive {
 
         // FIX 1: Actually build the portal and assign it to the variable
         visionPortal = new VisionPortal.Builder()
-                .setCamera(Turret.getInstance().getWebcamName())
+                .setCamera(subsystem(Turret.class).getWebcamName())
                 .setCameraResolution(new Size(1280, 720))
                 .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
                 .addProcessor(aprilTag)

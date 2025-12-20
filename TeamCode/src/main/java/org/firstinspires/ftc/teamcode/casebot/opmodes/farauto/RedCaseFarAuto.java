@@ -37,14 +37,10 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
 @Autonomous(name = "-RED Case Auto Pedro", group = "Auto")
 public final class RedCaseFarAuto extends OpMode {
     @Override
-    public void init() {
-
-    }
+    public void init() {}
 
     @Override
-    public void loop() {
-
-    }
+    public void loop() {}
 
     /*
     private final double FLYWHEEL_LAUNCH = 1080;

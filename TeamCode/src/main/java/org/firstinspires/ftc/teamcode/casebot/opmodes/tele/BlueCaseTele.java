@@ -38,6 +38,7 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
         @Override
         public void runOpMode() {
             caseBot.setupBot(
+                    StellarBot.AllianceColor.BLUE,
                     pedroDrivebase,
                     intake,
                     leverTransfer,
@@ -45,11 +46,12 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
                     turret,
                     camera
             );
+
+            StellarBot.getInstance().getSubsystem(PedroDrivebase.class);
+
             caseBot.setPrintDebug(true);
 
             pedroDrivebase.setOpMode(PedroDrivebase.opModeType.TELEOP);
-
-            pedroDrivebase.setAllianceColor(PedroDrivebase.AllianceColor.BLUE);
 
             // set up subsystems
             caseBot.init(hardwareMap);

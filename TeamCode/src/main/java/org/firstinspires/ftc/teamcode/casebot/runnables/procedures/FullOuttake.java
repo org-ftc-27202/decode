@@ -4,6 +4,8 @@ import org.firstinspires.ftc.teamcode.casebot.subsystems.LeverTransfer;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Spindexer;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Procedure;
 
+import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
+
 public class FullOuttake extends Procedure {
     public FullOuttake() {
         super(
@@ -13,9 +15,9 @@ public class FullOuttake extends Procedure {
                 new OuttakeAt(() -> 2)
         );
 
-        setRequiredSubsystems(LeverTransfer.getInstance(),
-                Spindexer.getInstance(),
-                LeverTransfer.getInstance()
+        setRequiredSubsystems(
+                subsystem(Spindexer.class),
+                subsystem(LeverTransfer.class)
         );
     }
 }

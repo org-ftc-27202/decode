@@ -16,17 +16,26 @@ public class StellarBot {
 
 	private StellarBot() {}
 
-	private boolean isActive = false;
-
 	private final Scheduler scheduler = new Scheduler();
-	private boolean printDebug = false;
+	private boolean printDebug;
+	private AllianceColor allianceColor = AllianceColor.UNSET;
 
 	private final Map<Class<? extends Subsystem>, Subsystem> subsystems = new LinkedHashMap<>();
 
+	public enum AllianceColor {
+		UNSET,
+		RED,
+		BLUE
+	}
+
 	@SafeVarargs
-    public final <T extends Subsystem> void setupBot(T... constructorSubsystems) {
-		this.isActive = true;
+    public final <T extends Subsystem> void setupBot(@NonNull AllianceColor allianceColor, @NonNull T... constructorSubsystems) {
+		this.printDebug = false;
+
 		for (T subsystem : constructorSubsystems) {
+			if (subsystem == null) {
+				throw new IllegalArgumentException("Subsystems for setting up StellarBot cannot be null");
+			}
 			this.subsystems.put(subsystem.getClass(), subsystem);
 		}
 
@@ -35,9 +44,25 @@ public class StellarBot {
 		});
 	}
 
-	public final void init(HardwareMap hardwareMap) {
-		Scheduler.setGlobalInstance(this.scheduler);
+	public AllianceColor getAllianceColor() {
+		return this.allianceColor;
+	}
 
+	public Scheduler getScheduler() {
+		return this.scheduler;
+	}
+
+	// create a shortcut
+	// import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
+	public static <T extends Subsystem> T subsystem(Class<T> subsystemClass) {
+		return getInstance().getSubsystem(subsystemClass);
+	}
+
+	public <T extends Subsystem> T getSubsystem(@NonNull Class<? extends Subsystem> key) {
+		return (T) subsystems.get(key);
+	}
+
+	public final void init(@NonNull HardwareMap hardwareMap) {
 		// initialize all subsystems
 		subsystems.forEach((key, subsystem) -> {
 			subsystem.init(hardwareMap);
@@ -80,6 +105,5 @@ public class StellarBot {
 
 	public final void deactivateBot() {
 		scheduler.cancelAll();
-		this.isActive = false;
 	}
 }

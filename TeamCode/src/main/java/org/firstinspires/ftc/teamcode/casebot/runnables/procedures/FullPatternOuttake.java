@@ -5,6 +5,8 @@ import org.firstinspires.ftc.teamcode.casebot.subsystems.Spindexer;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Procedure;
 import org.firstinspires.ftc.teamcode.util.GameState;
 
+import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
+
 public class FullPatternOuttake extends Procedure {
     public FullPatternOuttake() {
         super(
@@ -16,8 +18,8 @@ public class FullPatternOuttake extends Procedure {
 
         setWaitForStartingConditions(false);
         setRequiredSubsystems(
-                Spindexer.getInstance(),
-                LeverTransfer.getInstance()
+                subsystem(Spindexer.class),
+                subsystem(LeverTransfer.class)
         );
     }
 }

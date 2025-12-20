@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+import org.firstinspires.ftc.teamcode.stellarstructure.StellarBot;
 import org.firstinspires.ftc.teamcode.stellarstructure.Subsystem;
 import org.firstinspires.ftc.teamcode.stellarstructure.hardwaremapwrappers.StellarLight;
 
@@ -19,44 +20,12 @@ public final class PedroDrivebase extends Subsystem {
     public final static double FAR_LAUNCH_FACTOR = 0.2;
     public final static double NEAR_LAUNCH_FACTOR = 0.4;
     public final static double LAUNCH_ZONE_SCALE = 6.2;
-    private boolean hasSetAllianceColor = false;
-    private double GOAL_X, GOAL_Y, STARTING_X, STARTING_Y;
+    private double GOAL_X, GOAL_Y;
     private opModeType opMode;
 
-    // BLUE LAUNCH
-    // GOAL X 8.0
-    // GOAL Y 143.0
-
-    // RED LAUNCH
-    // GOAL X 136.0
-    // GOAL Y 143.0
-
-    public enum AllianceColor {
-        BLUE,
-        RED
-    }
     public enum opModeType {
         AUTO,
         TELEOP
-    }
-    public void setAllianceColor(@NonNull AllianceColor allianceColor) {
-        if (allianceColor == AllianceColor.BLUE) {
-            GOAL_X = -18;
-            GOAL_Y = 144.0;
-
-            STARTING_X = 55.25;
-            STARTING_Y = 9.0;
-            hasSetAllianceColor = true;
-        } else if (allianceColor == AllianceColor.RED) {
-            GOAL_X = 155.0;
-            GOAL_Y = 144.0;
-
-            STARTING_X = 88.75;
-            STARTING_Y = 9.0;
-            hasSetAllianceColor = true;
-        } else {
-            throw new IllegalArgumentException("setAllianceColor() set to ");
-        }
     }
 
     public void setOpMode(@NonNull opModeType opMode) {
@@ -74,8 +43,30 @@ public final class PedroDrivebase extends Subsystem {
 
     @Override
     public void init(HardwareMap hardwareMap) {
-        if (!hasSetAllianceColor) {
-            throw new IllegalStateException("setAllianceColor() needs to be called in PedroDrivebase before init()");
+        double STARTING_X, STARTING_Y;
+        // BLUE LAUNCH
+        // GOAL X 8.0
+        // GOAL Y 143.0
+
+        // RED LAUNCH
+        // GOAL X 136.0
+        // GOAL Y 143.0
+
+        StellarBot.AllianceColor allianceColor = StellarBot.getInstance().getAllianceColor();
+        if (allianceColor == StellarBot.AllianceColor.BLUE) {
+            GOAL_X = -18.0;
+            GOAL_Y = 144.0;
+
+            STARTING_X = 55.25;
+            STARTING_Y = 9.0;
+        } else if (allianceColor == StellarBot.AllianceColor.RED) {
+            GOAL_X = 155.0;
+            GOAL_Y = 144.0;
+
+            STARTING_X = 88.75;
+            STARTING_Y = 9.0;
+        } else {
+            throw new IllegalArgumentException("PedroDrivebase needs set alliance color");
         }
 
         needsToStart = true;
@@ -177,6 +168,7 @@ public final class PedroDrivebase extends Subsystem {
         leftBackDrive.setPower(leftBackPower);
         rightBackDrive.setPower(rightBackPower);
     }
+
     public double getDistanceFromGoal(){
         return distanceFromGoal;
     }

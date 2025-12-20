@@ -5,24 +5,26 @@ import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Procedure;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.SetPosition;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Sleep;
 
+import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
+
 public class PulseTransferLever extends Procedure {
 	public PulseTransferLever() {
 		super(
 				"PulseTransferLever",
 				// down
-				//new SetPosition(LeverTransfer.getInstance().getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION),
+				//new SetPosition(subsystem(LeverTransfer.class).getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION),
 				//new Sleep(0.10),
 
 				// up
-				new SetPosition(LeverTransfer.getInstance().getLeverTransferServo(), LeverTransfer.LEVER_UP_POSITION),
+				new SetPosition(subsystem(LeverTransfer.class).getLeverTransferServo(), LeverTransfer.LEVER_UP_POSITION),
 				new Sleep(0.10),
 
 				// down
-				new SetPosition(LeverTransfer.getInstance().getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION)//,
+				new SetPosition(subsystem(LeverTransfer.class).getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION)//,
 				//new Sleep(0.05)
 		);
 
-		setRequiredSubsystems(LeverTransfer.getInstance());
+		setRequiredSubsystems(subsystem(LeverTransfer.class));
 
 		/*
 		setStartingConditions(
@@ -31,7 +33,7 @@ public class PulseTransferLever extends Procedure {
 		);*/
 
 		setRequiredSubsystems(
-				LeverTransfer.getInstance()
+				subsystem(LeverTransfer.class)
 		);
 	}
 }

@@ -26,9 +26,7 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
 @TeleOp(name = "-RED Case +Pedro", group = "Robot")
     public final class RedCaseTele extends LinearOpMode {
     @Override
-    public void runOpMode() throws InterruptedException {
-
-    }
+    public void runOpMode() throws InterruptedException {}
     /*
         private final PedroDrivebase pedroDrivebase = PedroDrivebase.getInstance();
         private final Intake intake = Intake.getInstance();
