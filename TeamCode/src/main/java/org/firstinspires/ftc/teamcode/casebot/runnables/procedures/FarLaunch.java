@@ -18,7 +18,7 @@ public class FarLaunch extends Procedure {
                     PedroDrivebase.getInstance().getFollower().turnTo(Math.toRadians(PedroDrivebase.getInstance().getLaunchYaw()));
                 }),
                 new InstantlyDo(()->
-                        Turret.getInstance().setTurretVelocity(1600)
+                        Turret.getInstance().setTurretVelocity(1600.0)
                 ),
                 new SetPosition(Turret.getInstance().getTurretHoodServo(), 0.0),
                 new Parallel(
@@ -32,7 +32,6 @@ public class FarLaunch extends Procedure {
                                 )
                         )
                 )
-
         );
 
         setRequiredSubsystems(

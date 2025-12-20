@@ -36,6 +36,17 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
 @Disabled
 @Autonomous(name = "-RED Case Auto Pedro", group = "Auto")
 public final class RedCaseFarAuto extends OpMode {
+    @Override
+    public void init() {
+
+    }
+
+    @Override
+    public void loop() {
+
+    }
+
+    /*
     private final double FLYWHEEL_LAUNCH = 1080;
     private final double TURRET_LAUNCH = 0;
     private final double HOOD_LAUNCH = 0;
@@ -178,14 +189,14 @@ public final class RedCaseFarAuto extends OpMode {
 
     @Override
     public void loop() {
-        caseBot.update();
-        follower.update();
-        /*telemetry.addData("x: ", follower.getPose().getX());
-        telemetry.addData("isBusy(): ", follower.isBusy());
-        telemetry.addData("y: ", follower.getPose().getY());
-        telemetry.addData("heading: ", follower.getPose().getHeading());
-        telemetry.addData("T: ", follower.getCurrentTValue());*/
+        //caseBot.update();
+        //follower.update();
+        //telemetry.addData("x: ", follower.getPose().getX());
+        //telemetry.addData("isBusy(): ", follower.isBusy());
+        //telemetry.addData("y: ", follower.getPose().getY());
+        //telemetry.addData("heading: ", follower.getPose().getHeading());
+        //telemetry.addData("T: ", follower.getCurrentTValue());
         telemetry.addLine(caseBot.toString());
         telemetry.update();
-    }
+    }*/
 }

@@ -22,39 +22,37 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
 
 @TeleOp(name = "-BLUECase +Pedro", group = "Robot")
     public final class BlueCaseTele extends LinearOpMode {
-        private final PedroDrivebase pedroDrivebase = PedroDrivebase.getInstance();
-        private final Intake intake = Intake.getInstance();
-        private final LeverTransfer leverTransfer = LeverTransfer.getInstance();
-        private final Spindexer spindexer = Spindexer.getInstance();
-        private final Camera camera = Camera.getInstance();
+        private final PedroDrivebase pedroDrivebase = new PedroDrivebase();
+        private final Intake intake = new Intake();
+        private final LeverTransfer leverTransfer = new LeverTransfer();
+        private final Spindexer spindexer = new Spindexer();
+        private final Camera camera = new Camera();
+        private final Turret turret = new Turret();
 
-        private final Turret turret = Turret.getInstance();
-    // Define these at the class level of your OpMode
-        private boolean poseResetToggled = false; // Tracks if the reset command has been run for the current press
-        private boolean currentResetState = false; // Tracks the state of the toggle (Optional: for alternate poses)
+        // define these at the class level of your OpMode
+        private boolean poseResetToggled = false; // tracks if the reset command has been run for the current press
 
-    private long lastCycleTime = 0;
-
-    private final StellarBot caseBot = new StellarBot(
-            pedroDrivebase,
-            intake,
-            leverTransfer,
-            spindexer,
-            turret,
-            camera
-    );
+        private long lastCycleTime = 0;
+        private final StellarBot caseBot = StellarBot.getInstance();
 
         @Override
         public void runOpMode() {
+            caseBot.setupBot(
+                    pedroDrivebase,
+                    intake,
+                    leverTransfer,
+                    spindexer,
+                    turret,
+                    camera
+            );
             caseBot.setPrintDebug(true);
 
-            PedroDrivebase.getInstance().setOpMode(PedroDrivebase.opModeType.TELEOP);
+            pedroDrivebase.setOpMode(PedroDrivebase.opModeType.TELEOP);
 
-            PedroDrivebase.getInstance().setAllianceColor(PedroDrivebase.AllianceColor.BLUE);
+            pedroDrivebase.setAllianceColor(PedroDrivebase.AllianceColor.BLUE);
 
             // set up subsystems
             caseBot.init(hardwareMap);
-
 
             // set up default directives
             pedroDrivebase.setDefaultDirective(new PedroDefaultDrivebase(gamepad1, gamepad2));
@@ -82,9 +80,9 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
             if (isStopRequested()) return;
 
             while (opModeIsActive()) {
-                // panic: cancels all runnables
+                // panic: reset bot
                 if (gamepad2.left_bumper && gamepad2.right_bumper) {
-                    caseBot.cancelAll();
+                    caseBot.deactivateBot();
                 }
                 // Define inputs and the single reset pose
                 boolean triggersDown = (gamepad2.left_trigger > 0.05) && (gamepad2.right_trigger > 0.05);
@@ -94,7 +92,7 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
 // This block runs ONLY on the moment the triggers are pressed (rising edge)
                 if (triggersDown && !poseResetToggled) {
                     // 1. Execute the reset
-                    PedroDrivebase.getInstance().getFollower().setPose(resetPose);
+                    pedroDrivebase.getFollower().setPose(resetPose);
                     // 2. Set the one-shot flag (prevents repeat execution while held)
                     poseResetToggled = true;
                 } else if (!triggersDown) {
@@ -110,9 +108,9 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
                     telemetry.addLine(caseBot.toString());
                     telemetry.addLine(
                             String.format("%s, %s, %s",
-                                    Spindexer.getInstance().getArtifactColorAt(0),
-                                    Spindexer.getInstance().getArtifactColorAt(1),
-                                    Spindexer.getInstance().getArtifactColorAt(2)
+                                    spindexer.getArtifactColorAt(0),
+                                    spindexer.getArtifactColorAt(1),
+                                    spindexer.getArtifactColorAt(2)
                             )
                     );
 
@@ -132,6 +130,6 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
             }
 
             // cancel triggers and runnables
-            caseBot.cancelAll();
+            caseBot.deactivateBot();
         }
 }

@@ -18,7 +18,7 @@ public class ShortMotifLaunch extends Procedure {
                     PedroDrivebase.getInstance().getFollower().turnTo(Math.toRadians(PedroDrivebase.getInstance().getLaunchYaw()));
                 }),
                 new InstantlyDo(()->
-                        Turret.getInstance().setTurretVelocity(1300)
+                        Turret.getInstance().setTurretVelocity(1300.0)
                 ),
                 new SetPosition(Turret.getInstance().getTurretHoodServo(), 0.25),
                 new Parallel(
@@ -26,7 +26,7 @@ public class ShortMotifLaunch extends Procedure {
                         new FullMotifOuttake(),
                         new Procedure(
                                 "Start Driving",
-                                new Sleep(.1),
+                                new Sleep(0.1),
                                 new InstantlyDo(()->
                                         PedroDrivebase.getInstance().getFollower().startTeleopDrive(true)
                                 )

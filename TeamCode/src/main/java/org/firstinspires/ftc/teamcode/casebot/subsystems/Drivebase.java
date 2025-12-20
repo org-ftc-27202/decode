@@ -9,12 +9,6 @@ import org.firstinspires.ftc.teamcode.stellarstructure.Subsystem;
 
 //todo: make init auto and init tele
 public final class Drivebase extends Subsystem {
-    private static final Drivebase drivebase = new Drivebase();
-    public static Drivebase getInstance() {
-        return drivebase;
-    }
-    private Drivebase() {}
-
     public final static double CARDINAL_SPEED = 0.70;
     public final static double TURN_SPEED = 0.55;
 

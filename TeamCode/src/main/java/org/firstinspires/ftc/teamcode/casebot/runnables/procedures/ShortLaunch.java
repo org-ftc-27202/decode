@@ -26,7 +26,7 @@ public class ShortLaunch extends Procedure {
                         new FullOuttake(),
                         new Procedure(
                                 "Start Driving",
-                                new Sleep(.5),
+                                new Sleep(0.5),
                                 new InstantlyDo(()->
                                         PedroDrivebase.getInstance().getFollower().startTeleopDrive(true)
                                 )

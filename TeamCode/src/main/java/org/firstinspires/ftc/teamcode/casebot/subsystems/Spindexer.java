@@ -17,11 +17,6 @@ import java.util.function.Supplier;
 
 
 public final class Spindexer extends Subsystem {
-	private static final Spindexer spindexer = new Spindexer();
-	public static Spindexer getInstance() {
-		return spindexer;
-	}
-	private Spindexer() {}
 	private final static double[] INTAKE_POSITIONS = {0.014, 0.382, 0.747};
 	private final static double[] TRANSFER_POSITIONS = {0.567, 0.938, 0.193};
 

@@ -18,7 +18,7 @@ public class FarColorLaunch extends Procedure {
                     //PedroDrivebase.getInstance().getFollower().turnTo(Math.toRadians(PedroDrivebase.getInstance().getLaunchYaw()));
                 }),
                 new InstantlyDo(()->
-                        Turret.getInstance().setTurretVelocity(1600)
+                        Turret.getInstance().setTurretVelocity(1600.0)
                 ),
                 new SetPosition(Turret.getInstance().getTurretHoodServo(), 0.0),
                 new Parallel(
@@ -26,7 +26,7 @@ public class FarColorLaunch extends Procedure {
                         new FullPatternOuttake(),
                         new Procedure(
                                 "Start Driving",
-                                new Sleep(.5),
+                                new Sleep(0.5),
                                 new InstantlyDo(()->
                                         PedroDrivebase.getInstance().getFollower().startTeleopDrive(true)
                                 )

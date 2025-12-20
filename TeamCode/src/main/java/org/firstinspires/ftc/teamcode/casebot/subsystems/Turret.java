@@ -22,12 +22,6 @@ import org.firstinspires.ftc.teamcode.stellarstructure.hardwaremapwrappers.Stell
 import org.firstinspires.ftc.teamcode.stellarstructure.hardwaremapwrappers.StellarServo;
 
 public final class Turret extends Subsystem {
-    private static final Turret turret = new Turret();
-    public static Turret getInstance() {
-        return turret;
-    }
-    private Turret() {}
-
     private final static double DEGREES_TO_SERVO = 1.0 / 320.0;
 
     private final static double TICKS_TO_ROTATION = 1.5 / 7.0;

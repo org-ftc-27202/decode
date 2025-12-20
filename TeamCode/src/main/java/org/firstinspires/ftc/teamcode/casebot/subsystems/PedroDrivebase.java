@@ -13,12 +13,6 @@ import org.firstinspires.ftc.teamcode.stellarstructure.hardwaremapwrappers.Stell
 
 //todo: make init auto and init tele
 public final class PedroDrivebase extends Subsystem {
-    private static final PedroDrivebase drivebase = new PedroDrivebase();
-    public static PedroDrivebase getInstance() {
-        return drivebase;
-    }
-    private PedroDrivebase() {}
-
     private static Follower follower;
     public final static double CARDINAL_SPEED = 1.00;
     public final static double TURN_SPEED = 0.70;
