@@ -13,19 +13,6 @@ import java.util.List;
 
 public class Scheduler {
 	// todo: make the scheduler check to see if a directive finishes instantly or smt
-	private static Scheduler activeSchedulerInstance;
-
-	public static void setGlobalInstance(Scheduler scheduler) {
-		activeSchedulerInstance = scheduler;
-	}
-
-	public static Scheduler getGlobalInstance() {
-		if (activeSchedulerInstance == null) {
-			throw new IllegalStateException("Scheduler global instance has not been set!");
-		}
-		return activeSchedulerInstance;
-	}
-
 	private final List<Subsystem> subsystems = new ArrayList<>();
 	private final List<Runnable> pendingRunnables = new ArrayList<>();
 	private final List<Runnable> activeRunnables = new ArrayList<>();
