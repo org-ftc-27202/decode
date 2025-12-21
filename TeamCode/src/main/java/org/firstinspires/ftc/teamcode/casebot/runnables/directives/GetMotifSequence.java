@@ -7,7 +7,6 @@ import android.util.Size;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Camera;
-import org.firstinspires.ftc.teamcode.casebot.subsystems.Spindexer;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Turret;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Directive;
 import org.firstinspires.ftc.teamcode.util.DecodeDataTypes;

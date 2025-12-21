@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.casebot.runnables.procedures;
 
+import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
+
 import org.firstinspires.ftc.teamcode.casebot.runnables.directives.SetSpindexerPosition;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.LeverTransfer;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Spindexer;
@@ -11,8 +13,6 @@ import org.firstinspires.ftc.teamcode.stellarstructure.runnables.WaitUntil;
 import org.firstinspires.ftc.teamcode.util.DecodeDataTypes;
 
 import java.util.function.Supplier;
-
-import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
 
 public class OuttakeAt extends Procedure {
     // todo: make suppliers easier to use for procedures

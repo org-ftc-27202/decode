@@ -1,9 +1,10 @@
 package org.firstinspires.ftc.teamcode.casebot.runnables.defaultdirectives;
 
+import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
+
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.IntakeAt;
-import org.firstinspires.ftc.teamcode.casebot.subsystems.Drivebase;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.GamepadButtonMap;
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.StatefulCondition;
@@ -12,8 +13,6 @@ import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Parallel;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Procedure;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Sleep;
 import org.firstinspires.ftc.teamcode.stellarstructure.triggers.ActionTrigger;
-
-import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
 
 public class DefaultIntake extends DefaultDirective {
 	private final Intake intake = subsystem(Intake.class);

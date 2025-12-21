@@ -5,7 +5,6 @@ import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsyst
 import com.pedropathing.follower.Follower;
 
 import org.firstinspires.ftc.teamcode.casebot.subsystems.PedroDrivebase;
-import org.firstinspires.ftc.teamcode.casebot.subsystems.Spindexer;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Directive;
 
 public class TurnTo extends Directive {

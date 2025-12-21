@@ -1,10 +1,10 @@
 package org.firstinspires.ftc.teamcode.casebot.runnables.procedures;
 
+import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
+
 import org.firstinspires.ftc.teamcode.casebot.subsystems.LeverTransfer;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Spindexer;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Procedure;
-
-import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
 
 public class FullMotifOuttake extends Procedure {
     public FullMotifOuttake() {

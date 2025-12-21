@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.casebot.runnables.defaultdirectives;
 
+import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
+
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.casebot.runnables.directives.GetMotifSequence;
@@ -11,7 +13,6 @@ import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FullIntake;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FullIntakeWaitForColor;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.ShortColorLaunch;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.ShortLaunch;
-import org.firstinspires.ftc.teamcode.casebot.subsystems.Drivebase;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.PedroDrivebase;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Spindexer;
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.GamepadButtonMap;
@@ -20,8 +21,6 @@ import org.firstinspires.ftc.teamcode.stellarstructure.runnables.DefaultDirectiv
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.InstantlyDo;
 import org.firstinspires.ftc.teamcode.stellarstructure.triggers.ActionTrigger;
 import org.firstinspires.ftc.teamcode.util.DecodeDataTypes;
-
-import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
 
 public class DefaultSpindexer extends DefaultDirective {
 	public DefaultSpindexer(Gamepad gamepad1, Gamepad gamepad2) {

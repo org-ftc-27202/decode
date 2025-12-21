@@ -10,4 +10,9 @@ public final class Camera extends Subsystem {
 
     @Override
     public void update() {}
+
+    @Override
+    public String toString() {
+        return "Camera";
+    }
 }

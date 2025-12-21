@@ -3,8 +3,8 @@ package org.firstinspires.ftc.teamcode.stellarstructure;
 
 import androidx.annotation.NonNull;
 
-import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Runnable;
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.Condition;
+import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Runnable;
 import org.firstinspires.ftc.teamcode.stellarstructure.triggers.Trigger;
 
 import java.util.ArrayList;

@@ -1,12 +1,11 @@
 package org.firstinspires.ftc.teamcode.casebot.runnables.defaultdirectives;
 
+import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
+
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.teamcode.casebot.subsystems.Drivebase;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Turret;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.DefaultDirective;
-
-import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
 
 public class DefaultTurret extends DefaultDirective {
     private final Turret turret = subsystem(Turret.class);

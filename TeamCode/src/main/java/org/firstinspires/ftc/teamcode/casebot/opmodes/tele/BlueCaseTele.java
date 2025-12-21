@@ -49,7 +49,7 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
 
             StellarBot.getInstance().getSubsystem(PedroDrivebase.class);
 
-            caseBot.setPrintDebug(true);
+            //caseBot.setPrintDebug(true);
 
             pedroDrivebase.setOpMode(PedroDrivebase.opModeType.TELEOP);
 
@@ -124,8 +124,7 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
                     telemetry.addData("telemetry didn't work", e);
                 }
 
-                telemetry.addLine();
-                telemetry.addLine("Honesty setting: 90%");
+                telemetry.addLine("\nHonesty setting: 90%");
                 telemetry.addLine("Humor setting: 75%");
 
                 telemetry.update();

@@ -30,6 +30,7 @@ public class StellarBot {
 
 	@SafeVarargs
     public final <T extends Subsystem> void setupBot(@NonNull AllianceColor allianceColor, @NonNull T... constructorSubsystems) {
+		this.allianceColor = allianceColor;
 		this.printDebug = false;
 
 		for (T subsystem : constructorSubsystems) {
@@ -39,11 +40,13 @@ public class StellarBot {
 			this.subsystems.put(subsystem.getClass(), subsystem);
 		}
 
+		// todo: add all at once
 		subsystems.forEach((key, subsystem) -> {
 			scheduler.addSubsystem(subsystem);
 		});
 	}
 
+	@NonNull
 	public AllianceColor getAllianceColor() {
 		return this.allianceColor;
 	}
@@ -58,8 +61,8 @@ public class StellarBot {
 		return getInstance().getSubsystem(subsystemClass);
 	}
 
-	public <T extends Subsystem> T getSubsystem(@NonNull Class<? extends Subsystem> key) {
-		return (T) subsystems.get(key);
+	public <T extends Subsystem> T getSubsystem(@NonNull Class<T> clazz) {
+		return clazz.cast(subsystems.get(clazz));
 	}
 
 	public final void init(@NonNull HardwareMap hardwareMap) {

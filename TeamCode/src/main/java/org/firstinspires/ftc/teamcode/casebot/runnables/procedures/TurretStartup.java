@@ -1,12 +1,11 @@
 package org.firstinspires.ftc.teamcode.casebot.runnables.procedures;
 
-import org.firstinspires.ftc.teamcode.casebot.subsystems.Spindexer;
+import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
+
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Turret;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.InstantlyDo;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Procedure;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Sleep;
-
-import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
 
 public class TurretStartup extends Procedure {
     public TurretStartup() {

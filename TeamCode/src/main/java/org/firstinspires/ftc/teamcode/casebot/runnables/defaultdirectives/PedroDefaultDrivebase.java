@@ -1,20 +1,19 @@
 package org.firstinspires.ftc.teamcode.casebot.runnables.defaultdirectives;
 
+import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
+
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.teamcode.casebot.subsystems.Drivebase;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.PedroDrivebase;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Turret;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.DefaultDirective;
-
-import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
 
 public class PedroDefaultDrivebase extends DefaultDirective {
 	private final Gamepad gamepad1;
 	private final Gamepad gamepad2;
 
 	public PedroDefaultDrivebase(Gamepad gamepad1, Gamepad gamepad2) {
-		super(subsystem(Drivebase.class));
+		super(subsystem(PedroDrivebase.class));
 
 		this.gamepad1 = gamepad1;
 		this.gamepad2 = gamepad2;
