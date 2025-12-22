@@ -26,18 +26,21 @@ public abstract class auto_01_NearFromGoal_base extends NextFTCOpMode {
         );
     }
     private Timer opModeTimer;
-    private PathChain driveToGetPattern, driveToLaunch1, driveToSpike1Start, driveToSpike1End, driveToLaunch1_2, driveToLeave;
+    private PathChain driveToGetPattern, driveToLaunch1, driveToSpike1Start, driveToSpike1End, driveToLaunch1_2,
+            driveToSpike2Start, driveToSpike2End, driveToLaunch2, driveToLeave;
     private Pose startPose;
 
     public void buildPaths() {
-        Pose getPatternPose, launchNear1Pose, spike1StartPose, spike1EndPose, LeavePose;
+        Pose getPatternPose, launchNear1Pose, spike1StartPose, spike1EndPose, LeavePose, spike2StartPose, spike2EndPose;
 
         startPose = new Pose(112, 128, Math.toRadians(90));
         getPatternPose = new Pose(92, 92, Math.toRadians(110));
         launchNear1Pose = new Pose(92, 80, Math.toRadians(50));
-        spike1StartPose = new Pose(100, 78, Math.toRadians(0));
+        spike1StartPose = new Pose(100, 84, Math.toRadians(0));
         spike1EndPose = new Pose(130, 78, Math.toRadians(0));
         LeavePose = new Pose(100, 60, Math.toRadians(0));
+        spike2StartPose = new Pose(100,60, Math.toRadians(0));
+        spike2EndPose = new Pose(130,60, Math.toRadians(0));
 
         if (Config.allianceColor == Config.AllianceColors.BLUE) {
             startPose = startPose.mirror();
@@ -77,6 +80,21 @@ public abstract class auto_01_NearFromGoal_base extends NextFTCOpMode {
                 .addPath(new BezierLine(launchNear1Pose, LeavePose))
                 .setLinearHeadingInterpolation(launchNear1Pose.getHeading(), LeavePose.getHeading())
                 .build();
+
+        driveToSpike2Start = PedroComponent.follower().pathBuilder()
+                .addPath(new BezierLine(launchNear1Pose, spike2StartPose))
+                .setLinearHeadingInterpolation(launchNear1Pose.getHeading(), spike2StartPose.getHeading())
+                .build();
+
+        driveToSpike2End = PedroComponent.follower().pathBuilder()
+                .addPath(new BezierLine(spike2StartPose, spike2EndPose))
+                .setLinearHeadingInterpolation(spike2StartPose.getHeading(), spike2EndPose.getHeading())
+                .build();
+
+        driveToLaunch2 = PedroComponent.follower().pathBuilder()
+                .addPath(new BezierLine(spike2EndPose, launchNear1Pose))
+                .setLinearHeadingInterpolation(spike2EndPose.getHeading(), launchNear1Pose.getHeading())
+                .build();
     }
     private Command autonomousRoutine() {
         return new SequentialGroup(
@@ -91,7 +109,12 @@ public abstract class auto_01_NearFromGoal_base extends NextFTCOpMode {
                 new FollowPath(driveToLaunch1_2, true),
                 Intake.INSTANCE.Stop,
                 Catapult.INSTANCE.LaunchByPattern,
-                new FollowPath(driveToLeave, true)
+                Intake.INSTANCE.Inwards,
+                new FollowPath(driveToSpike2Start, true),
+                new FollowPath(driveToSpike2End),
+                new FollowPath(driveToLaunch2),
+                Intake.INSTANCE.Stop,
+                Catapult.INSTANCE.LaunchByPattern
         );
     }
     @Override
