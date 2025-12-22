@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.casebot.runnables.directives.GetMotifSeque
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FarMotifLaunch;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FullIntakeWaitForColor;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.TurretStartup;
+import org.firstinspires.ftc.teamcode.casebot.subsystems.Camera;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.LeverTransfer;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.PedroDrivebase;
@@ -41,6 +42,7 @@ public final class BlueCaseFarAuto extends OpMode {
     private final LeverTransfer leverTransfer = new LeverTransfer();
     private final Spindexer spindexer = new Spindexer();
     private final Turret turret = new Turret();
+    private final Camera camera = new Camera();
 
     private Follower follower;
 
@@ -106,7 +108,8 @@ public final class BlueCaseFarAuto extends OpMode {
             intake,
             leverTransfer,
             spindexer,
-            turret
+            turret,
+                camera
         );
 
         //this.follower = Constants.createFollower(hardwareMap);

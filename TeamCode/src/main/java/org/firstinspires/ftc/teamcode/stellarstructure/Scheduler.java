@@ -176,7 +176,7 @@ public class Scheduler {
 		}
 	}
 
-	private boolean isSubsystemInUse(Subsystem subsystemToCheck) {
+	private boolean isSubsystemInUse(@NonNull Subsystem subsystemToCheck) {
 		List<Runnable> futureRunnables = new ArrayList<>();
 		futureRunnables.addAll(this.activeRunnables);
 		futureRunnables.addAll(this.runnablesToAdd);

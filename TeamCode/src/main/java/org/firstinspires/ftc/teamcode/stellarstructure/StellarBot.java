@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 public class StellarBot {
 	private static final StellarBot stellarBot = new StellarBot();
@@ -57,12 +58,18 @@ public class StellarBot {
 
 	// create a shortcut
 	// import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
-	public static <T extends Subsystem> T subsystem(Class<T> subsystemClass) {
+	@NonNull
+	public static <T extends Subsystem> T subsystem(@NonNull Class<T> subsystemClass) {
 		return getInstance().getSubsystem(subsystemClass);
 	}
-
+	@NonNull
 	public <T extends Subsystem> T getSubsystem(@NonNull Class<T> clazz) {
-		return clazz.cast(subsystems.get(clazz));
+		T gottenSubsystem = clazz.cast(subsystems.get(clazz));
+		if (gottenSubsystem==null){
+			throw new NoSuchElementException(String.format("No subsystem of key %s found in StellarBOt!", clazz));
+		}
+
+		return gottenSubsystem;
 	}
 
 	public final void init(@NonNull HardwareMap hardwareMap) {
