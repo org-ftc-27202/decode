@@ -10,7 +10,7 @@ import java.util.function.Supplier;
 public class SetSpindexerPosition extends Directive {
 	private final StellarServo servo;
 	private final Supplier<Double> targetPositionSupplier;
-	private double targetPosition = 0;
+	private double targetPosition = 0.0;
 
 	public SetSpindexerPosition(@NonNull StellarServo servo, Supplier<Double> targetPosition) {
 		super();

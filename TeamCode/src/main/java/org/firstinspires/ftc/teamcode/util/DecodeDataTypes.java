@@ -25,6 +25,7 @@ public class DecodeDataTypes {
             return this.displayName;
         }
     }
+
     public static class ArtifactSequence {
         private ArtifactColor[] sequence = new ArtifactColor[3];
 

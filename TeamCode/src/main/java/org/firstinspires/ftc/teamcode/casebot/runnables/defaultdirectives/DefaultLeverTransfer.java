@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.casebot.runnables.defaultdirectives;
 
+import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
+
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.PulseTransferLever;
@@ -10,10 +12,10 @@ import org.firstinspires.ftc.teamcode.stellarstructure.runnables.DefaultDirectiv
 import org.firstinspires.ftc.teamcode.stellarstructure.triggers.ActionTrigger;
 
 public class DefaultLeverTransfer extends DefaultDirective {
-	private final LeverTransfer leverTransfer = LeverTransfer.getInstance();
+	private final LeverTransfer leverTransfer = subsystem(LeverTransfer.class);
 
 	public DefaultLeverTransfer(Gamepad gamepad1) {
-		super(LeverTransfer.getInstance());
+		super(subsystem(LeverTransfer.class));
 
 		/*addTrigger(new ActionTrigger(
 				new StatefulCondition(

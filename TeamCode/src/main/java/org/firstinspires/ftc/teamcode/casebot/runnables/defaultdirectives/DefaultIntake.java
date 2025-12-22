@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.casebot.runnables.defaultdirectives;
 
+import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
+
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.IntakeAt;
@@ -13,10 +15,10 @@ import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Sleep;
 import org.firstinspires.ftc.teamcode.stellarstructure.triggers.ActionTrigger;
 
 public class DefaultIntake extends DefaultDirective {
-	private final Intake intake = Intake.getInstance();
+	private final Intake intake = subsystem(Intake.class);
 
 	public DefaultIntake(Gamepad gamepad1, Gamepad gamepad2) {
-		super(Intake.getInstance());
+		super(subsystem(Intake.class));
 
 		/*addTrigger(new IteratorTrigger(
 				new StatefulCondition(

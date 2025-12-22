@@ -1,30 +1,16 @@
 package org.firstinspires.ftc.teamcode.casebot.opmodes.tele;
 
-import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
-import org.firstinspires.ftc.teamcode.casebot.runnables.defaultdirectives.DefaultIntake;
-import org.firstinspires.ftc.teamcode.casebot.runnables.defaultdirectives.DefaultLeverTransfer;
-import org.firstinspires.ftc.teamcode.casebot.runnables.defaultdirectives.DefaultSpindexer;
-import org.firstinspires.ftc.teamcode.casebot.runnables.defaultdirectives.DefaultTurret;
-import org.firstinspires.ftc.teamcode.casebot.runnables.defaultdirectives.PedroDefaultDrivebase;
-import org.firstinspires.ftc.teamcode.casebot.subsystems.Camera;
-import org.firstinspires.ftc.teamcode.casebot.subsystems.Intake;
-import org.firstinspires.ftc.teamcode.casebot.subsystems.LeverTransfer;
-import org.firstinspires.ftc.teamcode.casebot.subsystems.PedroDrivebase;
-import org.firstinspires.ftc.teamcode.casebot.subsystems.Spindexer;
-import org.firstinspires.ftc.teamcode.casebot.subsystems.Turret;
-import org.firstinspires.ftc.teamcode.stellarstructure.StellarBot;
-import org.firstinspires.ftc.teamcode.util.TrajectoryCalculator;
-import org.firstinspires.ftc.teamcode.util.bootscreen.BootScreen;
-import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
 
 //todo
 @Disabled
 @TeleOp(name = "-RED Case +Pedro", group = "Robot")
     public final class RedCaseTele extends LinearOpMode {
+    @Override
+    public void runOpMode() throws InterruptedException {}
+    /*
         private final PedroDrivebase pedroDrivebase = PedroDrivebase.getInstance();
         private final Intake intake = Intake.getInstance();
         private final LeverTransfer leverTransfer = LeverTransfer.getInstance();
@@ -80,7 +66,7 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
             while (opModeIsActive()) {
                 // panic: cancels all runnables
                 if (gamepad2.left_bumper && gamepad2.right_bumper) {
-                    caseBot.cancelAll();
+                    caseBot.deactivateBot();
                 }
                 // Define inputs and the single reset pose
                 boolean triggersDown = (gamepad2.left_trigger > 0.05) && (gamepad2.right_trigger > 0.05);
@@ -116,6 +102,6 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
             }
 
             // cancel triggers and runnables
-            caseBot.cancelAll();
-        }
+            caseBot.deactivateBot();
+        }*/
 }

@@ -1,16 +1,18 @@
 package org.firstinspires.ftc.teamcode.casebot.runnables.defaultdirectives;
 
+import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
+
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Drivebase;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.DefaultDirective;
 
 public class DefaultDrivebase extends DefaultDirective {
-	private final Drivebase drivebase = Drivebase.getInstance();
+	private final Drivebase drivebase = subsystem(Drivebase.class);
 	private final Gamepad gamepad1;
 
 	public DefaultDrivebase(Gamepad gamepad1) {
-		super(Drivebase.getInstance());
+		super(subsystem(Drivebase.class));
 
 		this.gamepad1 = gamepad1;
 	}

@@ -2,10 +2,10 @@ package org.firstinspires.ftc.teamcode.stellarstructure.runnables;
 
 import androidx.annotation.NonNull;
 
-import org.firstinspires.ftc.teamcode.stellarstructure.Scheduler;
+import org.firstinspires.ftc.teamcode.stellarstructure.StellarBot;
 import org.firstinspires.ftc.teamcode.stellarstructure.Subsystem;
-import org.firstinspires.ftc.teamcode.stellarstructure.triggers.Trigger;
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.Condition;
+import org.firstinspires.ftc.teamcode.stellarstructure.triggers.Trigger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -112,7 +112,7 @@ public abstract class Runnable {
     }
 
     public final void schedule() {
-        Scheduler.getGlobalInstance().schedule(this);
+        StellarBot.getInstance().getScheduler().schedule(this);
     }
 
     @NonNull

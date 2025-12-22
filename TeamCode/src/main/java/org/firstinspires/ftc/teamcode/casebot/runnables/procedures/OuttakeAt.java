@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.casebot.runnables.procedures;
 
+import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
+
 import org.firstinspires.ftc.teamcode.casebot.runnables.directives.SetSpindexerPosition;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.LeverTransfer;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Spindexer;
@@ -17,24 +19,24 @@ public class OuttakeAt extends Procedure {
     public OuttakeAt(Supplier<Integer> segmentSupplier) {
         super(
                 "OuttakeAt",
-                new SetPosition(LeverTransfer.getInstance().getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION),
+                new SetPosition(subsystem(LeverTransfer.class).getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION),
 
-                new SetSpindexerPosition(Spindexer.getInstance().getSpindexerServo(), () -> Spindexer.getInstance().getDegreesForSegmentSupplierAndPosition(segmentSupplier, Spindexer.Position.TRANSFER)),
-                //new SetPosition(Spindexer.getInstance().getSpindexerServo(), Spindexer.getInstance().getDegreesForSegmentSupplierAndPosition(segmentSupplier, Spindexer.Position.TRANSFER)),
+                new SetSpindexerPosition(subsystem(Spindexer.class).getSpindexerServo(), () -> subsystem(Spindexer.class).getDegreesForSegmentSupplierAndPosition(segmentSupplier, Spindexer.Position.TRANSFER)),
+                //new SetPosition(subsystem(Spindexer.class).getSpindexerServo(), subsystem(Spindexer.class).getDegreesForSegmentSupplierAndPosition(segmentSupplier, Spindexer.Position.TRANSFER)),
 
-                new WaitUntil(() -> Spindexer.getInstance().spindexerEncoderIsWithinTolerance(Spindexer.getInstance().getDegreesForSegmentSupplierAndPosition(segmentSupplier, Spindexer.Position.TRANSFER), 0.05)),
+                new WaitUntil(() -> subsystem(Spindexer.class).spindexerEncoderIsWithinTolerance(subsystem(Spindexer.class).getDegreesForSegmentSupplierAndPosition(segmentSupplier, Spindexer.Position.TRANSFER), 0.05)),
 
-                new WaitUntil(() -> Turret.getInstance().velocityWithinTolerance()),
+                new WaitUntil(() -> subsystem(Turret.class).velocityWithinTolerance()),
                 new PulseTransferLever(),
 
                 new InstantlyDo(
-                    () -> Spindexer.getInstance().setArtifactColorsInSpindexerFromSupplier(segmentSupplier, DecodeDataTypes.ArtifactColor.NONE)
+                    () -> subsystem(Spindexer.class).setArtifactColorsInSpindexerFromSupplier(segmentSupplier, DecodeDataTypes.ArtifactColor.NONE)
                 )
         );
 
         setRequiredSubsystems(
-                Spindexer.getInstance(),
-                LeverTransfer.getInstance()
+                subsystem(Spindexer.class),
+                subsystem(LeverTransfer.class)
         );
     }
 }

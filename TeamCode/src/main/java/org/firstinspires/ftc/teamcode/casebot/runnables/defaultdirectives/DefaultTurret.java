@@ -1,18 +1,20 @@
 package org.firstinspires.ftc.teamcode.casebot.runnables.defaultdirectives;
 
+import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
+
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Turret;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.DefaultDirective;
 
 public class DefaultTurret extends DefaultDirective {
-    private final Turret turret = Turret.getInstance();
+    private final Turret turret = subsystem(Turret.class);
     private double velocity = 0.0;
     private double position = 0.0;
 
     private double hoodPosition = 0.0;
     public DefaultTurret(Gamepad gamepad1, Gamepad gamepad2) {
-        super(Turret.getInstance());
+        super(subsystem(Turret.class));
 
         /*addTrigger(new ActionTrigger(
                 // when dpad up just first pressed

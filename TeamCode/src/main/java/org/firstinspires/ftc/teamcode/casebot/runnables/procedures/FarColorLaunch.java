@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.casebot.runnables.procedures;
 
+import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
+
 import org.firstinspires.ftc.teamcode.casebot.subsystems.LeverTransfer;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.PedroDrivebase;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Spindexer;
@@ -14,21 +16,21 @@ public class FarColorLaunch extends Procedure {
     public FarColorLaunch() {
         super("FarColorLaunch",
                 new InstantlyDo(()-> {
-                    //PedroDrivebase.getInstance().getFollower().activateAllPIDFs();
-                    //PedroDrivebase.getInstance().getFollower().turnTo(Math.toRadians(PedroDrivebase.getInstance().getLaunchYaw()));
+                    //subsystem(PedroDrivebase).getFollower().activateAllPIDFs();
+                    //subsystem(PedroDrivebase).getFollower().turnTo(Math.toRadians(subsystem(PedroDrivebase).getLaunchYaw()));
                 }),
                 new InstantlyDo(()->
-                        Turret.getInstance().setTurretVelocity(1600)
+                        subsystem(Turret.class).setTurretVelocity(1600.0)
                 ),
-                new SetPosition(Turret.getInstance().getTurretHoodServo(), 0.0),
+                new SetPosition(subsystem(Turret.class).getTurretHoodServo(), 0.0),
                 new Parallel(
                         "Launch+Stop",
                         new FullPatternOuttake(),
                         new Procedure(
                                 "Start Driving",
-                                new Sleep(.5),
+                                new Sleep(0.5),
                                 new InstantlyDo(()->
-                                        PedroDrivebase.getInstance().getFollower().startTeleopDrive(true)
+                                        subsystem(PedroDrivebase.class).getFollower().startTeleopDrive(true)
                                 )
                         )
                 )
@@ -36,10 +38,10 @@ public class FarColorLaunch extends Procedure {
         );
 
         setRequiredSubsystems(
-                PedroDrivebase.getInstance(),
-                Turret.getInstance(),
-                LeverTransfer.getInstance(),
-                Spindexer.getInstance()
+                subsystem(PedroDrivebase.class),
+                subsystem(Turret.class),
+                subsystem(LeverTransfer.class),
+                subsystem(Spindexer.class)
         );
     }
 }

@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.casebot.runnables.directives;
 
+import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
+
 import androidx.annotation.NonNull;
 
 import org.firstinspires.ftc.teamcode.casebot.subsystems.PedroDrivebase;
@@ -13,7 +15,7 @@ public class SetSpeedScale extends Directive {
 
     @Override
     public void start(boolean hadToInterruptToStart) {
-        PedroDrivebase.getInstance().setSpeedScale(scale);
+        subsystem(PedroDrivebase.class).setSpeedScale(scale);
     }
 
     @Override

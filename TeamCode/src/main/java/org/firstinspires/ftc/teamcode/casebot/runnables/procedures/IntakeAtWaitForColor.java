@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.casebot.runnables.procedures;
 
+import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
+
 import org.firstinspires.ftc.teamcode.casebot.runnables.directives.SetLight;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.LeverTransfer;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.PedroDrivebase;
@@ -13,26 +15,24 @@ public class IntakeAtWaitForColor extends Procedure {
     public IntakeAtWaitForColor(int segment) {
         super(
                 "IntakeAtWaitForColor",
-                new SetPosition(LeverTransfer.getInstance().getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION),
+                new SetPosition(subsystem(LeverTransfer.class).getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION),
 
-                new SetPosition(Spindexer.getInstance().getSpindexerServo(), Spindexer.getInstance().getServoPositionFromSegment(segment, Spindexer.Position.INTAKE)),
+                new SetPosition(subsystem(Spindexer.class).getSpindexerServo(), subsystem(Spindexer.class).getServoPositionFromSegment(segment, Spindexer.Position.INTAKE)),
 
-                new WaitUntil(() -> Spindexer.getInstance().spindexerEncoderIsWithinTolerance(Spindexer.getInstance().getServoPositionFromSegment(segment, Spindexer.Position.INTAKE), 0.05)),
+                new WaitUntil(() -> subsystem(Spindexer.class).spindexerEncoderIsWithinTolerance(subsystem(Spindexer.class).getServoPositionFromSegment(segment, Spindexer.Position.INTAKE), 0.05)),
                 new WaitUntil(() ->
                         (
-                                Spindexer.getInstance().getBreamBreak1Broken() ||
-                                Spindexer.getInstance().getBeamBreak2Broken()
+                                subsystem(Spindexer.class).getBreamBreak1Broken() ||
+                                        subsystem(Spindexer.class).getBeamBreak2Broken()
                         ) &&
-                        Spindexer.getInstance().setArtifactColorAtSegmentToColorSensor(segment) != DecodeDataTypes.ArtifactColor.NONE
+                                subsystem(Spindexer.class).setArtifactColorAtSegmentToColorSensor(segment) != DecodeDataTypes.ArtifactColor.NONE
                 ),
-                new SetLight(PedroDrivebase.getInstance().getRightLight(), Spindexer.getInstance().getArtifactColorAt(segment))
+                new SetLight(subsystem(PedroDrivebase.class).getRightLight(), subsystem(Spindexer.class).getArtifactColorAt(segment))
         );
 
         setRequiredSubsystems(
-                Spindexer.getInstance(),
-                LeverTransfer.getInstance()
+                subsystem(Spindexer.class),
+                subsystem(LeverTransfer.class)
         );
-
-        setRequiredSubsystems(Spindexer.getInstance(), LeverTransfer.getInstance());
     }
 }

@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.casebot.runnables.defaultdirectives;
 
+import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
+
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.casebot.runnables.directives.GetMotifSequence;
@@ -22,7 +24,7 @@ import org.firstinspires.ftc.teamcode.util.DecodeDataTypes;
 
 public class DefaultSpindexer extends DefaultDirective {
 	public DefaultSpindexer(Gamepad gamepad1, Gamepad gamepad2) {
-		super(Spindexer.getInstance());
+		super(subsystem(Spindexer.class));
 
 		addTrigger(new ActionTrigger(
 				// when y just first pressed
@@ -151,7 +153,7 @@ public class DefaultSpindexer extends DefaultDirective {
 						StatefulCondition.Edge.RISING
 				),
 				()->{
-					new InstantlyDo(()-> PedroDrivebase.getInstance().getFollower().startTeleopDrive(true));
+					new InstantlyDo(()-> subsystem(PedroDrivebase.class).getFollower().startTeleopDrive(true));
 				}
 		));
 

@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.casebot.runnables.procedures;
 
+import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
+
 import org.firstinspires.ftc.teamcode.casebot.subsystems.LeverTransfer;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Spindexer;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Procedure;
@@ -12,12 +14,12 @@ public class FullIntakeWaitForColor extends Procedure {
                 new IntakeAtWaitForColor(0),
                 new IntakeAtWaitForColor(1),
                 new IntakeAtWaitForColor(2),
-                new SetPosition(Spindexer.getInstance().getSpindexerServo(), Spindexer.getInstance().getServoPositionFromSegment(0, Spindexer.Position.TRANSFER))
+                new SetPosition(subsystem(Spindexer.class).getSpindexerServo(), subsystem(Spindexer.class).getServoPositionFromSegment(0, Spindexer.Position.TRANSFER))
         );
 
         setRequiredSubsystems(
-                LeverTransfer.getInstance(),
-                Spindexer.getInstance()
+                subsystem(LeverTransfer.class),
+                subsystem(Spindexer.class)
         );
     }
 }

@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.casebot.runnables.directives;
 
+import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
+
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
@@ -21,7 +23,7 @@ public class FollowPath extends Directive {
         this.endPose = endPose;
         this.holdEnd = holdEnd;
 
-        setRequiredSubsystems(PedroDrivebase.getInstance());
+        setRequiredSubsystems(subsystem(PedroDrivebase.class));
     }
 
     @Override

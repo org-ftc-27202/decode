@@ -1,41 +1,20 @@
 package org.firstinspires.ftc.teamcode.casebot.opmodes.farauto;// make sure this aligns with class location
 
-import com.pedropathing.follower.Follower;
-import com.pedropathing.geometry.BezierLine;
-import com.pedropathing.geometry.Pose;
-import com.pedropathing.paths.PathChain;
-import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-
-import org.firstinspires.ftc.teamcode.casebot.runnables.defaultdirectives.DefaultIntake;
-import org.firstinspires.ftc.teamcode.casebot.runnables.defaultdirectives.DefaultLeverTransfer;
-import org.firstinspires.ftc.teamcode.casebot.runnables.defaultdirectives.DefaultSpindexer;
-import org.firstinspires.ftc.teamcode.casebot.runnables.directives.FollowPath;
-import org.firstinspires.ftc.teamcode.casebot.runnables.directives.GetMotifSequence;
-import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FarMotifLaunch;
-import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FullIntakeWaitForColor;
-import org.firstinspires.ftc.teamcode.casebot.subsystems.Camera;
-import org.firstinspires.ftc.teamcode.casebot.subsystems.Intake;
-import org.firstinspires.ftc.teamcode.casebot.subsystems.LeverTransfer;
-import org.firstinspires.ftc.teamcode.casebot.subsystems.PedroDrivebase;
-import org.firstinspires.ftc.teamcode.casebot.subsystems.Spindexer;
-import org.firstinspires.ftc.teamcode.casebot.subsystems.Turret;
-import org.firstinspires.ftc.teamcode.stellarstructure.StellarBot;
-import org.firstinspires.ftc.teamcode.stellarstructure.runnables.InstantlyDo;
-import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Parallel;
-import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Procedure;
-import org.firstinspires.ftc.teamcode.stellarstructure.runnables.SetPosition;
-import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Sleep;
-import org.firstinspires.ftc.teamcode.util.DecodeDataTypes;
-import org.firstinspires.ftc.teamcode.util.bootscreen.BootScreen;
-import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
 
 //todo
 @Disabled
 @Autonomous(name = "-RED Case Auto Pedro", group = "Auto")
 public final class RedCaseFarAuto extends OpMode {
+    @Override
+    public void init() {}
+
+    @Override
+    public void loop() {}
+
+    /*
     private final double FLYWHEEL_LAUNCH = 1080;
     private final double TURRET_LAUNCH = 0;
     private final double HOOD_LAUNCH = 0;
@@ -178,14 +157,14 @@ public final class RedCaseFarAuto extends OpMode {
 
     @Override
     public void loop() {
-        caseBot.update();
-        follower.update();
-        /*telemetry.addData("x: ", follower.getPose().getX());
-        telemetry.addData("isBusy(): ", follower.isBusy());
-        telemetry.addData("y: ", follower.getPose().getY());
-        telemetry.addData("heading: ", follower.getPose().getHeading());
-        telemetry.addData("T: ", follower.getCurrentTValue());*/
+        //caseBot.update();
+        //follower.update();
+        //telemetry.addData("x: ", follower.getPose().getX());
+        //telemetry.addData("isBusy(): ", follower.isBusy());
+        //telemetry.addData("y: ", follower.getPose().getY());
+        //telemetry.addData("heading: ", follower.getPose().getHeading());
+        //telemetry.addData("T: ", follower.getCurrentTValue());
         telemetry.addLine(caseBot.toString());
         telemetry.update();
-    }
+    }*/
 }

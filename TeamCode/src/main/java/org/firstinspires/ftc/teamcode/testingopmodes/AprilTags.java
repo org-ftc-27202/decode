@@ -1,36 +1,33 @@
 package org.firstinspires.ftc.teamcode.testingopmodes;
 
-import org.firstinspires.ftc.teamcode.util.DecodeDataTypes.ArtifactColor;
-import org.firstinspires.ftc.teamcode.util.DecodeDataTypes.ArtifactSequence;
-import org.firstinspires.ftc.teamcode.util.DecodeDataTypes.Coords;
-import org.firstinspires.ftc.teamcode.util.DecodeDataTypes.DateMs;
-import org.firstinspires.ftc.teamcode.util.DecodeDataTypes.MotorPositions;
-
-import org.firstinspires.ftc.teamcode.util.FtcJsonStorage;
-
-import java.util.List;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.util.Size;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
-import org.opencv.android.Utils;
-import org.opencv.core.Mat;
+import org.firstinspires.ftc.teamcode.util.DecodeDataTypes.ArtifactColor;
+import org.firstinspires.ftc.teamcode.util.DecodeDataTypes.ArtifactSequence;
+import org.firstinspires.ftc.teamcode.util.DecodeDataTypes.Coords;
+import org.firstinspires.ftc.teamcode.util.DecodeDataTypes.DateMs;
+import org.firstinspires.ftc.teamcode.util.DecodeDataTypes.MotorPositions;
+import org.firstinspires.ftc.teamcode.util.FtcJsonStorage;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.VisionPortal.StreamFormat;
 import org.firstinspires.ftc.vision.VisionProcessor;
-
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.util.Size;
-
-import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
-import org.firstinspires.ftc.vision.apriltag.AprilTagLibrary;
 import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
+import org.firstinspires.ftc.vision.apriltag.AprilTagLibrary;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
+import org.opencv.android.Utils;
+import org.opencv.core.Mat;
+
+import java.util.List;
 
 @TeleOp(name = "April Tags Test", group = "Robot")
 

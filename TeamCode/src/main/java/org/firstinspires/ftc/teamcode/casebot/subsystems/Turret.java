@@ -22,12 +22,6 @@ import org.firstinspires.ftc.teamcode.stellarstructure.hardwaremapwrappers.Stell
 import org.firstinspires.ftc.teamcode.stellarstructure.hardwaremapwrappers.StellarServo;
 
 public final class Turret extends Subsystem {
-    private static final Turret turret = new Turret();
-    public static Turret getInstance() {
-        return turret;
-    }
-    private Turret() {}
-
     private final static double DEGREES_TO_SERVO = 1.0 / 320.0;
 
     private final static double TICKS_TO_ROTATION = 1.5 / 7.0;
@@ -108,8 +102,8 @@ public final class Turret extends Subsystem {
 
     public void setPIDFScale(double scale){
         PIDFScale = scale;
-        leftTurretMotor.setVelocityPIDFCoefficents(p_left*PIDFScale, i_left*PIDFScale, d_left*PIDFScale, f_left*PIDFScale);
-        rightTurretMotor.setVelocityPIDFCoefficents(p_right*PIDFScale, i_right*PIDFScale, d_right*PIDFScale, f_right*PIDFScale);
+        leftTurretMotor.setVelocityPIDFCoefficents(p_left * PIDFScale, i_left * PIDFScale, d_left * PIDFScale, f_left * PIDFScale);
+        rightTurretMotor.setVelocityPIDFCoefficents(p_right * PIDFScale, i_right * PIDFScale, d_right * PIDFScale, f_right * PIDFScale);
     }
 
     public double getVelocityOffOfTarget() {
@@ -117,7 +111,7 @@ public final class Turret extends Subsystem {
     }
 
     public double getRealVelocityOffOfTarget(){
-        return leftTurretMotor.getVelocity()-velocity;
+        return leftTurretMotor.getVelocity() - velocity;
     }
 
     public boolean velocityWithinTolerance() {
@@ -126,7 +120,7 @@ public final class Turret extends Subsystem {
 
     @NonNull
     @Override
-    public String toString() {
+    public String debugTelemetry() {
         return String.format(
                 "Turret Servo Pos: %f\n" +
                     "   Hood Pos: %f\n" +

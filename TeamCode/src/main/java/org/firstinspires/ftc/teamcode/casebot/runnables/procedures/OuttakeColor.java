@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.casebot.runnables.procedures;
 
+import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
+
 import androidx.annotation.NonNull;
 
 import org.firstinspires.ftc.teamcode.casebot.subsystems.LeverTransfer;
@@ -11,15 +13,15 @@ public class OuttakeColor extends Procedure {
     public OuttakeColor(@NonNull DecodeDataTypes.ArtifactColor artifactColor) {
         super(
                 "OuttakeColor",
-                new OuttakeAt(() -> Spindexer.getInstance().getFirstColorSegmentLocation(artifactColor))
+                new OuttakeAt(() -> subsystem(Spindexer.class).getFirstColorSegmentLocation(artifactColor))
         );
 
         setWaitForStartingConditions(false);
-        setStartingConditions(() -> Spindexer.getInstance().getHasArtifactColor(artifactColor));
+        setStartingConditions(() -> subsystem(Spindexer.class).getHasArtifactColor(artifactColor));
 
         setRequiredSubsystems(
-                Spindexer.getInstance(),
-                LeverTransfer.getInstance()
+                subsystem(Spindexer.class),
+                subsystem(LeverTransfer.class)
         );
     }
 }

@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.casebot.runnables.procedures;
 
+import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
+
 import org.firstinspires.ftc.teamcode.casebot.runnables.directives.SetSpeedScale;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.LeverTransfer;
@@ -16,7 +18,7 @@ public class PedroFullOuttake extends Procedure {
                 //new SetLight(PedroDrivebase.getInstance().getLeftLight(), "YELLOW"),
                 //new SetLight(PedroDrivebase.getInstance().getRightLight(), "YELLOW"),
 
-                new WaitUntil(() -> PedroDrivebase.getInstance().checkForLaunchPose()),
+                new WaitUntil(() -> subsystem(PedroDrivebase.class).checkForLaunchPose()),
                 new SetSpeedScale(0.5),
                 //new SetLight(PedroDrivebase.getInstance().getLeftLight(), "RED"),
                 //new SetLight(PedroDrivebase.getInstance().getRightLight(), "RED"),
@@ -31,9 +33,9 @@ public class PedroFullOuttake extends Procedure {
         );
 
         setRequiredSubsystems(
-                Intake.getInstance(),
-                Spindexer.getInstance(),
-                LeverTransfer.getInstance()
+                subsystem(Intake.class),
+                subsystem(Spindexer.class),
+                subsystem(LeverTransfer.class)
         );
     }
 }

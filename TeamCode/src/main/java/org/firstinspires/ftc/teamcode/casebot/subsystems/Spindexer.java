@@ -17,11 +17,6 @@ import java.util.function.Supplier;
 
 
 public final class Spindexer extends Subsystem {
-	private static final Spindexer spindexer = new Spindexer();
-	public static Spindexer getInstance() {
-		return spindexer;
-	}
-	private Spindexer() {}
 	private final static double[] INTAKE_POSITIONS = {0.014, 0.382, 0.747};
 	private final static double[] TRANSFER_POSITIONS = {0.567, 0.938, 0.193};
 
@@ -214,7 +209,7 @@ public final class Spindexer extends Subsystem {
 
 	@NonNull
 	@Override
-	public String toString() {
+	public String debugTelemetry() {
 		//NormalizedRGBA colorSensorColors = colorSensor.getNormalizedColors();
 		return String.format(
 				"beamBreak1: %b\n" +
@@ -225,7 +220,7 @@ public final class Spindexer extends Subsystem {
 				//"Total RGB: %f\n" +
 				"Spindexer Servo: %f\n" +
 				"Spindexer Encoder: %f\n"+
-				"Motif Sequence: %s, %s, %s\n",
+				"Motif Sequence: %s, %s, %s",
 				getBreamBreak1Broken(),
 				getBeamBreak2Broken(),
 				//colorSensorColors.red, colorSensorColors.green, colorSensorColors.blue,

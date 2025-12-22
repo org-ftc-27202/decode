@@ -21,7 +21,7 @@ public class SetLight extends Directive {
         } else if (color == DecodeDataTypes.ArtifactColor.PURPLE){
             this.color = 0.721;
         } else if (color == DecodeDataTypes.ArtifactColor.NONE){
-            this.color =0.000;
+            this.color = 0.000;
         }
         //color to power
         /*switch (color) {

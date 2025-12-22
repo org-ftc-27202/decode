@@ -8,11 +8,6 @@ import org.firstinspires.ftc.teamcode.stellarstructure.Subsystem;
 import org.firstinspires.ftc.teamcode.stellarstructure.hardwaremapwrappers.StellarServo;
 
 public final class LeverTransfer extends Subsystem {
-	private static final LeverTransfer leverTransfer = new LeverTransfer();
-	public static LeverTransfer getInstance() {
-		return leverTransfer;
-	}
-	private LeverTransfer() {}
 
 	private StellarServo leverTransferServo;
 
@@ -36,7 +31,7 @@ public final class LeverTransfer extends Subsystem {
 
 	@NonNull
 	@Override
-	public String toString() {
+	public String debugTelemetry() {
 		return String.format("Lever Target Position: %f", leverTransferServo.getPosition());
 	}
 }

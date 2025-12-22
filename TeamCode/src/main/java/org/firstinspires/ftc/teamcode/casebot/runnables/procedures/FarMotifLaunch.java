@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.casebot.runnables.procedures;
 
+import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
+
 import org.firstinspires.ftc.teamcode.casebot.subsystems.LeverTransfer;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.PedroDrivebase;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Spindexer;
@@ -12,33 +14,33 @@ import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Sleep;
 
 public class FarMotifLaunch extends Procedure {
     public FarMotifLaunch() {
-        super("farmotiflaunch",
+        super("FarMotifLaunch",
                 new InstantlyDo(()-> {
                     //PedroDrivebase.getInstance().getFollower().activateAllPIDFs();
-                    PedroDrivebase.getInstance().getFollower().turnTo(Math.toRadians(PedroDrivebase.getInstance().getLaunchYaw()));
+                    subsystem(PedroDrivebase.class).getFollower().turnTo(Math.toRadians(subsystem(PedroDrivebase.class).getLaunchYaw()));
                 }),
                 new InstantlyDo(()->
-                        Turret.getInstance().setTurretVelocity(1560.0)
+                        subsystem(Turret.class).setTurretVelocity(1560.0)
                 ),
-                new SetPosition(Turret.getInstance().getTurretHoodServo(), 0.0),
+                new SetPosition(subsystem(Turret.class).getTurretHoodServo(), 0.0),
                 new Parallel(
                         "Launch+Stop",
                         new FullMotifOuttake(),
                         new Procedure(
                                 "Start Driving",
-                                new Sleep(.1),
+                                new Sleep(0.1),
                                 new InstantlyDo(()->
-                                        PedroDrivebase.getInstance().getFollower().startTeleopDrive(true)
+                                        subsystem(PedroDrivebase.class).getFollower().startTeleopDrive(true)
                                 )
                         )
                 )
         );
 
         setRequiredSubsystems(
-                PedroDrivebase.getInstance(),
-                Turret.getInstance(),
-                LeverTransfer.getInstance(),
-                Spindexer.getInstance()
+                subsystem(PedroDrivebase.class),
+                subsystem(Turret.class),
+                subsystem(LeverTransfer.class),
+                subsystem(Spindexer.class)
         );
     }
 }

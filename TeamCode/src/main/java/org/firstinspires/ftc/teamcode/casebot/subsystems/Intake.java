@@ -11,12 +11,6 @@ import dev.nextftc.control.ControlSystem;
 
 
 public final class Intake extends Subsystem {
-	private static final Intake intake = new Intake();
-	public static Intake getInstance() {
-		return intake;
-	}
-	private Intake() {}
-
 	private StellarDcMotor intakeMotor;
 
 	private double intakeSpeed = 0.5;
@@ -48,7 +42,7 @@ public final class Intake extends Subsystem {
 
 	@NonNull
 	@Override
-	public String toString() {
+	public String debugTelemetry() {
 		return String.format("Intake Speed: %f, Intake Power: %f", intakeMotor.getVelocity(), intakePower);
 	}
 }
