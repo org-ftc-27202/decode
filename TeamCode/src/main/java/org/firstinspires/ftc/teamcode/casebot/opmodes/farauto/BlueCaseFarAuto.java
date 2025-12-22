@@ -8,10 +8,12 @@ import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
+import org.firstinspires.ftc.teamcode.casebot.runnables.defaultdirectives.DefaultIntake;
 import org.firstinspires.ftc.teamcode.casebot.runnables.directives.FollowPath;
 import org.firstinspires.ftc.teamcode.casebot.runnables.directives.GetMotifSequence;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FarMotifLaunch;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FullIntakeWaitForColor;
+import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.TurretStartup;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.LeverTransfer;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.PedroDrivebase;
@@ -27,7 +29,7 @@ import org.firstinspires.ftc.teamcode.util.DecodeDataTypes;
 import org.firstinspires.ftc.teamcode.util.bootscreen.BootScreen;
 import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
 
-@Autonomous(name = "-BLUECase Auto Pedro", group = "Auto")
+@Autonomous(name = "BLUECase Auto Pedro", group = "Auto")
 public final class BlueCaseFarAuto extends OpMode {
     private final double FLYWHEEL_LAUNCH = 1080;
     private final double TURRET_LAUNCH = 0;
@@ -129,14 +131,24 @@ public final class BlueCaseFarAuto extends OpMode {
 
     @Override
     public void start() {
+
+
         new Procedure(
                 "AutoDrive",
                 new SetPosition(leverTransfer.getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION),
-                new InstantlyDo(() -> intake.setIntakeSpeed(1.0)),
-                new InstantlyDo(() -> new GetMotifSequence().schedule()),
-                new Sleep(2.0),
-                new FollowPath(path1, follower, new Pose(61.000, 24.000), true),
+                new InstantlyDo(() -> intake.setIntakeSpeed(0.0)),
+                new InstantlyDo(()-> intake.setMotorSpeed()),
+                new Parallel(
+                        "hmm",
+                        new TurretStartup(), // This runs in the background
+                        new Procedure(
+                                "lock in",// While this part continues forward
+                                new GetMotifSequence(),
+                                new FollowPath(path1, follower, new Pose(61.000, 24.000), true)
+                        )),
                 new FarMotifLaunch(),
+                new InstantlyDo(()-> intake.setIntakeSpeed(1.0)),
+                new InstantlyDo(()-> intake.setMotorSpeed()),
                 new FollowPath(path2, follower, new Pose(43.000, 35.500), true),
                 new Parallel("pickup1",
                         new FullIntakeWaitForColor(),

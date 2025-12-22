@@ -61,12 +61,7 @@ public final class Turret extends Subsystem {
 
     @Override
     public void update() {
-        if (needsToStart){
-            setPIDFScale(1.0);
-            new TurretStartup().schedule();
 
-            needsToStart = false;
-        }
     //leftTurretMotor.setVelocityPIDFCoefficents(p_left*PIDFScale, i_left*PIDFScale, d_left*PIDFScale, f_left*PIDFScale);
         //rightTurretMotor.setVelocityPIDFCoefficents(p_right*PIDFScale, i_right*PIDFScale, d_right*PIDFScale, f_right*PIDFScale);
     }

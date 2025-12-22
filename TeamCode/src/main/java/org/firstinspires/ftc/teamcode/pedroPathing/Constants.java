@@ -16,17 +16,15 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class Constants {
     public static FollowerConstants followerConstants = new FollowerConstants()
-            .mass(7.4)
-            .forwardZeroPowerAcceleration(-73.00)
-            .lateralZeroPowerAcceleration(-70.00)
+            .mass(11.06)
+            .forwardZeroPowerAcceleration(-55.00)
+            .lateralZeroPowerAcceleration(-64.00)
             .translationalPIDFCoefficients(new PIDFCoefficients(0.3, 0, 0.03, 0.025))
             .headingPIDFCoefficients(new PIDFCoefficients(2.75, 0, 0.175, 0.00))
-            .drivePIDFCoefficients(new FilteredPIDFCoefficients(1,0.000005,0.000089,0.6,0.010))
+            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.1,0.0,0.009,0.6,0.85))
             .centripetalScaling(0.005)
             ;
     public static PinpointConstants localizerConstants = new PinpointConstants()
-            .forwardPodY(-5)
-            .strafePodX(0.5)
             .distanceUnit(DistanceUnit.INCH)
             .hardwareMapName("computer")
             .encoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD)
@@ -47,14 +45,14 @@ public class Constants {
             .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
             .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD)
             .xVelocity(68.00)
-            .yVelocity(40.0)
+            .yVelocity(44.0)
 
             ;
 
     public static PathConstraints pathConstraints = new PathConstraints(
             0.99,
             100,
-            .5,
+            1,
             1);
 
     public static Follower createFollower(HardwareMap hardwareMap) {
