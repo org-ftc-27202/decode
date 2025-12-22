@@ -92,16 +92,18 @@ public class StellarBot {
 		StringBuilder telemetry = new StringBuilder();
 
 		if (printDebug) {
+			telemetry.append("DEBUG INFORMATION\n==========================================");
 			subsystems.forEach((key, subsystem) -> {
 				try {
-					telemetry.append(subsystem).append('\n');
+					telemetry.append('\n').append(subsystem.debugTelemetry()).append('\n');
 				} catch (Error error) {
 					telemetry.append(subsystem.getClass().getSimpleName()).append("'s Telemetry Failed!\n");
 				}
 			});
+			telemetry.append("==========================================\n\n");
 		}
 
-		telemetry.append(scheduler);
+		telemetry.append("SCHEDULER\n==========================================\n").append(scheduler).append("\n==========================================\n");
 
 		return telemetry.toString();
 	}

@@ -31,6 +31,7 @@ public final class PedroDrivebase extends Subsystem {
     public void setOpMode(@NonNull opModeType opMode) {
         this.opMode = opMode;
     }
+
     public double distanceFromGoal;
 
     public double speedScale = 1.0;
@@ -175,20 +176,20 @@ public final class PedroDrivebase extends Subsystem {
 
 	@NonNull
     @Override
-    public String toString() {
+    public String debugTelemetry() {
         return String.format(
-                        "Left Front: %.2f\n" +
-                        "Right Front: %.2f\n" +
-                        "Left Back: %.2f\n" +
-                        "Right Back: %.2f\n" +
-                        "X: %.3f\n" +
-                        "Y: %.3f\n" +
-                        "Heading(degrees): %.2f\n" +
-                                "Distance From Goal: %.3f\n"+
-                                "Launch Yaw: %.3f\n"+
-                        "In Launch Zone: %b\n "+
-                        "Left Light Color: %f" +
-                        "Right Light Color: %f",
+                "Left Front: %.2f\n" +
+                "Right Front: %.2f\n" +
+                "Left Back: %.2f\n" +
+                "Right Back: %.2f\n" +
+                "X: %.3f\n" +
+                "Y: %.3f\n" +
+                "Heading(degrees): %.2f\n" +
+                "Distance From Goal: %.3f\n"+
+                "Launch Yaw: %.3f\n"+
+                "In Launch Zone: %b\n "+
+                "Left Light Color: %f" +
+                "Right Light Color: %f",
                 leftFrontDrive.getPower(),
                 rightFrontDrive.getPower(),
                 leftBackDrive.getPower(),

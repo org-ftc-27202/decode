@@ -42,7 +42,7 @@ public final class Intake extends Subsystem {
 
 	@NonNull
 	@Override
-	public String toString() {
+	public String debugTelemetry() {
 		return String.format("Intake Speed: %f, Intake Power: %f", intakeMotor.getVelocity(), intakePower);
 	}
 }

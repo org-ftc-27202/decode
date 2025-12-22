@@ -31,7 +31,7 @@ public final class LeverTransfer extends Subsystem {
 
 	@NonNull
 	@Override
-	public String toString() {
+	public String debugTelemetry() {
 		return String.format("Lever Target Position: %f", leverTransferServo.getPosition());
 	}
 }

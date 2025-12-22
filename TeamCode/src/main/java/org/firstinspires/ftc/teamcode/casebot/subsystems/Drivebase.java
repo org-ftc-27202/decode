@@ -45,7 +45,7 @@ public final class Drivebase extends Subsystem {
 
 	@NonNull
     @Override
-    public String toString() {
+    public String debugTelemetry() {
         return String.format("Left Front: %.2f\nRight Front: %.2f\nLeft Back: %.2f\nRight Back: %.2f",
                 leftFrontDrive.getPower(),
                 rightFrontDrive.getPower(),

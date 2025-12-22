@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.stellarstructure;
 
+import androidx.annotation.NonNull;
+
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.DefaultDirective;
@@ -36,5 +38,16 @@ public abstract class Subsystem {
 
 	public final DefaultDirective getDefaultDirective() {
 		return defaultDirective;
+	}
+
+	@NonNull
+	public String debugTelemetry() {
+		return this + " debug info not set";
+	}
+
+	@NonNull
+	@Override
+	public final String toString() {
+		return getClass().getSimpleName();
 	}
 }

@@ -209,7 +209,7 @@ public final class Spindexer extends Subsystem {
 
 	@NonNull
 	@Override
-	public String toString() {
+	public String debugTelemetry() {
 		//NormalizedRGBA colorSensorColors = colorSensor.getNormalizedColors();
 		return String.format(
 				"beamBreak1: %b\n" +
@@ -220,7 +220,7 @@ public final class Spindexer extends Subsystem {
 				//"Total RGB: %f\n" +
 				"Spindexer Servo: %f\n" +
 				"Spindexer Encoder: %f\n"+
-				"Motif Sequence: %s, %s, %s\n",
+				"Motif Sequence: %s, %s, %s",
 				getBreamBreak1Broken(),
 				getBeamBreak2Broken(),
 				//colorSensorColors.red, colorSensorColors.green, colorSensorColors.blue,

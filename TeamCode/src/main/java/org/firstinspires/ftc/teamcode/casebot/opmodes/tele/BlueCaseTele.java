@@ -49,7 +49,7 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
 
             StellarBot.getInstance().getSubsystem(PedroDrivebase.class);
 
-            //caseBot.setPrintDebug(true);
+            caseBot.setPrintDebug(true);
 
             pedroDrivebase.setOpMode(PedroDrivebase.opModeType.TELEOP);
 
