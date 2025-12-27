@@ -1,11 +1,11 @@
 package org.firstinspires.ftc.teamcode.stellarstructure.runnables;
 
 public abstract class Directive extends Runnable {
-	public abstract void start(boolean hadToInterruptToStart);
+	protected abstract void onStart(boolean hadToInterruptToStart);
 
-	public abstract void update();
+	protected abstract void onUpdate();
 
-	public abstract void stop(boolean interrupted);
+	protected abstract void onStop(boolean interrupted);
 
-	public abstract boolean isFinished();
+	protected abstract boolean isFinished();
 }

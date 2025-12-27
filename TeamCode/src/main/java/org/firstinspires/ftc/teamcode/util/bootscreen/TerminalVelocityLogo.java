@@ -13,7 +13,7 @@ public class TerminalVelocityLogo extends BootScreenAnimation {
 
     @Override
     public String getFrame(int frame) {
-        return "\n                                 █\n" +
+        return "\n\n\n                                 █\n" +
                 "                                 █              █\n" +
                 "                                 █              █              █\n" +
                 "                                                  █              █\n" +

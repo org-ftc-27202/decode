@@ -12,18 +12,18 @@ public class InstantlyDo extends Directive {
 	}
 
 	@Override
-	public void start(boolean hadToInterruptToStart) {
+	protected void onStart(boolean hadToInterruptToStart) {
 		action.run();
 	}
 
 	@Override
-	public final void update() {}
+	protected final void onUpdate() {}
 
 	@Override
-	public final void stop(boolean interrupted) {}
+	protected final void onStop(boolean interrupted) {}
 
 	@Override
-	public final boolean isFinished() {
+	protected final boolean isFinished() {
 		return true;
 	}
 }

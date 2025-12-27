@@ -22,20 +22,20 @@ public class TurnTo extends Directive {
     }
 
     @Override
-    public void start(boolean hadToInterruptToStart) {
+    protected void onStart(boolean hadToInterruptToStart) {
         follower.turnTo(turnAngle);
     }
 
     @Override
-    public void update() {
+    protected void onUpdate() {
         follower.update();
     }
 
     @Override
-    public void stop(boolean interrupted) {}
-    //(Math.abs(follower.getHeadingError())< Math.toDegrees(.05))
+    protected void onStop(boolean interrupted) {}
+    //(Math.abs(follower.getHeadingError()) < Math.toDegrees(0.05))
     @Override
-    public boolean isFinished() {
+    protected boolean isFinished() {
         return true;
     }
 }

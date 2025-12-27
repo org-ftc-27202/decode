@@ -16,7 +16,6 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.TurretStartup;
 import org.firstinspires.ftc.teamcode.stellarstructure.Subsystem;
 import org.firstinspires.ftc.teamcode.stellarstructure.hardwaremapwrappers.StellarDcMotor;
 import org.firstinspires.ftc.teamcode.stellarstructure.hardwaremapwrappers.StellarServo;

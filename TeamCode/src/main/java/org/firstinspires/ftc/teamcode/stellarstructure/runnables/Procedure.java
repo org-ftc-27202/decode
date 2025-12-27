@@ -2,15 +2,9 @@ package org.firstinspires.ftc.teamcode.stellarstructure.runnables;
 
 import androidx.annotation.NonNull;
 
-import org.firstinspires.ftc.teamcode.stellarstructure.Subsystem;
-
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
-public class Procedure extends Runnable {
-    private final Runnable[] runnables;
+public class Procedure extends CompositeRunnable {
     private int currentRunnableIndex = 0;
     private final String nameId;
     private boolean hasScheduledFirst = false;
@@ -18,25 +12,13 @@ public class Procedure extends Runnable {
 
 
     public Procedure(@NonNull String nameId, @NonNull Runnable... runnables) {
-        if (runnables.length == 0) {
-            throw new IllegalArgumentException("No directives provided");
-        }
+        super(runnables);
 
         if (nameId.isEmpty()) {
             throw new IllegalArgumentException("Procedure nameId cannot be empty");
         }
 
         this.nameId = nameId;
-        this.runnables = runnables;
-
-        Set<Subsystem> subsystems = new HashSet<>();
-
-        for (Runnable runnable : runnables) {
-            subsystems.addAll(Arrays.asList(runnable.getRequiredSubsystems()));
-            runnable.setRequiredSubsystems();
-        }
-
-        setRequiredSubsystems(subsystems.toArray(new Subsystem[0]));
 
         setInterruptible(false);
     }
@@ -65,10 +47,10 @@ public class Procedure extends Runnable {
     }
 
     @Override
-    public final void start(boolean hadToInterruptToStart) {}
+    protected final void onStart(boolean hadToInterruptToStart) {}
 
     @Override
-    public final void update() {
+    protected final void onUpdate() {
         if (isFinished()) return;
 
         if (!hasScheduledFirst) {
@@ -97,14 +79,14 @@ public class Procedure extends Runnable {
     }
 
     @Override
-    public final void stop(boolean interrupted) {
+    protected final void onStop(boolean interrupted) {
         if (interrupted && currentRunnableIndex >= 0 && currentRunnableIndex < runnables.length) {
-            runnables[currentRunnableIndex].stop(true);
+            runnables[currentRunnableIndex].onStop(true);
         }
     }
 
     @Override
-    public final boolean isFinished() {
+    protected final boolean isFinished() {
         return currentRunnableIndex >= runnables.length || shouldStop;
     }
 
@@ -194,7 +176,7 @@ public class Procedure extends Runnable {
     }
 
     @Override
-    public final void start(boolean hadToInterruptToStart) {}
+    public final void onStart(boolean hadToInterruptToStart) {}
 
     @Override
     public final void update() {
@@ -219,7 +201,7 @@ public class Procedure extends Runnable {
         }
 
         if (currentRunnable.getHasFinished()) {
-            currentRunnable.stopInScheduler();
+            currentRunnable.stop();
             currentRunnableIndex++;
             currentRunnable = runnables[currentRunnableIndex];
 
@@ -237,9 +219,9 @@ public class Procedure extends Runnable {
     }
 
     @Override
-    public final void stop(boolean interrupted) {
+    public final void onStop(boolean interrupted) {
         if (interrupted && currentRunnableIndex >= 0 && currentRunnableIndex < runnables.length) {
-            runnables[currentRunnableIndex].stop(true);
+            runnables[currentRunnableIndex].onStop(true);
         }
     }
 

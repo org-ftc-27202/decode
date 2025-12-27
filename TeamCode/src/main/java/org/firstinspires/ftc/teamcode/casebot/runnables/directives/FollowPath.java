@@ -27,20 +27,20 @@ public class FollowPath extends Directive {
     }
 
     @Override
-    public void start(boolean hadToInterruptToStart) {
+    protected void onStart(boolean hadToInterruptToStart) {
         follower.followPath(path, holdEnd);
     }
 
     @Override
-    public void update() {
+    protected void onUpdate() {
         follower.update();
     }
 
     @Override
-    public void stop(boolean interrupted) {}
+    protected void onStop(boolean interrupted) {}
 
     @Override
-    public boolean isFinished() {
+    protected boolean isFinished() {
         return follower.atPose(endPose, 2,2) && !follower.isBusy();
     }
 }

@@ -12,18 +12,18 @@ public class Sleep extends Directive {
 	}
 
 	@Override
-	public void start(boolean hadToInterruptToStart) {
+	protected void onStart(boolean hadToInterruptToStart) {
 		endingTime = System.currentTimeMillis() + (long) (sleepTimeSeconds * 1000.0);
 	}
 
 	@Override
-	public void update() {}
+	protected void onUpdate() {}
 
 	@Override
-	public void stop(boolean interrupted) {}
+	protected void onStop(boolean interrupted) {}
 
 	@Override
-	public boolean isFinished() {
+	protected boolean isFinished() {
 		return System.currentTimeMillis() >= endingTime;
 	}
 

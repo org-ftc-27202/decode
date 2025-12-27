@@ -26,16 +26,16 @@ public class DefaultDirective extends Directive {
     }
 
     @Override
-    public void start(boolean hadToInterruptToStart) {}
+    protected void onStart(boolean hadToInterruptToStart) {}
 
     @Override
-    public void update() {}
+    protected void onUpdate() {}
 
     @Override
-    public void stop(boolean interrupted) {}
+    protected void onStop(boolean interrupted) {}
 
     @Override
-    public final boolean isFinished() {
+    protected final boolean isFinished() {
         return false;
     }
 }

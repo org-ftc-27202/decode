@@ -20,7 +20,7 @@ public class PedroDefaultDrivebase extends DefaultDirective {
 
 	}
 	@Override
-	public void update() {
+	protected void onUpdate() {
 		double max, axial, lateral, yaw;
 		double leftFrontPower, rightFrontPower, leftBackPower, rightBackPower;
 		if (subsystem(Turret.class).velocityWithinTolerance()){

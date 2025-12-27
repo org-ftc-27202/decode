@@ -62,13 +62,13 @@ public class StellarBot {
 	public static <T extends Subsystem> T subsystem(@NonNull Class<T> subsystemClass) {
 		return getInstance().getSubsystem(subsystemClass);
 	}
+
 	@NonNull
 	public <T extends Subsystem> T getSubsystem(@NonNull Class<T> clazz) {
 		T gottenSubsystem = clazz.cast(subsystems.get(clazz));
-		if (gottenSubsystem==null){
-			throw new NoSuchElementException(String.format("No subsystem of key %s found in StellarBOt!", clazz));
+		if (gottenSubsystem == null){
+			throw new NoSuchElementException(String.format("No subsystem of key %s found in StellarBot!", clazz.getSimpleName()));
 		}
-
 		return gottenSubsystem;
 	}
 

@@ -118,7 +118,7 @@ public final class RedCaseFarAuto extends OpMode {
     }
 
     @Override
-    public void start() {
+    public void onStart() {
         new Procedure(
                 "AutoDrive",
                 new SetPosition(LeverTransfer.getInstance().getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION),

@@ -8,7 +8,6 @@ import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.firstinspires.ftc.teamcode.casebot.runnables.defaultdirectives.DefaultIntake;
 import org.firstinspires.ftc.teamcode.casebot.runnables.directives.FollowPath;
 import org.firstinspires.ftc.teamcode.casebot.runnables.directives.GetMotifSequence;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FarMotifLaunch;
@@ -109,7 +108,7 @@ public final class BlueCaseFarAuto extends OpMode {
             leverTransfer,
             spindexer,
             turret,
-                camera
+            camera
         );
 
         //this.follower = Constants.createFollower(hardwareMap);
@@ -134,13 +133,11 @@ public final class BlueCaseFarAuto extends OpMode {
 
     @Override
     public void start() {
-
-
         new Procedure(
                 "AutoDrive",
                 new SetPosition(leverTransfer.getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION),
                 new InstantlyDo(() -> intake.setIntakeSpeed(0.0)),
-                new InstantlyDo(()-> intake.setMotorSpeed()),
+                new InstantlyDo(intake::setMotorSpeed),
                 new Parallel(
                         "hmm",
                         new TurretStartup(), // This runs in the background
@@ -151,7 +148,7 @@ public final class BlueCaseFarAuto extends OpMode {
                         )),
                 new FarMotifLaunch(),
                 new InstantlyDo(()-> intake.setIntakeSpeed(1.0)),
-                new InstantlyDo(()-> intake.setMotorSpeed()),
+                new InstantlyDo(intake::setMotorSpeed),
                 new FollowPath(path2, follower, new Pose(43.000, 35.500), true),
                 new Parallel("pickup1",
                         new FullIntakeWaitForColor(),
@@ -160,7 +157,8 @@ public final class BlueCaseFarAuto extends OpMode {
                                 new Sleep(0.5),
                                 new FollowPath(path4, follower, new Pose(11.000, 35.500), true),
                                 new Sleep(0.5)
-                )),
+                        )
+                ),
                 new FollowPath(path5, follower, new Pose(30.000, 30.000), true)
                 //new FarMotifLaunch(),
                 //new FollowPath(path6, follower, new Pose(61.000, 44.000), true)

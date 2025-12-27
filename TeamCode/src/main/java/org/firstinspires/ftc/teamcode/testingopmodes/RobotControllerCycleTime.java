@@ -9,7 +9,7 @@ public class RobotControllerCycleTime extends LinearOpMode {
     @Override
     public void runOpMode() {
         long lastCycleTime = System.currentTimeMillis();
-        // wait for the start button to be pressed.
+        // wait for the onStart button to be pressed.
         waitForStart();
 
         while (opModeIsActive()) {

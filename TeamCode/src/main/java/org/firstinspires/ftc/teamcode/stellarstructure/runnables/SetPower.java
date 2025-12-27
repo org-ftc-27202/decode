@@ -17,19 +17,19 @@ public class SetPower extends Directive {
 	}
 
 	@Override
-	public void start(boolean hadToInterruptToStart) {
+	protected void onStart(boolean hadToInterruptToStart) {
 		motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 		motor.setPower(power);
 	}
 
 	@Override
-	public void update() {}
+	protected void onUpdate() {}
 
 	@Override
-	public void stop(boolean interrupted) {}
+	protected void onStop(boolean interrupted) {}
 
 	@Override
-	public boolean isFinished() {
+	protected boolean isFinished() {
 		return true;
 	}
 

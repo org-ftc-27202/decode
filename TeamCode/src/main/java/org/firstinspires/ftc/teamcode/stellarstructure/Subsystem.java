@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.DefaultDirective;
 
 public abstract class Subsystem {
-	//todo: maybe add start() or smt
+	//todo: maybe add onStart() or smt
 	//todo: make subsystems say what motors/other stuff they use
 	private DefaultDirective defaultDirective;
 

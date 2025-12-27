@@ -11,43 +11,115 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Runnable {
+    public enum Status {
+        WAITING("WAIT", false),
+        STARTED("STRT", false),
+        BLOCKED("BLCK", false),
+        PENDING("PEND", false),
+        ACTIVE("ACTV", false),
+        INTERRUPTED("INTR", true),
+        DONE("DONE", true);
+
+        private final String displayName;
+        private final boolean isFinished;
+
+        Status(String displayName, boolean isFinished) {
+            this.displayName = displayName;
+            this.isFinished = isFinished;
+        }
+
+        public boolean isFinished() {
+            return isFinished;
+        }
+
+        @NonNull
+        @Override
+        public String toString() {
+            return this.displayName;
+        }
+    }
+
+    private Status status = Status.WAITING;
+    private boolean isOwned = false;
+
     // no required subsystems by default
     private Subsystem[] requiredSubsystems = {};
     private Condition[] startingConditions = {};
-    private final List<Trigger> ownedTriggers = new ArrayList<>();
 
-    private boolean hadToInterruptToStart = false;
+    //todo: only for default directives
+    private final List<Trigger> ownedTriggers = new ArrayList<>();
 
     // interruptible by default
     private boolean interruptible = true;
 
+    // waits for starting conditions by default
+    private boolean waitForStartingConditions = true;
+
+
+
+
+
+
+
+
+
+    private boolean hadToInterruptToStart = false;
+
+
+
     private boolean hasBeenInterrupted = false;
     private boolean hasFinished = false;
 
-    private boolean waitForStartingConditions = true;
 
-    protected abstract void start(boolean hadToInterruptToStart);
+    protected abstract void onStart(boolean hadToInterruptToStart);
 
-    public abstract void update();
+    protected abstract void onUpdate();
 
-    protected abstract void stop(boolean interrupted);
+    protected abstract void onStop(boolean interrupted);
 
     public final void setHadToInterruptToStart(boolean hadToInterruptToStart) {
         this.hadToInterruptToStart = hadToInterruptToStart;
     }
 
-    public final void startInScheduler() {
+    public final void start() {
         this.hasFinished = false;
+        this.status = Status.STARTED;
 
-        start(hadToInterruptToStart);
+        this.onStart(hadToInterruptToStart);
     }
 
-    public final void stopInScheduler() {
+    public final void update() {
+        this.status = Status.ACTIVE;
+        this.onUpdate();
+    }
+
+    public final void stop() {
         this.hasFinished = true;
 
-        setHasBeenInterrupted(!isFinished());
-        stop(!isFinished());
+        boolean runnableFinished = isFinished();
+        this.status = runnableFinished ? Status.DONE : Status.INTERRUPTED;
+        this.setHasBeenInterrupted(!runnableFinished);
+        this.onStop(!runnableFinished);
     }
+
+    public final Status getStatus() {
+        return status;
+    }
+
+    public final void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public final boolean isOwned() {
+        return isOwned;
+    }
+
+    public final void setOwned() {
+        this.isOwned = true;
+    }
+
+
+
 
     protected abstract boolean isFinished();
 
@@ -95,8 +167,14 @@ public abstract class Runnable {
         return this;
     }
 
-    public final boolean getInterruptible() {
+    public final boolean isInterruptible() {
         return interruptible;
+    }
+
+    public final void updateIsFinished() {
+        if (!hasFinished) {
+            hasFinished = isFinished();
+        }
     }
 
     public final boolean getFinished() {

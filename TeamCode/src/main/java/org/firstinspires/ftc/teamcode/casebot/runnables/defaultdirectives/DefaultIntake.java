@@ -82,7 +82,7 @@ public class DefaultIntake extends DefaultDirective {
 	}
 
 	@Override
-	public void update() {
+	protected void onUpdate() {
 		intake.setMotorSpeed();
 	}
 }

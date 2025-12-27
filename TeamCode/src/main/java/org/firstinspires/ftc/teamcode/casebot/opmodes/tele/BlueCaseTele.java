@@ -16,7 +16,6 @@ import org.firstinspires.ftc.teamcode.casebot.subsystems.PedroDrivebase;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Spindexer;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Turret;
 import org.firstinspires.ftc.teamcode.stellarstructure.StellarBot;
-import org.firstinspires.ftc.teamcode.util.TrajectoryCalculator;
 import org.firstinspires.ftc.teamcode.util.bootscreen.BootScreen;
 import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
 
@@ -72,8 +71,8 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
                 telemetry.addData("telemetry didn't work", e);
             }
 
-            double[] radiansAndVelocity = TrajectoryCalculator.calculateTrajectory(0.1, 3.6576, 1.0, 2.7);
-            telemetry.addLine(String.format("Radians: %f, Velocity: %f", radiansAndVelocity[0], radiansAndVelocity[1]));
+            //double[] radiansAndVelocity = TrajectoryCalculator.calculateTrajectory(0.1, 3.6576, 1.0, 2.7);
+            //telemetry.addLine(String.format("Radians: %f, Velocity: %f", radiansAndVelocity[0], radiansAndVelocity[1]));
 
             telemetry.update();
 

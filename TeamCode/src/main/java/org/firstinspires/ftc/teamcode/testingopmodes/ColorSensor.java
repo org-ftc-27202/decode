@@ -19,7 +19,7 @@ public class ColorSensor extends LinearOpMode {
         telemetry.addData("Beam Break", "Press START to continue...");
         telemetry.update();
 
-        // wait for the start button to be pressed.
+        // wait for the onStart button to be pressed.
         waitForStart();
 
         // while the OpMode is active, loop and read the digital channel.

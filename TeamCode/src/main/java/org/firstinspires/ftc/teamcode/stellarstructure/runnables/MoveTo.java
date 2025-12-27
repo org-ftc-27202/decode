@@ -18,23 +18,23 @@ public class MoveTo extends Directive {
 	}
 
 	@Override
-	public void start(boolean hadToInterruptToStart) {
+	protected void onStart(boolean hadToInterruptToStart) {
 		motor.setTargetPosition(targetPosition);
 		motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 		motor.setPower(Math.abs(power));
 	}
 
 	@Override
-	public void update() {}
+	protected void onUpdate() {}
 
 	@Override
-	public void stop(boolean interrupted) {
+	protected void onStop(boolean interrupted) {
 		motor.setPower(0);
 		motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 	}
 
 	@Override
-	public boolean isFinished() {
+	protected boolean isFinished() {
 		return targetPosition == motor.getTargetPosition();
 	}
 

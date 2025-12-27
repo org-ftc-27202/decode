@@ -14,18 +14,18 @@ public class SetSpeedScale extends Directive {
     }
 
     @Override
-    public void start(boolean hadToInterruptToStart) {
+    protected void onStart(boolean hadToInterruptToStart) {
         subsystem(PedroDrivebase.class).setSpeedScale(scale);
     }
 
     @Override
-    public void update() {}
+    protected void onUpdate() {}
 
     @Override
-    public void stop(boolean interrupted) {}
+    protected void onStop(boolean interrupted) {}
 
     @Override
-    public boolean isFinished() {
+    protected boolean isFinished() {
         return true;
     }
 

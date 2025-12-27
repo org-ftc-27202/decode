@@ -14,10 +14,10 @@ import org.firstinspires.ftc.teamcode.util.FtcJsonStorage;
 public class FtcJsonExample extends LinearOpMode {
 	@Override
 	public void runOpMode() {
-		telemetry.addLine("Waiting for start");
+		telemetry.addLine("Waiting for onStart");
 		telemetry.update();
 
-		// Wait for the user to press start on the Driver Station
+		// Wait for the user to press onStart on the Driver Station
 		waitForStart();
 
 		FtcJsonStorage storage = new FtcJsonStorage(hardwareMap.appContext);

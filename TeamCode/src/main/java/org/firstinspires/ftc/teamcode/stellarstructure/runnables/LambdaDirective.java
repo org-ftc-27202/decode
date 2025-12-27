@@ -13,43 +13,43 @@ public class LambdaDirective extends Directive {
 
 	public LambdaDirective() {}
 
-	public LambdaDirective onStart(Consumer<Boolean> onStart) {
+	public LambdaDirective setOnStart(Consumer<Boolean> onStart) {
 		this.onStart = onStart;
 		return this;
 	}
 
 	@Override
-	public void start(boolean hadToInterruptToStart) {
+	protected void onStart(boolean hadToInterruptToStart) {
 		onStart.accept(hadToInterruptToStart);
 	}
 
-	public LambdaDirective onUpdate(Action onUpdate) {
+	public LambdaDirective setOnUpdate(Action onUpdate) {
 		this.onUpdate = onUpdate;
 		return this;
 	}
 
 	@Override
-	public void update() {
+	protected void onUpdate() {
 		onUpdate.run();
 	}
 
-	public LambdaDirective onStop(Consumer<Boolean> onStop) {
+	public LambdaDirective setOnStop(Consumer<Boolean> onStop) {
 		this.onStop = onStop;
 		return this;
 	}
 
 	@Override
-	public void stop(boolean interrupted) {
+	protected void onStop(boolean interrupted) {
 		onStop.accept(interrupted);
 	}
 
-	public LambdaDirective finishedWhen(Condition finishedWhen) {
+	public LambdaDirective setFinishedWhen(Condition finishedWhen) {
 		this.finishedWhen = finishedWhen;
 		return this;
 	}
 
 	@Override
-	public boolean isFinished() {
+	protected boolean isFinished() {
 		return finishedWhen.evaluate();
 	}
 }

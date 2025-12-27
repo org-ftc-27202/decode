@@ -4,8 +4,10 @@ package org.firstinspires.ftc.teamcode.stellarstructure;
 import androidx.annotation.NonNull;
 
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.Condition;
+import org.firstinspires.ftc.teamcode.stellarstructure.runnables.CompositeRunnable;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Runnable;
 import org.firstinspires.ftc.teamcode.stellarstructure.triggers.Trigger;
+import org.firstinspires.ftc.teamcode.util.MonoSpacedFont;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -46,7 +48,7 @@ public class Scheduler {
 		for (Runnable runningRunnable : runnables) {
 			for (Subsystem requiredByNew : runnableToCheck.getRequiredSubsystems()) {
 				for (Subsystem requiredByRunning : runningRunnable.getRequiredSubsystems()) {
-					if (requiredByNew.equals(requiredByRunning) && !runningRunnable.getInterruptible()) {
+					if (requiredByNew.equals(requiredByRunning) && !runningRunnable.isInterruptible()) {
 						return true;
 					}
 				}
@@ -108,8 +110,10 @@ public class Scheduler {
 		if (!checkStartingConditions(runnableToSchedule)) {
 			if (runnableToSchedule.getWaitForStartingConditions()) {
 				this.pendingRunnables.add(runnableToSchedule);
+				runnableToSchedule.setStatus(Runnable.Status.PENDING);
 			} else {
 				runnableToSchedule.setHasBeenInterrupted(true);
+				runnableToSchedule.setStatus(Runnable.Status.BLOCKED);
 			}
 
 			return;
@@ -117,17 +121,19 @@ public class Scheduler {
 
 		// try to run
 		if (!startRunnable(runnableToSchedule)) {
-			// didn't start, so add to queue
+			// didn't onStart, so add to queue
 			if (runnableToSchedule.getWaitForStartingConditions()) {
 				this.pendingRunnables.add(runnableToSchedule);
+				runnableToSchedule.setStatus(Runnable.Status.PENDING);
 			} else {
 				runnableToSchedule.setHasBeenInterrupted(true);
+				runnableToSchedule.setStatus(Runnable.Status.BLOCKED);
 			}
 		}
 	}
 
 	public final void run() {
-		// check scheduled runnables and start them if possible
+		// check scheduled runnables and onStart them if possible
 		for (Iterator<Runnable> iterator = this.pendingRunnables.iterator(); iterator.hasNext(); ) {
 			Runnable runnable = iterator.next();
 			if (checkStartingConditions(runnable)) {
@@ -139,6 +145,7 @@ public class Scheduler {
 
 		// update runnables
 		for (Runnable runnable : new ArrayList<>(this.activeRunnables)) {
+			runnable.updateIsFinished();
 			if (runnable.getFinished()) {
 				if (!runnablesToRemove.contains(runnable)) {
 					runnablesToRemove.add(runnable);
@@ -155,14 +162,14 @@ public class Scheduler {
 		// remove runnables to be removed
 		for (Runnable runnable : runnablesToRemove) {
 			this.activeRunnables.remove(runnable);
-			runnable.stopInScheduler();
+			runnable.stop();
 		}
 		runnablesToRemove.clear();
 
 		// add runnables to be added
 		for (Runnable runnable : runnablesToAdd) {
 			this.activeRunnables.add(runnable);
-			runnable.startInScheduler();
+			runnable.start();
 		}
 		runnablesToAdd.clear();
 
@@ -203,9 +210,9 @@ public class Scheduler {
 		// clear all queued directives
 		this.pendingRunnables.clear();
 
-		// stop all directives
+		// onStop all directives
 		for (Runnable runnable : this.activeRunnables) {
-			runnable.stopInScheduler();
+			runnable.stop();
 		}
 
 		// clear all running directives
@@ -215,22 +222,66 @@ public class Scheduler {
 		this.runnablesToRemove.clear();
 	}
 
+
+	public void buildBranch(StringBuilder stringBuilder, String prefix, Runnable runnable, boolean isLast) {
+		stringBuilder.append(prefix);
+		stringBuilder.append(runnable.getStatus() == Runnable.Status.ACTIVE ? "█" : (isLast ? "└" : "├"));
+		stringBuilder.append('─');
+		stringBuilder.append(runnable instanceof CompositeRunnable ? '┬' : '─');
+		stringBuilder.append("   ");
+		int classLength = MonoSpacedFont.toMonospace(stringBuilder, runnable.getClass().getSimpleName());
+
+		for (int i = 0; i < 22 - classLength - prefix.length() / 2; i++) {
+			stringBuilder.append("   ");
+		}
+		MonoSpacedFont.toMonospace(stringBuilder, runnable.getStatus().toString());
+		stringBuilder.append("   ║\n");
+
+		if (runnable instanceof CompositeRunnable) {
+			Runnable[] children = ((CompositeRunnable) runnable).getOwnedRunnables();
+
+			for (int i = 0; i < children.length; i++) {
+				buildBranch(stringBuilder, prefix + "│   ", children[i], i == children.length - 1);
+			}
+		}
+	}
+
+	public void buildRunnable(StringBuilder stringBuilder, Runnable runnable) {
+		stringBuilder.append("╔═╤   ");
+		int classLength = MonoSpacedFont.toMonospace(stringBuilder, runnable.getClass().getSimpleName());
+
+		stringBuilder.append("   ");
+		for (int i = 0; i < 26 - classLength; i++) {
+			stringBuilder.append('═');
+		}
+		stringBuilder.append("╗\n");
+
+		if (runnable instanceof CompositeRunnable) {
+			for (Runnable child : ((CompositeRunnable) runnable).getOwnedRunnables()) {
+				buildBranch(stringBuilder, "║   ", child, false);
+			}
+		}
+		stringBuilder.append("╚══════════════════════════════╝\n");
+	}
+
 	@NonNull
 	@Override
 	public final String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append(String.format("Runnables Queue: %d\nActive Runnables: %d", this.pendingRunnables.size(), this.activeRunnables.size()));
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append("Runnables Queue: ").append(this.pendingRunnables.size()).append("\nActive Runnables: ").append(this.activeRunnables.size());
 
-		builder.append("\nRunnables Queue\n");
+		stringBuilder.append("\nRunnables Queue\n");
 		for (Runnable runnable : this.pendingRunnables) {
-			builder.append(String.format("\n%s", runnable.toString()));
+			stringBuilder.append(String.format("\n%s", runnable.getClass().getSimpleName()));
 		}
 
-		builder.append("\nActive Runnables\n");
+		stringBuilder.append("\nActive Runnables\n");
 		for (Runnable runnable : this.activeRunnables) {
-			builder.append(String.format("\n%s", runnable.toString()));
+			if (!runnable.isOwned()) {
+				buildRunnable(stringBuilder, runnable);
+			}
 		}
 
-		return builder.toString();
+		return stringBuilder.toString();
 	}
 }

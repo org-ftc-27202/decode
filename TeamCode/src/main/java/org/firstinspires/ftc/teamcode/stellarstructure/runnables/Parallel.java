@@ -2,23 +2,18 @@ package org.firstinspires.ftc.teamcode.stellarstructure.runnables;
 
 import androidx.annotation.NonNull;
 
-import org.firstinspires.ftc.teamcode.stellarstructure.Subsystem;
-
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 /**
  * Represents a list of {@link Runnable} tasks to be executed in parallel.
- * Finishes when all {@link Runnable} tasks are complete or one is interrupted/doesn't start.
+ * Finishes when all {@link Runnable} tasks are complete or one is interrupted/doesn't onStart.
  *
  * <p>Example:</p>
  *
  * <pre>
  *     {@code
  *     new Parallel(
- *         "IntakeWithTimer",
+ *         "IntakeWhileWait10",
  *         new Sleep(10),
  *         new IntakeAt(2)
  *     ).schedule();
@@ -26,8 +21,7 @@ import java.util.Set;
  * </pre>
  */
 
-public class Parallel extends Runnable {
-    private final Runnable[] runnables;
+public class Parallel extends CompositeRunnable {
     private final String nameId;
     private boolean hasScheduledFirst = false;
     private boolean shouldStop = false;
@@ -39,25 +33,13 @@ public class Parallel extends Runnable {
      * @param runnables The {@link Runnable} tasks to be executed in parallel.
      */
     public Parallel(@NonNull String nameId, @NonNull Runnable... runnables) {
-        if (runnables.length == 0) {
-            throw new IllegalArgumentException("No directives provided");
-        }
+        super(runnables);
 
         if (nameId.isEmpty()) {
             throw new IllegalArgumentException("Parallel nameId cannot be empty");
         }
 
         this.nameId = nameId;
-        this.runnables = runnables;
-
-        Set<Subsystem> subsystems = new HashSet<>();
-
-        for (Runnable runnable : runnables) {
-            subsystems.addAll(Arrays.asList(runnable.getRequiredSubsystems()));
-            runnable.setRequiredSubsystems();
-        }
-
-        setRequiredSubsystems(subsystems.toArray(new Subsystem[0]));
 
         setInterruptible(false);
     }
@@ -82,10 +64,10 @@ public class Parallel extends Runnable {
     }
 
     @Override
-    public final void start(boolean hadToInterruptToStart) {}
+    protected final void onStart(boolean hadToInterruptToStart) {}
 
     @Override
-    public final void update() {
+    protected final void onUpdate() {
         if (isFinished()) {
             return;
         }
@@ -109,16 +91,18 @@ public class Parallel extends Runnable {
     }
 
     @Override
-    public final void stop(boolean interrupted) {
-        for (Runnable runnable : runnables) {
-            if (!runnable.getHasFinished()) {
-                runnable.stop(interrupted);
+    protected final void onStop(boolean interrupted) {
+        if (interrupted) {
+            for (Runnable runnable : runnables) {
+                if (!runnable.getHasFinished()) {
+                    runnable.onStop(true);
+                }
             }
         }
     }
 
     @Override
-    public final boolean isFinished() {
+    protected final boolean isFinished() {
         if (shouldStop) {
             return true;
         }

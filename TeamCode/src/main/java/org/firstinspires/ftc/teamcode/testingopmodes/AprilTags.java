@@ -59,10 +59,10 @@ public final class AprilTags extends LinearOpMode {
 
         VisionPortal visionPortal = builder.build();
 
-        telemetry.addLine("Waiting for start");
+        telemetry.addLine("Waiting for onStart");
         telemetry.update();
 
-        // Wait for the user to press start on the Driver Station
+        // Wait for the user to press onStart on the Driver Station
         waitForStart();
 
         FtcJsonStorage storage = new FtcJsonStorage(hardwareMap.appContext);
@@ -178,9 +178,9 @@ public final class AprilTags extends LinearOpMode {
             telemetry.update();
 
             if (gamepad1.a) {
-                // IMPORTANT NOTE: calling stopStreaming() will indeed stop the stream of images
-                // from the camera (and, by extension, stop calling your vision pipeline). HOWEVER,
-                // if the reason you wish to stop the stream early is to switch use of the camera
+                // IMPORTANT NOTE: calling stopStreaming() will indeed onStop the stream of images
+                // from the camera (and, by extension, onStop calling your vision pipeline). HOWEVER,
+                // if the reason you wish to onStop the stream early is to switch use of the camera
                 // over to, say, Vuforia or TFOD, you will also need to call closeCameraDevice()
                 // (commented out below), because according to the Android Camera API documentation:
                 //	     "Your application should only have one Camera object active at a time for

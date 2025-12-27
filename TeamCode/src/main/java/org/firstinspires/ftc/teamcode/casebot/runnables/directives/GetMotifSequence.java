@@ -30,7 +30,7 @@ import java.util.List;
     }
 
     @Override
-    public void start(boolean hadToInterruptToStart) {
+    public void onStart(boolean hadToInterruptToStart) {
         //AprilTags.PositionalPipeline positionalPipeline = new AprilTags.PositionalPipeline();
 
         gameTagLibrary = AprilTagGameDatabase.getDecodeTagLibrary();
@@ -99,7 +99,7 @@ import java.util.List;
     }
 
     @Override
-    public void stop(boolean interrupted) {}
+    public void onStop(boolean interrupted) {}
 
     @Override
     public boolean isFinished() {
@@ -118,7 +118,7 @@ public class GetMotifSequence extends Directive {
     }
 
     @Override
-    public void start(boolean hadToInterruptToStart) {
+    protected void onStart(boolean hadToInterruptToStart) {
         gameTagLibrary = AprilTagGameDatabase.getDecodeTagLibrary();
 
         aprilTag = new AprilTagProcessor.Builder()
@@ -142,7 +142,7 @@ public class GetMotifSequence extends Directive {
     }
 
     @Override
-    public void update() {
+    protected void onUpdate() {
         // If we already found it, don't keep processing
         if (isTargetFound) return;
 
@@ -170,7 +170,7 @@ public class GetMotifSequence extends Directive {
     }
 
     @Override
-    public void stop(boolean interrupted) {
+    protected void onStop(boolean interrupted) {
         // FIX 2: Close the camera to prevent crashes
             // Check if the portal exists before trying to close it
             if (visionPortal != null) {
@@ -187,8 +187,7 @@ public class GetMotifSequence extends Directive {
     }
 
     @Override
-    public boolean isFinished() {
-        // FIX 3: Return true when we have found the tag
+    protected boolean isFinished() {
         return isTargetFound;
     }
 }
