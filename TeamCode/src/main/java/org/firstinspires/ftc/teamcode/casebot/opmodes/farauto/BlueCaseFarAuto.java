@@ -49,7 +49,7 @@ public final class BlueCaseFarAuto extends OpMode {
     private final Pose collect1Pose = new Pose(19, 35.5);
     private final Pose collect1Control = new Pose(56,35.5);
     private final Pose launchFarPose = new Pose(60,21);
-    private PathChain path1, path2, path3, path4, path5, path6;
+    private PathChain path1, path2, path3, path4, path5, path6, path7, path8;
 
     public void buildPaths() {
         path1 = follower
@@ -69,7 +69,7 @@ public final class BlueCaseFarAuto extends OpMode {
         path3 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(43.000, 35.500), new Pose(27.000, 35.500))
+                        new BezierLine(new Pose(43.000, 35.500), new Pose(33.000, 35.500))
                 )
                 .setConstantHeadingInterpolation(Math.toRadians(180))
                 .build();
@@ -77,7 +77,7 @@ public final class BlueCaseFarAuto extends OpMode {
         path4 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(27.000, 35.500), new Pose(11.000, 35.500))
+                        new BezierLine(new Pose(33.000, 35.500), new Pose(11.000, 35.500))
                 )
                 .setConstantHeadingInterpolation(Math.toRadians(180))
                 .build();
@@ -85,18 +85,32 @@ public final class BlueCaseFarAuto extends OpMode {
         path5 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(11.000, 35.500), new Pose(30.000, 30.000))
+                        new BezierLine(new Pose(11.000, 35.500), new Pose(61.000, 24.000))
                 )
-                .setTangentHeadingInterpolation()
-                .setReversed()
+                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(90))
                 .build();
         path6 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(61.000, 24.000), new Pose(61.000, 44.000))
+                        new BezierLine(new Pose(61.000, 24.000), new Pose(43.000, 59.500))
                 )
-                .setTangentHeadingInterpolation()
+                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(180))
                 .build();
+        path7 = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(new Pose(43.00, 59.00), new Pose (33.0, 59.0))
+                )
+                .setConstantHeadingInterpolation(Math.toRadians(180))
+                .build();
+        path8 = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(new Pose(33.0, 59.00), new Pose (11.0, 59.0))
+                )
+                .setConstantHeadingInterpolation(Math.toRadians(180))
+                .build();
+
     }
 
     @Override
@@ -114,7 +128,7 @@ public final class BlueCaseFarAuto extends OpMode {
         //this.follower = Constants.createFollower(hardwareMap);
         pedroDrivebase.setOpMode(PedroDrivebase.opModeType.AUTO);
         caseBot.init(hardwareMap);
-        caseBot.setPrintDebug(true);
+        caseBot.setPrintDebug(false);
         follower = pedroDrivebase.getFollower();
         buildPaths();
         spindexer.setArtifactColorInSpindexer(0, DecodeDataTypes.ArtifactColor.PURPLE);
@@ -136,7 +150,7 @@ public final class BlueCaseFarAuto extends OpMode {
         new Procedure(
                 "AutoDrive",
                 new SetPosition(leverTransfer.getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION),
-                new InstantlyDo(() -> intake.setIntakeSpeed(0.0)),
+                new InstantlyDo(() -> intake.setIntakeSpeed(0.35)),
                 new InstantlyDo(intake::setMotorSpeed),
                 new Parallel(
                         "hmm",
@@ -144,22 +158,33 @@ public final class BlueCaseFarAuto extends OpMode {
                         new Procedure(
                                 "lock in",// While this part continues forward
                                 new GetMotifSequence(),
-                                new FollowPath(path1, follower, new Pose(61.000, 24.000), true)
+                                new FollowPath(path1, follower, new Pose(61.000, 24.000), true, 1.0)
                         )),
                 new FarMotifLaunch(),
-                new InstantlyDo(()-> intake.setIntakeSpeed(1.0)),
+                new InstantlyDo(()-> intake.setIntakeSpeed(0.5)),
                 new InstantlyDo(intake::setMotorSpeed),
-                new FollowPath(path2, follower, new Pose(43.000, 35.500), true),
+                new FollowPath(path2, follower, new Pose(43.000, 35.500), true, 1.0),
                 new Parallel("pickup1",
                         new FullIntakeWaitForColor(),
                         new Procedure ("pickup",
-                                new FollowPath(path3, follower, new Pose(27.000, 35.500), true),
+                                new FollowPath(path3, follower, new Pose(33.000, 35.500), true, 0.4),
                                 new Sleep(0.5),
-                                new FollowPath(path4, follower, new Pose(11.000, 35.500), true),
+                                new FollowPath(path4, follower, new Pose(11.000, 35.500), true, 0.4),
                                 new Sleep(0.5)
                         )
                 ),
-                new FollowPath(path5, follower, new Pose(30.000, 30.000), true)
+                new FollowPath(path5, follower, new Pose(61.000, 24.000), true, 1.0),
+                new FarMotifLaunch(),
+                new FollowPath(path6, follower, new Pose(43, 59.5), true, 1.0),
+                new Parallel("pickup2",
+                    new FullIntakeWaitForColor(),
+                        new Procedure ("pickup",
+                            new FollowPath(path7, follower, new Pose(33.000, 59.500), true, 0.4),
+                            new Sleep(0.5),
+                            new FollowPath(path8, follower, new Pose(11.000, 59.500), true, 0.4),
+                            new Sleep(0.5)
+                )
+        )
                 //new FarMotifLaunch(),
                 //new FollowPath(path6, follower, new Pose(61.000, 44.000), true)
 

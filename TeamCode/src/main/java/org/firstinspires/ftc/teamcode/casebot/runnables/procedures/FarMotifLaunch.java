@@ -28,7 +28,7 @@ public class FarMotifLaunch extends Procedure {
                         new FullMotifOuttake(),
                         new Procedure(
                                 "Start Driving",
-                                new Sleep(0.1),
+                                new Sleep(1.0),
                                 new InstantlyDo(()->
                                         subsystem(PedroDrivebase.class).getFollower().startTeleopDrive(true)
                                 )

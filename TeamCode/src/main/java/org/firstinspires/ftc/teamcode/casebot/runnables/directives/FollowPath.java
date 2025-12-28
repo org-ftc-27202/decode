@@ -15,20 +15,22 @@ public class FollowPath extends Directive {
     private final Pose endPose;
 
     private final boolean holdEnd;
+    private final double pathingPower;
 
-    public FollowPath(PathChain path, Follower follower, Pose endPose, boolean holdEnd) {
+    public FollowPath(PathChain path, Follower follower, Pose endPose, boolean holdEnd, double pathingPower) {
         setInterruptible(true);
         this.path = path;
         this.follower = follower;
         this.endPose = endPose;
         this.holdEnd = holdEnd;
+        this.pathingPower =pathingPower;
 
         setRequiredSubsystems(subsystem(PedroDrivebase.class));
     }
 
     @Override
     protected void onStart(boolean hadToInterruptToStart) {
-        follower.followPath(path, holdEnd);
+        follower.followPath(path, pathingPower, holdEnd);
     }
 
     @Override
