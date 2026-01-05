@@ -24,8 +24,6 @@ public class PulseTransferLever extends Procedure {
 				//new Sleep(0.05)
 		);
 
-		setRequiredSubsystems(subsystem(LeverTransfer.class));
-
 		/*
 		setStartingConditions(
 				// spindexer outtake position
@@ -35,5 +33,7 @@ public class PulseTransferLever extends Procedure {
 		setRequiredSubsystems(
 				subsystem(LeverTransfer.class)
 		);
+
+		setInterruptible(false);
 	}
 }

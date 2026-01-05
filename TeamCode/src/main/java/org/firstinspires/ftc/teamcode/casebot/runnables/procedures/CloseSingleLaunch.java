@@ -44,5 +44,7 @@ public class CloseSingleLaunch extends Procedure {
                 subsystem(LeverTransfer.class),
                 subsystem(Spindexer.class)
         );
+
+        setInterruptible(false);
     }
 }

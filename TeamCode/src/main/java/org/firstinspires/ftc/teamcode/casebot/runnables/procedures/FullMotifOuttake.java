@@ -20,5 +20,7 @@ public class FullMotifOuttake extends Procedure {
                 subsystem(Spindexer.class),
                 subsystem(LeverTransfer.class)
         );
+
+        setInterruptible(false);
     }
 }

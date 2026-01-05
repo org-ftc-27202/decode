@@ -44,5 +44,7 @@ public class FarSingleLaunch extends Procedure {
                 subsystem(LeverTransfer.class),
                 subsystem(Spindexer.class)
         );
+
+        setInterruptible(false);
     }
 }

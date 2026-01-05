@@ -42,5 +42,7 @@ public class ShortLaunch extends Procedure {
                 subsystem(LeverTransfer.class),
                 subsystem(Spindexer.class)
         );
+
+        setInterruptible(false);
     }
 }

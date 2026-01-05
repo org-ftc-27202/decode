@@ -38,5 +38,7 @@ public class ShortColorLaunch extends Procedure {
                 subsystem(PedroDrivebase.class),
                 subsystem(Turret.class)
         );
+
+        setInterruptible(false);
     }
 }

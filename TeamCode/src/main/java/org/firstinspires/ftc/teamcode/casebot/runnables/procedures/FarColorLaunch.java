@@ -43,5 +43,7 @@ public class FarColorLaunch extends Procedure {
                 subsystem(LeverTransfer.class),
                 subsystem(Spindexer.class)
         );
+
+        setInterruptible(false);
     }
 }

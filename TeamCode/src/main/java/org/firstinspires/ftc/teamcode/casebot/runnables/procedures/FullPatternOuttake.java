@@ -21,5 +21,7 @@ public class FullPatternOuttake extends Procedure {
                 subsystem(Spindexer.class),
                 subsystem(LeverTransfer.class)
         );
+
+        setInterruptible(false);
     }
 }

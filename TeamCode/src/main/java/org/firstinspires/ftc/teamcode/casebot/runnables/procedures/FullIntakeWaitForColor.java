@@ -17,6 +17,8 @@ public class FullIntakeWaitForColor extends Procedure {
                 new SetPos(subsystem(Spindexer.class).getSpindexerServo(), subsystem(Spindexer.class).getServoPositionFromSegment(0, Spindexer.Position.TRANSFER))
         );
 
+        setInterruptible(true);
+
         setRequiredSubsystems(
                 subsystem(LeverTransfer.class),
                 subsystem(Spindexer.class)

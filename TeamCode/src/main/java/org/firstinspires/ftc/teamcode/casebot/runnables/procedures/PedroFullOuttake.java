@@ -37,5 +37,7 @@ public class PedroFullOuttake extends Procedure {
                 subsystem(Spindexer.class),
                 subsystem(LeverTransfer.class)
         );
+
+        setInterruptible(false);
     }
 }

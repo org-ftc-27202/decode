@@ -33,5 +33,7 @@ public class TurretStartup extends Procedure {
         setRequiredSubsystems(
                 subsystem(Turret.class)
         );
+
+        setInterruptible(false);
     }
 }

@@ -38,5 +38,7 @@ public class OuttakeAt extends Procedure {
                 subsystem(Spindexer.class),
                 subsystem(LeverTransfer.class)
         );
+
+        setInterruptible(false);
     }
 }
