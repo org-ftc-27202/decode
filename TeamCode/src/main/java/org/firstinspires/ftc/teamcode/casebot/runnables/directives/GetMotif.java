@@ -106,13 +106,13 @@ import java.util.List;
         return false;
     }
 }*/
-public class GetMotifSequence extends Directive {
+public class GetMotif extends Directive {
     private AprilTagLibrary gameTagLibrary;
     private AprilTagProcessor aprilTag;
     private VisionPortal visionPortal; // Field to hold the portal
     private boolean isTargetFound = false; // Flag to finish the command
 
-    public GetMotifSequence() {
+    public GetMotif() {
         setInterruptible(true);
         setRequiredSubsystems(subsystem(Camera.class)); // Ideally, require the Turret/Camera subsystem here if you have one
     }

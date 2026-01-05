@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.casebot.subsystems.Turret;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.InstantlyDo;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Parallel;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Procedure;
-import org.firstinspires.ftc.teamcode.stellarstructure.runnables.SetPosition;
+import org.firstinspires.ftc.teamcode.stellarstructure.runnables.SetPos;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Sleep;
 
 public class FarMotifLaunch extends Procedure {
@@ -20,9 +20,9 @@ public class FarMotifLaunch extends Procedure {
                     subsystem(PedroDrivebase.class).getFollower().turnTo(Math.toRadians(subsystem(PedroDrivebase.class).getLaunchYaw()));
                 }),
                 new InstantlyDo(()->
-                        subsystem(Turret.class).setTurretVelocity(1560.0)
+                        subsystem(Turret.class).setTurretVelocity(1600.0)
                 ),
-                new SetPosition(subsystem(Turret.class).getTurretHoodServo(), 0.0),
+                new SetPos(subsystem(Turret.class).getTurretHoodServo(), 0.0),
                 new Parallel(
                         "Launch+Stop",
                         new FullMotifOuttake(),

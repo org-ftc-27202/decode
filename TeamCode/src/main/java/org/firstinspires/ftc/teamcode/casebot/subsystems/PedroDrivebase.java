@@ -83,6 +83,7 @@ public final class PedroDrivebase extends Subsystem {
             firstInit = false;
         }
 
+
         lightLeft = new StellarLight(hardwareMap, "lightLeft");
         lightRight = new StellarLight(hardwareMap, "lightRight");
 

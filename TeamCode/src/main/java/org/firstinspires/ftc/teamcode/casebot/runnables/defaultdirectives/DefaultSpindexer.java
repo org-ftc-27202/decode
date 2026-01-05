@@ -4,7 +4,7 @@ import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsyst
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.teamcode.casebot.runnables.directives.GetMotifSequence;
+import org.firstinspires.ftc.teamcode.casebot.runnables.directives.GetMotif;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.CloseSingleLaunch;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FarColorLaunch;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FarLaunch;
@@ -144,7 +144,7 @@ public class DefaultSpindexer extends DefaultDirective {
 						StatefulCondition.Edge.RISING
 				),
 				()->{
-					new GetMotifSequence().schedule();
+					new GetMotif().schedule();
 				}
 		));
 		addTrigger(new ActionTrigger(

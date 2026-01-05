@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.casebot.runnables.directives.FollowPath;
-import org.firstinspires.ftc.teamcode.casebot.runnables.directives.GetMotifSequence;
+import org.firstinspires.ftc.teamcode.casebot.runnables.directives.GetMotif;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FarMotifLaunch;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FullIntakeWaitForColor;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.TurretStartup;
@@ -23,7 +23,7 @@ import org.firstinspires.ftc.teamcode.stellarstructure.StellarBot;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.InstantlyDo;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Parallel;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Procedure;
-import org.firstinspires.ftc.teamcode.stellarstructure.runnables.SetPosition;
+import org.firstinspires.ftc.teamcode.stellarstructure.runnables.SetPos;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Sleep;
 import org.firstinspires.ftc.teamcode.util.DecodeDataTypes;
 import org.firstinspires.ftc.teamcode.util.bootscreen.BootScreen;
@@ -35,6 +35,7 @@ public final class BlueCaseFarAuto extends OpMode {
     private final double TURRET_LAUNCH = 0;
     private final double HOOD_LAUNCH = 0;
     private Timer pathTimer, actionTimer, opmodeTimer;
+
     private final StellarBot caseBot = StellarBot.getInstance();
     private final PedroDrivebase pedroDrivebase = new PedroDrivebase();
     private final Intake intake = new Intake();
@@ -45,72 +46,106 @@ public final class BlueCaseFarAuto extends OpMode {
 
     private Follower follower;
 
-    private final Pose startPose = new Pose(56.75,7, Math.toRadians(180));
-    private final Pose collect1Pose = new Pose(19, 35.5);
-    private final Pose collect1Control = new Pose(56,35.5);
-    private final Pose launchFarPose = new Pose(60,21);
-    private PathChain path1, path2, path3, path4, path5, path6, path7, path8;
+    private final Pose startPose = new Pose(55.3,7, Math.toRadians(90));
+    private final Pose cameraPose = new Pose(61, 24, Math.toRadians(90));
+    private final Pose launchControlPose = new Pose(61, 24, Math.toRadians(90));
+    private final Pose launchPose = new Pose(61, 24, Math.toRadians(85));
+
+    private final Pose spike1Control = new Pose(43,35.5, Math.toRadians(180));
+    private final Pose spike1Start = new Pose(33,35.5, Math.toRadians(180));
+    private final Pose spike1End = new Pose(17,35.5, Math.toRadians(180));
+
+    private final Pose spike2Control = new Pose(43,59, Math.toRadians(180));
+    private final Pose spike2Start = new Pose(34,59, Math.toRadians(180));
+    private final Pose spike2End = new Pose(17,59, Math.toRadians(180));
+    private final Pose gate = new Pose(28,72, Math.toRadians(180));
+    
+  //  private final Pose collect1Pose = new Pose(19, 35.5);
+
+  //  private final Pose collect1Control = new Pose(56,35.5);
+  //  private final Pose launchFarPose = new Pose(60,21);
+    private PathChain driveToGetMotif, driveToSpike1Control, driveToSpike1Start, driveToSpike1End, driveToLaunch1, driveToSpike2Control, driveToSpike2Start, driveToSpike2End, driveToLaunch2pt1, driveToLaunch2pt2, driveToLever;
 
     public void buildPaths() {
-        path1 = follower
+        driveToGetMotif = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(55.300, 7.000), new Pose(61.000, 24.000))
+                        new BezierLine(startPose, cameraPose)
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(90))
+                .setLinearHeadingInterpolation(startPose.getHeading(), cameraPose.getHeading())
                 .build();
-        path2 = follower
+        driveToSpike1Control = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(61.000, 24.000), new Pose(43.000, 35.500))
+                        new BezierLine(launchPose, spike1Control)
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(85), Math.toRadians(180))
+                .setLinearHeadingInterpolation(launchPose.getHeading(), spike1Control.getHeading())
                 .build();
-        path3 = follower
+        driveToSpike1Start = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(43.000, 35.500), new Pose(33.000, 35.500))
-                )
-                .setConstantHeadingInterpolation(Math.toRadians(180))
-                .build();
-
-        path4 = follower
-                .pathBuilder()
-                .addPath(
-                        new BezierLine(new Pose(33.000, 35.500), new Pose(11.000, 35.500))
+                        new BezierLine(spike1Control, spike1Start)
                 )
                 .setConstantHeadingInterpolation(Math.toRadians(180))
                 .build();
 
-        path5 = follower
+        driveToSpike1End = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(11.000, 35.500), new Pose(61.000, 24.000))
-                )
-                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(90))
-                .build();
-        path6 = follower
-                .pathBuilder()
-                .addPath(
-                        new BezierLine(new Pose(61.000, 24.000), new Pose(43.000, 59.500))
-                )
-                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(180))
-                .build();
-        path7 = follower
-                .pathBuilder()
-                .addPath(
-                        new BezierLine(new Pose(43.00, 59.00), new Pose (33.0, 59.0))
-                )
-                .setConstantHeadingInterpolation(Math.toRadians(180))
-                .build();
-        path8 = follower
-                .pathBuilder()
-                .addPath(
-                        new BezierLine(new Pose(33.0, 59.00), new Pose (11.0, 59.0))
+                        new BezierLine(spike1Start, spike1End)
                 )
                 .setConstantHeadingInterpolation(Math.toRadians(180))
                 .build();
 
+        driveToLaunch1 = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(spike1End, launchControlPose)
+                )
+                .setLinearHeadingInterpolation(spike1End.getHeading(), launchControlPose.getHeading())
+                .build();
+        driveToSpike2Control = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(launchControlPose, spike2Control)
+                )
+                .setLinearHeadingInterpolation(launchControlPose.getHeading(), spike2Control.getHeading())
+                .build();
+        driveToSpike2Start = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(spike2Control, spike2Start)
+                )
+                .setConstantHeadingInterpolation(Math.toRadians(180))
+                .build();
+        driveToSpike2End = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(spike2Start, spike2End)
+                )
+                .setConstantHeadingInterpolation(Math.toRadians(180))
+                .build();
+        driveToLaunch2pt1 = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(spike2End, spike2Start)
+                )
+                .setLinearHeadingInterpolation(spike2End.getHeading(), Math.toRadians(135))
+                .build();
+        driveToLaunch2pt2 = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(spike2Start, launchControlPose)
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(135), launchControlPose.getHeading())
+                .build();
+        driveToLever = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(launchControlPose, gate)
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(95), Math.toRadians(180))
+                .build();
     }
 
     @Override
@@ -149,7 +184,7 @@ public final class BlueCaseFarAuto extends OpMode {
     public void start() {
         new Procedure(
                 "AutoDrive",
-                new SetPosition(leverTransfer.getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION),
+                new SetPos(leverTransfer.getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION),
                 new InstantlyDo(() -> intake.setIntakeSpeed(0.35)),
                 new InstantlyDo(intake::setMotorSpeed),
                 new Parallel(
@@ -157,34 +192,36 @@ public final class BlueCaseFarAuto extends OpMode {
                         new TurretStartup(), // This runs in the background
                         new Procedure(
                                 "lock in",// While this part continues forward
-                                new GetMotifSequence(),
-                                new FollowPath(path1, follower, new Pose(61.000, 24.000), true, 1.0)
+                                new GetMotif(),
+                                new FollowPath(driveToGetMotif, follower, cameraPose, true, 1.0)
                         )),
                 new FarMotifLaunch(),
                 new InstantlyDo(()-> intake.setIntakeSpeed(0.5)),
                 new InstantlyDo(intake::setMotorSpeed),
-                new FollowPath(path2, follower, new Pose(43.000, 35.500), true, 1.0),
+                new FollowPath(driveToSpike1Control, follower, spike1Control, true, 1.0),
                 new Parallel("pickup1",
                         new FullIntakeWaitForColor(),
-                        new Procedure ("pickup",
-                                new FollowPath(path3, follower, new Pose(33.000, 35.500), true, 0.4),
-                                new Sleep(0.5),
-                                new FollowPath(path4, follower, new Pose(11.000, 35.500), true, 0.4),
-                                new Sleep(0.5)
+                        new Procedure ("spike1pickup",
+                                new FollowPath(driveToSpike1Start, follower, spike1Start, true, 0.4),
+                                new Sleep(0.3),
+                                new FollowPath(driveToSpike1End, follower, spike1End, true, 0.4)
                         )
                 ),
-                new FollowPath(path5, follower, new Pose(61.000, 24.000), true, 1.0),
+                new FollowPath(driveToLaunch1, follower, launchControlPose, true, 1.0),
                 new FarMotifLaunch(),
-                new FollowPath(path6, follower, new Pose(43, 59.5), true, 1.0),
+                new FollowPath(driveToSpike2Control, follower, spike2Control, true, 1.0),
                 new Parallel("pickup2",
                     new FullIntakeWaitForColor(),
-                        new Procedure ("pickup",
-                            new FollowPath(path7, follower, new Pose(33.000, 59.500), true, 0.4),
-                            new Sleep(0.5),
-                            new FollowPath(path8, follower, new Pose(11.000, 59.500), true, 0.4),
-                            new Sleep(0.5)
-                )
-        )
+                        new Procedure ("spike2pickup",
+                            new FollowPath(driveToSpike2Start, follower, spike2Start, true, 0.4),
+                            new Sleep(0.3),
+                            new FollowPath(driveToSpike2End, follower, spike2End, true, 0.4)
+                        )
+                ),
+                new FollowPath(driveToLaunch2pt1, follower, spike2Start, true,1.0),
+                new FollowPath(driveToLaunch2pt2, follower, launchControlPose, true, 1.0),
+                new FarMotifLaunch(),
+                new FollowPath(driveToLever, follower, gate, true, 1.0)
                 //new FarMotifLaunch(),
                 //new FollowPath(path6, follower, new Pose(61.000, 44.000), true)
 

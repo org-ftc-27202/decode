@@ -3,10 +3,10 @@ package org.firstinspires.ftc.teamcode.stellarstructure.runnables;
 import androidx.annotation.NonNull;
 
 import org.firstinspires.ftc.teamcode.stellarstructure.hardwaremapwrappers.StellarServo;
-public class SetPosition extends Directive {
+public class SetPos extends Directive {
 	private final StellarServo servo;
 	private final double targetPosition;
-	public SetPosition(@NonNull StellarServo servo, double targetPosition) {
+	public SetPos(@NonNull StellarServo servo, double targetPosition) {
 		super();
 		this.servo = servo;
 		this.targetPosition = targetPosition;

@@ -7,12 +7,12 @@ import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Directive;
 
 import java.util.function.Supplier;
 
-public class SetSpindexerPosition extends Directive {
+public class SetSpinPos extends Directive {
 	private final StellarServo servo;
 	private final Supplier<Double> targetPositionSupplier;
 	private double targetPosition = 0.0;
 
-	public SetSpindexerPosition(@NonNull StellarServo servo, Supplier<Double> targetPosition) {
+	public SetSpinPos(@NonNull StellarServo servo, Supplier<Double> targetPosition) {
 		super();
 		this.servo = servo;
 		this.targetPositionSupplier = targetPosition;

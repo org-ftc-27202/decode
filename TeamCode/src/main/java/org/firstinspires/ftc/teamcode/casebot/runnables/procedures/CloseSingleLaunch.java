@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.casebot.subsystems.Turret;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.InstantlyDo;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Parallel;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Procedure;
-import org.firstinspires.ftc.teamcode.stellarstructure.runnables.SetPosition;
+import org.firstinspires.ftc.teamcode.stellarstructure.runnables.SetPos;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Sleep;
 import org.firstinspires.ftc.teamcode.util.DecodeDataTypes;
 
@@ -23,7 +23,7 @@ public class CloseSingleLaunch extends Procedure {
                 new InstantlyDo(()->
                         subsystem(Turret.class).setTurretVelocity(1300.0)
                 ),
-                new SetPosition(subsystem(Turret.class).getTurretHoodServo(), 0.25),
+                new SetPos(subsystem(Turret.class).getTurretHoodServo(), 0.25),
                 new Parallel(
                         "Launch+Stop",
                         new OuttakeColor(artifactColor),

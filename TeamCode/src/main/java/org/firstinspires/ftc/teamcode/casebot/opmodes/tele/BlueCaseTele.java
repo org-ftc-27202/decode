@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.casebot.runnables.defaultdirectives.Defaul
 import org.firstinspires.ftc.teamcode.casebot.runnables.defaultdirectives.DefaultSpindexer;
 import org.firstinspires.ftc.teamcode.casebot.runnables.defaultdirectives.DefaultTurret;
 import org.firstinspires.ftc.teamcode.casebot.runnables.defaultdirectives.PedroDefaultDrivebase;
+import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.TurretStartup;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Camera;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.LeverTransfer;
@@ -16,6 +17,7 @@ import org.firstinspires.ftc.teamcode.casebot.subsystems.PedroDrivebase;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Spindexer;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Turret;
 import org.firstinspires.ftc.teamcode.stellarstructure.StellarBot;
+import org.firstinspires.ftc.teamcode.stellarstructure.runnables.InstantlyDo;
 import org.firstinspires.ftc.teamcode.util.bootscreen.BootScreen;
 import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
 
@@ -27,6 +29,7 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
         private final Spindexer spindexer = new Spindexer();
         private final Camera camera = new Camera();
         private final Turret turret = new Turret();
+        private boolean onStart;
 
         // define these at the class level of your OpMode
         private boolean poseResetToggled = false; // tracks if the reset command has been run for the current press
@@ -55,6 +58,8 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
             // set up subsystems
             caseBot.init(hardwareMap);
 
+            onStart = true;
+
             // set up default directives
             pedroDrivebase.setDefaultDirective(new PedroDefaultDrivebase(gamepad1, gamepad2));
             intake.setDefaultDirective(new DefaultIntake(gamepad1, gamepad2));
@@ -82,6 +87,10 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
 
             while (opModeIsActive()) {
                 // panic: reset bot
+                if (onStart){
+                    new TurretStartup().schedule();
+                    onStart = false;
+                }
                 if (gamepad2.left_bumper && gamepad2.right_bumper) {
                     caseBot.deactivateBot();
                 }

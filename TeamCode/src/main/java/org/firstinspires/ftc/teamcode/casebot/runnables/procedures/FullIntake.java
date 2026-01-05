@@ -5,7 +5,7 @@ import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsyst
 import org.firstinspires.ftc.teamcode.casebot.subsystems.LeverTransfer;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Spindexer;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Procedure;
-import org.firstinspires.ftc.teamcode.stellarstructure.runnables.SetPosition;
+import org.firstinspires.ftc.teamcode.stellarstructure.runnables.SetPos;
 
 public class FullIntake extends Procedure {
 	public FullIntake() {
@@ -14,7 +14,7 @@ public class FullIntake extends Procedure {
 				new IntakeAt(0),
 				new IntakeAt(1),
 				new IntakeAt(2),
-				new SetPosition(subsystem(Spindexer.class).getSpindexerServo(), subsystem(Spindexer.class).getServoPositionFromSegment(0, Spindexer.Position.TRANSFER))
+				new SetPos(subsystem(Spindexer.class).getSpindexerServo(), subsystem(Spindexer.class).getServoPositionFromSegment(0, Spindexer.Position.TRANSFER))
 		);
 
 		setInterruptible(true);

@@ -2,13 +2,13 @@ package org.firstinspires.ftc.teamcode.casebot.runnables.procedures;
 
 import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
 
-import org.firstinspires.ftc.teamcode.casebot.runnables.directives.SetSpindexerPosition;
+import org.firstinspires.ftc.teamcode.casebot.runnables.directives.SetSpinPos;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.LeverTransfer;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Spindexer;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Turret;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.InstantlyDo;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Procedure;
-import org.firstinspires.ftc.teamcode.stellarstructure.runnables.SetPosition;
+import org.firstinspires.ftc.teamcode.stellarstructure.runnables.SetPos;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.WaitUntil;
 import org.firstinspires.ftc.teamcode.util.DecodeDataTypes;
 
@@ -19,9 +19,9 @@ public class OuttakeAt extends Procedure {
     public OuttakeAt(Supplier<Integer> segmentSupplier) {
         super(
                 "OuttakeAt",
-                new SetPosition(subsystem(LeverTransfer.class).getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION),
+                new SetPos(subsystem(LeverTransfer.class).getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION),
 
-                new SetSpindexerPosition(subsystem(Spindexer.class).getSpindexerServo(), () -> subsystem(Spindexer.class).getDegreesForSegmentSupplierAndPosition(segmentSupplier, Spindexer.Position.TRANSFER)),
+                new SetSpinPos(subsystem(Spindexer.class).getSpindexerServo(), () -> subsystem(Spindexer.class).getDegreesForSegmentSupplierAndPosition(segmentSupplier, Spindexer.Position.TRANSFER)),
                 //new SetPosition(subsystem(Spindexer.class).getSpindexerServo(), subsystem(Spindexer.class).getDegreesForSegmentSupplierAndPosition(segmentSupplier, Spindexer.Position.TRANSFER)),
 
                 new WaitUntil(() -> subsystem(Spindexer.class).spindexerEncoderIsWithinTolerance(subsystem(Spindexer.class).getDegreesForSegmentSupplierAndPosition(segmentSupplier, Spindexer.Position.TRANSFER), 0.05)),
