@@ -6,7 +6,7 @@ public class WaitUntil extends Directive {
 	private final BooleanSupplier condition;
 	public WaitUntil(BooleanSupplier condition) {
 		this.condition = condition;
-		setInterruptible(true);
+		setInterruptible(false);
 	}
 
 	@Override
