@@ -26,7 +26,12 @@ public class OuttakeAt extends Procedure {
 
                 new WaitUntil(() -> subsystem(Spindexer.class).spindexerEncoderIsWithinTolerance(subsystem(Spindexer.class).getDegreesForSegmentSupplierAndPosition(segmentSupplier, Spindexer.Position.TRANSFER), 0.05)),
 
-                new WaitUntil(() -> subsystem(Turret.class).velocityWithinTolerance()),
+                // The speed check must own the turret and be non-interruptible; otherwise the
+                // scheduler can cancel this wait while the wheels are still spinning up, which
+                // makes the code skip the lever pulse and move to the next ball.
+                new WaitUntil(() -> subsystem(Turret.class).velocityWithinTolerance())
+                        .setRequiredSubsystems(subsystem(Turret.class))
+                        .setInterruptible(false),
                 new PulseTransferLever(),
 
                 new InstantlyDo(
@@ -36,7 +41,8 @@ public class OuttakeAt extends Procedure {
 
         setRequiredSubsystems(
                 subsystem(Spindexer.class),
-                subsystem(LeverTransfer.class)
+                subsystem(LeverTransfer.class),
+                subsystem(Turret.class)
         );
 
         setInterruptible(false);

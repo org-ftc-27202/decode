@@ -17,7 +17,8 @@ public class FullOuttake extends Procedure {
 
         setRequiredSubsystems(
                 subsystem(Spindexer.class),
-                subsystem(LeverTransfer.class)
+                subsystem(LeverTransfer.class),
+                subsystem(org.firstinspires.ftc.teamcode.casebot.subsystems.Turret.class)
         );
 
         setInterruptible(false);
