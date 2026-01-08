@@ -17,8 +17,8 @@ public class PedroDefaultDrivebase extends DefaultDirective {
 
 		this.gamepad1 = gamepad1;
 		this.gamepad2 = gamepad2;
-
 	}
+
 	@Override
 	protected void onUpdate() {
 		double max, axial, lateral, yaw;

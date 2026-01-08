@@ -39,7 +39,6 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
 
         @Override
         public void runOpMode() {
-            pedroDrivebase.getFollower().setMaxPower(1.0);
             caseBot.setupBot(
                     StellarBot.AllianceColor.BLUE,
                     pedroDrivebase,
@@ -58,6 +57,7 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
 
             // set up subsystems
             caseBot.init(hardwareMap);
+            pedroDrivebase.getFollower().setMaxPower(1.0);
 
             onStart = true;
 
