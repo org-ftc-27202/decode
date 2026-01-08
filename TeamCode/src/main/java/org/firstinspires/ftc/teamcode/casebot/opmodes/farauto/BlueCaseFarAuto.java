@@ -213,15 +213,15 @@ public final class BlueCaseFarAuto extends OpMode {
                     spindexer.setArtifactColorInSpindexer(2, DecodeDataTypes.ArtifactColor.PURPLE);
                 }
                 ),
-                new FollowPath(driveToLaunch1, follower, launchControlPose, true, 0.4),
+                new FollowPath(driveToLaunch1, follower, launchControlPose, true, 1.0),
                 new FarMotifLaunch(),
-                new FollowPath(driveToSpike2Control, follower, spike2Control, true, 0.4),
+                new FollowPath(driveToSpike2Control, follower, spike2Control, true, 1.0),
                 new Parallel("pickup2",
                     new FullIntake(),
                         new Procedure ("spike2pickup",
-                            new FollowPath(driveToSpike2Start, follower, spike2Start, true, 1.0),
+                            new FollowPath(driveToSpike2Start, follower, spike2Start, true, 0.4),
                             new Sleep(0.3),
-                            new FollowPath(driveToSpike2End, follower, spike2End, true, 1.0)
+                            new FollowPath(driveToSpike2End, follower, spike2End, true, 0.4)
                         )
                 ),
                 new InstantlyDo(()-> {
