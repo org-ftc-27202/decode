@@ -7,8 +7,8 @@ import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Procedure;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.SetPos;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Sleep;
 
-public class PulseTransferLever extends Procedure {
-	public PulseTransferLever() {
+public class PulseLever extends Procedure {
+	public PulseLever() {
 		super(
 				"PulseTransferLever",
 				// down

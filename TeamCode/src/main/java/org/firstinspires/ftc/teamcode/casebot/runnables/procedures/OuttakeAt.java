@@ -27,7 +27,7 @@ public class OuttakeAt extends Procedure {
                 new WaitUntil(() -> subsystem(Spindexer.class).spindexerEncoderIsWithinTolerance(subsystem(Spindexer.class).getDegreesForSegmentSupplierAndPosition(segmentSupplier, Spindexer.Position.TRANSFER), 0.05)),
 
                 new WaitUntil(() -> subsystem(Turret.class).velocityWithinTolerance()),
-                new PulseTransferLever(),
+                new PulseLever(),
 
                 new InstantlyDo(
                     () -> subsystem(Spindexer.class).setArtifactColorsInSpindexerFromSupplier(segmentSupplier, DecodeDataTypes.ArtifactColor.NONE)

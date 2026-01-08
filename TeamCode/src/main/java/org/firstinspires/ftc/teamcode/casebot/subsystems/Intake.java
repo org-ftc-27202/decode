@@ -13,7 +13,7 @@ import dev.nextftc.control.ControlSystem;
 public final class Intake extends Subsystem {
 	private StellarDcMotor intakeMotor;
 
-	private double intakeSpeed = 0.5;
+	private double intakeSpeed = 0.0;
 
 	private ControlSystem controller;
 

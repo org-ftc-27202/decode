@@ -31,6 +31,7 @@ public class StellarBot {
 
 	@SafeVarargs
     public final <T extends Subsystem> void setupBot(@NonNull AllianceColor allianceColor, @NonNull T... constructorSubsystems) {
+		deactivateBot();
 		this.allianceColor = allianceColor;
 		this.printDebug = false;
 

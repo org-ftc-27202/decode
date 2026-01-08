@@ -11,8 +11,8 @@ import org.firstinspires.ftc.teamcode.stellarstructure.runnables.SetPos;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.WaitUntil;
 import org.firstinspires.ftc.teamcode.util.DecodeDataTypes;
 
-public class IntakeAtWaitForColor extends Procedure {
-    public IntakeAtWaitForColor(int segment) {
+public class IntakeColor extends Procedure {
+    public IntakeColor(int segment) {
         super(
                 "IntakeAtWaitForColor",
                 new SetPos(subsystem(LeverTransfer.class).getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION),

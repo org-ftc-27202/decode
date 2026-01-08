@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.casebot.runnables.directives.FollowPath;
 import org.firstinspires.ftc.teamcode.casebot.runnables.directives.GetMotif;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FarMotifLaunch;
-import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FullIntakeWaitForColor;
+import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FullIntakeColor;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.TurretStartup;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Camera;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Intake;
@@ -191,7 +191,7 @@ public final class BlueCaseFarAuto extends OpMode {
                         "hmm",
                         new TurretStartup(), // This runs in the background
                         new Procedure(
-                                "lock in",// While this part continues forward
+                                "lock in", // While this part continues forward
                                 new GetMotif(),
                                 new FollowPath(driveToGetMotif, follower, cameraPose, true, 1.0)
                         )),
@@ -200,7 +200,7 @@ public final class BlueCaseFarAuto extends OpMode {
                 new InstantlyDo(intake::setMotorSpeed),
                 new FollowPath(driveToSpike1Control, follower, spike1Control, true, 1.0),
                 new Parallel("pickup1",
-                        new FullIntakeWaitForColor(),
+                        new FullIntakeColor(),
                         new Procedure ("spike1pickup",
                                 new FollowPath(driveToSpike1Start, follower, spike1Start, true, 0.4),
                                 new Sleep(0.3),
@@ -211,7 +211,7 @@ public final class BlueCaseFarAuto extends OpMode {
                 new FarMotifLaunch(),
                 new FollowPath(driveToSpike2Control, follower, spike2Control, true, 1.0),
                 new Parallel("pickup2",
-                    new FullIntakeWaitForColor(),
+                    new FullIntakeColor(),
                         new Procedure ("spike2pickup",
                             new FollowPath(driveToSpike2Start, follower, spike2Start, true, 0.4),
                             new Sleep(0.3),

@@ -4,7 +4,7 @@ import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsyst
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.PulseTransferLever;
+import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.PulseLever;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.LeverTransfer;
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.GamepadButtonMap;
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.StatefulCondition;
@@ -46,7 +46,7 @@ public class DefaultLeverTransfer extends DefaultDirective {
 				),
 				() -> {
 					// up down up
-					new PulseTransferLever().schedule();
+					new PulseLever().schedule();
 				}
 		));
 	}

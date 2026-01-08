@@ -6,8 +6,8 @@ import org.firstinspires.ftc.teamcode.casebot.subsystems.LeverTransfer;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Spindexer;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Procedure;
 
-public class OuttakeMotifOrArtifactAt extends Procedure {
-	public OuttakeMotifOrArtifactAt(int motifIndex) {
+public class OuttakeIdealAt extends Procedure {
+	public OuttakeIdealAt(int motifIndex) {
 		super(
 				"OuttakeMotifOrArtifactAt",
 				new OuttakeAt(() -> subsystem(Spindexer.class).getMotifSegmentOrFirstArtifact(motifIndex))

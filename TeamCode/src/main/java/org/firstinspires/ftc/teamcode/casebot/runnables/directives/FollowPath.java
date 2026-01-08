@@ -16,6 +16,7 @@ public class FollowPath extends Directive {
 
     private final boolean holdEnd;
     private final double pathingPower;
+    private final double preMaxPower;
 
     public FollowPath(PathChain path, Follower follower, Pose endPose, boolean holdEnd, double pathingPower) {
         setInterruptible(true);
@@ -23,7 +24,8 @@ public class FollowPath extends Directive {
         this.follower = follower;
         this.endPose = endPose;
         this.holdEnd = holdEnd;
-        this.pathingPower =pathingPower;
+        this.pathingPower = pathingPower;
+        this.preMaxPower = follower.getMaxPowerScaling();
 
         setRequiredSubsystems(subsystem(PedroDrivebase.class));
     }
@@ -39,7 +41,9 @@ public class FollowPath extends Directive {
     }
 
     @Override
-    protected void onStop(boolean interrupted) {}
+    protected void onStop(boolean interrupted) {
+        follower.setMaxPower(preMaxPower);
+    }
 
     @Override
     protected boolean isFinished() {

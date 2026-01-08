@@ -10,9 +10,9 @@ public class FullMotifOuttake extends Procedure {
     public FullMotifOuttake() {
         super(
                 "FullMotifOuttake",
-                new OuttakeMotifOrArtifactAt(0),
-                new OuttakeMotifOrArtifactAt(1),
-                new OuttakeMotifOrArtifactAt(2)
+                new OuttakeIdealAt(0),
+                new OuttakeIdealAt(1),
+                new OuttakeIdealAt(2)
         );
 
         setWaitForStartingConditions(false);

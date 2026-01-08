@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FarColorLaunc
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FarLaunch;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FarSingleLaunch;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FullIntake;
-import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FullIntakeWaitForColor;
+import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FullIntakeColor;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.ShortColorLaunch;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.ShortLaunch;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.PedroDrivebase;
@@ -57,7 +57,7 @@ public class DefaultSpindexer extends DefaultDirective {
 				),
 				() -> {
 					// intake 3
-					new FullIntakeWaitForColor().schedule();
+					new FullIntakeColor().schedule();
 				}
 		));
 
