@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.casebot.runnables.directives.FollowPath;
 import org.firstinspires.ftc.teamcode.casebot.runnables.directives.GetMotif;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FarMotifLaunch;
+import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FullIntake;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FullIntakeColor;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.TurretStartup;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Camera;
@@ -31,10 +32,8 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
 
 @Autonomous(name = "BLUECase Auto Pedro", group = "Auto")
 public final class BlueCaseFarAuto extends OpMode {
-    private final double FLYWHEEL_LAUNCH = 1080;
-    private final double TURRET_LAUNCH = 0;
-    private final double HOOD_LAUNCH = 0;
-    private Timer pathTimer, actionTimer, opmodeTimer;
+
+    private final double PRE_MATCH_DELAY = 0.0;
 
     private final StellarBot caseBot = StellarBot.getInstance();
     private final PedroDrivebase pedroDrivebase = new PedroDrivebase();
@@ -184,6 +183,7 @@ public final class BlueCaseFarAuto extends OpMode {
     public void start() {
         new Procedure(
                 "AutoDrive",
+                new Sleep(PRE_MATCH_DELAY),
                 new SetPos(leverTransfer.getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION),
                 new InstantlyDo(() -> intake.setIntakeSpeed(0.35)),
                 new InstantlyDo(intake::setMotorSpeed),
@@ -200,23 +200,35 @@ public final class BlueCaseFarAuto extends OpMode {
                 new InstantlyDo(intake::setMotorSpeed),
                 new FollowPath(driveToSpike1Control, follower, spike1Control, true, 1.0),
                 new Parallel("pickup1",
-                        new FullIntakeColor(),
+                        new FullIntake(),
                         new Procedure ("spike1pickup",
                                 new FollowPath(driveToSpike1Start, follower, spike1Start, true, 0.4),
                                 new Sleep(0.3),
                                 new FollowPath(driveToSpike1End, follower, spike1End, true, 0.4)
                         )
                 ),
-                new FollowPath(driveToLaunch1, follower, launchControlPose, true, 1.0),
+                new InstantlyDo(()-> {
+                    spindexer.setArtifactColorInSpindexer(0, DecodeDataTypes.ArtifactColor.GREEN);
+                    spindexer.setArtifactColorInSpindexer(1, DecodeDataTypes.ArtifactColor.PURPLE);
+                    spindexer.setArtifactColorInSpindexer(2, DecodeDataTypes.ArtifactColor.PURPLE);
+                }
+                ),
+                new FollowPath(driveToLaunch1, follower, launchControlPose, true, 0.4),
                 new FarMotifLaunch(),
-                new FollowPath(driveToSpike2Control, follower, spike2Control, true, 1.0),
+                new FollowPath(driveToSpike2Control, follower, spike2Control, true, 0.4),
                 new Parallel("pickup2",
-                    new FullIntakeColor(),
+                    new FullIntake(),
                         new Procedure ("spike2pickup",
-                            new FollowPath(driveToSpike2Start, follower, spike2Start, true, 0.4),
+                            new FollowPath(driveToSpike2Start, follower, spike2Start, true, 1.0),
                             new Sleep(0.3),
-                            new FollowPath(driveToSpike2End, follower, spike2End, true, 0.4)
+                            new FollowPath(driveToSpike2End, follower, spike2End, true, 1.0)
                         )
+                ),
+                new InstantlyDo(()-> {
+                    spindexer.setArtifactColorInSpindexer(0, DecodeDataTypes.ArtifactColor.PURPLE);
+                    spindexer.setArtifactColorInSpindexer(1, DecodeDataTypes.ArtifactColor.GREEN);
+                    spindexer.setArtifactColorInSpindexer(2, DecodeDataTypes.ArtifactColor.PURPLE);
+                }
                 ),
                 new FollowPath(driveToLaunch2pt1, follower, spike2Start, true,1.0),
                 new FollowPath(driveToLaunch2pt2, follower, launchControlPose, true, 1.0),
