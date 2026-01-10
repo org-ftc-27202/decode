@@ -75,7 +75,8 @@ public class DefaultTurret extends DefaultDirective {
 
     }
     @Override
-    protected void onUpdate() {
+    protected void onUpdate(
+    ) {
         /*if (PedroDrivebase.getInstance().getFollower().getPose().getY() >= 44){
             velocity = 1300.0;
         } else {
@@ -83,6 +84,6 @@ public class DefaultTurret extends DefaultDirective {
         }*/
 
         turret.getTurretHoodServo().setPosition(hoodPosition);
-        turret.getTurretServo().setPosition(position);
+        turret.updateTurretYawServo();
     }
 }

@@ -8,6 +8,7 @@ import static org.firstinspires.ftc.teamcode.casebot.subsystems.TurretPIDFConsta
 import static org.firstinspires.ftc.teamcode.casebot.subsystems.TurretPIDFConstants.i_right;
 import static org.firstinspires.ftc.teamcode.casebot.subsystems.TurretPIDFConstants.p_left;
 import static org.firstinspires.ftc.teamcode.casebot.subsystems.TurretPIDFConstants.p_right;
+import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
 
 import androidx.annotation.NonNull;
 
@@ -25,25 +26,31 @@ public final class Turret extends Subsystem {
 
     private final static double TICKS_TO_ROTATION = 1.5 / 7.0;
     private final static double VELOCITY_TOLERANCE = 41.0;
+    private final static double TURRET_YAW_MIN = 0.0;
+    private final static double TURRET_YAW_MAX = 1.0;
+    private final static double YAW_SERVO_DEGREE_RANGE = 330;
+    private final static double YAW_GEAR_RATIO = 1.167;
+    private final static double DEGREES_TO_POS = (YAW_GEAR_RATIO/YAW_SERVO_DEGREE_RANGE);
 
     private double velocity = 0.0;
 
-    private StellarServo turretServo;
+    private StellarServo turretYawServo;
     private StellarDcMotor leftTurretMotor;
     private StellarDcMotor rightTurretMotor;
-    private StellarServo turretHoodServo;
+    private StellarServo turretPitchServo;
     private WebcamName webcamName;
 
     private double PIDFScale;
     private boolean needsToStart = true;
+    private final PedroDrivebase pedroDrivebase = subsystem(PedroDrivebase.class);
 
 
     @Override
     public void init(HardwareMap hardwareMap) {
         PIDFScale = 1;
         needsToStart = true;
-        turretServo = new StellarServo(hardwareMap, "turretServo");
-        turretHoodServo = new StellarServo(hardwareMap, "turretHoodServo");
+        turretYawServo = new StellarServo(hardwareMap, "turretServo");
+        turretPitchServo = new StellarServo(hardwareMap, "turretHoodServo");
         leftTurretMotor = new StellarDcMotor(hardwareMap, "leftTurretMotor" );
         rightTurretMotor = new StellarDcMotor(hardwareMap, "rightTurretMotor");
 
@@ -68,11 +75,11 @@ public final class Turret extends Subsystem {
         return needsToStart;
     }
     public StellarServo getTurretServo() {
-        return turretServo;
+        return turretYawServo;
     }
 
     public StellarServo getTurretHoodServo(){
-        return turretHoodServo;
+        return turretPitchServo;
     }
 
     public StellarDcMotor getLeftTurretMotor() {
@@ -111,6 +118,28 @@ public final class Turret extends Subsystem {
     public boolean velocityWithinTolerance() {
         return getVelocityOffOfTarget() < VELOCITY_TOLERANCE;
     }
+    public double getTurretYawAngleTarget(){
+        double launchYaw = pedroDrivebase.getLaunchYaw();
+        double robotHeading = pedroDrivebase.getFollower().getHeading();
+
+        return robotHeading-launchYaw;
+
+    }
+    public double getBoundedTurretYawAngleTarget(){
+        double targetAngle = getTurretYawAngleTarget();
+        double boundedTargetAngle;
+        if (targetAngle < -13){
+            boundedTargetAngle= -13;
+        } else if (targetAngle > 30){
+            boundedTargetAngle = 30;
+        } else{
+            boundedTargetAngle = targetAngle;
+        }
+        return boundedTargetAngle;
+    }
+    public double updateTurretYawServo(){
+        return (getBoundedTurretYawAngleTarget() + 13) * (DEGREES_TO_POS);
+    }
 
     @NonNull
     @Override
@@ -120,13 +149,16 @@ public final class Turret extends Subsystem {
                     "   Hood Pos: %f\n" +
                     "   Turret Left/Right Motor Vel: %f, %f\n" +
                 "Turret Target Velocity: %f\n" +
-                    "   TurretAtTargetVelocity?: %b",
-                turretServo.getPosition(),
-                turretHoodServo.getPosition(),
+                    "   TurretAtTargetVelocity?: %b\n"+
+                "Bounded Turret Yaw Target Angle: %f",
+                turretYawServo.getPosition(),
+                turretPitchServo.getPosition(),
                 leftTurretMotor.getVelocity(),
                 rightTurretMotor.getVelocity(),
                 velocity,
-                velocityWithinTolerance()
+                velocityWithinTolerance(),
+                getBoundedTurretYawAngleTarget()
+
         );
     }
 }
