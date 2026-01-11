@@ -17,6 +17,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.stellarstructure.Subsystem;
 import org.firstinspires.ftc.teamcode.stellarstructure.hardwaremapwrappers.StellarDcMotor;
 import org.firstinspires.ftc.teamcode.stellarstructure.hardwaremapwrappers.StellarServo;
@@ -31,6 +32,7 @@ public final class Turret extends Subsystem {
     private final static double YAW_SERVO_DEGREE_RANGE = 330;
     private final static double YAW_GEAR_RATIO = 1.167;
     private final static double DEGREES_TO_POS = (YAW_GEAR_RATIO/YAW_SERVO_DEGREE_RANGE);
+    private final static double YAW_SERVO_MID = 0.287;
 
     private double velocity = 0.0;
 
@@ -42,7 +44,7 @@ public final class Turret extends Subsystem {
 
     private double PIDFScale;
     private boolean needsToStart = true;
-    private final PedroDrivebase pedroDrivebase = subsystem(PedroDrivebase.class);
+
 
 
     @Override
@@ -56,17 +58,20 @@ public final class Turret extends Subsystem {
 
         webcamName = hardwareMap.get(WebcamName.class, "camera");
 
-        leftTurretMotor.setDirection(DcMotorEx.Direction.FORWARD);
-        rightTurretMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftTurretMotor.setDirection(DcMotorEx.Direction.REVERSE);
+        rightTurretMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         leftTurretMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         rightTurretMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         leftTurretMotor.setVelocityPIDFCoefficents(p_left, i_left, d_left, f_left);
         rightTurretMotor.setVelocityPIDFCoefficents(p_right, i_right, d_right, f_right);
 
-    }
 
+    }
+    //:todo add on start
     @Override
-    public void update() {
+    public void update(
+    ) {
+
 
     //leftTurretMotor.setVelocityPIDFCoefficents(p_left*PIDFScale, i_left*PIDFScale, d_left*PIDFScale, f_left*PIDFScale);
         //rightTurretMotor.setVelocityPIDFCoefficents(p_right*PIDFScale, i_right*PIDFScale, d_right*PIDFScale, f_right*PIDFScale);
@@ -118,13 +123,16 @@ public final class Turret extends Subsystem {
     public boolean velocityWithinTolerance() {
         return getVelocityOffOfTarget() < VELOCITY_TOLERANCE;
     }
-    public double getTurretYawAngleTarget(){
+    public double getTurretYawAngleTarget() {
+        PedroDrivebase pedroDrivebase = subsystem(PedroDrivebase.class);
         double launchYaw = pedroDrivebase.getLaunchYaw();
-        double robotHeading = pedroDrivebase.getFollower().getHeading();
+        // Assuming PedroDrivebase returns degrees. If it's radians, use Math.toDegrees first.
+        double robotHeading = Math.toDegrees(pedroDrivebase.getFollower().getHeading());
 
-        return robotHeading-launchYaw;
-
+        // This forces the result to stay between -180 and 180
+        return AngleUnit.normalizeDegrees(robotHeading - launchYaw);
     }
+
     public double getBoundedTurretYawAngleTarget(){
         double targetAngle = getTurretYawAngleTarget();
         double boundedTargetAngle;
@@ -137,9 +145,22 @@ public final class Turret extends Subsystem {
         }
         return boundedTargetAngle;
     }
-    public double updateTurretYawServo(){
-        return (getBoundedTurretYawAngleTarget() + 13) * (DEGREES_TO_POS);
+    public void updateTurretYawServo() {
+        double targetAngle = getBoundedTurretYawAngleTarget();
+
+        // 1. Calculate how many servo-degrees we need to move from center
+        double servoDegreesOffset = targetAngle * YAW_GEAR_RATIO;
+
+        // 2. Convert those degrees to the 0.0-1.0 servo scale
+        double servoPosOffset = servoDegreesOffset / YAW_SERVO_DEGREE_RANGE;
+
+        // 3. Apply the offset to your calibrated MID point
+        // Note: If the turret moves the WRONG way, change the + to a -
+        double finalServoPos = YAW_SERVO_MID - servoPosOffset;
+
+        turretYawServo.setPosition(finalServoPos);
     }
+
 
     @NonNull
     @Override
