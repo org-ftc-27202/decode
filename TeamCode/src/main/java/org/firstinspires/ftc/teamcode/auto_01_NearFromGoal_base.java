@@ -26,21 +26,28 @@ public abstract class auto_01_NearFromGoal_base extends NextFTCOpMode {
         );
     }
     private Timer opModeTimer;
-    private PathChain driveToGetPattern, driveToLaunch1, driveToSpike1Start, driveToSpike1End, driveToLaunch1_2,
-            driveToSpike2Start, driveToSpike2End, driveToLaunch2, driveToLeave;
+    private PathChain driveToGetPattern, driveToLaunch0,
+            driveToSpike1Start, driveToSpike1End, driveToLaunch1,
+            driveToSpike2Start, driveToSpike2End, driveToLaunch2,
+            driveToSpike3Start, driveToSpike3End, driveToLaunch3
+            ;
     private Pose startPose;
 
     public void buildPaths() {
-        Pose getPatternPose, launchNear1Pose, spike1StartPose, spike1EndPose, LeavePose, spike2StartPose, spike2EndPose;
+        Pose getPatternPose, launchNear1Pose, spike1StartPose, spike1EndPose, LeavePose, spike2StartPose, spike2EndPose, spike3StartPose, spike3EndPose;
 
-        startPose = new Pose(112, 128, Math.toRadians(90));
+        startPose = new Pose(113, 129.5, Math.toRadians(90));
         getPatternPose = new Pose(92, 92, Math.toRadians(110));
-        launchNear1Pose = new Pose(92, 80, Math.toRadians(50));
-        spike1StartPose = new Pose(100, 84, Math.toRadians(0));
-        spike1EndPose = new Pose(130, 78, Math.toRadians(0));
-        LeavePose = new Pose(100, 60, Math.toRadians(0));
-        spike2StartPose = new Pose(100,60, Math.toRadians(0));
-        spike2EndPose = new Pose(130,60, Math.toRadians(0));
+        launchNear1Pose = new Pose(100, 88, Math.toRadians(52));
+
+        spike1StartPose = new Pose(100, 82, Math.toRadians(0));
+        spike1EndPose = new Pose(130, 72, Math.toRadians(0));
+        spike2StartPose = new Pose(100, 58, Math.toRadians(0));
+        spike2EndPose = new Pose(136,54, Math.toRadians(0));
+        spike3StartPose = new Pose(100, 34, Math.toRadians(0));
+        spike3EndPose = new Pose(136,30, Math.toRadians(0));
+
+        LeavePose = new Pose(89, 105, Math.toRadians(30));
 
         if (Config.allianceColor == Config.AllianceColors.BLUE) {
             startPose = startPose.mirror();
@@ -48,6 +55,10 @@ public abstract class auto_01_NearFromGoal_base extends NextFTCOpMode {
             launchNear1Pose = launchNear1Pose.mirror();
             spike1StartPose = spike1StartPose.mirror();
             spike1EndPose = spike1EndPose.mirror();
+            spike2StartPose = spike2StartPose.mirror();
+            spike2EndPose = spike2EndPose.mirror();
+            spike3StartPose = spike3StartPose.mirror();
+            spike3EndPose = spike3EndPose.mirror();
             LeavePose = LeavePose.mirror();
         }
 
@@ -56,7 +67,7 @@ public abstract class auto_01_NearFromGoal_base extends NextFTCOpMode {
                 .setLinearHeadingInterpolation(startPose.getHeading(), getPatternPose.getHeading())
                 .build();
 
-        driveToLaunch1 = PedroComponent.follower().pathBuilder()
+        driveToLaunch0 = PedroComponent.follower().pathBuilder()
                 .addPath(new BezierLine(getPatternPose, launchNear1Pose))
                 .setLinearHeadingInterpolation(getPatternPose.getHeading(), launchNear1Pose.getHeading())
                 .build();
@@ -71,14 +82,9 @@ public abstract class auto_01_NearFromGoal_base extends NextFTCOpMode {
                 .setLinearHeadingInterpolation(spike1StartPose.getHeading(), spike1EndPose.getHeading())
                 .build();
 
-        driveToLaunch1_2 = PedroComponent.follower().pathBuilder()
+        driveToLaunch1 = PedroComponent.follower().pathBuilder()
                 .addPath(new BezierLine(spike1EndPose, launchNear1Pose))
                 .setLinearHeadingInterpolation(spike1EndPose.getHeading(), launchNear1Pose.getHeading())
-                .build();
-
-        driveToLeave = PedroComponent.follower().pathBuilder()
-                .addPath(new BezierLine(launchNear1Pose, LeavePose))
-                .setLinearHeadingInterpolation(launchNear1Pose.getHeading(), LeavePose.getHeading())
                 .build();
 
         driveToSpike2Start = PedroComponent.follower().pathBuilder()
@@ -95,6 +101,21 @@ public abstract class auto_01_NearFromGoal_base extends NextFTCOpMode {
                 .addPath(new BezierLine(spike2EndPose, launchNear1Pose))
                 .setLinearHeadingInterpolation(spike2EndPose.getHeading(), launchNear1Pose.getHeading())
                 .build();
+
+        driveToSpike3Start = PedroComponent.follower().pathBuilder()
+                .addPath(new BezierLine(launchNear1Pose, spike3StartPose))
+                .setLinearHeadingInterpolation(launchNear1Pose.getHeading(), spike3StartPose.getHeading())
+                .build();
+
+        driveToSpike3End = PedroComponent.follower().pathBuilder()
+                .addPath(new BezierLine(spike3StartPose, spike3EndPose))
+                .setLinearHeadingInterpolation(spike3StartPose.getHeading(), spike3EndPose.getHeading())
+                .build();
+
+        driveToLaunch3 = PedroComponent.follower().pathBuilder()
+                .addPath(new BezierLine(spike3EndPose, LeavePose))
+                .setLinearHeadingInterpolation(spike3EndPose.getHeading(), LeavePose.getHeading())
+                .build();
     }
     private Command autonomousRoutine() {
         return new SequentialGroup(
@@ -102,17 +123,24 @@ public abstract class auto_01_NearFromGoal_base extends NextFTCOpMode {
                 new Delay(0.1),
                 Camera.INSTANCE.capturePattern,
                 new FollowPath(driveToLaunch1, true),
+                new Delay(0.75),
                 Catapult.INSTANCE.LaunchByPattern,
                 new FollowPath(driveToSpike1Start),
                 Intake.INSTANCE.Inwards,
                 new FollowPath(driveToSpike1End),
-                new FollowPath(driveToLaunch1_2, true),
+                new FollowPath(driveToLaunch2, true),
                 Intake.INSTANCE.Stop,
                 Catapult.INSTANCE.LaunchByPattern,
                 Intake.INSTANCE.Inwards,
                 new FollowPath(driveToSpike2Start, true),
                 new FollowPath(driveToSpike2End),
                 new FollowPath(driveToLaunch2),
+                Intake.INSTANCE.Stop,
+                Catapult.INSTANCE.LaunchByPattern,
+                Intake.INSTANCE.Inwards,
+                new FollowPath(driveToSpike3Start, true),
+                new FollowPath(driveToSpike3End),
+                new FollowPath(driveToLaunch3),
                 Intake.INSTANCE.Stop,
                 Catapult.INSTANCE.LaunchByPattern
         );
