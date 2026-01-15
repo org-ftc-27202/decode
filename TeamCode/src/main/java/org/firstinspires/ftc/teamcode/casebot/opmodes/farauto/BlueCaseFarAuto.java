@@ -196,7 +196,7 @@ public final class BlueCaseFarAuto extends OpMode {
                                 new FollowPath(driveToGetMotif, follower, cameraPose, true, 1.0)
                         )),
                 new FarMotifLaunch(),
-                new InstantlyDo(()-> intake.setIntakeSpeed(0.5)),
+                new InstantlyDo(()-> intake.setIntakeSpeed(0.75)),
                 new InstantlyDo(intake::setMotorSpeed),
                 new FollowPath(driveToSpike1Control, follower, spike1Control, true, 1.0),
                 new Parallel("pickup1",

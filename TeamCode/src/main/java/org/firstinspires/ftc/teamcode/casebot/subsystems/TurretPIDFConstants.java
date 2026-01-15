@@ -4,15 +4,15 @@ import com.bylazar.configurables.annotations.Configurable;
 
 @Configurable
 public class TurretPIDFConstants {
-    public static double p_left = 31.0;
-    public static double i_left = 0.0;
+    public static double p_left = 70.0;
+    public static double i_left = 0.2;
     public static double d_left = 0.0;
     public static double f_left = 15.15;
 
-    public static double p_right = 31.0;
-    public static double i_right = 0.0;
+    public static double p_right = 70.0;
+    public static double i_right = 0.2;
     public static double d_right = 0.0;
-    public static double f_right = 14.65;
+    public static double f_right = 15.15;
     /*public static double p_left = 30.0;
     public static double i_left = 0.01;
     public static double d_left = 1.0;

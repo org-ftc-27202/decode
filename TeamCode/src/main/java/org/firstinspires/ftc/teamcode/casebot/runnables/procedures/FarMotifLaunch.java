@@ -22,7 +22,7 @@ public class FarMotifLaunch extends Procedure {
                 new InstantlyDo(()->
                         subsystem(Turret.class).setTurretVelocity(1600.0)
                 ),
-                new SetPos(subsystem(Turret.class).getTurretHoodServo(), 0.0),
+                new SetPos(subsystem(Turret.class).getTurretHoodServo(), 0.05),
                 new Parallel(
                         "Launch+Stop",
                         new FullMotifOuttake(),
