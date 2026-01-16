@@ -20,9 +20,9 @@ public class FarColorLaunch extends Procedure {
                     //subsystem(PedroDrivebase).getFollower().turnTo(Math.toRadians(subsystem(PedroDrivebase).getLaunchYaw()));
                 }),
                 new InstantlyDo(()->
-                        subsystem(Turret.class).setTurretVelocity(1600.0)
+                        subsystem(Turret.class).setTurretVelocity(1500.0)
                 ),
-                new SetPos(subsystem(Turret.class).getTurretHoodServo(), 0.01),
+                new SetPos(subsystem(Turret.class).getTurretHoodServo(), 0.05),
                 new Parallel(
                         "Launch+Stop",
                         new FullPatternOuttake(),

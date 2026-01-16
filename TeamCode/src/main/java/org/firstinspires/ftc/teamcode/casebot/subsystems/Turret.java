@@ -27,12 +27,10 @@ public final class Turret extends Subsystem {
 
     private final static double TICKS_TO_ROTATION = 1.5 / 7.0;
     private final static double VELOCITY_TOLERANCE = 41.0;
-    private final static double TURRET_YAW_MIN = 0.0;
-    private final static double TURRET_YAW_MAX = 1.0;
-    private final static double YAW_SERVO_DEGREE_RANGE = 330;
+    private final static double YAW_SERVO_DEGREE_RANGE = 330.0;
     private final static double YAW_GEAR_RATIO = 1.167;
     private final static double DEGREES_TO_POS = (YAW_GEAR_RATIO/YAW_SERVO_DEGREE_RANGE);
-    private final static double YAW_SERVO_MID = 0.287;
+    private final static double YAW_SERVO_MID = 0.23;
 
     private double velocity = 0.0;
 
@@ -45,11 +43,9 @@ public final class Turret extends Subsystem {
     private double PIDFScale;
     private boolean needsToStart = true;
 
-
-
     @Override
     public void init(HardwareMap hardwareMap) {
-        PIDFScale = 1;
+        PIDFScale = 1.0;
         needsToStart = true;
         turretYawServo = new StellarServo(hardwareMap, "turretServo");
         turretPitchServo = new StellarServo(hardwareMap, "turretHoodServo");
@@ -69,9 +65,7 @@ public final class Turret extends Subsystem {
     }
     //:todo add on start
     @Override
-    public void update(
-    ) {
-
+    public void update() {
 
     //leftTurretMotor.setVelocityPIDFCoefficents(p_left*PIDFScale, i_left*PIDFScale, d_left*PIDFScale, f_left*PIDFScale);
         //rightTurretMotor.setVelocityPIDFCoefficents(p_right*PIDFScale, i_right*PIDFScale, d_right*PIDFScale, f_right*PIDFScale);
@@ -125,7 +119,7 @@ public final class Turret extends Subsystem {
     }
     public double getTurretYawAngleTarget() {
         PedroDrivebase pedroDrivebase = subsystem(PedroDrivebase.class);
-        double launchYaw = pedroDrivebase.getLaunchYaw();
+        double launchYaw = pedroDrivebase.getRealLaunchYaw();
         // Assuming PedroDrivebase returns degrees. If it's radians, use Math.toDegrees first.
         double robotHeading = Math.toDegrees(pedroDrivebase.getFollower().getHeading());
 
@@ -133,29 +127,27 @@ public final class Turret extends Subsystem {
         return AngleUnit.normalizeDegrees(robotHeading - launchYaw);
     }
 
-    public double getBoundedTurretYawAngleTarget(){
+    public double getBoundedTurretYawAngleTarget() {
         double targetAngle = getTurretYawAngleTarget();
         double boundedTargetAngle;
-        if (targetAngle < -13){
-            boundedTargetAngle= -13;
-        } else if (targetAngle > 30){
-            boundedTargetAngle = 30;
+        if (targetAngle < -13.0){
+            boundedTargetAngle= -13.0;
+        } else if (targetAngle > 30.0){
+            boundedTargetAngle = 30.0;
         } else{
             boundedTargetAngle = targetAngle;
         }
         return boundedTargetAngle;
     }
+
     public void updateTurretYawServo() {
         double targetAngle = getBoundedTurretYawAngleTarget();
 
-        // 1. Calculate how many servo-degrees we need to move from center
-        double servoDegreesOffset = targetAngle * YAW_GEAR_RATIO;
+        double servoDegreesOffset = (targetAngle * YAW_GEAR_RATIO) + 0.025;
 
-        // 2. Convert those degrees to the 0.0-1.0 servo scale
         double servoPosOffset = servoDegreesOffset / YAW_SERVO_DEGREE_RANGE;
 
-        // 3. Apply the offset to your calibrated MID point
-        // Note: If the turret moves the WRONG way, change the + to a -
+
         double finalServoPos = YAW_SERVO_MID - servoPosOffset;
 
         turretYawServo.setPosition(finalServoPos);

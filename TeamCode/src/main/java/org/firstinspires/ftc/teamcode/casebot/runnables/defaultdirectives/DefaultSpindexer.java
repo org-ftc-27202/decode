@@ -8,11 +8,13 @@ import org.firstinspires.ftc.teamcode.casebot.runnables.directives.GetMotif;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.CloseSingleLaunch;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FarColorLaunch;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FarLaunch;
+import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FarMotifLaunch;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FarSingleLaunch;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FullIntake;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FullIntakeColor;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.ShortColorLaunch;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.ShortLaunch;
+import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.ShortMotifLaunch;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.PedroDrivebase;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Spindexer;
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.GamepadButtonMap;
@@ -79,7 +81,7 @@ public class DefaultSpindexer extends DefaultDirective {
 						StatefulCondition.Edge.RISING
 				),
 				()->{
-					new ShortColorLaunch().schedule();
+					new ShortMotifLaunch().schedule();
 				}
 		));
 		addTrigger(new ActionTrigger(
@@ -88,7 +90,7 @@ public class DefaultSpindexer extends DefaultDirective {
 						StatefulCondition.Edge.RISING
 				),
 				()->{
-					new FarColorLaunch().schedule();
+					new FarMotifLaunch().schedule();
 				}
 		));
 

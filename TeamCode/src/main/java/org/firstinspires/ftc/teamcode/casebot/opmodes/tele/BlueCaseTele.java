@@ -51,7 +51,7 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
 
             StellarBot.getInstance().getSubsystem(PedroDrivebase.class);
 
-            caseBot.setPrintDebug(true);
+            caseBot.setPrintDebug(false);
 
             pedroDrivebase.setOpMode(PedroDrivebase.opModeType.TELEOP);
 
@@ -113,6 +113,7 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
 
                 // run scheduler and subsystems logic
                 caseBot.update();
+                turret.updateTurretYawServo();
 
                 // print telemetry
                 try {

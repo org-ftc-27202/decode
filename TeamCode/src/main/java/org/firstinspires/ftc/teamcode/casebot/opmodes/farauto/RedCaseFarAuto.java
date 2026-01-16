@@ -150,7 +150,7 @@ public final class RedCaseFarAuto extends OpMode {
     @Override
     public void init() {
         caseBot.setupBot(
-                StellarBot.AllianceColor.BLUE,
+                StellarBot.AllianceColor.RED,
                 pedroDrivebase,
                 intake,
                 leverTransfer,
@@ -185,7 +185,7 @@ public final class RedCaseFarAuto extends OpMode {
                 "AutoDrive",
                 new Sleep(PRE_MATCH_DELAY),
                 new SetPos(leverTransfer.getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION),
-                new InstantlyDo(() -> intake.setIntakeSpeed(0.35)),
+                new InstantlyDo(() -> intake.setIntakeSpeed(1.0)),
                 new InstantlyDo(intake::setMotorSpeed),
                 new Parallel(
                         "hmm",
@@ -196,7 +196,7 @@ public final class RedCaseFarAuto extends OpMode {
                                 new FollowPath(driveToGetMotif, follower, cameraPose, true, 1.0)
                         )),
                 new FarMotifLaunch(),
-                new InstantlyDo(()-> intake.setIntakeSpeed(0.5)),
+                new InstantlyDo(()-> intake.setIntakeSpeed(1.0)),
                 new InstantlyDo(intake::setMotorSpeed),
                 new FollowPath(driveToSpike1Control, follower, spike1Control, true, 1.0),
                 new Parallel("pickup1",

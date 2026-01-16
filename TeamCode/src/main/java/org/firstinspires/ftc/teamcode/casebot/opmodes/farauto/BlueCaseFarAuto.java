@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.casebot.opmodes.farauto;// make sure this aligns with class location
 
+import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
+
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
@@ -185,7 +187,7 @@ public final class BlueCaseFarAuto extends OpMode {
                 "AutoDrive",
                 new Sleep(PRE_MATCH_DELAY),
                 new SetPos(leverTransfer.getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION),
-                new InstantlyDo(() -> intake.setIntakeSpeed(0.35)),
+                new InstantlyDo(() -> intake.setIntakeSpeed(1.0)),
                 new InstantlyDo(intake::setMotorSpeed),
                 new Parallel(
                         "hmm",
@@ -196,7 +198,7 @@ public final class BlueCaseFarAuto extends OpMode {
                                 new FollowPath(driveToGetMotif, follower, cameraPose, true, 1.0)
                         )),
                 new FarMotifLaunch(),
-                new InstantlyDo(()-> intake.setIntakeSpeed(0.75)),
+                new InstantlyDo(()-> intake.setIntakeSpeed(1.0)),
                 new InstantlyDo(intake::setMotorSpeed),
                 new FollowPath(driveToSpike1Control, follower, spike1Control, true, 1.0),
                 new Parallel("pickup1",
@@ -253,8 +255,10 @@ public final class BlueCaseFarAuto extends OpMode {
 
     @Override
     public void loop() {
+
         caseBot.update();
         follower.update();
+        turret.updateTurretYawServo();
         /*telemetry.addData("x: ", follower.getPose().getX());
         telemetry.addData("isBusy(): ", follower.isBusy());
         telemetry.addData("y: ", follower.getPose().getY());

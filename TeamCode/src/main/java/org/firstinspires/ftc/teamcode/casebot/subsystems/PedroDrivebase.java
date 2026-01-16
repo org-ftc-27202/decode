@@ -20,7 +20,7 @@ public final class PedroDrivebase extends Subsystem {
     public final static double FAR_LAUNCH_FACTOR = 0.2;
     public final static double NEAR_LAUNCH_FACTOR = 0.4;
     public final static double LAUNCH_ZONE_SCALE = 6.2;
-    private double GOAL_X, GOAL_Y;
+    private double GOAL_X, GOAL_Y, REAL_GOAL_X, REAL_GOAL_Y;
     private opModeType opMode;
 
     public enum opModeType {
@@ -58,11 +58,17 @@ public final class PedroDrivebase extends Subsystem {
             GOAL_X = -18.0;
             GOAL_Y = 144.0;
 
+            REAL_GOAL_X = 8.0;
+            REAL_GOAL_Y = 144.0;
+
             STARTING_X = 55.25;
             STARTING_Y = 9.0;
         } else if (allianceColor == StellarBot.AllianceColor.RED) {
-            GOAL_X = 155.0;
+            GOAL_X = 162.0;
             GOAL_Y = 144.0;
+
+            REAL_GOAL_X = 136.0;
+            REAL_GOAL_Y = 144.0;
 
             STARTING_X = 88.75;
             STARTING_Y = 9.0;
@@ -117,6 +123,7 @@ public final class PedroDrivebase extends Subsystem {
         follower.update();
         distanceFromGoal = Math.sqrt(Math.pow(follower.getPose().getX() - GOAL_X, 2) + Math.pow(follower.getPose().getY() - GOAL_Y, 2));
     }
+
     public Follower getFollower(){
         return follower;
     }
@@ -126,17 +133,17 @@ public final class PedroDrivebase extends Subsystem {
             double x = follower.getPose().getX();
             double y = follower.getPose().getY();
 
-            if (y > 48) {
-                if (x <= 72) {
-                    return y >= (-x + 138 - LAUNCH_ZONE_SCALE);
-                } else if (x > 72) {
-                    return y >= (x - 6 - LAUNCH_ZONE_SCALE);
+            if (y > 48.0) {
+                if (x <= 72.0) {
+                    return y >= (-x + 138.0 - LAUNCH_ZONE_SCALE);
+                } else if (x > 72.0) {
+                    return y >= (x - 6.0 - LAUNCH_ZONE_SCALE);
                 }
-            } else if (y <= 48) {
-                if (x <= 72) {
-                    return y <= (x - 42 + LAUNCH_ZONE_SCALE);
-                } else if (x > 72) {
-                    return y <= (-x + 102 + LAUNCH_ZONE_SCALE);
+            } else if (y <= 48.0) {
+                if (x <= 72.0) {
+                    return y <= (x - 42.0 + LAUNCH_ZONE_SCALE);
+                } else if (x > 72.0) {
+                    return y <= (-x + 102.0 + LAUNCH_ZONE_SCALE);
                 }
             }
             return false;
@@ -151,6 +158,18 @@ public final class PedroDrivebase extends Subsystem {
 
         // Convert to degrees (-180 to +180)
         return Math.toDegrees(angleRadians);
+    }
+    public double getRealLaunchYaw(){
+
+        double x = REAL_GOAL_X - follower.getPose().getX();
+        double y = REAL_GOAL_Y - follower.getPose().getY();
+
+            // Use atan2(y, x) to get the correct angle in radians (-PI to +PI)
+            double angleRadians = Math.atan2(y, x);
+
+            // Convert to degrees (-180 to +180)
+            return Math.toDegrees(angleRadians);
+
     }
     public StellarLight getLeftLight() {
         return lightLeft;
