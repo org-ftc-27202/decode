@@ -271,9 +271,9 @@ public final class BlueCaseFarAuto extends OpMode {
 
         caseBot.update();
         follower.update();
-        if(HasMotifPattern){
-        turret.updateTurretYawServo();
-        }else{
+        if (HasMotifPattern) {
+            turret.updateTurretYawServo();
+        } else {
             turret.setTurretToForward();
         }
         /*telemetry.addData("x: ", follower.getPose().getX());

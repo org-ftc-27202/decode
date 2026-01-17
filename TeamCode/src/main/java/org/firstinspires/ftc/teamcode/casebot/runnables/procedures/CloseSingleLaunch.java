@@ -23,7 +23,7 @@ public class CloseSingleLaunch extends Procedure {
                 new InstantlyDo(()->
                         subsystem(Turret.class).setTurretVelocity(1300.0)
                 ),
-                new SetPos(subsystem(Turret.class).getTurretHoodServo(), 0.25),
+                new SetPos(subsystem(Turret.class).getTurretHoodServo(), 0.2),
                 new Parallel(
                         "Launch+Stop",
                         new OuttakeColor(artifactColor),

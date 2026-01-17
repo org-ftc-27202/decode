@@ -79,8 +79,8 @@ public final class Spindexer extends Subsystem {
 		//return (spindexerServoEncoder.getVoltage() / 3.3) - (15.0 / 360.0);
 		double pos = ((spindexerServoEncoder.getVoltage() - 0.170) / 2.96);
 		double realPos = pos;
-		if (pos >= 1){
-			realPos = pos - 1;
+		if (pos >= 1.0){
+			realPos = pos - 1.0;
 		}
 		return realPos;
 	}

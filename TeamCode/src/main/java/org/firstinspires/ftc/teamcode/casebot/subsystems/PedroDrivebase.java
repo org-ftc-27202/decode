@@ -95,6 +95,7 @@ public final class PedroDrivebase extends Subsystem {
         lightRight = new StellarLight(hardwareMap, "lightRight");
 
         //todo: make omni wheel directive
+
         leftFrontDrive = hardwareMap.get(DcMotorEx.class, "leftFront");
         leftBackDrive = hardwareMap.get(DcMotorEx.class, "leftBack");
         rightFrontDrive = hardwareMap.get(DcMotorEx.class, "rightFront");
@@ -184,19 +185,19 @@ public final class PedroDrivebase extends Subsystem {
         double x = REAL_GOAL_X - follower.getPose().getX();
         double y = REAL_GOAL_Y - follower.getPose().getY();
 
-            // Use atan2(y, x) to get the correct angle in radians (-PI to +PI)
-            double angleRadians = Math.atan2(y, x);
+        // Use atan2(y, x) to get the correct angle in radians (-PI to +PI)
+        double angleRadians = Math.atan2(y, x);
 
-            // Convert to degrees (-180 to +180)
-            return Math.toDegrees(angleRadians);
+        // Convert to degrees (-180 to +180)
+        return Math.toDegrees(angleRadians);
 
     }
     public StellarLight getLeftLight() {
-        return lightLeft;
+        return this.lightLeft;
     }
 
     public StellarLight getRightLight() {
-        return lightRight;
+        return this.lightRight;
     }
 
     public void setSpeedScale(double speedScale){

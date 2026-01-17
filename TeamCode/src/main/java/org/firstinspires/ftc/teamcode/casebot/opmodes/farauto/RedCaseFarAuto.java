@@ -268,9 +268,9 @@ public final class RedCaseFarAuto extends OpMode {
     public void loop() {
         caseBot.update();
         follower.update();
-        if(hasMotifPattern){
+        if (hasMotifPattern) {
             turret.updateTurretYawServo();
-        }else{
+        } else {
             turret.setTurretToForward();
         }
         /*telemetry.addData("x: ", follower.getPose().getX());

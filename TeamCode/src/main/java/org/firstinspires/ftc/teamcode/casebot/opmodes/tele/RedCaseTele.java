@@ -97,7 +97,7 @@ public final class RedCaseTele extends LinearOpMode {
             }
             // Define inputs and the single reset pose
             boolean triggersDown = (gamepad2.left_trigger > 0.05) && (gamepad2.right_trigger > 0.05);
-            Pose resetPose = new Pose(56.75, 7, Math.toRadians(180.0));
+            Pose resetPose = new Pose(87.25, 7, Math.toRadians(180.0));
 
 // --- RISING EDGE / ONE-SHOT LOGIC ---
 // This block runs ONLY on the moment the triggers are pressed (rising edge)
