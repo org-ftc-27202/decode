@@ -30,7 +30,7 @@ public final class Turret extends Subsystem {
     private final static double YAW_SERVO_DEGREE_RANGE = 330.0;
     private final static double YAW_GEAR_RATIO = 1.167;
     private final static double DEGREES_TO_POS = (YAW_GEAR_RATIO/YAW_SERVO_DEGREE_RANGE);
-    private final static double YAW_SERVO_MID = 0.23;
+    private final static double YAW_SERVO_MID = 0.83;
 
     private double velocity = 0.0;
 
@@ -53,7 +53,7 @@ public final class Turret extends Subsystem {
         rightTurretMotor = new StellarDcMotor(hardwareMap, "rightTurretMotor");
 
         webcamName = hardwareMap.get(WebcamName.class, "camera");
-
+        //turretYawServo.setPosition(YAW_SERVO_MID);
         leftTurretMotor.setDirection(DcMotorEx.Direction.REVERSE);
         rightTurretMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         leftTurretMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
@@ -130,8 +130,11 @@ public final class Turret extends Subsystem {
     public double getBoundedTurretYawAngleTarget() {
         double targetAngle = getTurretYawAngleTarget();
         double boundedTargetAngle;
-        if (targetAngle < -13.0){
-            boundedTargetAngle= -13.0;
+        if ((targetAngle<-13) && (targetAngle>-90)){
+            boundedTargetAngle = -13;
+        }
+        else if (targetAngle < -90.0){
+            boundedTargetAngle= -30.0;
         } else if (targetAngle > 30.0){
             boundedTargetAngle = 30.0;
         } else{
@@ -143,7 +146,7 @@ public final class Turret extends Subsystem {
     public void updateTurretYawServo() {
         double targetAngle = getBoundedTurretYawAngleTarget();
 
-        double servoDegreesOffset = (targetAngle * YAW_GEAR_RATIO) + 0.025;
+        double servoDegreesOffset = (targetAngle * YAW_GEAR_RATIO);
 
         double servoPosOffset = servoDegreesOffset / YAW_SERVO_DEGREE_RANGE;
 
@@ -151,6 +154,9 @@ public final class Turret extends Subsystem {
         double finalServoPos = YAW_SERVO_MID - servoPosOffset;
 
         turretYawServo.setPosition(finalServoPos);
+    }
+    public void setTurretToForward(){
+        turretYawServo.setPosition(YAW_SERVO_MID);
     }
 
 

@@ -47,6 +47,7 @@ public final class BlueCaseFarAuto extends OpMode {
     private final Camera camera = new Camera();
 
     private Follower follower;
+    private boolean HasMotifPattern = false;
 
     private final Pose startPose = new Pose(55.3,7, Math.toRadians(90));
     private final Pose cameraPose = new Pose(61, 24, Math.toRadians(90));
@@ -186,16 +187,20 @@ public final class BlueCaseFarAuto extends OpMode {
     public void start() {
         new Procedure(
                 "AutoDrive",
-                new Sleep(PRE_MATCH_DELAY),
+                new InstantlyDo(()-> HasMotifPattern = false),
                 new SetPos(leverTransfer.getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION),
                 new InstantlyDo(() -> intake.setIntakeSpeed(1.0)),
                 new InstantlyDo(intake::setMotorSpeed),
                 new Parallel(
                         "hmm",
-                        new TurretStartup(), // This runs in the background
+                        new TurretStartup(),
+                        new Sleep(PRE_MATCH_DELAY),// This runs in the background
                         new Procedure(
                                 "lock in", // While this part continues forward
-                                new GetMotif(),
+                                new Race("get Motif",
+                                        new GetMotif(),
+                                        new Sleep(3.0)),
+                                new InstantlyDo(()-> HasMotifPattern = true),
                                 new FollowPath(driveToGetMotif, follower, cameraPose, true, 1.0)
                         )),
                 new FarMotifLaunch(),
@@ -266,7 +271,11 @@ public final class BlueCaseFarAuto extends OpMode {
 
         caseBot.update();
         follower.update();
+        if(HasMotifPattern){
         turret.updateTurretYawServo();
+        }else{
+            turret.setTurretToForward();
+        }
         /*telemetry.addData("x: ", follower.getPose().getX());
         telemetry.addData("isBusy(): ", follower.isBusy());
         telemetry.addData("y: ", follower.getPose().getY());

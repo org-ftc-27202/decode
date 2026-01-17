@@ -55,7 +55,7 @@ public final class Spindexer extends Subsystem {
 		spindexerServoEncoder = hardwareMap.get(AnalogInput.class, "spindexerServoEncoder");
 
 		//todo
-		spindexerServo.setPosition(getServoPositionFromSegment(0, Position.INTAKE));
+		//spindexerServo.setPosition(getServoPositionFromSegment(0, Position.INTAKE));
 
 		beamBreak1 = hardwareMap.get(DigitalChannel.class, "beamBreak1");
 		beamBreak1.setMode(DigitalChannel.Mode.INPUT);

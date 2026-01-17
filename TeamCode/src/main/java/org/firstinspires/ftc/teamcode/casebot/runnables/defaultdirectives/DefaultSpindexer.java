@@ -158,6 +158,16 @@ public class DefaultSpindexer extends DefaultDirective {
 					new InstantlyDo(()-> subsystem(PedroDrivebase.class).getFollower().startTeleopDrive(true));
 				}
 		));
+		addTrigger(new ActionTrigger(
+				new StatefulCondition(
+						new GamepadButtonMap(gamepad2, GamepadButtonMap.Button.DPAD_DOWN),
+						StatefulCondition.Edge.RISING
+				),
+				()->{
+					new InstantlyDo(()-> subsystem(PedroDrivebase.class).setEndgame());
+				}
+		));
+
 
 
 

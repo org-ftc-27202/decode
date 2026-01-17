@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.stellarstructure.runnables.DefaultDirectiv
 public class PedroDefaultDrivebase extends DefaultDirective {
 	private final Gamepad gamepad1;
 	private final Gamepad gamepad2;
-
+	private final PedroDrivebase pedroDrivebase = subsystem(PedroDrivebase.class);
 	public PedroDefaultDrivebase(Gamepad gamepad1, Gamepad gamepad2) {
 		super(subsystem(PedroDrivebase.class));
 
@@ -40,6 +40,9 @@ public class PedroDefaultDrivebase extends DefaultDirective {
 					-gamepad1.right_stick_x * 0.75001,
 					true
 			); // robot centric
-
+		if (pedroDrivebase.inWrongSideEndgame()){
+			//gamepad1.rumble(1.0, 1.0, 500);
+			gamepad1.rumbleBlips(1);
+		}
 	}
 }

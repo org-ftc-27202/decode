@@ -22,6 +22,7 @@ public final class PedroDrivebase extends Subsystem {
     public final static double LAUNCH_ZONE_SCALE = 6.2;
     private double GOAL_X, GOAL_Y, REAL_GOAL_X, REAL_GOAL_Y;
     private opModeType opMode;
+    private boolean isEndgame = false;
 
     public enum opModeType {
         AUTO,
@@ -128,6 +129,25 @@ public final class PedroDrivebase extends Subsystem {
         return follower;
     }
 
+    public void setEndgame(){
+        this.isEndgame = true;
+    }
+
+
+    public boolean inWrongSideEndgame() {
+        StellarBot.AllianceColor allianceColor = StellarBot.getInstance().getAllianceColor();
+        if (isEndgame) {
+            double x = follower.getPose().getX();
+            if (allianceColor == StellarBot.AllianceColor.BLUE) {
+                return x < 72.0;
+            }
+            if (allianceColor == StellarBot.AllianceColor.RED) {
+                return x > 72.0;
+            }
+
+        }
+        return false;
+    }
 
     public boolean checkForLaunchPose() {
             double x = follower.getPose().getX();
