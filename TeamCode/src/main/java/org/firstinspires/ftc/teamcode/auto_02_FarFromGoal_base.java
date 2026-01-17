@@ -27,26 +27,19 @@ public abstract class auto_02_FarFromGoal_base extends NextFTCOpMode {
         );
     }
     private Timer opModeTimer;
-    private PathChain driveToGetPattern, driveToLaunch1, driveToSpike3Start, driveToSpike3End, driveToLaunch3_2, driveToLeave;
+    private PathChain driveToGetPattern, driveToLeave;
     private Pose startPose;
 
     public void buildPaths() {
-        Pose getPatternPose, launchFar1Pose, spike3StartPose, spike3EndPose, LeavePose;
+        Pose getPatternPose, LeavePose;
 
         startPose = new Pose(86, 6, Math.toRadians(90));
         getPatternPose = new Pose(88, 18, Math.toRadians(90));
-        launchFar1Pose = new Pose(87, 18, Math.toRadians(67));
-        spike3StartPose = new Pose(100, 36, Math.toRadians(0));
-        spike3EndPose = new Pose(130, 36, Math.toRadians(0));
-        LeavePose = new Pose(100, 60, Math.toRadians(0));
-
+        LeavePose = new Pose(88, 20, Math.toRadians(90));
 
         if (Config.allianceColor == Config.AllianceColors.BLUE) {
             startPose = startPose.mirror();
             getPatternPose = getPatternPose.mirror();
-            launchFar1Pose = launchFar1Pose.mirror();
-            spike3StartPose = spike3StartPose.mirror();
-            spike3EndPose = spike3EndPose.mirror();
             LeavePose = LeavePose.mirror();
         }
 
@@ -55,44 +48,17 @@ public abstract class auto_02_FarFromGoal_base extends NextFTCOpMode {
                 .setLinearHeadingInterpolation(startPose.getHeading(), getPatternPose.getHeading())
                 .build();
 
-        driveToLaunch1 = PedroComponent.follower().pathBuilder()
-                .addPath(new BezierLine(getPatternPose, launchFar1Pose))
-                .setLinearHeadingInterpolation(getPatternPose.getHeading(), launchFar1Pose.getHeading())
-                .build();
-
-        driveToSpike3Start = PedroComponent.follower().pathBuilder()
-                .addPath(new BezierLine(launchFar1Pose, spike3StartPose))
-                .setLinearHeadingInterpolation(launchFar1Pose.getHeading(), spike3StartPose.getHeading())
-                .build();
-
-        driveToSpike3End = PedroComponent.follower().pathBuilder()
-                .addPath(new BezierLine(spike3StartPose, spike3EndPose))
-                .setLinearHeadingInterpolation(spike3StartPose.getHeading(), spike3EndPose.getHeading())
-                .build();
-
-        driveToLaunch3_2 = PedroComponent.follower().pathBuilder()
-                .addPath(new BezierLine(spike3EndPose, launchFar1Pose))
-                .setLinearHeadingInterpolation(spike3EndPose.getHeading(), launchFar1Pose.getHeading())
-                .build();
-
         driveToLeave = PedroComponent.follower().pathBuilder()
-                .addPath(new BezierLine(launchFar1Pose, LeavePose))
-                .setLinearHeadingInterpolation(launchFar1Pose.getHeading(), LeavePose.getHeading())
+                .addPath(new BezierLine(getPatternPose, LeavePose))
+                .setLinearHeadingInterpolation(getPatternPose.getHeading(), LeavePose.getHeading())
                 .build();
     }
     private Command autonomousRoutine() {
         return new SequentialGroup(
+                Wiper.INSTANCE.toLaunchPosition,
                 new FollowPath(driveToGetPattern),
                 new Delay(0.1),
                 Camera.INSTANCE.capturePattern,
-                new FollowPath(driveToLaunch1, true),
-                Catapult.INSTANCE.LaunchByPattern,
-                new FollowPath(driveToSpike3Start),
-                Intake.INSTANCE.Inwards,
-                new FollowPath(driveToSpike3End),
-                new FollowPath(driveToLaunch3_2, true),
-                Intake.INSTANCE.Stop,
-                Catapult.INSTANCE.LaunchByPattern,
                 new FollowPath(driveToLeave, true)
         );
     }

@@ -23,21 +23,23 @@ public abstract class TeleOp_01_base extends NextFTCOpMode {
     public TeleOp_01_base() {
         addComponents(
                 new PedroComponent(Constants::createFollower),
-                new SubsystemComponent(Intake.INSTANCE, Catapult.INSTANCE, Camera.INSTANCE),
+                new SubsystemComponent(Intake.INSTANCE, Catapult.INSTANCE, Camera.INSTANCE, Wiper.INSTANCE),
                 BulkReadComponent.INSTANCE,
                 BindingsComponent.INSTANCE
         );
     }
     private Timer opModeTimer;
     private Pose relocalizePose;
-    private PathChain driveToBaseEndGame, driveToLoadingZone, driveToGate, driveToLaunch1Pose, driveToLaunch2Pose;
+    private PathChain driveToBaseEndGame, driveToBase2EndGame, driveToLoadingZone, driveToGate, driveToLaunch1Pose;
+            //, driveToLaunch2Pose;
     public void buildPaths() {
-        Pose baseEndGamePose, loadingZonePose, gatePose, launch1Pose, launch2Pose;
+        Pose baseEndGamePose, base2EndGamePose, loadingZonePose, gatePose, launch1Pose, launch2Pose;
         // Robot Length: 17"; Robot Width: 17.5"
         // Base on Red Alliance
         relocalizePose = new Pose(8.75, 8.5, Math.toRadians(0));
         loadingZonePose = new Pose(21, 30, Math.toRadians(45));
         baseEndGamePose = new Pose(38, 32, Math.toRadians(0));
+        base2EndGamePose = new Pose(38, 50, Math.toRadians(0));
         gatePose = new Pose(128, 66, Math.toRadians(0));
         if (Config.goalOption == Config.GoalOptions.FAR) {
             launch1Pose = new Pose(65.5, 26.5, Math.toRadians(58));
@@ -50,6 +52,7 @@ public abstract class TeleOp_01_base extends NextFTCOpMode {
         if (Config.allianceColor == Config.AllianceColors.BLUE) {
             relocalizePose = relocalizePose.mirror();
             baseEndGamePose = baseEndGamePose.mirror();
+            base2EndGamePose = base2EndGamePose.mirror();
             loadingZonePose = loadingZonePose.mirror();
             launch1Pose = launch1Pose.mirror();
             launch2Pose = launch2Pose.mirror();
@@ -59,6 +62,11 @@ public abstract class TeleOp_01_base extends NextFTCOpMode {
         driveToBaseEndGame = PedroComponent.follower().pathBuilder()
                 .addPath(new BezierCurve(PedroComponent.follower().getPose(), baseEndGamePose))
                 .setConstantHeadingInterpolation(baseEndGamePose.getHeading())
+                .build();
+
+        driveToBase2EndGame = PedroComponent.follower().pathBuilder()
+                .addPath(new BezierCurve(PedroComponent.follower().getPose(), base2EndGamePose))
+                .setConstantHeadingInterpolation(base2EndGamePose.getHeading())
                 .build();
 
         driveToGate = PedroComponent.follower().pathBuilder()
@@ -76,10 +84,10 @@ public abstract class TeleOp_01_base extends NextFTCOpMode {
                 .setConstantHeadingInterpolation(launch1Pose.getHeading())
                 .build();
 
-        driveToLaunch2Pose = PedroComponent.follower().pathBuilder()
-                .addPath(new BezierCurve(PedroComponent.follower().getPose(), launch2Pose))
-                .setConstantHeadingInterpolation(launch2Pose.getHeading())
-                .build();
+//        driveToLaunch2Pose = PedroComponent.follower().pathBuilder()
+//                .addPath(new BezierCurve(PedroComponent.follower().getPose(), launch2Pose))
+//                .setConstantHeadingInterpolation(launch2Pose.getHeading())
+//                .build();
     }
     @Override
     public void onInit() {
@@ -100,34 +108,30 @@ public abstract class TeleOp_01_base extends NextFTCOpMode {
 
         // Intake
         Gamepads.gamepad1().leftBumper().whenBecomesTrue(
-                new ParallelGroup(Intake.INSTANCE.Inwards,
+                new ParallelGroup(
+                        Wiper.INSTANCE.toIntakePosition,
+                        Intake.INSTANCE.Inwards,
                         new InstantCommand(() -> PedroComponent.follower().startTeleopDrive())));
         Gamepads.gamepad1().leftTrigger().greaterThan(0.2).whenBecomesTrue(Intake.INSTANCE.Outwards);
         Gamepads.gamepad1().leftTrigger().lessThan(0.2).whenBecomesTrue(Intake.INSTANCE.Stop);
 
+        // Wiper
+        Gamepads.gamepad1().dpadRight().whenBecomesTrue(
+                new SequentialGroup(Wiper.INSTANCE.toLaunchPosition));
+
         // Catapults
-//        Gamepads.gamepad1().dpadLeft().whenBecomesTrue(
-//                new SequentialGroup(
-//                        new ParallelGroup(Intake.INSTANCE.Stop, Catapult.INSTANCE.Launch01),
-//                        new InstantCommand(() -> PedroComponent.follower().startTeleopDrive())));
-//        Gamepads.gamepad1().dpadUp().whenBecomesTrue(
-//                new SequentialGroup(
-//                        new ParallelGroup(Intake.INSTANCE.Stop, Catapult.INSTANCE.Launch02),
-//                        new InstantCommand(() -> PedroComponent.follower().startTeleopDrive())));
-//        Gamepads.gamepad1().dpadRight().whenBecomesTrue(
-//                new SequentialGroup(
-//                        new ParallelGroup(Intake.INSTANCE.Stop, Catapult.INSTANCE.Launch03),
-//                        new InstantCommand(() -> PedroComponent.follower().startTeleopDrive())));
         Gamepads.gamepad1().rightBumper().whenBecomesTrue(
                new SequentialGroup(
-                        new ParallelGroup(Intake.INSTANCE.Stop, Camera.INSTANCE.getCatapultArtifactColors),
+                        new ParallelGroup(Wiper.INSTANCE.toLaunchPosition,
+                                Intake.INSTANCE.Stop,
+                                Camera.INSTANCE.getCatapultArtifactColors),
                         Catapult.INSTANCE.LaunchInParallel,
                         new InstantCommand(() -> PedroComponent.follower().startTeleopDrive())));
-//        Gamepads.gamepad1().rightTrigger().greaterThan(0.2).whenBecomesTrue(
-//                new SequentialGroup(
-//                        new ParallelGroup(Intake.INSTANCE.Stop, Camera.INSTANCE.getCatapultArtifactColors),
-//                        Catapult.INSTANCE.LaunchInParallel,
-//                        new InstantCommand(() -> PedroComponent.follower().startTeleopDrive())));
+        Gamepads.gamepad1().rightTrigger().greaterThan(0.2).whenBecomesTrue(
+                new SequentialGroup(
+                        new ParallelGroup(Intake.INSTANCE.Stop, Camera.INSTANCE.getCatapultArtifactColors),
+                        Catapult.INSTANCE.LaunchByPattern,
+                        new InstantCommand(() -> PedroComponent.follower().startTeleopDrive())));
 
         // Manual Settings
         Gamepads.gamepad1().dpadDown().and(Gamepads.gamepad1().x()).whenBecomesTrue(new InstantCommand(() -> PedroComponent.follower().setPose(relocalizePose)));
@@ -142,30 +146,28 @@ public abstract class TeleOp_01_base extends NextFTCOpMode {
         // Drive to Loading Zone
         Gamepads.gamepad1().dpadDown().not().and(Gamepads.gamepad1().a()).whenBecomesTrue(
                 new ParallelGroup(
+                        Wiper.INSTANCE.toLaunchPosition,
                         Intake.INSTANCE.Stop,
                         new FollowPath(driveToLoadingZone, true, 1.0)));
         // Drive to Launch 1
         Gamepads.gamepad1().dpadDown().not().and(Gamepads.gamepad1().b()).whenBecomesTrue(
                 new ParallelGroup(
+                        Wiper.INSTANCE.toLaunchPosition,
                         new SequentialGroup(new Delay(2), Intake.INSTANCE.Stop),
                         new FollowPath(driveToLaunch1Pose, true, 1.0)));
-//        // Drive to Launch 2
-//        Gamepads.gamepad1().dpadDown().not().and(Gamepads.gamepad1().y()).whenBecomesTrue(
-//                new ParallelGroup(
-//                        new SequentialGroup(new Delay(2), Intake.INSTANCE.Stop),
-//                        new FollowPath(driveToLaunch2Pose, true, 1.0)));
         // Drive to driveToGate
         Gamepads.gamepad1().dpadDown().not().and(Gamepads.gamepad1().y()).whenBecomesTrue(
                 new FollowPath(driveToGate, true, 1.0));
-        // Drive to Base (parking)
+        // Drive to Base 1 (parking)
         Gamepads.gamepad1().dpadUp().whenBecomesTrue(
                 new ParallelGroup(
                         Intake.INSTANCE.Stop,
                         new FollowPath(driveToBaseEndGame, true, 1.0)));
+        // Drive to Base 2 (parking)
         Gamepads.gamepad1().dpadLeft().whenBecomesTrue(
                 new ParallelGroup(
                         Intake.INSTANCE.Stop,
-                        new FollowPath(driveToBaseEndGame, true, 1.0)));
+                        new FollowPath(driveToBase2EndGame, true, 1.0)));
     }
     @Override
     public void onUpdate() {

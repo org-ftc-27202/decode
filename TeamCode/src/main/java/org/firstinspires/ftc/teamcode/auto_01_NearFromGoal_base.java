@@ -6,6 +6,7 @@ import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.delays.Delay;
+import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.components.BindingsComponent;
 import dev.nextftc.core.components.SubsystemComponent;
@@ -18,9 +19,7 @@ public abstract class auto_01_NearFromGoal_base extends NextFTCOpMode {
     public auto_01_NearFromGoal_base() {
         addComponents(
                 new PedroComponent(Constants::createFollower),
-                new SubsystemComponent(Intake.INSTANCE),
-                new SubsystemComponent(Catapult.INSTANCE),
-                new SubsystemComponent(Camera.INSTANCE),
+                new SubsystemComponent(Intake.INSTANCE, Catapult.INSTANCE, Camera.INSTANCE, Wiper.INSTANCE),
                 BulkReadComponent.INSTANCE,
                 BindingsComponent.INSTANCE
         );
@@ -29,7 +28,8 @@ public abstract class auto_01_NearFromGoal_base extends NextFTCOpMode {
     private PathChain driveToGetPattern, driveToLaunch0,
             driveToSpike1Start, driveToSpike1End, driveToLaunch1,
             driveToSpike2Start, driveToSpike2End, driveToLaunch2,
-            driveToSpike3Start, driveToSpike3End, driveToLaunch3
+            driveToSpike3Start, driveToSpike3End, driveToLaunch3,
+            driveToLeave
             ;
     private Pose startPose;
 
@@ -40,14 +40,14 @@ public abstract class auto_01_NearFromGoal_base extends NextFTCOpMode {
         getPatternPose = new Pose(92, 92, Math.toRadians(110));
         launchNear1Pose = new Pose(100, 88, Math.toRadians(52));
 
-        spike1StartPose = new Pose(100, 82, Math.toRadians(0));
+        spike1StartPose = new Pose(100, 80, Math.toRadians(0));
         spike1EndPose = new Pose(130, 72, Math.toRadians(0));
-        spike2StartPose = new Pose(100, 58, Math.toRadians(0));
-        spike2EndPose = new Pose(136,54, Math.toRadians(0));
-        spike3StartPose = new Pose(100, 34, Math.toRadians(0));
-        spike3EndPose = new Pose(136,30, Math.toRadians(0));
+        spike2StartPose = new Pose(100, 56, Math.toRadians(0));
+        spike2EndPose = new Pose(136,56, Math.toRadians(0));
+        spike3StartPose = new Pose(100, 32, Math.toRadians(0));
+        spike3EndPose = new Pose(136,32, Math.toRadians(0));
 
-        LeavePose = new Pose(89, 105, Math.toRadians(30));
+        LeavePose = new Pose(120, 66, Math.toRadians(0));  // Near Gate to Open for TeleOp
 
         if (Config.allianceColor == Config.AllianceColors.BLUE) {
             startPose = startPose.mirror();
@@ -113,36 +113,61 @@ public abstract class auto_01_NearFromGoal_base extends NextFTCOpMode {
                 .build();
 
         driveToLaunch3 = PedroComponent.follower().pathBuilder()
-                .addPath(new BezierLine(spike3EndPose, LeavePose))
-                .setLinearHeadingInterpolation(spike3EndPose.getHeading(), LeavePose.getHeading())
+                .addPath(new BezierLine(spike3EndPose, launchNear1Pose))
+                .setLinearHeadingInterpolation(spike3EndPose.getHeading(), launchNear1Pose.getHeading())
+                .build();
+
+        driveToLeave = PedroComponent.follower().pathBuilder()
+                .addPath(new BezierLine(launchNear1Pose, LeavePose))
+                .setLinearHeadingInterpolation(launchNear1Pose.getHeading(), LeavePose.getHeading())
                 .build();
     }
     private Command autonomousRoutine() {
         return new SequentialGroup(
+                // Get Motif and Launch Preloads
+                Wiper.INSTANCE.toLaunchPosition,
                 new FollowPath(driveToGetPattern),
                 new Delay(0.1),
                 Camera.INSTANCE.capturePattern,
-                new FollowPath(driveToLaunch1, true),
+                new FollowPath(driveToLaunch0, true),
                 new Delay(0.75),
-                Catapult.INSTANCE.LaunchByPattern,
+                Catapult.INSTANCE.LaunchInParallel,
+
+                // Grab balls and launch #1
                 new FollowPath(driveToSpike1Start),
+                Wiper.INSTANCE.toIntakePosition,
                 Intake.INSTANCE.Inwards,
                 new FollowPath(driveToSpike1End),
-                new FollowPath(driveToLaunch2, true),
+                new ParallelGroup(
+                    new SequentialGroup(new Delay(1.0), Wiper.INSTANCE.toLaunchPosition),
+                    new FollowPath(driveToLaunch1, true)),
                 Intake.INSTANCE.Stop,
                 Catapult.INSTANCE.LaunchByPattern,
+
+                // Grab balls and launch #2
+                Wiper.INSTANCE.toIntakePosition,
                 Intake.INSTANCE.Inwards,
                 new FollowPath(driveToSpike2Start, true),
                 new FollowPath(driveToSpike2End),
-                new FollowPath(driveToLaunch2),
+                new ParallelGroup(
+                        new SequentialGroup(new Delay(1.0), Wiper.INSTANCE.toLaunchPosition),
+                        new FollowPath(driveToLaunch2, true)),
                 Intake.INSTANCE.Stop,
                 Catapult.INSTANCE.LaunchByPattern,
+
+                // Grab balls and launch #3
+                Wiper.INSTANCE.toIntakePosition,
                 Intake.INSTANCE.Inwards,
                 new FollowPath(driveToSpike3Start, true),
                 new FollowPath(driveToSpike3End),
-                new FollowPath(driveToLaunch3),
+                new ParallelGroup(
+                        new SequentialGroup(new Delay(1.0), Wiper.INSTANCE.toLaunchPosition),
+                        new FollowPath(driveToLaunch3, true)),
                 Intake.INSTANCE.Stop,
-                Catapult.INSTANCE.LaunchByPattern
+                Catapult.INSTANCE.LaunchByPattern,
+
+                // Go to Leave Pose
+                new FollowPath(driveToLeave)
         );
     }
     @Override

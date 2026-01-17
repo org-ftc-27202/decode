@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 //@Disabled
 
-@Autonomous(name = "02A Red Far From Goal (Auto)", group = "00 Robot", preselectTeleOp = "02A Red Far From Goal (TeleOp)")
+@Autonomous(name = "02A Red Far From Goal (Auto)", group = "00 Robot", preselectTeleOp = "01A Red Near From Goal (TeleOp)")
 
 public class auto_02a_FarFromGoal_Red extends auto_02_FarFromGoal_base {
     @Override
