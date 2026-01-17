@@ -33,7 +33,7 @@ public abstract class TeleOp_01_base extends NextFTCOpMode {
     private PathChain driveToBaseEndGame, driveToBase2EndGame, driveToLoadingZone, driveToGate, driveToLaunch1Pose;
             //, driveToLaunch2Pose;
     public void buildPaths() {
-        Pose baseEndGamePose, base2EndGamePose, loadingZonePose, gatePose, launch1Pose, launch2Pose;
+        Pose baseEndGamePose, base2EndGamePose, loadingZonePose, gatePose, launch1Pose; //, launch2Pose;
         // Robot Length: 17"; Robot Width: 17.5"
         // Base on Red Alliance
         relocalizePose = new Pose(8.75, 8.5, Math.toRadians(0));
@@ -43,10 +43,10 @@ public abstract class TeleOp_01_base extends NextFTCOpMode {
         gatePose = new Pose(128, 66, Math.toRadians(0));
         if (Config.goalOption == Config.GoalOptions.FAR) {
             launch1Pose = new Pose(65.5, 26.5, Math.toRadians(58));
-            launch2Pose = new Pose(87, 18, Math.toRadians(67));  // works for TeleOp and auto
+//            launch2Pose = new Pose(87, 18, Math.toRadians(67));  // works for TeleOp and auto
         } else { // NEAR
             launch1Pose = new Pose(100, 88, Math.toRadians(52));  // works for TeleOp and auto
-            launch2Pose = new Pose(77, 116, Math.toRadians(19));
+//            launch2Pose = new Pose(77, 116, Math.toRadians(19));
         }
 
         if (Config.allianceColor == Config.AllianceColors.BLUE) {
@@ -55,7 +55,7 @@ public abstract class TeleOp_01_base extends NextFTCOpMode {
             base2EndGamePose = base2EndGamePose.mirror();
             loadingZonePose = loadingZonePose.mirror();
             launch1Pose = launch1Pose.mirror();
-            launch2Pose = launch2Pose.mirror();
+//            launch2Pose = launch2Pose.mirror();
             gatePose = gatePose.mirror();
         }
 

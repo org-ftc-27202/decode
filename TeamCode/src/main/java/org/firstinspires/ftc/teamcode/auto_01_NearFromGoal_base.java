@@ -34,20 +34,21 @@ public abstract class auto_01_NearFromGoal_base extends NextFTCOpMode {
     private Pose startPose;
 
     public void buildPaths() {
-        Pose getPatternPose, launchNear1Pose, spike1StartPose, spike1EndPose, LeavePose, spike2StartPose, spike2EndPose, spike3StartPose, spike3EndPose;
+        Pose getPatternPose, launchNear1Pose, spike1StartPose, spike1EndPose, LeavePose, spike2StartPose, spike2StartPose2, spike2EndPose, spike3StartPose, spike3EndPose;
 
         startPose = new Pose(113, 129.5, Math.toRadians(90));
         getPatternPose = new Pose(92, 92, Math.toRadians(110));
-        launchNear1Pose = new Pose(100, 88, Math.toRadians(52));
+        launchNear1Pose = new Pose(100, 90, Math.toRadians(50));
 
-        spike1StartPose = new Pose(100, 80, Math.toRadians(0));
-        spike1EndPose = new Pose(130, 72, Math.toRadians(0));
+        spike1StartPose = new Pose(100, 82, Math.toRadians(0));
+        spike1EndPose = new Pose(132, 82, Math.toRadians(0));
         spike2StartPose = new Pose(100, 56, Math.toRadians(0));
-        spike2EndPose = new Pose(136,56, Math.toRadians(0));
-        spike3StartPose = new Pose(100, 32, Math.toRadians(0));
-        spike3EndPose = new Pose(136,32, Math.toRadians(0));
+        spike2StartPose2 = new Pose(120, 56, Math.toRadians(0));
+        spike2EndPose = new Pose(134,56, Math.toRadians(0));
+        spike3StartPose = new Pose(100, 34, Math.toRadians(0));
+        spike3EndPose = new Pose(134,34, Math.toRadians(0));
 
-        LeavePose = new Pose(120, 66, Math.toRadians(0));  // Near Gate to Open for TeleOp
+        LeavePose = new Pose(124, 62, Math.toRadians(0));  // Near Gate to Open for TeleOp
 
         if (Config.allianceColor == Config.AllianceColors.BLUE) {
             startPose = startPose.mirror();
@@ -56,6 +57,7 @@ public abstract class auto_01_NearFromGoal_base extends NextFTCOpMode {
             spike1StartPose = spike1StartPose.mirror();
             spike1EndPose = spike1EndPose.mirror();
             spike2StartPose = spike2StartPose.mirror();
+            spike2StartPose2 = spike2StartPose2.mirror();
             spike2EndPose = spike2EndPose.mirror();
             spike3StartPose = spike3StartPose.mirror();
             spike3EndPose = spike3EndPose.mirror();
@@ -98,6 +100,13 @@ public abstract class auto_01_NearFromGoal_base extends NextFTCOpMode {
                 .build();
 
         driveToLaunch2 = PedroComponent.follower().pathBuilder()
+                .addPath(new BezierLine(spike2EndPose, spike2StartPose2))
+                .setLinearHeadingInterpolation(spike2EndPose.getHeading(), spike2StartPose2.getHeading())
+                .addPath(new BezierLine(spike2StartPose2, launchNear1Pose))
+                .setLinearHeadingInterpolation(spike2StartPose2.getHeading(), launchNear1Pose.getHeading())
+                .build();
+
+        driveToLaunch2 = PedroComponent.follower().pathBuilder()
                 .addPath(new BezierLine(spike2EndPose, launchNear1Pose))
                 .setLinearHeadingInterpolation(spike2EndPose.getHeading(), launchNear1Pose.getHeading())
                 .build();
@@ -127,43 +136,48 @@ public abstract class auto_01_NearFromGoal_base extends NextFTCOpMode {
                 // Get Motif and Launch Preloads
                 Wiper.INSTANCE.toLaunchPosition,
                 new FollowPath(driveToGetPattern),
-                new Delay(0.1),
+                new Delay(0.10),
                 Camera.INSTANCE.capturePattern,
-                new FollowPath(driveToLaunch0, true),
-                new Delay(0.75),
-                Catapult.INSTANCE.LaunchInParallel,
+                new FollowPath(driveToLaunch0),
+                new Delay(0.10),
+                Catapult.INSTANCE.LaunchInParallel
+                ,
 
                 // Grab balls and launch #1
-                new FollowPath(driveToSpike1Start),
                 Wiper.INSTANCE.toIntakePosition,
                 Intake.INSTANCE.Inwards,
-                new FollowPath(driveToSpike1End),
+                new FollowPath(driveToSpike1Start),
+                new FollowPath(driveToSpike1End, true, 0.5),
                 new ParallelGroup(
                     new SequentialGroup(new Delay(1.0), Wiper.INSTANCE.toLaunchPosition),
-                    new FollowPath(driveToLaunch1, true)),
+                    new FollowPath(driveToLaunch1)),
                 Intake.INSTANCE.Stop,
-                Catapult.INSTANCE.LaunchByPattern,
+                new Delay(0.50),
+                Catapult.INSTANCE.LaunchByPattern
+                ,
 
                 // Grab balls and launch #2
                 Wiper.INSTANCE.toIntakePosition,
                 Intake.INSTANCE.Inwards,
-                new FollowPath(driveToSpike2Start, true),
-                new FollowPath(driveToSpike2End),
+                new FollowPath(driveToSpike2Start),
+                new FollowPath(driveToSpike2End, true, 0.5),
                 new ParallelGroup(
                         new SequentialGroup(new Delay(1.0), Wiper.INSTANCE.toLaunchPosition),
-                        new FollowPath(driveToLaunch2, true)),
+                        new FollowPath(driveToLaunch2)),
                 Intake.INSTANCE.Stop,
+                new Delay(0.50),
                 Catapult.INSTANCE.LaunchByPattern,
 
                 // Grab balls and launch #3
                 Wiper.INSTANCE.toIntakePosition,
                 Intake.INSTANCE.Inwards,
-                new FollowPath(driveToSpike3Start, true),
-                new FollowPath(driveToSpike3End),
+                new FollowPath(driveToSpike3Start),
+                new FollowPath(driveToSpike3End, true, 0.5),
                 new ParallelGroup(
                         new SequentialGroup(new Delay(1.0), Wiper.INSTANCE.toLaunchPosition),
-                        new FollowPath(driveToLaunch3, true)),
+                        new FollowPath(driveToLaunch3)),
                 Intake.INSTANCE.Stop,
+                new Delay(0.50),
                 Catapult.INSTANCE.LaunchByPattern,
 
                 // Go to Leave Pose

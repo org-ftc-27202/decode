@@ -9,6 +9,6 @@ public class Wiper implements Subsystem {
     public static final Wiper INSTANCE = new Wiper();
     private Wiper() { }
     private final ServoEx wiperServo = new ServoEx("wiper");
-    public Command toIntakePosition = new SetPosition(wiperServo, 0.48).requires(this);
-    public Command toLaunchPosition = new SetPosition(wiperServo, 0.85).requires(this);
+    public Command toIntakePosition = new SetPosition(wiperServo, 0.46).requires(this);
+    public Command toLaunchPosition = new SetPosition(wiperServo, 0.88).requires(this);
 }
