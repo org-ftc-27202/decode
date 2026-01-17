@@ -58,6 +58,7 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
             // set up subsystems
             caseBot.init(hardwareMap);
             pedroDrivebase.getFollower().setMaxPower(1.0);
+            gamepad1.rumble(1.0, 1.0, 12000000);
 
             onStart = true;
 

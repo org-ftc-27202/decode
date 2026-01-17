@@ -26,6 +26,7 @@ import org.firstinspires.ftc.teamcode.stellarstructure.StellarBot;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.InstantlyDo;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Parallel;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Procedure;
+import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Race;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.SetPos;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Sleep;
 import org.firstinspires.ftc.teamcode.util.DecodeDataTypes;
@@ -201,37 +202,44 @@ public final class BlueCaseFarAuto extends OpMode {
                 new InstantlyDo(()-> intake.setIntakeSpeed(1.0)),
                 new InstantlyDo(intake::setMotorSpeed),
                 new FollowPath(driveToSpike1Control, follower, spike1Control, true, 1.0),
-                new Parallel("pickup1",
-                        new FullIntake(),
-                        new Procedure ("spike1pickup",
-                                new FollowPath(driveToSpike1Start, follower, spike1Start, true, 0.4),
-                                new Sleep(0.3),
-                                new FollowPath(driveToSpike1End, follower, spike1End, true, 0.4)
-                        )
+                new Race(
+                        "pickup1Race",
+                        new Parallel("pickup1",
+                                new FullIntake(),
+                                new Procedure ("spike1pickup",
+                                        new FollowPath(driveToSpike1Start, follower, spike1Start, true, 0.4),
+                                        new Sleep(0.3),
+                                        new FollowPath(driveToSpike1End, follower, spike1End, true, 0.4)
+                                )
+                        ),
+                        new Sleep(4.5)
                 ),
                 new InstantlyDo(()-> {
                     spindexer.setArtifactColorInSpindexer(0, DecodeDataTypes.ArtifactColor.GREEN);
                     spindexer.setArtifactColorInSpindexer(1, DecodeDataTypes.ArtifactColor.PURPLE);
                     spindexer.setArtifactColorInSpindexer(2, DecodeDataTypes.ArtifactColor.PURPLE);
-                }
-                ),
+                }),
+
                 new FollowPath(driveToLaunch1, follower, launchControlPose, true, 1.0),
                 new FarMotifLaunch(),
                 new FollowPath(driveToSpike2Control, follower, spike2Control, true, 1.0),
-                new Parallel("pickup2",
-                    new FullIntake(),
+                new Race(
+                    "pickup2Race",
+                    new Parallel("pickup2",
+                        new FullIntake(),
                         new Procedure ("spike2pickup",
                             new FollowPath(driveToSpike2Start, follower, spike2Start, true, 0.4),
                             new Sleep(0.3),
                             new FollowPath(driveToSpike2End, follower, spike2End, true, 0.4)
                         )
+                    ),
+                    new Sleep(4.5)
                 ),
                 new InstantlyDo(()-> {
                     spindexer.setArtifactColorInSpindexer(0, DecodeDataTypes.ArtifactColor.PURPLE);
                     spindexer.setArtifactColorInSpindexer(1, DecodeDataTypes.ArtifactColor.GREEN);
                     spindexer.setArtifactColorInSpindexer(2, DecodeDataTypes.ArtifactColor.PURPLE);
-                }
-                ),
+                }),
                 new FollowPath(driveToLaunch2pt1, follower, spike2Start, true,1.0),
                 new FollowPath(driveToLaunch2pt2, follower, launchControlPose, true, 1.0),
                 new FarMotifLaunch(),

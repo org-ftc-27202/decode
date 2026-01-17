@@ -8,7 +8,7 @@ public class GameState {
         return gameState;
     }
 
-    private static DecodeDataTypes.ArtifactColor[] motifPattern = {
+    private static final DecodeDataTypes.ArtifactColor[] motifPattern = new DecodeDataTypes.ArtifactColor[] {
             DecodeDataTypes.ArtifactColor.PURPLE,
             DecodeDataTypes.ArtifactColor.GREEN,
             DecodeDataTypes.ArtifactColor.PURPLE,
