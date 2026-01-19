@@ -31,9 +31,8 @@ public abstract class TeleOp_01_base extends NextFTCOpMode {
     private Timer opModeTimer;
     private Pose relocalizePose;
     private PathChain driveToBaseEndGame, driveToBase2EndGame, driveToLoadingZone, driveToGate, driveToLaunch1Pose;
-            //, driveToLaunch2Pose;
     public void buildPaths() {
-        Pose baseEndGamePose, base2EndGamePose, loadingZonePose, gatePose, launch1Pose; //, launch2Pose;
+        Pose baseEndGamePose, base2EndGamePose, loadingZonePose, gatePose, launch1Pose;
         // Robot Length: 17"; Robot Width: 17.5"
         // Base on Red Alliance
         relocalizePose = new Pose(8.75, 8.5, Math.toRadians(0));
@@ -43,10 +42,8 @@ public abstract class TeleOp_01_base extends NextFTCOpMode {
         gatePose = new Pose(128, 66, Math.toRadians(0));
         if (Config.goalOption == Config.GoalOptions.FAR) {
             launch1Pose = new Pose(65.5, 26.5, Math.toRadians(58));
-//            launch2Pose = new Pose(87, 18, Math.toRadians(67));  // works for TeleOp and auto
         } else { // NEAR
             launch1Pose = new Pose(100, 88, Math.toRadians(52));  // works for TeleOp and auto
-//            launch2Pose = new Pose(77, 116, Math.toRadians(19));
         }
 
         if (Config.allianceColor == Config.AllianceColors.BLUE) {
@@ -55,39 +52,33 @@ public abstract class TeleOp_01_base extends NextFTCOpMode {
             base2EndGamePose = base2EndGamePose.mirror();
             loadingZonePose = loadingZonePose.mirror();
             launch1Pose = launch1Pose.mirror();
-//            launch2Pose = launch2Pose.mirror();
             gatePose = gatePose.mirror();
         }
 
         driveToBaseEndGame = PedroComponent.follower().pathBuilder()
-                .addPath(new BezierCurve(PedroComponent.follower().getPose(), baseEndGamePose))
+                .addPath(new BezierCurve(PedroComponent.follower().getPose(), baseEndGamePose, baseEndGamePose))
                 .setConstantHeadingInterpolation(baseEndGamePose.getHeading())
                 .build();
 
         driveToBase2EndGame = PedroComponent.follower().pathBuilder()
-                .addPath(new BezierCurve(PedroComponent.follower().getPose(), base2EndGamePose))
+                .addPath(new BezierCurve(PedroComponent.follower().getPose(), base2EndGamePose, base2EndGamePose))
                 .setConstantHeadingInterpolation(base2EndGamePose.getHeading())
                 .build();
 
         driveToGate = PedroComponent.follower().pathBuilder()
-                .addPath(new BezierCurve(PedroComponent.follower().getPose(), gatePose))
+                .addPath(new BezierCurve(PedroComponent.follower().getPose(), gatePose, gatePose))
                 .setConstantHeadingInterpolation(gatePose.getHeading())
                 .build();
 
         driveToLoadingZone = PedroComponent.follower().pathBuilder()
-                .addPath(new BezierCurve(PedroComponent.follower().getPose(), loadingZonePose))
+                .addPath(new BezierCurve(PedroComponent.follower().getPose(), loadingZonePose, loadingZonePose))
                 .setConstantHeadingInterpolation(loadingZonePose.getHeading())
                 .build();
 
         driveToLaunch1Pose = PedroComponent.follower().pathBuilder()
-                .addPath(new BezierCurve(PedroComponent.follower().getPose(), launch1Pose))
+                .addPath(new BezierCurve(PedroComponent.follower().getPose(), launch1Pose, launch1Pose))
                 .setConstantHeadingInterpolation(launch1Pose.getHeading())
                 .build();
-
-//        driveToLaunch2Pose = PedroComponent.follower().pathBuilder()
-//                .addPath(new BezierCurve(PedroComponent.follower().getPose(), launch2Pose))
-//                .setConstantHeadingInterpolation(launch2Pose.getHeading())
-//                .build();
     }
     @Override
     public void onInit() {
@@ -136,6 +127,13 @@ public abstract class TeleOp_01_base extends NextFTCOpMode {
         // Manual Settings
         Gamepads.gamepad1().dpadDown().and(Gamepads.gamepad1().x()).whenBecomesTrue(new InstantCommand(() -> PedroComponent.follower().setPose(relocalizePose)));
         Gamepads.gamepad1().dpadDown().and(Gamepads.gamepad1().y()).whenBecomesTrue(Camera.INSTANCE.capturePattern);
+        Gamepads.gamepad1().dpadDown().and(Gamepads.gamepad1().a()).whenBecomesTrue(Camera.INSTANCE.captureGoalPosition);
+
+// Temporary: Move the bot based on the Goal Position
+        Gamepads.gamepad1().dpadDown().and(Gamepads.gamepad1().b()).whenBecomesTrue(
+                new SequentialGroup(
+                        Camera.INSTANCE.captureGoalPosition,
+                        new InstantCommand(() -> PedroComponent.follower().turn(Math.toRadians(Config.deltaToCenterAngleInDeg), false))));
 
         // Auto Mode
         // Cancel automated driving and restart back to TeleOp drive
@@ -152,8 +150,7 @@ public abstract class TeleOp_01_base extends NextFTCOpMode {
         // Drive to Launch 1
         Gamepads.gamepad1().dpadDown().not().and(Gamepads.gamepad1().b()).whenBecomesTrue(
                 new ParallelGroup(
-                        Wiper.INSTANCE.toLaunchPosition,
-                        new SequentialGroup(new Delay(2), Intake.INSTANCE.Stop),
+                        new SequentialGroup(new Delay(1.0), Wiper.INSTANCE.toLaunchPosition, Intake.INSTANCE.Stop),
                         new FollowPath(driveToLaunch1Pose, true, 1.0)));
         // Drive to driveToGate
         Gamepads.gamepad1().dpadDown().not().and(Gamepads.gamepad1().y()).whenBecomesTrue(
@@ -178,12 +175,13 @@ public abstract class TeleOp_01_base extends NextFTCOpMode {
         telemetry.addData("intake (power)", "%.0f", Intake.INSTANCE.getPower());
         telemetry.addData("catapults (pos)", "01: %.0f | 02: %.0f | 03: %.0f", Catapult.INSTANCE.getPosition01(), Catapult.INSTANCE.getPosition02(), Catapult.INSTANCE.getPosition03());
         telemetry.addData("catapults (pattern)", "%s%s%s", Config.catapult01Color.toString().charAt(0), Config.catapult02Color.toString().charAt(0), Config.catapult03Color.toString().charAt(0));
+        telemetry.addData("goal", "cx: %.0f | cy: %.0f | cd: %.0f", Config.deltaToCenterX, Config.deltaToCenterY, Config.deltaToCenterAngleInDeg);
         telemetry.addData("Timer", "%.1f", opModeTimer.getElapsedTimeSeconds());
         telemetry.addLine("--------------------");
         telemetry.addLine("Intake: leftBumper=In/Off leftTrigger=Out/Off");
         telemetry.addLine("Drive To: a=Load b=Launch1 y=Gate x=Cancel");
         telemetry.addLine("Drive To: dpadLeft=End (Barely In) dpadUp=End");
-        telemetry.addLine("dpadDown+: x=Relocalize y=Motif");
+        telemetry.addLine("dpadDown+: x=Relocalize y=Motif a=Goal");
         telemetry.addLine("Launch: rightBumper=Parallel rightTrigger=Pattern");
         telemetry.update();
     }

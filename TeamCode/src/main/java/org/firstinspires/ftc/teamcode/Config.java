@@ -14,4 +14,5 @@ public class Config {
     public static Colors catapult02Color = Colors.PURPLE;
     public static Colors catapult03Color = Colors.PURPLE;
     public static Pose autoEndPose = new Pose(113, 129.5, Math.toRadians(90));
+    public static double deltaToCenterX = 0.0, deltaToCenterY = 0.0, deltaToCenterAngleInDeg = 0.0;
 }
