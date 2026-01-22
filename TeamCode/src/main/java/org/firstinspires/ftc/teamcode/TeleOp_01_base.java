@@ -108,7 +108,9 @@ public abstract class TeleOp_01_base extends NextFTCOpMode {
 
         // Wiper
         Gamepads.gamepad1().dpadRight().whenBecomesTrue(
-                new SequentialGroup(Wiper.INSTANCE.toLaunchPosition));
+                new ParallelGroup(
+                        Intake.INSTANCE.Stop,
+                        Wiper.INSTANCE.toLaunchPosition));
 
         // Catapults
         Gamepads.gamepad1().rightBumper().whenBecomesTrue(
@@ -127,13 +129,6 @@ public abstract class TeleOp_01_base extends NextFTCOpMode {
         // Manual Settings
         Gamepads.gamepad1().dpadDown().and(Gamepads.gamepad1().x()).whenBecomesTrue(new InstantCommand(() -> PedroComponent.follower().setPose(relocalizePose)));
         Gamepads.gamepad1().dpadDown().and(Gamepads.gamepad1().y()).whenBecomesTrue(Camera.INSTANCE.capturePattern);
-        Gamepads.gamepad1().dpadDown().and(Gamepads.gamepad1().a()).whenBecomesTrue(Camera.INSTANCE.captureGoalPosition);
-
-// Temporary: Move the bot based on the Goal Position
-        Gamepads.gamepad1().dpadDown().and(Gamepads.gamepad1().b()).whenBecomesTrue(
-                new SequentialGroup(
-                        Camera.INSTANCE.captureGoalPosition,
-                        new InstantCommand(() -> PedroComponent.follower().turn(Math.toRadians(Config.deltaToCenterAngleInDeg), false))));
 
         // Auto Mode
         // Cancel automated driving and restart back to TeleOp drive
@@ -141,17 +136,25 @@ public abstract class TeleOp_01_base extends NextFTCOpMode {
                 new ParallelGroup(
                         Intake.INSTANCE.Stop,
                         new InstantCommand(() -> PedroComponent.follower().startTeleopDrive())));
-        // Drive to Loading Zone
+//        // Drive to Loading Zone
+//        Gamepads.gamepad1().dpadDown().not().and(Gamepads.gamepad1().a()).whenBecomesTrue(
+//                new ParallelGroup(
+//                        Wiper.INSTANCE.toLaunchPosition,
+//                        Intake.INSTANCE.Stop,
+//                        new FollowPath(driveToLoadingZone, true, 1.0)));
+
+        // Move the bot based on the Goal Position
         Gamepads.gamepad1().dpadDown().not().and(Gamepads.gamepad1().a()).whenBecomesTrue(
-                new ParallelGroup(
-                        Wiper.INSTANCE.toLaunchPosition,
-                        Intake.INSTANCE.Stop,
-                        new FollowPath(driveToLoadingZone, true, 1.0)));
+                new SequentialGroup(
+                        Camera.INSTANCE.captureGoalPosition,
+                        new InstantCommand(() -> PedroComponent.follower().turn(Math.toRadians(Config.deltaToCenterAngleInDeg), false))));
         // Drive to Launch 1
         Gamepads.gamepad1().dpadDown().not().and(Gamepads.gamepad1().b()).whenBecomesTrue(
-                new ParallelGroup(
-                        new SequentialGroup(new Delay(1.0), Wiper.INSTANCE.toLaunchPosition, Intake.INSTANCE.Stop),
-                        new FollowPath(driveToLaunch1Pose, true, 1.0)));
+                new SequentialGroup(
+                    new ParallelGroup(
+                            new SequentialGroup(new Delay(1.0), Wiper.INSTANCE.toLaunchPosition, Intake.INSTANCE.Stop),
+                            new FollowPath(driveToLaunch1Pose, true, 1.0)),
+                    new InstantCommand(() -> PedroComponent.follower().turn(Math.toRadians(Config.deltaToCenterAngleInDeg), false))));
         // Drive to driveToGate
         Gamepads.gamepad1().dpadDown().not().and(Gamepads.gamepad1().y()).whenBecomesTrue(
                 new FollowPath(driveToGate, true, 1.0));
@@ -179,9 +182,9 @@ public abstract class TeleOp_01_base extends NextFTCOpMode {
         telemetry.addData("Timer", "%.1f", opModeTimer.getElapsedTimeSeconds());
         telemetry.addLine("--------------------");
         telemetry.addLine("Intake: leftBumper=In/Off leftTrigger=Out/Off");
-        telemetry.addLine("Drive To: a=Load b=Launch1 y=Gate x=Cancel");
+        telemetry.addLine("Drive To: a=Center b=Launch1 y=Gate x=Cancel");
         telemetry.addLine("Drive To: dpadLeft=End (Barely In) dpadUp=End");
-        telemetry.addLine("dpadDown+: x=Relocalize y=Motif a=Goal");
+        telemetry.addLine("dpadDown+: x=Relocalize y=Motif");
         telemetry.addLine("Launch: rightBumper=Parallel rightTrigger=Pattern");
         telemetry.update();
     }
