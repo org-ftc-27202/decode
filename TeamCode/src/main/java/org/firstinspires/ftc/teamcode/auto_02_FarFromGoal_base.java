@@ -34,8 +34,8 @@ public abstract class auto_02_FarFromGoal_base extends NextFTCOpMode {
         Pose getPatternPose, LeavePose;
 
         startPose = new Pose(86, 6, Math.toRadians(90));
-        getPatternPose = new Pose(88, 18, Math.toRadians(90));
-        LeavePose = new Pose(88, 20, Math.toRadians(90));
+        getPatternPose = new Pose(88, 54, Math.toRadians(95));
+        LeavePose = new Pose(106, 8, Math.toRadians(90));
 
         if (Config.allianceColor == Config.AllianceColors.BLUE) {
             startPose = startPose.mirror();

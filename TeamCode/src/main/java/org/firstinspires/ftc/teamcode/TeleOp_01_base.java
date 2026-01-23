@@ -122,7 +122,9 @@ public abstract class TeleOp_01_base extends NextFTCOpMode {
                         new InstantCommand(() -> PedroComponent.follower().startTeleopDrive())));
         Gamepads.gamepad1().rightTrigger().greaterThan(0.2).whenBecomesTrue(
                 new SequentialGroup(
-                        new ParallelGroup(Intake.INSTANCE.Stop, Camera.INSTANCE.getCatapultArtifactColors),
+                        new ParallelGroup(Wiper.INSTANCE.toLaunchPosition,
+                                Intake.INSTANCE.Stop,
+                                Camera.INSTANCE.getCatapultArtifactColors),
                         Catapult.INSTANCE.LaunchByPattern,
                         new InstantCommand(() -> PedroComponent.follower().startTeleopDrive())));
 
