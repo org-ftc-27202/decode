@@ -11,6 +11,11 @@ import java.util.zip.GZIPInputStream;
 
 @TeleOp(name = "BadApple60FPS", group = "Robot")
 public class BadApple60FPS extends LinearOpMode {
+	// NOTE:
+	// this animation is meant to display with smallest sysytem font size on driver hub
+ 	// this can be changed by going to the settings app on the driver station
+	// Display > Advanced > Font size > drag slider all the way to the left
+
 	private static final int WIDTH = 32;
 	private static final int HEIGHT = 24;
 	private static final int BYTES_PER_ROW = WIDTH / 8; // 4
@@ -89,8 +94,11 @@ public class BadApple60FPS extends LinearOpMode {
 				byte[] topBytes = new byte[BYTES_PER_ROW], bottomBytes = new byte[BYTES_PER_ROW];
 				int frameOffset = frame_number * BYTES_PER_FRAME;
 
+				// margin to left of frame
+				frame.append(DISPLAY_OFFSET);
+
 				// left side of frame
-				frame.append(DISPLAY_OFFSET).append("█");
+				frame.append("█");
 
 				// each byte in a row
 				for (int x = 0; x < BYTES_PER_ROW; x++) {
@@ -105,7 +113,8 @@ public class BadApple60FPS extends LinearOpMode {
 							frame.append("█");
 						} else if (!top && !bottom) {
 							// this is the same width as a block character for some reason
-							frame.append("\u200A\u200A\u200A\u200A\u200A\u200A\u200A");
+							//frame.append("\u200A\u200A\u200A\u200A\u200A\u200A\u200A");
+							frame.append("  \u200A\u200A\u200A\u200A");
 						} else if (top) {
 							frame.append("▀");
 						} else {
@@ -115,7 +124,10 @@ public class BadApple60FPS extends LinearOpMode {
 				}
 
 				// right side of frame
-				frame.append("█\n");
+				frame.append("█");
+
+				// next line of bad apple
+				frame.append("\n");
 			}
 
 			// bottom of frame
@@ -132,7 +144,8 @@ public class BadApple60FPS extends LinearOpMode {
 				Thread.sleep(0, 10000); // 100th of a millisecond
 			}
 
-			telemetry.addLine("Frame " + frame_number + "/" + bad_apple_frames + "        " + "FPS: " + (1000000000.0 / (System.nanoTime() - lastCycleTime)));
+			telemetry.addLine("Frame " + frame_number + "/" + bad_apple_frames);
+			telemetry.addData("FPS: ", (1000000000.0 / (System.nanoTime() - lastCycleTime)));
 			lastCycleTime = System.nanoTime();
 
 			telemetry.update();

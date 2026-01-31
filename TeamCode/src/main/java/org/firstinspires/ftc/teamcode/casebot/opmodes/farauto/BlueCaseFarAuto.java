@@ -51,8 +51,8 @@ public final class BlueCaseFarAuto extends OpMode {
 
     private final Pose startPose = new Pose(55.3,7, Math.toRadians(90));
     private final Pose cameraPose = new Pose(61, 24, Math.toRadians(90));
-    private final Pose launchControlPose = new Pose(61, 24, Math.toRadians(90));
-    private final Pose launchPose = new Pose(61, 24, Math.toRadians(85));
+    private final Pose launchControlPose = new Pose(58, 19, Math.toRadians(90));
+    private final Pose launchPose = new Pose(58, 19, Math.toRadians(85));
 
     private final Pose spike1Control = new Pose(43,35.5, Math.toRadians(180));
     private final Pose spike1Start = new Pose(33,35.5, Math.toRadians(180));
@@ -61,7 +61,7 @@ public final class BlueCaseFarAuto extends OpMode {
     private final Pose spike2Control = new Pose(43,59, Math.toRadians(180));
     private final Pose spike2Start = new Pose(34,59, Math.toRadians(180));
     private final Pose spike2End = new Pose(17,59, Math.toRadians(180));
-    private final Pose gate = new Pose(28,72, Math.toRadians(180));
+    private final Pose gateApr = new Pose(28,72, Math.toRadians(180));
     
   //  private final Pose collect1Pose = new Pose(19, 35.5);
 
@@ -145,7 +145,7 @@ public final class BlueCaseFarAuto extends OpMode {
         driveToLever = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(launchControlPose, gate)
+                        new BezierLine(launchControlPose, gateApr)
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(95), Math.toRadians(180))
                 .build();
@@ -248,7 +248,7 @@ public final class BlueCaseFarAuto extends OpMode {
                 new FollowPath(driveToLaunch2pt1, follower, spike2Start, true,1.0),
                 new FollowPath(driveToLaunch2pt2, follower, launchControlPose, true, 1.0),
                 new FarMotifLaunch(),
-                new FollowPath(driveToLever, follower, gate, true, 1.0)
+                new FollowPath(driveToLever, follower, gateApr, true, 1.0)
                 //new FarMotifLaunch(),
                 //new FollowPath(path6, follower, new Pose(61.000, 44.000), true)
 

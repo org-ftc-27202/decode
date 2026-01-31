@@ -59,7 +59,7 @@ public final class PedroDrivebase extends Subsystem {
             GOAL_X = -18.0;
             GOAL_Y = 144.0;
 
-            REAL_GOAL_X = 8.0;
+            REAL_GOAL_X = 6.0;
             REAL_GOAL_Y = 144.0;
 
             STARTING_X = 55.25;
@@ -68,7 +68,7 @@ public final class PedroDrivebase extends Subsystem {
             GOAL_X = 162.0;
             GOAL_Y = 144.0;
 
-            REAL_GOAL_X = 136.0;
+            REAL_GOAL_X = 138.0;
             REAL_GOAL_Y = 144.0;
 
             STARTING_X = 88.75;
