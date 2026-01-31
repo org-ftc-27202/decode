@@ -83,7 +83,5 @@ public class DefaultTurret extends DefaultDirective {
             velocity = 1600.0;
         }*/
 
-        turret.getTurretHoodServo().setPosition(hoodPosition);
-        turret.updateTurretYawServo();
     }
 }

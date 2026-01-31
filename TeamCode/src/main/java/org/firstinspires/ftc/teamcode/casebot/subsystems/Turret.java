@@ -21,6 +21,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.stellarstructure.Subsystem;
 import org.firstinspires.ftc.teamcode.stellarstructure.hardwaremapwrappers.StellarDcMotor;
 import org.firstinspires.ftc.teamcode.stellarstructure.hardwaremapwrappers.StellarServo;
+import org.firstinspires.ftc.teamcode.util.LaunchInterpolator;
+import org.firstinspires.ftc.teamcode.util.LaunchParameters;
 
 public final class Turret extends Subsystem {
     private final static double DEGREES_TO_SERVO = 1.0 / 320.0;
@@ -125,6 +127,12 @@ public final class Turret extends Subsystem {
 
         // This forces the result to stay between -180 and 180
         return AngleUnit.normalizeDegrees(robotHeading - launchYaw);
+    }
+
+    public void updateTurretWithInterpolation(double distance){
+        LaunchParameters parameters = LaunchInterpolator.getEstimatedLaunchParameters(distance);
+        setTurretVelocity(parameters.getVelocity());
+        turretPitchServo.setPosition(parameters.getAngle());
     }
 
     public double getBoundedTurretYawAngleTarget() {

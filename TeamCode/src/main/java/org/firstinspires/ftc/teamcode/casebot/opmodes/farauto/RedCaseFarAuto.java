@@ -48,9 +48,9 @@ public final class RedCaseFarAuto extends OpMode {
     private boolean hasMotifPattern = false;
 
     private final Pose startPose = new Pose(55.3,7, Math.toRadians(90)).mirror();
-    private final Pose cameraPose = new Pose(61, 24, Math.toRadians(90)).mirror();
-    private final Pose launchControlPose = new Pose(58, 19, Math.toRadians(90)).mirror();
-    private final Pose launchPose = new Pose(58, 19, Math.toRadians(85)).mirror();
+    private final Pose cameraPose = new Pose(61, 19, Math.toRadians(90)).mirror();
+    private final Pose launchControlPose = new Pose(61, 19, Math.toRadians(90)).mirror();
+    private final Pose launchPose = new Pose(61, 19, Math.toRadians(85)).mirror();
 
     private final Pose spike1Control = new Pose(43,35.5, Math.toRadians(180)).mirror();
     private final Pose spike1Start = new Pose(33,35.5, Math.toRadians(180)).mirror();

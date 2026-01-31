@@ -98,7 +98,7 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
                 }
                 // Define inputs and the single reset pose
                 boolean triggersDown = (gamepad2.left_trigger > 0.05) && (gamepad2.right_trigger > 0.05);
-                Pose resetPose = new Pose(56.75, 7, Math.toRadians(180.0));
+                Pose resetPose = new Pose(56.75, 7, Math.toRadians(90.0));
 
 // --- RISING EDGE / ONE-SHOT LOGIC ---
 // This block runs ONLY on the moment the triggers are pressed (rising edge)
@@ -115,6 +115,7 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
                 // run scheduler and subsystems logic
                 caseBot.update();
                 turret.updateTurretYawServo();
+                turret.updateTurretWithInterpolation(pedroDrivebase.getDistanceFromGoal());
 
                 // print telemetry
                 try {

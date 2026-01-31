@@ -57,7 +57,7 @@ public final class PedroDrivebase extends Subsystem {
         StellarBot.AllianceColor allianceColor = StellarBot.getInstance().getAllianceColor();
         if (allianceColor == StellarBot.AllianceColor.BLUE) {
             GOAL_X = -18.0;
-            GOAL_Y = 144.0;
+            GOAL_Y = 140.0;
 
             REAL_GOAL_X = 6.0;
             REAL_GOAL_Y = 144.0;
@@ -66,7 +66,7 @@ public final class PedroDrivebase extends Subsystem {
             STARTING_Y = 9.0;
         } else if (allianceColor == StellarBot.AllianceColor.RED) {
             GOAL_X = 162.0;
-            GOAL_Y = 144.0;
+            GOAL_Y = 140.0;
 
             REAL_GOAL_X = 138.0;
             REAL_GOAL_Y = 144.0;
