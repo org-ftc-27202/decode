@@ -46,7 +46,7 @@ public abstract class auto_01_NearFromGoal_base extends NextFTCOpMode {
         spike1EndPose = new Pose(130, 82, Math.toRadians(0));
 
         gateStartPose = new Pose(120, 74, Math.toRadians(0));
-        gateEndPose = new Pose(132, 74, Math.toRadians(0));
+        gateEndPose = new Pose(130, 74, Math.toRadians(0));
 
         spike2StartPose = new Pose(100, 56, Math.toRadians(0));
         spike2StartPose2 = new Pose(128, 56, Math.toRadians(0));
@@ -166,7 +166,7 @@ public abstract class auto_01_NearFromGoal_base extends NextFTCOpMode {
                 Wiper.INSTANCE.toIntakePosition,
                 Intake.INSTANCE.Inwards,
                 new FollowPath(driveToSpike1Start),
-                new FollowPath(driveToSpike1End, true, 0.38),
+                new FollowPath(driveToSpike1End, true, 0.4),
                 new FollowPath(driveToGateStart),
                 new FollowPath(driveToGateEnd),
                 new Delay(0.40),
@@ -174,7 +174,7 @@ public abstract class auto_01_NearFromGoal_base extends NextFTCOpMode {
                     new SequentialGroup(new Delay(1.25), Wiper.INSTANCE.toLaunchPosition),
                     new FollowPath(driveToLaunch1)),
                 Intake.INSTANCE.Stop,
-                new Delay(0.50),
+                new Delay(0.25),
                 new InstantCommand(() -> PedroComponent.follower().turn(Math.toRadians(Config.deltaToCenterAngleInDeg), false)),
                 Catapult.INSTANCE.LaunchByPattern
                 ,
@@ -183,12 +183,12 @@ public abstract class auto_01_NearFromGoal_base extends NextFTCOpMode {
                 Wiper.INSTANCE.toIntakePosition,
                 Intake.INSTANCE.Inwards,
                 new FollowPath(driveToSpike2Start),
-                new FollowPath(driveToSpike2End, true, 0.38),
+                new FollowPath(driveToSpike2End, true, 0.4),
                 new ParallelGroup(
                         new SequentialGroup(new Delay(1.25), Wiper.INSTANCE.toLaunchPosition),
                         new FollowPath(driveToLaunch2)),
                 Intake.INSTANCE.Stop,
-                new Delay(0.50),
+                new Delay(0.25),
                 new InstantCommand(() -> PedroComponent.follower().turn(Math.toRadians(Config.deltaToCenterAngleInDeg), false)),
                 Catapult.INSTANCE.LaunchByPattern,
 
@@ -196,12 +196,12 @@ public abstract class auto_01_NearFromGoal_base extends NextFTCOpMode {
                 Wiper.INSTANCE.toIntakePosition,
                 Intake.INSTANCE.Inwards,
                 new FollowPath(driveToSpike3Start),
-                new FollowPath(driveToSpike3End, true, 0.38),
+                new FollowPath(driveToSpike3End, true, 0.4),
                 new ParallelGroup(
                         new SequentialGroup(new Delay(1.25), Wiper.INSTANCE.toLaunchPosition),
                         new FollowPath(driveToLaunch3)),
                 Intake.INSTANCE.Stop,
-                new Delay(0.50),
+                new Delay(0.25),
                 new InstantCommand(() -> PedroComponent.follower().turn(Math.toRadians(Config.deltaToCenterAngleInDeg), false)),
                 Catapult.INSTANCE.LaunchByPattern,
 
@@ -231,6 +231,7 @@ public abstract class auto_01_NearFromGoal_base extends NextFTCOpMode {
         telemetry.addData("pattern", Config.motifPattern.toString());
         telemetry.addData("pos", "x: %.1f | y: %.1f | heading: %.0f", PedroComponent.follower().getPose().getX(), PedroComponent.follower().getPose().getY(), Math.toDegrees(PedroComponent.follower().getPose().getHeading()));
         telemetry.addData("intake (power)", "%.0f", Intake.INSTANCE.getPower());
+        telemetry.addData("balls", "%d", IntakeStopper.INSTANCE.ballCounter);
         telemetry.addData("catapults (pos)", "01: %.0f | 02: %.0f | 03: %.0f", Catapult.INSTANCE.getPosition01(), Catapult.INSTANCE.getPosition02(), Catapult.INSTANCE.getPosition03());
         telemetry.addData("catapults (pattern)", "%s%s%s", Config.catapult01Color.toString().charAt(0), Config.catapult02Color.toString().charAt(0), Config.catapult03Color.toString().charAt(0));
         telemetry.addData("Timer", "%.1f", opModeTimer.getElapsedTimeSeconds());

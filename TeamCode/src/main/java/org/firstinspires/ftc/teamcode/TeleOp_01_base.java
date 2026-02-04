@@ -23,7 +23,7 @@ public abstract class TeleOp_01_base extends NextFTCOpMode {
     public TeleOp_01_base() {
         addComponents(
                 new PedroComponent(Constants::createFollower),
-                new SubsystemComponent(Intake.INSTANCE, Catapult.INSTANCE, Camera.INSTANCE, Wiper.INSTANCE),
+                new SubsystemComponent(Intake.INSTANCE, Catapult.INSTANCE, Camera.INSTANCE, Wiper.INSTANCE, IntakeStopper.INSTANCE),
                 BulkReadComponent.INSTANCE,
                 BindingsComponent.INSTANCE
         );
@@ -84,6 +84,7 @@ public abstract class TeleOp_01_base extends NextFTCOpMode {
     public void onInit() {
         opModeTimer = new Timer();
         Camera.INSTANCE.mapCameraHardware(hardwareMap);
+        IntakeStopper.INSTANCE.mapIntakeStopperHardware(hardwareMap);
         buildPaths();
     }
 
@@ -102,8 +103,12 @@ public abstract class TeleOp_01_base extends NextFTCOpMode {
                 new ParallelGroup(
                         Wiper.INSTANCE.toIntakePosition,
                         Intake.INSTANCE.Inwards,
+                        IntakeStopper.INSTANCE.toOpenPosition,
                         new InstantCommand(() -> PedroComponent.follower().startTeleopDrive())));
-        Gamepads.gamepad1().leftTrigger().greaterThan(0.2).whenBecomesTrue(Intake.INSTANCE.Outwards);
+        Gamepads.gamepad1().leftTrigger().greaterThan(0.2).whenBecomesTrue(
+                new ParallelGroup(
+                        Intake.INSTANCE.Outwards,
+                        IntakeStopper.INSTANCE.toOpenPosition));
         Gamepads.gamepad1().leftTrigger().lessThan(0.2).whenBecomesTrue(Intake.INSTANCE.Stop);
 
         // Wiper
@@ -111,28 +116,32 @@ public abstract class TeleOp_01_base extends NextFTCOpMode {
                 new ParallelGroup(
                         Intake.INSTANCE.Stop,
                         Wiper.INSTANCE.toLaunchPosition));
-
         // Catapults
         Gamepads.gamepad1().rightBumper().whenBecomesTrue(
                new SequentialGroup(
                         new ParallelGroup(Wiper.INSTANCE.toLaunchPosition,
                                 Intake.INSTANCE.Stop,
-                                Camera.INSTANCE.getCatapultArtifactColors),
+                                Camera.INSTANCE.getCatapultArtifactColors,
+                                IntakeStopper.INSTANCE.initIntakeStopper),
                         Catapult.INSTANCE.LaunchInParallel,
                         new InstantCommand(() -> PedroComponent.follower().startTeleopDrive())));
         Gamepads.gamepad1().rightTrigger().greaterThan(0.2).whenBecomesTrue(
                 new SequentialGroup(
                         new ParallelGroup(Wiper.INSTANCE.toLaunchPosition,
                                 Intake.INSTANCE.Stop,
-                                Camera.INSTANCE.getCatapultArtifactColors),
+                                Camera.INSTANCE.getCatapultArtifactColors,
+                                IntakeStopper.INSTANCE.initIntakeStopper),
                         Catapult.INSTANCE.LaunchByPattern,
                         new InstantCommand(() -> PedroComponent.follower().startTeleopDrive())));
 
-        // Manual Settings
-        Gamepads.gamepad1().dpadDown().and(Gamepads.gamepad1().x()).whenBecomesTrue(new InstantCommand(() -> PedroComponent.follower().setPose(relocalizePose)));
+        // Intake Stopper
+        Gamepads.gamepad1().b().whenBecomesTrue(IntakeStopper.INSTANCE.ballCountTo2);
+
+        // Motif
+//        Gamepads.gamepad1().dpadDown().and(Gamepads.gamepad1().x()).whenBecomesTrue(new InstantCommand(() -> PedroComponent.follower().setPose(relocalizePose)));
         Gamepads.gamepad1().dpadDown().and(Gamepads.gamepad1().y()).whenBecomesTrue(Camera.INSTANCE.capturePattern);
 
-        // Auto Mode
+        // Auto-Drives
         // Cancel automated driving and restart back to TeleOp drive
         Gamepads.gamepad1().dpadDown().not().and(Gamepads.gamepad1().x()).whenBecomesTrue(
                 new ParallelGroup(
@@ -145,49 +154,53 @@ public abstract class TeleOp_01_base extends NextFTCOpMode {
 //                        Intake.INSTANCE.Stop,
 //                        new FollowPath(driveToLoadingZone, true, 1.0)));
 
-        // Move the bot based on the Goal Position
+        // Move the bot center towards goal
         Gamepads.gamepad1().dpadDown().not().and(Gamepads.gamepad1().a()).whenBecomesTrue(
                 new SequentialGroup(
                         Camera.INSTANCE.captureGoalPosition,
                         new InstantCommand(() -> PedroComponent.follower().turn(Math.toRadians(Config.deltaToCenterAngleInDeg), false))));
         // Drive to Launch 1
-        Gamepads.gamepad1().dpadDown().not().and(Gamepads.gamepad1().b()).whenBecomesTrue(
-                new SequentialGroup(
-                    new ParallelGroup(
-                            new SequentialGroup(new Delay(1.0), Wiper.INSTANCE.toLaunchPosition, Intake.INSTANCE.Stop),
-                            new FollowPath(driveToLaunch1Pose, true, 1.0)),
-                    new InstantCommand(() -> PedroComponent.follower().turn(Math.toRadians(Config.deltaToCenterAngleInDeg), false))));
-        // Drive to driveToGate
-        Gamepads.gamepad1().dpadDown().not().and(Gamepads.gamepad1().y()).whenBecomesTrue(
-                new FollowPath(driveToGate, true, 1.0));
-        // Drive to Base 1 (parking)
-        Gamepads.gamepad1().dpadUp().whenBecomesTrue(
-                new ParallelGroup(
-                        Intake.INSTANCE.Stop,
-                        new FollowPath(driveToBaseEndGame, true, 1.0)));
-        // Drive to Base 2 (parking)
-        Gamepads.gamepad1().dpadLeft().whenBecomesTrue(
-                new ParallelGroup(
-                        Intake.INSTANCE.Stop,
-                        new FollowPath(driveToBase2EndGame, true, 1.0)));
+//        Gamepads.gamepad1().dpadDown().not().and(Gamepads.gamepad1().b()).whenBecomesTrue(
+//                new SequentialGroup(
+//                    new ParallelGroup(
+//                            new SequentialGroup(new Delay(1.0), Wiper.INSTANCE.toLaunchPosition, Intake.INSTANCE.Stop),
+//                            new FollowPath(driveToLaunch1Pose, true, 1.0)),
+//                    new InstantCommand(() -> PedroComponent.follower().turn(Math.toRadians(Config.deltaToCenterAngleInDeg), false))));
+//        // Drive to driveToGate
+//        Gamepads.gamepad1().dpadDown().not().and(Gamepads.gamepad1().y()).whenBecomesTrue(
+//                new FollowPath(driveToGate, true, 1.0));
+//        // Drive to Base 1 (parking)
+//        Gamepads.gamepad1().dpadUp().whenBecomesTrue(
+//                new ParallelGroup(
+//                        Intake.INSTANCE.Stop,
+//                        new FollowPath(driveToBaseEndGame, true, 1.0)));
+//        // Drive to Base 2 (parking)
+//        Gamepads.gamepad1().dpadLeft().whenBecomesTrue(
+//                new ParallelGroup(
+//                        Intake.INSTANCE.Stop,
+//                        new FollowPath(driveToBase2EndGame, true, 1.0)));
     }
     @Override
     public void onUpdate() {
+        IntakeStopper.INSTANCE.CountBalls();
+
         telemetry.addData("run #", 1);
         telemetry.addData("alliance", Config.allianceColor.toString());
         telemetry.addData("pattern", Config.motifPattern.toString());
         telemetry.addData("pos", "x: %.1f | y: %.1f | heading: %.0f", PedroComponent.follower().getPose().getX(), PedroComponent.follower().getPose().getY(), Math.toDegrees(PedroComponent.follower().getPose().getHeading()));
         telemetry.addData("intake (power)", "%.0f", Intake.INSTANCE.getPower());
+        telemetry.addData("balls", "%d", IntakeStopper.INSTANCE.ballCounter);
         telemetry.addData("catapults (pos)", "01: %.0f | 02: %.0f | 03: %.0f", Catapult.INSTANCE.getPosition01(), Catapult.INSTANCE.getPosition02(), Catapult.INSTANCE.getPosition03());
         telemetry.addData("catapults (pattern)", "%s%s%s", Config.catapult01Color.toString().charAt(0), Config.catapult02Color.toString().charAt(0), Config.catapult03Color.toString().charAt(0));
         telemetry.addData("goal", "cx: %.0f | cy: %.0f | cd: %.0f", Config.deltaToCenterX, Config.deltaToCenterY, Config.deltaToCenterAngleInDeg);
         telemetry.addData("Timer", "%.1f", opModeTimer.getElapsedTimeSeconds());
         telemetry.addLine("--------------------");
         telemetry.addLine("Intake: leftBumper=In/Off leftTrigger=Out/Off");
-        telemetry.addLine("Drive To: a=Center b=Launch1 y=Gate x=Cancel");
-        telemetry.addLine("Drive To: dpadLeft=End (Barely In) dpadUp=End");
-        telemetry.addLine("dpadDown+: x=Relocalize y=Motif");
+        telemetry.addLine("Wiper: dpadRight=Launch Pos");
+        telemetry.addLine("Auto-Drive: a=Center to Goal x=Cancel");
         telemetry.addLine("Launch: rightBumper=Parallel rightTrigger=Pattern");
+        telemetry.addLine("b=Ball Count to 2 (Open IntakeStopper)");
+        telemetry.addLine("dpadDown+: y=Motif");
         telemetry.update();
     }
 }
