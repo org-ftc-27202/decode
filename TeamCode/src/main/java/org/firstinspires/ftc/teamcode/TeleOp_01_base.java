@@ -135,7 +135,7 @@ public abstract class TeleOp_01_base extends NextFTCOpMode {
                         new InstantCommand(() -> PedroComponent.follower().startTeleopDrive())));
 
         // Intake Stopper
-        Gamepads.gamepad1().b().whenBecomesTrue(IntakeStopper.INSTANCE.ballCountTo2);
+        Gamepads.gamepad1().y().whenBecomesTrue(IntakeStopper.INSTANCE.ballCountTo2);
 
         // Motif
 //        Gamepads.gamepad1().dpadDown().and(Gamepads.gamepad1().x()).whenBecomesTrue(new InstantCommand(() -> PedroComponent.follower().setPose(relocalizePose)));
@@ -155,9 +155,9 @@ public abstract class TeleOp_01_base extends NextFTCOpMode {
 //                        new FollowPath(driveToLoadingZone, true, 1.0)));
 
         // Move the bot center towards goal
-        Gamepads.gamepad1().dpadDown().not().and(Gamepads.gamepad1().a()).whenBecomesTrue(
+        Gamepads.gamepad1().dpadDown().not().and(Gamepads.gamepad1().b()).whenBecomesTrue(
                 new SequentialGroup(
-                        Camera.INSTANCE.captureGoalPosition,
+                        new ParallelGroup(Camera.INSTANCE.captureGoalPosition, Wiper.INSTANCE.toLaunchPosition, Intake.INSTANCE.Stop),
                         new InstantCommand(() -> PedroComponent.follower().turn(Math.toRadians(Config.deltaToCenterAngleInDeg), false))));
         // Drive to Launch 1
 //        Gamepads.gamepad1().dpadDown().not().and(Gamepads.gamepad1().b()).whenBecomesTrue(
@@ -197,9 +197,9 @@ public abstract class TeleOp_01_base extends NextFTCOpMode {
         telemetry.addLine("--------------------");
         telemetry.addLine("Intake: leftBumper=In/Off leftTrigger=Out/Off");
         telemetry.addLine("Wiper: dpadRight=Launch Pos");
-        telemetry.addLine("Auto-Drive: a=Center to Goal x=Cancel");
+        telemetry.addLine("Auto-Drive: b=Center to Goal x=Cancel");
         telemetry.addLine("Launch: rightBumper=Parallel rightTrigger=Pattern");
-        telemetry.addLine("b=Ball Count to 2 (Open IntakeStopper)");
+        telemetry.addLine("y=Ball Count to 2 (Open IntakeStopper)");
         telemetry.addLine("dpadDown+: y=Motif");
         telemetry.update();
     }

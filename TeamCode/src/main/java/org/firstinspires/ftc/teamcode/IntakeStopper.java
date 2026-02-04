@@ -40,7 +40,7 @@ public class IntakeStopper implements Subsystem {
     public Command ballCountTo2 = new LambdaCommand("ballCountTo2")
             .setStart(() -> {
                 ballCounter = 2;
-                new SequentialGroup(toOpenPosition);})
+                stopperServo.setPosition(openPosition);})
             .setUpdate(() -> {})
             .setIsDone(() -> true)
             .setStop(interrupted -> {})
