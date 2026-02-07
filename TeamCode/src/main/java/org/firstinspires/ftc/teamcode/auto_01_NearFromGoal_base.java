@@ -20,12 +20,13 @@ public abstract class auto_01_NearFromGoal_base extends NextFTCOpMode {
     public auto_01_NearFromGoal_base() {
         addComponents(
                 new PedroComponent(Constants::createFollower),
-                new SubsystemComponent(Intake.INSTANCE, Catapult.INSTANCE, Camera.INSTANCE, Wiper.INSTANCE),
+                new SubsystemComponent(Intake.INSTANCE, Catapult.INSTANCE, Camera.INSTANCE),
                 BulkReadComponent.INSTANCE,
                 BindingsComponent.INSTANCE
         );
     }
     private Timer opModeTimer;
+    private boolean telemetryOnFlag;
     private PathChain driveToGetPattern, driveToLaunch0,
             driveToSpike1Start, driveToSpike1End, driveToLaunch1,
             driveToSpike2Start, driveToSpike2End, driveToLaunch2,
@@ -152,58 +153,58 @@ public abstract class auto_01_NearFromGoal_base extends NextFTCOpMode {
     private Command autonomousRoutine() {
         return new SequentialGroup(
                 // Get Motif and Launch Preloads
-                Wiper.INSTANCE.toLaunchPosition,
+                Intake.INSTANCE.initIntakeStopper,
                 new FollowPath(driveToGetPattern),
                 new Delay(0.10),
                 Camera.INSTANCE.capturePattern,
                 new FollowPath(driveToLaunch0),
                 new Delay(0.10),
+                Camera.INSTANCE.captureGoalPosition,
                 new InstantCommand(() -> PedroComponent.follower().turn(Math.toRadians(Config.deltaToCenterAngleInDeg), false)),
                 Catapult.INSTANCE.LaunchInParallel
                 ,
 
                 // Grab balls and launch #1
-                Wiper.INSTANCE.toIntakePosition,
-                Intake.INSTANCE.Inwards,
-                new FollowPath(driveToSpike1Start),
+                new ParallelGroup(
+                    Intake.INSTANCE.Inwards,
+                    new FollowPath(driveToSpike1Start)),
                 new FollowPath(driveToSpike1End, true, 0.4),
                 new FollowPath(driveToGateStart),
                 new FollowPath(driveToGateEnd),
-                new Delay(0.40),
+                new Delay(0.4),
                 new ParallelGroup(
-                    new SequentialGroup(new Delay(1.25), Wiper.INSTANCE.toLaunchPosition),
-                    new FollowPath(driveToLaunch1)),
-                Intake.INSTANCE.Stop,
+                        new SequentialGroup(new Delay(1.25), Intake.INSTANCE.Stop),
+                        new FollowPath(driveToLaunch1)),
                 new Delay(0.25),
                 new InstantCommand(() -> PedroComponent.follower().turn(Math.toRadians(Config.deltaToCenterAngleInDeg), false)),
                 Catapult.INSTANCE.LaunchByPattern
                 ,
 
                 // Grab balls and launch #2
-                Wiper.INSTANCE.toIntakePosition,
-                Intake.INSTANCE.Inwards,
-                new FollowPath(driveToSpike2Start),
+                new ParallelGroup(
+                        Intake.INSTANCE.Inwards,
+                        new FollowPath(driveToSpike2Start)),
                 new FollowPath(driveToSpike2End, true, 0.4),
                 new ParallelGroup(
-                        new SequentialGroup(new Delay(1.25), Wiper.INSTANCE.toLaunchPosition),
+                        new SequentialGroup(new Delay(1.25), Intake.INSTANCE.Stop),
                         new FollowPath(driveToLaunch2)),
-                Intake.INSTANCE.Stop,
                 new Delay(0.25),
                 new InstantCommand(() -> PedroComponent.follower().turn(Math.toRadians(Config.deltaToCenterAngleInDeg), false)),
-                Catapult.INSTANCE.LaunchByPattern,
+                Catapult.INSTANCE.LaunchByPattern
+                ,
 
                 // Grab balls and launch #3
-                Wiper.INSTANCE.toIntakePosition,
-                Intake.INSTANCE.Inwards,
-                new FollowPath(driveToSpike3Start),
+                new ParallelGroup(
+                        Intake.INSTANCE.Inwards,
+                        new FollowPath(driveToSpike3Start)),
                 new FollowPath(driveToSpike3End, true, 0.4),
                 new ParallelGroup(
-                        new SequentialGroup(new Delay(1.25), Wiper.INSTANCE.toLaunchPosition),
+                        new SequentialGroup(new Delay(1.25), Intake.INSTANCE.Stop),
                         new FollowPath(driveToLaunch3)),
-                Intake.INSTANCE.Stop,
                 new Delay(0.25),
                 new InstantCommand(() -> PedroComponent.follower().turn(Math.toRadians(Config.deltaToCenterAngleInDeg), false)),
-                Catapult.INSTANCE.LaunchByPattern,
+                Catapult.INSTANCE.LaunchByPattern
+                ,
 
                 // Go to Leave Pose
                 new FollowPath(driveToLeave)
@@ -215,6 +216,8 @@ public abstract class auto_01_NearFromGoal_base extends NextFTCOpMode {
         Camera.INSTANCE.mapCameraHardware(hardwareMap);
         buildPaths();
         PedroComponent.follower().setPose(startPose);
+//        telemetryOnFlag = true;
+        telemetryOnFlag = false;
     }
 
     @Override
@@ -225,16 +228,20 @@ public abstract class auto_01_NearFromGoal_base extends NextFTCOpMode {
 
     @Override
     public void onUpdate() {
+        Intake.INSTANCE.CountBalls();
         Config.autoEndPose = PedroComponent.follower().getPose();
-        telemetry.addData("run #", 1);
-        telemetry.addData("alliance", Config.allianceColor.toString());
-        telemetry.addData("pattern", Config.motifPattern.toString());
-        telemetry.addData("pos", "x: %.1f | y: %.1f | heading: %.0f", PedroComponent.follower().getPose().getX(), PedroComponent.follower().getPose().getY(), Math.toDegrees(PedroComponent.follower().getPose().getHeading()));
-        telemetry.addData("intake (power)", "%.0f", Intake.INSTANCE.getPower());
-        telemetry.addData("balls", "%d", IntakeStopper.INSTANCE.ballCounter);
-        telemetry.addData("catapults (pos)", "01: %.0f | 02: %.0f | 03: %.0f", Catapult.INSTANCE.getPosition01(), Catapult.INSTANCE.getPosition02(), Catapult.INSTANCE.getPosition03());
-        telemetry.addData("catapults (pattern)", "%s%s%s", Config.catapult01Color.toString().charAt(0), Config.catapult02Color.toString().charAt(0), Config.catapult03Color.toString().charAt(0));
-        telemetry.addData("Timer", "%.1f", opModeTimer.getElapsedTimeSeconds());
-        telemetry.update();
+
+        if (telemetryOnFlag) {
+            telemetry.addData("run #", 1);
+            telemetry.addData("alliance", Config.allianceColor.toString());
+            telemetry.addData("pattern", Config.motifPattern.toString());
+            telemetry.addData("pos", "x: %.1f | y: %.1f | heading: %.0f", PedroComponent.follower().getPose().getX(), PedroComponent.follower().getPose().getY(), Math.toDegrees(PedroComponent.follower().getPose().getHeading()));
+            telemetry.addData("intake (power)", "%.0f", Intake.INSTANCE.getPower());
+            telemetry.addData("balls", "%d", Intake.INSTANCE.ballCounter);
+            telemetry.addData("catapults (pos)", "01: %.0f | 02: %.0f | 03: %.0f", Catapult.INSTANCE.getPosition01(), Catapult.INSTANCE.getPosition02(), Catapult.INSTANCE.getPosition03());
+            telemetry.addData("catapults (pattern)", "%s%s%s", Config.catapult01Color.toString().charAt(0), Config.catapult02Color.toString().charAt(0), Config.catapult03Color.toString().charAt(0));
+            telemetry.addData("Timer", "%.1f", opModeTimer.getElapsedTimeSeconds());
+            telemetry.update();
+        }
     }
 }
