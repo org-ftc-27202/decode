@@ -23,11 +23,9 @@ public class TurretStartup extends Procedure {
                 new InstantlyDo(()-> subsystem(Turret.class).setTurretVelocity(1000.0)),
                 new Sleep(0.06),
 
-                new InstantlyDo(()-> subsystem(Turret.class).setTurretVelocity(1200.0)),
-                new Sleep(0.06),
-                new InstantlyDo(()-> subsystem(Turret.class).setTurretVelocity(1400.0)),
-                new Sleep(0.06),
-                new InstantlyDo(()-> subsystem(Turret.class).setTurretVelocity(1600.0))
+                new InstantlyDo(()-> subsystem(Turret.class).setTurretVelocity(1050.0)),
+                new Sleep(0.06)
+
         );
 
         setRequiredSubsystems(

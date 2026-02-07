@@ -20,19 +20,25 @@ public final class PedroDrivebase extends Subsystem {
     public final static double FAR_LAUNCH_FACTOR = 0.2;
     public final static double NEAR_LAUNCH_FACTOR = 0.4;
     public final static double LAUNCH_ZONE_SCALE = 6.2;
-    private double GOAL_X, GOAL_Y, REAL_GOAL_X, REAL_GOAL_Y;
+    private double GOAL_X, GOAL_Y, REAL_GOAL_X, REAL_GOAL_Y, STARTING_ANGLE;
     private opModeType opMode;
+    private AutoSide autoSide;
     private boolean isEndgame = false;
 
     public enum opModeType {
         AUTO,
         TELEOP
     }
-
+    public enum AutoSide{
+        SHORT,
+        FAR
+    }
     public void setOpMode(@NonNull opModeType opMode) {
         this.opMode = opMode;
     }
-
+    public void setAutoSide(@NonNull AutoSide autoSide){
+        this.autoSide = autoSide;
+    }
     public double distanceFromGoal;
 
     public double speedScale = 1.0;
@@ -58,12 +64,17 @@ public final class PedroDrivebase extends Subsystem {
         if (allianceColor == StellarBot.AllianceColor.BLUE) {
             GOAL_X = -18.0;
             GOAL_Y = 140.0;
-
             REAL_GOAL_X = 6.0;
             REAL_GOAL_Y = 144.0;
-
+            if (autoSide == AutoSide.FAR){
             STARTING_X = 55.25;
             STARTING_Y = 9.0;
+            STARTING_ANGLE = 90;
+            } else{
+                STARTING_X = 36.0;
+                STARTING_Y = 135.0;
+                STARTING_ANGLE = 0;
+            }
         } else if (allianceColor == StellarBot.AllianceColor.RED) {
             GOAL_X = 162.0;
             GOAL_Y = 140.0;
@@ -83,10 +94,10 @@ public final class PedroDrivebase extends Subsystem {
         }
 
         if (opMode == opModeType.AUTO) {
-            follower.setStartingPose(new Pose(STARTING_X, STARTING_Y, Math.toRadians(90)));
+            follower.setStartingPose(new Pose(STARTING_X, STARTING_Y, Math.toRadians(STARTING_ANGLE)));
             firstInit = false;
         } else if (opMode == opModeType.TELEOP && firstInit){
-            follower.setStartingPose(new Pose(STARTING_X, STARTING_Y, Math.toRadians(90)));
+            follower.setStartingPose(new Pose(STARTING_X, STARTING_Y, Math.toRadians(STARTING_ANGLE)));
             firstInit = false;
         }
 

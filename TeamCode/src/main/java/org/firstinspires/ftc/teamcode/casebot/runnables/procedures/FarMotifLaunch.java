@@ -19,10 +19,6 @@ public class FarMotifLaunch extends Procedure {
                     //PedroDrivebase.getInstance().getFollower().activateAllPIDFs();
                     subsystem(PedroDrivebase.class).getFollower().turnTo(Math.toRadians(subsystem(PedroDrivebase.class).getLaunchYaw()));
                 }),
-                new InstantlyDo(()->
-                        subsystem(Turret.class).setTurretVelocity(1460.0)
-                ),
-                new SetPos(subsystem(Turret.class).getTurretHoodServo(), 0.2),
                 new Parallel(
                         "Launch+Stop",
                         new FullMotifOuttake(),

@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.casebot.opmodes.farauto;// make sure this aligns with class location
 
+import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
+
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
@@ -10,6 +12,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.casebot.runnables.directives.FollowPath;
 import org.firstinspires.ftc.teamcode.casebot.runnables.directives.GetMotif;
+import org.firstinspires.ftc.teamcode.casebot.runnables.directives.TurnTo;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FarMotifLaunch;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FullIntake;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FullIntakeColor;
@@ -31,8 +34,8 @@ import org.firstinspires.ftc.teamcode.util.DecodeDataTypes;
 import org.firstinspires.ftc.teamcode.util.bootscreen.BootScreen;
 import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
 
-@Autonomous(name = "REDCase Auto Pedro", group = "Auto")
-public final class RedCaseFarAuto extends OpMode {
+@Autonomous(name = "BLUE SHORT Auto ", group = "Auto")
+public final class BlueCaseShortAuto extends OpMode {
 
     private final double PRE_MATCH_DELAY = 0.0;
 
@@ -45,29 +48,33 @@ public final class RedCaseFarAuto extends OpMode {
     private final Camera camera = new Camera();
 
     private Follower follower;
-    private boolean hasMotifPattern = false;
+    private boolean HasMotifPattern = false;
+    private boolean turretStarted = false;
 
     private long lastCycleTime = 0;
 
-    private final Pose startPose = new Pose(55.3,7, Math.toRadians(90)).mirror();
-    private final Pose cameraPose = new Pose(61, 19, Math.toRadians(90)).mirror();
-    private final Pose launchControlPose = new Pose(61, 19, Math.toRadians(90)).mirror();
-    private final Pose launchPose = new Pose(61, 19, Math.toRadians(85)).mirror();
+    private final Pose startPose = new Pose(36.0,135.0, Math.toRadians(0));
+    private final Pose cameraPose = new Pose(53.5, 80.0, Math.toRadians(60));
+    private final Pose launchControlPose = new Pose(53.5, 80.0, Math.toRadians(135));
+    private final Pose launchPose = new Pose(53.5, 80.0, Math.toRadians(135));
+    private final Pose spike1Control = new Pose(43,35.5, Math.toRadians(180));
+    private final Pose spike1Start = new Pose(33,35.5, Math.toRadians(180));
+    private final Pose spike1End = new Pose(12 ,35.5, Math.toRadians(180));
 
-    private final Pose spike1Control = new Pose(43,35.5, Math.toRadians(180)).mirror();
-    private final Pose spike1Start = new Pose(33,35.5, Math.toRadians(180)).mirror();
-    private final Pose spike1End = new Pose(17,35.5, Math.toRadians(180)).mirror();
-
-    private final Pose spike2Control = new Pose(43,59, Math.toRadians(180)).mirror();
-    private final Pose spike2Start = new Pose(34,59, Math.toRadians(180)).mirror();
-    private final Pose spike2End = new Pose(17,59, Math.toRadians(180)).mirror();
-    private final Pose gate = new Pose(28,72, Math.toRadians(180)).mirror();
+    private final Pose spike2Control = new Pose(43,59, Math.toRadians(180));
+    private final Pose spike2Start = new Pose(34,59, Math.toRadians(180));
+    private final Pose spike2End = new Pose(12,59, Math.toRadians(180));
+    private final Pose spike3Control = new Pose(43,82.5, Math.toRadians(180));
+    private final Pose spike3Start = new Pose(34,82.5, Math.toRadians(180));
+    private final Pose spike3End = new Pose(12,82.5, Math.toRadians(180));
+    private final Pose gateApr = new Pose(20,76, Math.toRadians(180));
+    private final Pose gateHold = new Pose(15, 76, Math.toRadians(180));
 
     //  private final Pose collect1Pose = new Pose(19, 35.5);
 
     //  private final Pose collect1Control = new Pose(56,35.5);
     //  private final Pose launchFarPose = new Pose(60,21);
-    private PathChain driveToGetMotif, driveToSpike1Control, driveToSpike1Start, driveToSpike1End, driveToLaunch1, driveToSpike2Control, driveToSpike2Start, driveToSpike2End, driveToLaunch2pt1, driveToLaunch2pt2, driveToLever;
+    private PathChain driveToGetMotif, driveToSpike1Control, driveToSpike1Start, driveToSpike1End, driveToLaunch1, driveToSpike2Control, driveToSpike2Start, driveToSpike2End, driveToLaunch2, driveToLeverApr, driveToLeverHold, driveToLaunch3, driveToSpike3Control, driveToSpike3Start, driveToSpike3End, driveToLaunchGate;
 
     public void buildPaths() {
         driveToGetMotif = follower
@@ -87,9 +94,9 @@ public final class RedCaseFarAuto extends OpMode {
         driveToSpike1Start = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(spike1Control, spike1Start)
+                        new BezierLine(spike1Control, spike1End)
                 )
-                .setConstantHeadingInterpolation(Math.toRadians(0))
+                .setConstantHeadingInterpolation(Math.toRadians(180))
                 .build();
 
         driveToSpike1End = follower
@@ -97,7 +104,7 @@ public final class RedCaseFarAuto extends OpMode {
                 .addPath(
                         new BezierLine(spike1Start, spike1End)
                 )
-                .setConstantHeadingInterpolation(Math.toRadians(0))
+                .setConstantHeadingInterpolation(Math.toRadians(180))
                 .build();
 
         driveToLaunch1 = follower
@@ -117,44 +124,73 @@ public final class RedCaseFarAuto extends OpMode {
         driveToSpike2Start = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(spike2Control, spike2Start)
+                        new BezierLine(spike2Control, spike2End)
                 )
-                .setConstantHeadingInterpolation(Math.toRadians(0))
+                .setConstantHeadingInterpolation(Math.toRadians(180))
                 .build();
         driveToSpike2End = follower
                 .pathBuilder()
                 .addPath(
                         new BezierLine(spike2Start, spike2End)
                 )
-                .setConstantHeadingInterpolation(Math.toRadians(0))
+                .setConstantHeadingInterpolation(Math.toRadians(180))
                 .build();
-        driveToLaunch2pt1 = follower
+        driveToLaunch2 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(spike2End, spike2Start)
+                        new BezierLine(spike2End, launchPose)
                 )
-                .setLinearHeadingInterpolation(spike2End.getHeading(), Math.toRadians(45))
+                .setLinearHeadingInterpolation(spike2End.getHeading(), launchPose.getHeading())
                 .build();
-        driveToLaunch2pt2 = follower
+        driveToSpike3Control = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(spike2Start, launchControlPose)
+                        new BezierLine(launchControlPose, spike3Control)
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(45), launchControlPose.getHeading())
+                .setLinearHeadingInterpolation(launchControlPose.getHeading(), spike2Control.getHeading())
                 .build();
-        driveToLever = follower
+        driveToSpike3Start = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(launchControlPose, gate)
+                        new BezierLine(spike3Control, spike3End)
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(85), Math.toRadians(0))
+                .setConstantHeadingInterpolation(Math.toRadians(180))
+                .build();
+        driveToSpike3End = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(spike3Start, spike3End)
+                )
+                .setConstantHeadingInterpolation(Math.toRadians(180))
+                .build();
+
+        driveToLeverApr = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(spike3End, gateApr)
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
+                .build();
+        driveToLeverHold = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(gateApr, gateHold)
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
+                .build();
+        driveToLaunchGate = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(gateHold, launchPose)
+                )
+                .setLinearHeadingInterpolation(gateHold.getHeading(), launchPose.getHeading())
                 .build();
     }
 
     @Override
     public void init() {
         caseBot.setupBot(
-                StellarBot.AllianceColor.RED,
+                StellarBot.AllianceColor.BLUE,
                 pedroDrivebase,
                 intake,
                 leverTransfer,
@@ -165,6 +201,7 @@ public final class RedCaseFarAuto extends OpMode {
 
         //this.follower = Constants.createFollower(hardwareMap);
         pedroDrivebase.setOpMode(PedroDrivebase.opModeType.AUTO);
+        pedroDrivebase.setAutoSide(PedroDrivebase.AutoSide.SHORT);
         caseBot.init(hardwareMap);
         caseBot.setPrintDebug(false);
         follower = pedroDrivebase.getFollower();
@@ -187,45 +224,56 @@ public final class RedCaseFarAuto extends OpMode {
     public void start() {
         new Procedure(
                 "AutoDrive",
-                new InstantlyDo(()-> hasMotifPattern = false),
+                new InstantlyDo(()-> HasMotifPattern = false),
+                new InstantlyDo(()-> turretStarted = false),
                 new SetPos(leverTransfer.getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION),
                 new InstantlyDo(() -> intake.setIntakeSpeed(1.0)),
                 new InstantlyDo(intake::setMotorSpeed),
                 new Parallel(
                         "hmm",
-                        new TurretStartup(),
+                        new Procedure(
+                                "turret",
+                                new TurretStartup(),
+                                new InstantlyDo(()-> turretStarted = true)
+                        ),
                         new Sleep(PRE_MATCH_DELAY),// This runs in the background
                         new Procedure(
-                                "lock in", // While this part continues forward
+                                "lock in",
+                                // While this part continues forward
+                                new FollowPath(driveToGetMotif, follower, cameraPose, true, 1.0),
                                 new Race("get Motif",
                                         new GetMotif(),
                                         new Sleep(3.0)),
-                                new InstantlyDo(()-> hasMotifPattern = true),
-                                new FollowPath(driveToGetMotif, follower, cameraPose, true, 1.0)
+                                new InstantlyDo(()-> HasMotifPattern = true),
+                                new TurnTo(Math.toRadians(135), follower),
+                                new Sleep(0.5)
+
                         )),
                 new FarMotifLaunch(),
                 new InstantlyDo(()-> intake.setIntakeSpeed(1.0)),
                 new InstantlyDo(intake::setMotorSpeed),
-                new FollowPath(driveToSpike1Control, follower, spike1Control, true, 1.0),
+                new FollowPath(driveToSpike3Control, follower, spike3Control, true, 1.0),
                 new Race(
-                        "pickup1Race",
-                        new Parallel("pickup1",
+                        "pickup3Race",
+                        new Parallel("pickup3",
                                 new FullIntake(),
-                                new Procedure ("spike1pickup",
-                                        new FollowPath(driveToSpike1Start, follower, spike1Start, true, 0.4),
-                                        new Sleep(0.3),
-                                        new FollowPath(driveToSpike1End, follower, spike1End, true, 0.4)
+                                new Procedure ("spike3pickup",
+                                        new FollowPath(driveToSpike3Start, follower, spike3End, true, 0.4)
+
                                 )
                         ),
                         new Sleep(4.5)
                 ),
                 new InstantlyDo(()-> {
-                    spindexer.setArtifactColorInSpindexer(0, DecodeDataTypes.ArtifactColor.GREEN);
+                    spindexer.setArtifactColorInSpindexer(0, DecodeDataTypes.ArtifactColor.PURPLE);
                     spindexer.setArtifactColorInSpindexer(1, DecodeDataTypes.ArtifactColor.PURPLE);
-                    spindexer.setArtifactColorInSpindexer(2, DecodeDataTypes.ArtifactColor.PURPLE);
+                    spindexer.setArtifactColorInSpindexer(2, DecodeDataTypes.ArtifactColor.GREEN);
                 }),
 
-                new FollowPath(driveToLaunch1, follower, launchControlPose, true, 1.0),
+                new FollowPath(driveToLeverApr, follower, gateApr, true, 1.0),
+                new FollowPath(driveToLeverHold, follower, gateHold, true, 1.0),
+                new Sleep(1.5),
+                new FollowPath(driveToLaunchGate, follower,launchPose, true, 1.0),
                 new FarMotifLaunch(),
                 new FollowPath(driveToSpike2Control, follower, spike2Control, true, 1.0),
                 new Race(
@@ -233,9 +281,8 @@ public final class RedCaseFarAuto extends OpMode {
                         new Parallel("pickup2",
                                 new FullIntake(),
                                 new Procedure ("spike2pickup",
-                                        new FollowPath(driveToSpike2Start, follower, spike2Start, true, 0.4),
-                                        new Sleep(0.3),
-                                        new FollowPath(driveToSpike2End, follower, spike2End, true, 0.4)
+                                        new FollowPath(driveToSpike2Start, follower, spike2End, true, 0.4)
+
                                 )
                         ),
                         new Sleep(4.5)
@@ -245,10 +292,27 @@ public final class RedCaseFarAuto extends OpMode {
                     spindexer.setArtifactColorInSpindexer(1, DecodeDataTypes.ArtifactColor.GREEN);
                     spindexer.setArtifactColorInSpindexer(2, DecodeDataTypes.ArtifactColor.PURPLE);
                 }),
-                new FollowPath(driveToLaunch2pt1, follower, spike2Start, true,1.0),
-                new FollowPath(driveToLaunch2pt2, follower, launchControlPose, true, 1.0),
+                new FollowPath(driveToLaunch2, follower, launchPose, true,1.0),
                 new FarMotifLaunch(),
-                new FollowPath(driveToLever, follower, gate, true, 1.0)
+                new FollowPath(driveToSpike1Control, follower, spike1Control, true, 1.0),
+                new Race(
+                        "pickup3Race",
+                        new Parallel("pickup3",
+                                new FullIntake(),
+                                new Procedure ("spike3pickup",
+                                        new FollowPath(driveToSpike1Start, follower, spike1End, true, 0.4)
+                                )
+                        ),
+                        new Sleep(4.5)
+                ),
+                new InstantlyDo(()-> {
+                    spindexer.setArtifactColorInSpindexer(0, DecodeDataTypes.ArtifactColor.GREEN);
+                    spindexer.setArtifactColorInSpindexer(1, DecodeDataTypes.ArtifactColor.PURPLE);
+                    spindexer.setArtifactColorInSpindexer(2, DecodeDataTypes.ArtifactColor.PURPLE);
+                }),
+                new FollowPath(driveToLaunch1, follower, launchPose, true, 1.0),
+                new FarMotifLaunch()
+
                 //new FarMotifLaunch(),
                 //new FollowPath(path6, follower, new Pose(61.000, 44.000), true)
 
@@ -268,13 +332,18 @@ public final class RedCaseFarAuto extends OpMode {
 
     @Override
     public void loop() {
+
         caseBot.update();
         follower.update();
-        if (hasMotifPattern) {
+        if (HasMotifPattern) {
             turret.updateTurretYawServo();
         } else {
             turret.setTurretToForward();
         }
+        if (turretStarted) {
+            turret.updateTurretWithInterpolation(pedroDrivebase.getDistanceFromGoal());
+        }
+
         /*telemetry.addData("x: ", follower.getPose().getX());
         telemetry.addData("isBusy(): ", follower.isBusy());
         telemetry.addData("y: ", follower.getPose().getY());

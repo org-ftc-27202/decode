@@ -46,6 +46,8 @@ public final class BlueCaseFarAuto extends OpMode {
     private final Turret turret = new Turret();
     private final Camera camera = new Camera();
 
+    private long lastCycleTime = 0;
+
     private Follower follower;
     private boolean HasMotifPattern = false;
 
@@ -164,6 +166,7 @@ public final class BlueCaseFarAuto extends OpMode {
 
         //this.follower = Constants.createFollower(hardwareMap);
         pedroDrivebase.setOpMode(PedroDrivebase.opModeType.AUTO);
+        pedroDrivebase.setAutoSide(PedroDrivebase.AutoSide.FAR);
         caseBot.init(hardwareMap);
         caseBot.setPrintDebug(false);
         follower = pedroDrivebase.getFollower();
@@ -275,14 +278,35 @@ public final class BlueCaseFarAuto extends OpMode {
         } else {
             turret.setTurretToForward();
         }
+        turret.updateTurretWithInterpolation(pedroDrivebase.getDistanceFromGoal());
 
         /*telemetry.addData("x: ", follower.getPose().getX());
         telemetry.addData("isBusy(): ", follower.isBusy());
         telemetry.addData("y: ", follower.getPose().getY());
         telemetry.addData("heading: ", follower.getPose().getHeading());
         telemetry.addData("T: ", follower.getCurrentTValue());*/
-        telemetry.addLine();
-        telemetry.addLine(caseBot.toString());
+        try {
+            telemetry.addLine(caseBot.toString());
+            telemetry.addLine(
+                    String.format("%s, %s, %s",
+                            spindexer.getArtifactColorAt(0),
+                            spindexer.getArtifactColorAt(1),
+                            spindexer.getArtifactColorAt(2)
+                    )
+            );
+
+            telemetry.addLine(
+                    String.format("Cycle Time: %d", System.currentTimeMillis() - lastCycleTime)
+            );
+            lastCycleTime = System.currentTimeMillis();
+        } catch (Exception e) {
+            telemetry.addData("telemetry didn't work", e);
+        }
+
+        telemetry.addLine("\nHonesty setting: 90%");
+        telemetry.addLine("Humor setting: 75%");
+
         telemetry.update();
     }
+
 }
