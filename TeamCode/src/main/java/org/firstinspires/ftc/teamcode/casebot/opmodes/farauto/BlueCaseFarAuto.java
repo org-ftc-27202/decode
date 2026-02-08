@@ -49,6 +49,7 @@ public final class BlueCaseFarAuto extends OpMode {
     private long lastCycleTime = 0;
 
     private Follower follower;
+    private boolean turretStarted = false;
     private boolean HasMotifPattern = false;
 
     private final Pose startPose = new Pose(55.3,7, Math.toRadians(90));
@@ -175,6 +176,7 @@ public final class BlueCaseFarAuto extends OpMode {
         spindexer.setArtifactColorInSpindexer(1, DecodeDataTypes.ArtifactColor.GREEN);
         spindexer.setArtifactColorInSpindexer(2, DecodeDataTypes.ArtifactColor.PURPLE);
 
+
         // print telemetry
         BootScreen bootScreen = new BootScreen(telemetry, new TerminalVelocityLogo(), true);
         try {
@@ -190,12 +192,15 @@ public final class BlueCaseFarAuto extends OpMode {
         new Procedure(
                 "AutoDrive",
                 new InstantlyDo(()-> HasMotifPattern = false),
+                new InstantlyDo(()-> turretStarted = false),
                 new SetPos(leverTransfer.getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION),
                 new InstantlyDo(() -> intake.setIntakeSpeed(1.0)),
                 new InstantlyDo(intake::setMotorSpeed),
                 new Parallel(
                         "hmm",
-                        new TurretStartup(),
+                        new Procedure("ahh",
+                              new TurretStartup(),
+                        new InstantlyDo(()-> turretStarted=true)),
                         new Sleep(PRE_MATCH_DELAY),// This runs in the background
                         new Procedure(
                                 "lock in", // While this part continues forward
@@ -278,7 +283,9 @@ public final class BlueCaseFarAuto extends OpMode {
         } else {
             turret.setTurretToForward();
         }
-        turret.updateTurretWithInterpolation(pedroDrivebase.getDistanceFromGoal());
+        if (turretStarted) {
+            turret.updateTurretWithInterpolation(pedroDrivebase.getDistanceFromGoalFromPose(launchPose));
+        }
 
         /*telemetry.addData("x: ", follower.getPose().getX());
         telemetry.addData("isBusy(): ", follower.isBusy());
