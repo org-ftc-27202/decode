@@ -24,7 +24,7 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
         private final Intake intake = new Intake();
         private final Transfer transfer = new Transfer();
         private final Camera camera = new Camera();
-        private final Turret turret = new Turret();
+        //private final Turret turret = new Turret();
         private boolean onStart;
 
         // define these at the class level of your OpMode
@@ -40,7 +40,7 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
                     pedroDrivebase,
                     intake,
                     transfer,
-                    turret,
+                    //turret,
                     camera
             );
 
@@ -61,7 +61,7 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
             pedroDrivebase.setDefaultDirective(new DefaultPedroDrivebase(gamepad1, gamepad2));
             intake.setDefaultDirective(new DefaultIntake(gamepad1, gamepad2));
             transfer.setDefaultDirective(new DefaultTransfer(gamepad1));
-            turret.setDefaultDirective(new DefaultTurret(gamepad1, gamepad2));
+            //turret.setDefaultDirective(new DefaultTurret(gamepad1, gamepad2));
 
             // print telemetry
             BootScreen bootScreen = new BootScreen(telemetry, new TerminalVelocityLogo(), true);
@@ -108,8 +108,8 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
 
                 // run scheduler and subsystems logic
                 enduranceBot.update();
-                turret.updateTurretYawServo();
-                turret.updateTurretWithInterpolation(pedroDrivebase.getDistanceFromGoal());
+                //turret.updateTurretYawServo();
+                //turret.updateTurretWithInterpolation(pedroDrivebase.getDistanceFromGoal());
 
                 // print telemetry
                 try {
