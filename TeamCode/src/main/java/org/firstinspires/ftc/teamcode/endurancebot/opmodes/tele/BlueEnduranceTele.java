@@ -5,20 +5,20 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.endurancebot.runnables.defaultdirectives.DefaultIntake;
-import org.firstinspires.ftc.teamcode.endurancebot.runnables.defaultdirectives.DefaultLeverTransfer;
+import org.firstinspires.ftc.teamcode.endurancebot.runnables.defaultdirectives.DefaultTransfer;
 import org.firstinspires.ftc.teamcode.endurancebot.runnables.defaultdirectives.DefaultTurret;
-import org.firstinspires.ftc.teamcode.endurancebot.runnables.defaultdirectives.PedroDefaultDrivebase;
+import org.firstinspires.ftc.teamcode.endurancebot.runnables.defaultdirectives.DefaultPedroDrivebase;
 import org.firstinspires.ftc.teamcode.endurancebot.runnables.procedures.TurretStartup;
 import org.firstinspires.ftc.teamcode.endurancebot.subsystems.Camera;
 import org.firstinspires.ftc.teamcode.endurancebot.subsystems.Intake;
-import org.firstinspires.ftc.teamcode.endurancebot.subsystems.Transfer;
 import org.firstinspires.ftc.teamcode.endurancebot.subsystems.PedroDrivebase;
+import org.firstinspires.ftc.teamcode.endurancebot.subsystems.Transfer;
 import org.firstinspires.ftc.teamcode.endurancebot.subsystems.Turret;
 import org.firstinspires.ftc.teamcode.stellarstructure.StellarBot;
 import org.firstinspires.ftc.teamcode.util.bootscreen.BootScreen;
 import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
 
-@TeleOp(name = "-BLUEendurance +Pedro", group = "Robot")
+@TeleOp(name = "-BlueEndurance", group = "Robot")
     public final class BlueEnduranceTele extends LinearOpMode {
         private final PedroDrivebase pedroDrivebase = new PedroDrivebase();
         private final Intake intake = new Intake();
@@ -58,9 +58,9 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
             onStart = true;
 
             // set up default directives
-            pedroDrivebase.setDefaultDirective(new PedroDefaultDrivebase(gamepad1, gamepad2));
+            pedroDrivebase.setDefaultDirective(new DefaultPedroDrivebase(gamepad1, gamepad2));
             intake.setDefaultDirective(new DefaultIntake(gamepad1, gamepad2));
-            transfer.setDefaultDirective(new DefaultLeverTransfer(gamepad1));
+            transfer.setDefaultDirective(new DefaultTransfer(gamepad1));
             turret.setDefaultDirective(new DefaultTurret(gamepad1, gamepad2));
 
             // print telemetry

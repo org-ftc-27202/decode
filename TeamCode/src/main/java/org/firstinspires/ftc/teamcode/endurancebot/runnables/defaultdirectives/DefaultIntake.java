@@ -4,7 +4,6 @@ import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsyst
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.teamcode.endurancebot.runnables.procedures.IntakeAt;
 import org.firstinspires.ftc.teamcode.endurancebot.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.GamepadButtonMap;
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.StatefulCondition;
@@ -34,20 +33,12 @@ public class DefaultIntake extends DefaultDirective {
 		addTrigger(new ActionTrigger(
 				() -> gamepad1.left_trigger > 0.05, //when left trigger pressed
 				//() -> {intake.setIntakeSpeed(0.5);} //set intake to left trigger
-				() -> {intake.setIntakeSpeed(-1.0);} //set intake to left trigger
+				() -> {intake.getIntakeMotor().setPower(1.0);} //set intake to left trigger
 		));
 
 		addTrigger(new ActionTrigger(
-				() -> gamepad1.right_trigger > 0.05, //when right trigger pressed
-				() -> {intake.setIntakeSpeed(1.0);} //set intake to right trigger
-		));
-		addTrigger(new ActionTrigger(
-				()-> gamepad2.right_trigger > 0.05,
-				() -> {intake.setIntakeSpeed(-1.0);}
-		));
-		addTrigger(new ActionTrigger(
-				()-> gamepad2.left_trigger > 0.05,
-				() -> {intake.setIntakeSpeed(1.0);}
+				() -> gamepad1.right_trigger <= 0.05, //when right trigger pressed
+				() -> {intake.getIntakeMotor().setPower(-1.0);} //set intake to right trigger
 		));
 
 
@@ -56,7 +47,7 @@ public class DefaultIntake extends DefaultDirective {
 				() -> {intake.setIntakeSpeed(-1.0);} //set intake to right trigger
 		));*/
 
-		addTrigger(new ActionTrigger(
+		/*addTrigger(new ActionTrigger(
 				// when dpad right just first pressed
 				new StatefulCondition(
 						new GamepadButtonMap(gamepad1, GamepadButtonMap.Button.DPAD_RIGHT),
@@ -74,7 +65,7 @@ public class DefaultIntake extends DefaultDirective {
 							)
 					).schedule();
 				}
-		));
+		));*/
 
 		/*addTrigger(new Trigger(
 				() -> (gamepad1.right_trigger <= 0.05) == (gamepad1.left_trigger <= 0.05), //neither or both triggers are pressed
@@ -84,6 +75,6 @@ public class DefaultIntake extends DefaultDirective {
 
 	@Override
 	protected void onUpdate() {
-		intake.setMotorSpeed();
+	//	intake.setMotorSpeed();
 	}
 }

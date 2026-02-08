@@ -4,18 +4,28 @@ import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsyst
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.teamcode.endurancebot.runnables.procedures.PulseLever;
+import org.firstinspires.ftc.teamcode.endurancebot.runnables.procedures.FullOuttake;
 import org.firstinspires.ftc.teamcode.endurancebot.subsystems.Transfer;
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.GamepadButtonMap;
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.StatefulCondition;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.DefaultDirective;
 import org.firstinspires.ftc.teamcode.stellarstructure.triggers.ActionTrigger;
 
-public class DefaultLeverTransfer extends DefaultDirective {
+public class DefaultTransfer extends DefaultDirective {
 	private final Transfer transfer = subsystem(Transfer.class);
 
-	public DefaultLeverTransfer(Gamepad gamepad1) {
+	public DefaultTransfer(Gamepad gamepad1) {
 		super(subsystem(Transfer.class));
+
+		addTrigger(new ActionTrigger(
+				new StatefulCondition(
+						new GamepadButtonMap(gamepad1, GamepadButtonMap.Button.DPAD_UP),
+						StatefulCondition.Edge.RISING //On initial press
+				),
+				() -> {
+					new FullOuttake().schedule();
+				}
+		));
 
 		/*addTrigger(new ActionTrigger(
 				new StatefulCondition(
@@ -39,7 +49,7 @@ public class DefaultLeverTransfer extends DefaultDirective {
 				}
 		));*/
 
-		addTrigger(new ActionTrigger(
+		/*addTrigger(new ActionTrigger(
 				new StatefulCondition(
 						new GamepadButtonMap(gamepad1, GamepadButtonMap.Button.DPAD_LEFT),
 						StatefulCondition.Edge.RISING //On initial press
@@ -48,6 +58,6 @@ public class DefaultLeverTransfer extends DefaultDirective {
 					// up down up
 					new PulseLever().schedule();
 				}
-		));
+		));*/
 	}
 }

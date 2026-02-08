@@ -25,13 +25,9 @@ import org.firstinspires.ftc.teamcode.util.LaunchInterpolator;
 import org.firstinspires.ftc.teamcode.util.LaunchParameters;
 
 public final class Turret extends Subsystem {
-    private final static double DEGREES_TO_SERVO = 1.0 / 320.0;
-
-    private final static double TICKS_TO_ROTATION = 1.5 / 7.0;
     private final static double VELOCITY_TOLERANCE = 41.0;
     private final static double YAW_SERVO_DEGREE_RANGE = 330.0;
     private final static double YAW_GEAR_RATIO = 1.167;
-    private final static double DEGREES_TO_POS = (YAW_GEAR_RATIO/YAW_SERVO_DEGREE_RANGE);
     private final static double YAW_SERVO_MID = 0.82;
 
     private double velocity = 0.0;
