@@ -225,6 +225,9 @@ public final class PedroDrivebase extends Subsystem {
     public double getDistanceFromGoal(){
         return distanceFromGoal;
     }
+    public double getDistanceFromGoalFromPose(Pose pose){
+        return Math.sqrt(Math.pow(pose.getX() - GOAL_X, 2) + Math.pow(pose.getY() - GOAL_Y, 2));
+    }
 
 	@NonNull
     @Override
