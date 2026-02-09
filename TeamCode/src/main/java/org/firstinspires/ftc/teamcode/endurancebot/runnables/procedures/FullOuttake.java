@@ -13,8 +13,8 @@ public class FullOuttake extends Procedure {
         super(
                 "FullOuttake",
                 new InstantlyDo(() -> subsystem(Transfer.class).setTransferPower(1.0)),
-                new Sleep(3.0),
-                new InstantlyDo(() -> subsystem(Transfer.class).setTransferPower(0.0))
+                new Sleep(10.0),
+                new InstantlyDo(() -> subsystem(Transfer.class).setTransferPower( 0.5))
         );
 
         setRequiredSubsystems(

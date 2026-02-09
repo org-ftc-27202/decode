@@ -22,16 +22,16 @@ public final class Transfer extends Subsystem {
 		transferRed.setPosition(power);
 		transferBlue.setPosition(power);
 	}
-	private StellarServo transferRed, transferBlue;
 
+	private StellarServo transferRed, transferBlue;
 
 	@Override
 	public void init(HardwareMap hardwareMap) {
-		transferRed = new StellarServo(hardwareMap, "transfer_red");
-		transferBlue = new StellarServo(hardwareMap, "transfer_blue");
+		transferRed = new StellarServo(hardwareMap, "transferRed");
+		transferBlue = new StellarServo(hardwareMap, "transferBlue");
 
 		transferRed.setDirection(Servo.Direction.FORWARD);
-		transferBlue.setDirection(Servo.Direction.REVERSE);
+		transferBlue.setDirection(Servo.Direction.FORWARD);
 	}
 
 	@Override

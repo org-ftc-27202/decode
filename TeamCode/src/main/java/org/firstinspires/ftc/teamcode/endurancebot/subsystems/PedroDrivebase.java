@@ -42,7 +42,7 @@ public final class PedroDrivebase extends Subsystem {
     private static boolean firstInit = true;
 
     private DcMotorEx leftFrontDrive, leftBackDrive, rightFrontDrive, rightBackDrive;
-    private StellarLight lightLeft, lightRight;
+    private StellarLight lightLeft, lightMiddle, lightRight;
 
 
     @Override
@@ -97,9 +97,9 @@ public final class PedroDrivebase extends Subsystem {
             firstInit = false;
         }
 
-
-        lightLeft = new StellarLight(hardwareMap, "lightLeft");
-        lightRight = new StellarLight(hardwareMap, "lightRight");
+        lightLeft = new StellarLight(hardwareMap, "leftLight");
+        lightMiddle = new StellarLight(hardwareMap, "middleLight");
+        lightRight = new StellarLight(hardwareMap, "rightLight");
 
         //todo: make omni wheel directive
 

@@ -8,7 +8,6 @@ import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsyst
 import androidx.annotation.NonNull;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -27,7 +26,7 @@ public final class Turret extends Subsystem {
 
     private double velocity = 0.0;
 
-    private StellarServo turretYawServo;
+    private StellarDcMotor turretYaw;
     private StellarDcMotor turretRed, turretBlue;
     private StellarServo turretPitchServo;
     private WebcamName webcamName;
@@ -39,15 +38,15 @@ public final class Turret extends Subsystem {
     public void init(HardwareMap hardwareMap) {
         PIDFScale = 1.0;
         needsToStart = true;
-        turretYawServo = new StellarServo(hardwareMap, "turretServo");
-        turretPitchServo = new StellarServo(hardwareMap, "turretHoodServo");
-        turretRed = new StellarDcMotor(hardwareMap, "flywheel_red" );
-        turretBlue = new StellarDcMotor(hardwareMap, "flywheel_blue");
+        turretYaw = new StellarDcMotor(hardwareMap, "turretRotation");
+        turretPitchServo = new StellarServo(hardwareMap, "turretHood");
+        turretRed = new StellarDcMotor(hardwareMap, "turretRed" );
+        turretBlue = new StellarDcMotor(hardwareMap, "turretBlue");
 
         webcamName = hardwareMap.get(WebcamName.class, "camera");
         //turretYawServo.setPosition(YAW_SERVO_MID);
         turretRed.setDirection(DcMotorEx.Direction.REVERSE);
-        turretBlue.setDirection(DcMotorSimple.Direction.FORWARD);
+        turretBlue.setDirection(DcMotorEx.Direction.FORWARD);
 
         turretRed.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         turretBlue.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
@@ -67,9 +66,9 @@ public final class Turret extends Subsystem {
     public boolean getNeedsToStart(){
         return needsToStart;
     }
-    public StellarServo getTurretServo() {
-        return turretYawServo;
-    }
+    //public StellarServo getTurretServo() {
+    // return turretYawServo;
+    //}
 
     public StellarServo getTurretHoodServo(){
         return turretPitchServo;
@@ -152,11 +151,11 @@ public final class Turret extends Subsystem {
 
 
         double finalServoPos = YAW_SERVO_MID - servoPosOffset;
-        turretYawServo.setPosition(finalServoPos);
+        // turretYawServo.setPosition(finalServoPos);
 
     }
     public void setTurretToForward(){
-        turretYawServo.setPosition(YAW_SERVO_MID);
+    //    turretYawServo.setPosition(YAW_SERVO_MID);
     }
 
 
@@ -164,13 +163,13 @@ public final class Turret extends Subsystem {
     @Override
     public String debugTelemetry() {
         return String.format(
-                "Turret Servo Pos: %f\n" +
+                //"Turret Servo Pos: %f\n" +
                     "   Hood Pos: %f\n" +
                     "   Turret Left/Right Motor Vel: %f, %f\n" +
                 "Turret Target Velocity: %f\n" +
                     "   TurretAtTargetVelocity?: %b\n"+
                 "Bounded Turret Yaw Target Angle: %f",
-                turretYawServo.getPosition(),
+                //turretYawServo.getPosition(),
                 turretPitchServo.getPosition(),
                 turretRed.getVelocity(),
                 turretBlue.getVelocity(),

@@ -275,12 +275,12 @@ public class Scheduler {
 			stringBuilder.append(String.format("\n%s", runnable.getClass().getSimpleName()));
 		}
 
-		/*stringBuilder.append("\nActive Runnables\n");
+		stringBuilder.append("\nActive Runnables\n");
 		for (Runnable runnable : this.activeRunnables) {
 			if (!runnable.isOwned()) {
 				buildRunnable(stringBuilder, runnable);
 			}
-		}*/
+		}
 
 		return stringBuilder.toString();
 	}
