@@ -71,8 +71,8 @@ public final class PedroDrivebase extends Subsystem {
             STARTING_Y = 9.0;
             STARTING_ANGLE = 90;
             } else{
-                STARTING_X = 36.0;
-                STARTING_Y = 135.0;
+                STARTING_X = 32.0;
+                STARTING_Y = 134.7;
                 STARTING_ANGLE = 0;
             }
         } else if (allianceColor == StellarBot.AllianceColor.RED) {

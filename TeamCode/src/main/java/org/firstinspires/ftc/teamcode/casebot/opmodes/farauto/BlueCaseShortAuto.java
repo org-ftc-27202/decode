@@ -149,7 +149,7 @@ public final class BlueCaseShortAuto extends OpMode {
         driveToLaunch2 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(spike2End, launchPose)
+                        new BezierCurve(spike2End, spike2Control, launchPose)
                 )
                 .setLinearHeadingInterpolation(spike2End.getHeading(), launchPose.getHeading())
                 .build();
