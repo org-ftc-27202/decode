@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.casebot.opmodes.tele;
 
+import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
+
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -113,8 +115,13 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
 
                 // run scheduler and subsystems logic
                 caseBot.update();
-                turret.updateTurretYawServo();
-                turret.updateTurretWithInterpolation(pedroDrivebase.getDistanceFromGoal());
+                if (pedroDrivebase.getLocalizationMode()) {
+                    turret.updateTurretYawServo();
+                    turret.updateTurretWithInterpolation(pedroDrivebase.getDistanceFromGoal());
+                } else {
+                    turret.setTurretToForward();
+                    turret.updateTurretWithInterpolation(pedroDrivebase.getDistanceFromGoalFromPose(new Pose(70.75, 15)));
+                }
 
                 // print telemetry
                 try {

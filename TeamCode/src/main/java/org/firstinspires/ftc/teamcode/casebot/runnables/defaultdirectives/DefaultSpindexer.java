@@ -147,11 +147,22 @@ public class DefaultSpindexer extends DefaultDirective {
 		));
 		addTrigger(new ActionTrigger(
 				new StatefulCondition(
+						new GamepadButtonMap(gamepad2, GamepadButtonMap.Button.DPAD_RIGHT),
+						StatefulCondition.Edge.RISING
+				),
+				()->{
+                    subsystem(PedroDrivebase.class).setLocalizationMode(!subsystem(PedroDrivebase.class).getLocalizationMode());
+				}
+		));
+
+
+		addTrigger(new ActionTrigger(
+				new StatefulCondition(
 						new GamepadButtonMap(gamepad2, GamepadButtonMap.Button.DPAD_LEFT),
 						StatefulCondition.Edge.RISING
 				),
 				()->{
-					new InstantlyDo(()-> subsystem(PedroDrivebase.class).getFollower().startTeleopDrive(true));
+					subsystem(PedroDrivebase.class).getFollower().startTeleopDrive(true);
 				}
 		));
 		addTrigger(new ActionTrigger(
@@ -160,7 +171,7 @@ public class DefaultSpindexer extends DefaultDirective {
 						StatefulCondition.Edge.RISING
 				),
 				()->{
-					new InstantlyDo(()-> subsystem(PedroDrivebase.class).setEndgame());
+					subsystem(PedroDrivebase.class).setEndgame();
 				}
 		));
 

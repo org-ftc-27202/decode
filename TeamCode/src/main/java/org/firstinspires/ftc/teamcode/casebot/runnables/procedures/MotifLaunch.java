@@ -19,7 +19,9 @@ public class MotifLaunch extends Procedure {
                     subsystem(Intake.class).setIntakeSpeed(0.2);
                     subsystem(Intake.class).setMotorSpeed();
                     //PedroDrivebase.getInstance().getFollower().activateAllPIDFs();
-                    subsystem(PedroDrivebase.class).getFollower().turnTo(Math.toRadians(subsystem(PedroDrivebase.class).getLaunchYaw()));
+                    if (subsystem(PedroDrivebase.class).getLocalizationMode()) {
+                        subsystem(PedroDrivebase.class).getFollower().turnTo(Math.toRadians(subsystem(PedroDrivebase.class).getLaunchYaw()));
+                    }
                 }),
                 new Parallel(
                         "Launch+Stop",

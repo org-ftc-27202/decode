@@ -3,7 +3,10 @@ package org.firstinspires.ftc.teamcode.casebot.subsystems;
 import androidx.annotation.NonNull;
 
 import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.BezierPoint;
+import com.pedropathing.geometry.FuturePose;
 import com.pedropathing.geometry.Pose;
+import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -24,6 +27,8 @@ public final class PedroDrivebase extends Subsystem {
     private opModeType opMode;
     private AutoSide autoSide;
     private boolean isEndgame = false;
+
+    private boolean localizationMode = true;
 
     public enum opModeType {
         AUTO,
@@ -48,10 +53,17 @@ public final class PedroDrivebase extends Subsystem {
     private DcMotorEx leftFrontDrive, leftBackDrive, rightFrontDrive, rightBackDrive;
     private StellarLight lightLeft, lightRight;
 
+    private FuturePose turnPoint;
+
+    private PathChain turnToAtPoint;
+
+
+
 
     @Override
     public void init(HardwareMap hardwareMap) {
         double STARTING_X, STARTING_Y;
+        setLocalizationMode(true);
         // BLUE LAUNCH
         // GOAL X 8.0
         // GOAL Y 143.0
@@ -145,7 +157,12 @@ public final class PedroDrivebase extends Subsystem {
         this.isEndgame = true;
     }
 
-
+    public void setLocalizationMode(boolean input){
+        localizationMode =  input;
+    }
+    public boolean getLocalizationMode(){
+        return localizationMode;
+    }
     public boolean inWrongSideEndgame() {
         StellarBot.AllianceColor allianceColor = StellarBot.getInstance().getAllianceColor();
         if (isEndgame) {
@@ -244,7 +261,8 @@ public final class PedroDrivebase extends Subsystem {
                 "Launch Yaw: %.3f\n"+
                 "In Launch Zone: %b\n "+
                 "Left Light Color: %f" +
-                "Right Light Color: %f",
+                "Right Light Color: %f\n" +
+                "Localization Mode: %b",
                 leftFrontDrive.getPower(),
                 rightFrontDrive.getPower(),
                 leftBackDrive.getPower(),
@@ -256,7 +274,8 @@ public final class PedroDrivebase extends Subsystem {
                 getLaunchYaw(),
                 checkForLaunchPose(),
                 lightLeft.getPosition(),
-                lightRight.getPosition()
+                lightRight.getPosition(),
+                getLocalizationMode()
           );
     }
 }

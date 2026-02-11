@@ -112,7 +112,13 @@ public final class RedCaseTele extends LinearOpMode {
 
             // run scheduler and subsystems logic
             caseBot.update();
-            turret.updateTurretYawServo();
+            if (pedroDrivebase.getLocalizationMode()) {
+                turret.updateTurretYawServo();
+                turret.updateTurretWithInterpolation(pedroDrivebase.getDistanceFromGoal());
+            } else {
+            turret.setTurretToForward();
+            turret.updateTurretWithInterpolation(pedroDrivebase.getDistanceFromGoalFromPose(new Pose(70.75, 15)));
+        }
 
             // print telemetry
             try {
