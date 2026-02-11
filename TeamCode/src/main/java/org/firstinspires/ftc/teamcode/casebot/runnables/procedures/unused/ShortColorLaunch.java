@@ -1,10 +1,8 @@
-package org.firstinspires.ftc.teamcode.casebot.runnables.procedures;
+package org.firstinspires.ftc.teamcode.casebot.runnables.procedures.unused;
 
 import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
 
-import org.firstinspires.ftc.teamcode.casebot.subsystems.LeverTransfer;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.PedroDrivebase;
-import org.firstinspires.ftc.teamcode.casebot.subsystems.Spindexer;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Turret;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.InstantlyDo;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Parallel;
@@ -12,19 +10,23 @@ import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Procedure;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.SetPos;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Sleep;
 
-public class FarLaunch extends Procedure {
-    public FarLaunch() {
-        super("FarLaunch",
+public class ShortColorLaunch extends Procedure {
+    public ShortColorLaunch() {
+        super("ShortColorLaunch",
                 new InstantlyDo(()-> {
                     //PedroDrivebase.getInstance().getFollower().activateAllPIDFs();
-                    subsystem(PedroDrivebase.class).getFollower().turnTo(Math.toRadians(subsystem(PedroDrivebase.class).getLaunchYaw()));
+                    //PedroDrivebase.getInstance().getFollower().turnTo(Math.toRadians(PedroDrivebase.getInstance().getLaunchYaw()));
                 }),
+                new InstantlyDo(()->
+                        subsystem(Turret.class).setTurretVelocity(1300.0)
+                ),
+                new SetPos(subsystem(Turret.class).getTurretHoodServo(), 0.25),
                 new Parallel(
                         "Launch+Stop",
-                        new FullOuttake(),
+                        new FullPatternOuttake(),
                         new Procedure(
                                 "Start Driving",
-                                new Sleep(2.0),
+                                new Sleep(0.5),
                                 new InstantlyDo(()->
                                         subsystem(PedroDrivebase.class).getFollower().startTeleopDrive(true)
                                 )
@@ -34,9 +36,7 @@ public class FarLaunch extends Procedure {
 
         setRequiredSubsystems(
                 subsystem(PedroDrivebase.class),
-                subsystem(Turret.class),
-                subsystem(LeverTransfer.class),
-                subsystem(Spindexer.class)
+                subsystem(Turret.class)
         );
 
         setInterruptible(false);

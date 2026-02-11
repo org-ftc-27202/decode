@@ -1,23 +1,18 @@
 package org.firstinspires.ftc.teamcode.casebot.opmodes.farauto;// make sure this aligns with class location
 
-import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
-
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
-import com.pedropathing.geometry.BezierPoint;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
-import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.casebot.runnables.directives.FollowPath;
 import org.firstinspires.ftc.teamcode.casebot.runnables.directives.GetMotif;
 import org.firstinspires.ftc.teamcode.casebot.runnables.directives.TurnTo;
-import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FarMotifLaunch;
+import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.MotifLaunch;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FullIntake;
-import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FullIntakeColor;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.TurretStartup;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Camera;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Intake;
@@ -271,7 +266,7 @@ public final class BlueCaseShortAuto extends OpMode {
                                 new Sleep(0.2)
 
                         )),
-                new FarMotifLaunch(),
+                new MotifLaunch(),
                 new InstantlyDo(()-> intake.setIntakeSpeed(1.0)),
                 new InstantlyDo(intake::setMotorSpeed),
                 new FollowPath(driveToSpike3Control, follower, spike3Control, false, 1.0),
@@ -299,7 +294,7 @@ public final class BlueCaseShortAuto extends OpMode {
                         new Sleep(2.0)
                         ),
                 new FollowPath(driveToLaunchGate, follower,launchPose, true, 1.0),
-                new FarMotifLaunch(),
+                new MotifLaunch(),
                 new FollowPath(driveToSpike2Control, follower, spike2Start, true, 1.0),
                 new Race(
                         "pickup2Race",
@@ -318,7 +313,7 @@ public final class BlueCaseShortAuto extends OpMode {
                     spindexer.setArtifactColorInSpindexer(2, DecodeDataTypes.ArtifactColor.PURPLE);
                 }),
                 new FollowPath(driveToLaunch2, follower, launchPose, true,1.0),
-                new FarMotifLaunch(),
+                new MotifLaunch(),
                 new FollowPath(leave, follower, leavePose, false, 1.0)
                 /*new FollowPath(driveToSpike1Control, follower, spike1Start, true, 1.0),
                 new Race(

@@ -10,8 +10,8 @@ public class FullOuttake extends Procedure {
     public FullOuttake() {
         super(
                 "FullOuttake",
-                new OuttakeAt(() -> 0),
                 new OuttakeAt(() -> 1),
+                new OuttakeAt(() -> 0),
                 new OuttakeAt(() -> 2)
         );
 

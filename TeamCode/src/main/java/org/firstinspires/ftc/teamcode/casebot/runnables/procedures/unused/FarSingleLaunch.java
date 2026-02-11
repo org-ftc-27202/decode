@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.casebot.runnables.procedures;
+package org.firstinspires.ftc.teamcode.casebot.runnables.procedures.unused;
 
 import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
 
@@ -13,15 +13,15 @@ import org.firstinspires.ftc.teamcode.stellarstructure.runnables.SetPos;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Sleep;
 import org.firstinspires.ftc.teamcode.util.DecodeDataTypes;
 
-public class CloseSingleLaunch extends Procedure {
-    public CloseSingleLaunch(DecodeDataTypes.ArtifactColor artifactColor) {
-        super("CloseSingleLaunch",
+public class FarSingleLaunch extends Procedure {
+    public FarSingleLaunch(DecodeDataTypes.ArtifactColor artifactColor) {
+        super("FarSingleLaunch",
                 new InstantlyDo(()-> {
-                    //subsystem(PedroDrivebase).getFollower().activateAllPIDFs();
+                    //PedroDrivebase.getInstance().getFollower().activateAllPIDFs();
                     subsystem(PedroDrivebase.class).getFollower().turnTo(Math.toRadians(subsystem(PedroDrivebase.class).getLaunchYaw()));
                 }),
                 new InstantlyDo(()->
-                        subsystem(Turret.class).setTurretVelocity(1300.0)
+                        subsystem(Turret.class).setTurretVelocity(1460.0)
                 ),
                 new SetPos(subsystem(Turret.class).getTurretHoodServo(), 0.2),
                 new Parallel(
@@ -29,7 +29,7 @@ public class CloseSingleLaunch extends Procedure {
                         new OuttakeColor(artifactColor),
                         new Procedure(
                                 "Start Driving",
-                                new Sleep(0.5),
+                                new Sleep(1.5),
                                 new InstantlyDo(()->
                                         subsystem(PedroDrivebase.class).getFollower().startTeleopDrive(true)
                                 )

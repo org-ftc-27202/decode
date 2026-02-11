@@ -4,15 +4,13 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
-import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.casebot.runnables.directives.FollowPath;
 import org.firstinspires.ftc.teamcode.casebot.runnables.directives.GetMotif;
-import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FarMotifLaunch;
+import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.MotifLaunch;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FullIntake;
-import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FullIntakeColor;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.TurretStartup;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Camera;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Intake;
@@ -203,7 +201,7 @@ public final class RedCaseFarAuto extends OpMode {
                                 new InstantlyDo(()-> hasMotifPattern = true),
                                 new FollowPath(driveToGetMotif, follower, cameraPose, true, 1.0)
                         )),
-                new FarMotifLaunch(),
+                new MotifLaunch(),
                 new InstantlyDo(()-> intake.setIntakeSpeed(1.0)),
                 new InstantlyDo(intake::setMotorSpeed),
                 new FollowPath(driveToSpike1Control, follower, spike1Control, true, 1.0),
@@ -226,7 +224,7 @@ public final class RedCaseFarAuto extends OpMode {
                 }),
 
                 new FollowPath(driveToLaunch1, follower, launchControlPose, true, 1.0),
-                new FarMotifLaunch(),
+                new MotifLaunch(),
                 new FollowPath(driveToSpike2Control, follower, spike2Control, true, 1.0),
                 new Race(
                         "pickup2Race",
@@ -247,7 +245,7 @@ public final class RedCaseFarAuto extends OpMode {
                 }),
                 new FollowPath(driveToLaunch2pt1, follower, spike2Start, true,1.0),
                 new FollowPath(driveToLaunch2pt2, follower, launchControlPose, true, 1.0),
-                new FarMotifLaunch(),
+                new MotifLaunch(),
                 new FollowPath(driveToLever, follower, gate, true, 1.0)
                 //new FarMotifLaunch(),
                 //new FollowPath(path6, follower, new Pose(61.000, 44.000), true)

@@ -5,16 +5,10 @@ import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsyst
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.casebot.runnables.directives.GetMotif;
-import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.CloseSingleLaunch;
-import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FarColorLaunch;
-import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FarLaunch;
-import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FarMotifLaunch;
-import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FarSingleLaunch;
+import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.Launch;
+import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.MotifLaunch;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FullIntake;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FullIntakeColor;
-import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.ShortColorLaunch;
-import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.ShortLaunch;
-import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.ShortMotifLaunch;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.PedroDrivebase;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Spindexer;
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.GamepadButtonMap;
@@ -22,7 +16,6 @@ import org.firstinspires.ftc.teamcode.stellarstructure.conditions.StatefulCondit
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.DefaultDirective;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.InstantlyDo;
 import org.firstinspires.ftc.teamcode.stellarstructure.triggers.ActionTrigger;
-import org.firstinspires.ftc.teamcode.util.DecodeDataTypes;
 
 public class DefaultSpindexer extends DefaultDirective {
 	public DefaultSpindexer(Gamepad gamepad1, Gamepad gamepad2) {
@@ -36,7 +29,7 @@ public class DefaultSpindexer extends DefaultDirective {
 				),
 				() -> {
 					// outtake 3 in pattern order (PGP for now)
-					new FarLaunch().schedule();
+					new Launch().schedule();
 				}
 		));
 
@@ -63,7 +56,7 @@ public class DefaultSpindexer extends DefaultDirective {
 				}
 		));
 
-		addTrigger(new ActionTrigger(
+		/*addTrigger(new ActionTrigger(
 				// when x just first pressed
 				new StatefulCondition(
 						new GamepadButtonMap(gamepad1, GamepadButtonMap.Button.A),
@@ -73,9 +66,9 @@ public class DefaultSpindexer extends DefaultDirective {
 					// outtake 3
 					new ShortLaunch().schedule();
 				}
-		));
+		));*/
 
-		addTrigger(new ActionTrigger(
+		/*addTrigger(new ActionTrigger(
 				new StatefulCondition(
 						new GamepadButtonMap(gamepad1, GamepadButtonMap.Button.B),
 						StatefulCondition.Edge.RISING
@@ -83,14 +76,15 @@ public class DefaultSpindexer extends DefaultDirective {
 				()->{
 					new ShortMotifLaunch().schedule();
 				}
-		));
+		));*/
+
 		addTrigger(new ActionTrigger(
 				new StatefulCondition(
 						new GamepadButtonMap(gamepad1, GamepadButtonMap.Button.X),
 						StatefulCondition.Edge.RISING
 				),
 				()->{
-					new FarMotifLaunch().schedule();
+					new MotifLaunch().schedule();
 				}
 		));
 
@@ -98,7 +92,7 @@ public class DefaultSpindexer extends DefaultDirective {
 
 
 
-		addTrigger(new ActionTrigger(
+		/*addTrigger(new ActionTrigger(
 				// when y just first pressed
 				new StatefulCondition(
 						new GamepadButtonMap(gamepad2, GamepadButtonMap.Button.Y),
@@ -108,9 +102,9 @@ public class DefaultSpindexer extends DefaultDirective {
 					// outtake 3
 					new FarSingleLaunch(DecodeDataTypes.ArtifactColor.PURPLE);
 				}
-		));
+		));*/
 
-		addTrigger(new ActionTrigger(
+		/*addTrigger(new ActionTrigger(
 				new StatefulCondition(
 						new GamepadButtonMap(gamepad2, GamepadButtonMap.Button.B),
 						StatefulCondition.Edge.RISING
@@ -118,9 +112,9 @@ public class DefaultSpindexer extends DefaultDirective {
 				()->{
 					new CloseSingleLaunch(DecodeDataTypes.ArtifactColor.PURPLE);
 				}
-		));
+		));*/
 
-		addTrigger(new ActionTrigger(
+		/*addTrigger(new ActionTrigger(
 				new StatefulCondition(
 						new GamepadButtonMap(gamepad2, GamepadButtonMap.Button.A),
 						StatefulCondition.Edge.RISING
@@ -128,8 +122,9 @@ public class DefaultSpindexer extends DefaultDirective {
 				()->{
 					new CloseSingleLaunch(DecodeDataTypes.ArtifactColor.GREEN);
 				}
-		));
-		addTrigger(new ActionTrigger(
+		));*/
+
+		/*addTrigger(new ActionTrigger(
 				// when y just first pressed
 				new StatefulCondition(
 						new GamepadButtonMap(gamepad2, GamepadButtonMap.Button.X),
@@ -139,7 +134,8 @@ public class DefaultSpindexer extends DefaultDirective {
 					// outtake 3
 					new FarSingleLaunch(DecodeDataTypes.ArtifactColor.GREEN);
 				}
-		));
+		));*/
+
 		addTrigger(new ActionTrigger(
 				new StatefulCondition(
 						new GamepadButtonMap(gamepad2, GamepadButtonMap.Button.DPAD_UP),

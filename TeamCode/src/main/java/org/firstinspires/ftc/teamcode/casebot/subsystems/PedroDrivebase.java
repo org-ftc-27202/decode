@@ -62,13 +62,13 @@ public final class PedroDrivebase extends Subsystem {
 
         StellarBot.AllianceColor allianceColor = StellarBot.getInstance().getAllianceColor();
         if (allianceColor == StellarBot.AllianceColor.BLUE) {
-            GOAL_X = -18.0;
-            GOAL_Y = 140.0;
-            REAL_GOAL_X = 6.0;
-            REAL_GOAL_Y = 144.0;
+            REAL_GOAL_X = 5.0;
+            REAL_GOAL_Y = 140.0;
+            GOAL_X = REAL_GOAL_X;
+            GOAL_Y = REAL_GOAL_Y;
             if (autoSide == AutoSide.FAR){
-            STARTING_X = 55.25;
-            STARTING_Y = 9.0;
+                STARTING_X = 55.25;
+                STARTING_Y = 9.0;
             STARTING_ANGLE = 90;
             } else{
                 STARTING_X = 32.0;

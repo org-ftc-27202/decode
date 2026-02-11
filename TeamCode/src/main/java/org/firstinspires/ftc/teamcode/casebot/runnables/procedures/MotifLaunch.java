@@ -2,31 +2,31 @@ package org.firstinspires.ftc.teamcode.casebot.runnables.procedures;
 
 import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
 
+import org.firstinspires.ftc.teamcode.casebot.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.casebot.subsystems.LeverTransfer;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.PedroDrivebase;
+import org.firstinspires.ftc.teamcode.casebot.subsystems.Spindexer;
 import org.firstinspires.ftc.teamcode.casebot.subsystems.Turret;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.InstantlyDo;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Parallel;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Procedure;
-import org.firstinspires.ftc.teamcode.stellarstructure.runnables.SetPos;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Sleep;
 
-public class ShortColorLaunch extends Procedure {
-    public ShortColorLaunch() {
-        super("ShortColorLaunch",
+public class MotifLaunch extends Procedure {
+    public MotifLaunch() {
+        super("FarMotifLaunch",
                 new InstantlyDo(()-> {
+                    subsystem(Intake.class).setIntakeSpeed(0.2);
+                    subsystem(Intake.class).setMotorSpeed();
                     //PedroDrivebase.getInstance().getFollower().activateAllPIDFs();
-                    //PedroDrivebase.getInstance().getFollower().turnTo(Math.toRadians(PedroDrivebase.getInstance().getLaunchYaw()));
+                    subsystem(PedroDrivebase.class).getFollower().turnTo(Math.toRadians(subsystem(PedroDrivebase.class).getLaunchYaw()));
                 }),
-                new InstantlyDo(()->
-                        subsystem(Turret.class).setTurretVelocity(1300.0)
-                ),
-                new SetPos(subsystem(Turret.class).getTurretHoodServo(), 0.25),
                 new Parallel(
                         "Launch+Stop",
-                        new FullPatternOuttake(),
+                        new FullMotifOuttake(),
                         new Procedure(
                                 "Start Driving",
-                                new Sleep(0.5),
+                                new Sleep(1.0),
                                 new InstantlyDo(()->
                                         subsystem(PedroDrivebase.class).getFollower().startTeleopDrive(true)
                                 )
@@ -36,7 +36,10 @@ public class ShortColorLaunch extends Procedure {
 
         setRequiredSubsystems(
                 subsystem(PedroDrivebase.class),
-                subsystem(Turret.class)
+                subsystem(Turret.class),
+                subsystem(LeverTransfer.class),
+                subsystem(Spindexer.class),
+                subsystem(Intake.class)
         );
 
         setInterruptible(false);
