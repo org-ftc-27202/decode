@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.casebot.runnables.directives.FollowPath;
 import org.firstinspires.ftc.teamcode.casebot.runnables.directives.GetMotif;
 import org.firstinspires.ftc.teamcode.casebot.runnables.directives.TurnTo;
+import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.Launch;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.MotifLaunch;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.FullIntake;
 import org.firstinspires.ftc.teamcode.casebot.runnables.procedures.TurretStartup;
@@ -58,14 +59,14 @@ public final class BlueCaseShortAuto extends OpMode {
     private final Pose spike1Start = new Pose(38,35.5, Math.toRadians(180));
     private final Pose spike1End = new Pose(12 ,35.5, Math.toRadians(180));
 
-    private final Pose spike2Control = new Pose(50,58, Math.toRadians(180));
+    private final Pose spike2Control = new Pose(55,58, Math.toRadians(180));
     private final Pose spike2Start = new Pose(42,58, Math.toRadians(180));
-    private final Pose spike2End = new Pose(10,58, Math.toRadians(180));
+    private final Pose spike2End = new Pose(19,58, Math.toRadians(180));
     private final Pose spike3Control = new Pose(46,82.5, Math.toRadians(180));
     private final Pose spike3Start = new Pose(34,82.5, Math.toRadians(180));
     private final Pose spike3End = new Pose(16,82.5, Math.toRadians(180));
-    private final Pose gateApr = new Pose(20,76, Math.toRadians(180));
-    private final Pose gateHold = new Pose(15, 76, Math.toRadians(180));
+    private final Pose gateApr = new Pose(19.5,76, Math.toRadians(180));
+    private final Pose gateHold = new Pose(14, 76, Math.toRadians(180));
     private final Pose leavePose = new Pose(51, 79, Math.toRadians(135));
 
     //  private final Pose collect1Pose = new Pose(19, 35.5);
@@ -125,7 +126,7 @@ public final class BlueCaseShortAuto extends OpMode {
                 .addPath(
                         new BezierCurve(launchControlPose, spike2Control, spike2Start)
                 )
-                .setLinearHeadingInterpolation(launchControlPose.getHeading(), spike1Start.getHeading())
+                .setTangentHeadingInterpolation()
                 .build();
         driveToSpike2Start = follower
                 .pathBuilder()
@@ -266,11 +267,11 @@ public final class BlueCaseShortAuto extends OpMode {
                                 new Sleep(0.2)
 
                         )),
-                new MotifLaunch(),
+                new Launch(),
                 new InstantlyDo(()-> intake.setIntakeSpeed(1.0)),
                 new InstantlyDo(intake::setMotorSpeed),
                 new FollowPath(driveToSpike3Control, follower, spike3Control, false, 1.0),
-                new Sleep(1.0),
+                new Sleep(.6),
                 new Race(
                         "pickup3Race",
                         new Parallel("pickup3",
@@ -301,11 +302,11 @@ public final class BlueCaseShortAuto extends OpMode {
                         new Parallel("pickup2",
                                 new FullIntake(),
                                 new Procedure ("spike2pickup",
-                                        new FollowPath(driveToSpike2Start, follower, spike2End, true, 0.32)
+                                        new FollowPath(driveToSpike2Start, follower, spike2End, true, 0.34    )
 
                                 )
                         ),
-                        new Sleep(2.5)
+                        new Sleep(3.0)
                 ),
                 new InstantlyDo(()-> {
                     spindexer.setArtifactColorInSpindexer(0, DecodeDataTypes.ArtifactColor.PURPLE);
