@@ -16,12 +16,17 @@ public class MotifLaunch extends Procedure {
     public MotifLaunch() {
         super("FarMotifLaunch",
                 new InstantlyDo(()-> {
-                    subsystem(Intake.class).setIntakeSpeed(0.2);
+                    subsystem(Intake.class).setIntakeSpeed(-1.0);
                     subsystem(Intake.class).setMotorSpeed();
                     //PedroDrivebase.getInstance().getFollower().activateAllPIDFs();
                     if (subsystem(PedroDrivebase.class).getLocalizationMode()) {
-                        subsystem(PedroDrivebase.class).getFollower().turnTo(Math.toRadians(subsystem(PedroDrivebase.class).getLaunchYaw()));
+                        subsystem(PedroDrivebase.class).getFollower().turn(Math.toRadians(subsystem(PedroDrivebase.class).getRobotHeadingErrorFromGoal()));
                     }
+                }),
+                new Sleep(0.5),
+                new InstantlyDo(()-> {
+                    subsystem(Intake.class).setIntakeSpeed(0.4);
+                    subsystem(Intake.class).setMotorSpeed();
                 }),
                 new Parallel(
                         "Launch+Stop",
@@ -33,7 +38,11 @@ public class MotifLaunch extends Procedure {
                                         subsystem(PedroDrivebase.class).getFollower().startTeleopDrive(true)
                                 )
                         )
-                )
+                ),
+                new InstantlyDo(()-> {
+                    subsystem(Intake.class).setIntakeSpeed(1.0);
+                    subsystem(Intake.class).setMotorSpeed();
+                })
         );
 
         setRequiredSubsystems(

@@ -238,7 +238,16 @@ public final class PedroDrivebase extends Subsystem {
         leftBackDrive.setPower(leftBackPower);
         rightBackDrive.setPower(rightBackPower);
     }
-
+    public double getRobotHeadingErrorFromGoal(){
+        double normalizedHeading;
+        double pedroHeading = Math.toDegrees(follower.getHeading());
+        if (pedroHeading<0){
+            normalizedHeading= pedroHeading+360.0;
+        } else {
+            normalizedHeading = pedroHeading;
+        }
+        return getLaunchYaw()-normalizedHeading;
+    }
     public double getDistanceFromGoal(){
         return distanceFromGoal;
     }

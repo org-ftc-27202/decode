@@ -16,24 +16,33 @@ public class Launch extends Procedure {
     public Launch() {
         super("FarLaunch",
                 new InstantlyDo(()-> {
-                    subsystem(Intake.class).setIntakeSpeed(0.2);
+                    subsystem(Intake.class).setIntakeSpeed(-1.0);
                     subsystem(Intake.class).setMotorSpeed();
                     //PedroDrivebase.getInstance().getFollower().activateAllPIDFs();
                     if (subsystem(PedroDrivebase.class).getLocalizationMode()) {
-                        subsystem(PedroDrivebase.class).getFollower().turnTo(Math.toRadians(subsystem(PedroDrivebase.class).getLaunchYaw()));
+                        subsystem(PedroDrivebase.class).getFollower().turn(Math.toRadians(subsystem(PedroDrivebase.class).getRobotHeadingErrorFromGoal()));
                     }
+                }),
+                new Sleep(0.5),
+                new InstantlyDo(()-> {
+                    subsystem(Intake.class).setIntakeSpeed(0.4);
+                    subsystem(Intake.class).setMotorSpeed();
                 }),
                 new Parallel(
                         "Launch+Stop",
                         new FullOuttake(),
                         new Procedure(
                                 "Start Driving",
-                                new Sleep(2.0),
+                                new Sleep(1.5),
                                 new InstantlyDo(()->
                                         subsystem(PedroDrivebase.class).getFollower().startTeleopDrive(true)
                                 )
                         )
-                )
+                ),
+                new InstantlyDo(()-> {
+                    subsystem(Intake.class).setIntakeSpeed(1.0);
+                    subsystem(Intake.class).setMotorSpeed();
+                })
         );
 
         setRequiredSubsystems(

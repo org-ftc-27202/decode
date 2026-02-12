@@ -52,14 +52,14 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
 
             StellarBot.getInstance().getSubsystem(PedroDrivebase.class);
 
-            caseBot.setPrintDebug(false);
+            caseBot.setPrintDebug(true);
             pedroDrivebase.setAutoSide(PedroDrivebase.AutoSide.FAR);
             pedroDrivebase.setOpMode(PedroDrivebase.opModeType.TELEOP);
 
             // set up subsystems
             caseBot.init(hardwareMap);
             pedroDrivebase.getFollower().setMaxPower(1.0);
-            gamepad1.rumble(1.0, 1.0, 12000000);
+
 
             onStart = true;
 
