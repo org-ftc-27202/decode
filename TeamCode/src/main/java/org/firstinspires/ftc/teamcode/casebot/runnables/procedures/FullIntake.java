@@ -14,7 +14,7 @@ public class FullIntake extends Procedure {
 				new IntakeAt(0),
 				new IntakeAt(1),
 				new IntakeAt(2),
-				new SetPos(subsystem(Spindexer.class).getSpindexerServo(), subsystem(Spindexer.class).getServoPositionFromSegment(0, Spindexer.Position.TRANSFER))
+				new SetPos(subsystem(Spindexer.class).getSpindexerServo(), subsystem(Spindexer.class).getServoPositionFromSegment(1, Spindexer.Position.TRANSFER))
 		);
 
 		setInterruptible(true);

@@ -50,9 +50,10 @@ public final class RedCaseTele extends LinearOpMode {
 
         StellarBot.getInstance().getSubsystem(PedroDrivebase.class);
 
-        caseBot.setPrintDebug(false);
+        caseBot.setPrintDebug(true);
 
         pedroDrivebase.setOpMode(PedroDrivebase.opModeType.TELEOP);
+        pedroDrivebase.setAutoSide(PedroDrivebase.AutoSide.FAR);
 
         // set up subsystems
         caseBot.init(hardwareMap);
