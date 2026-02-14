@@ -82,20 +82,29 @@ public final class PedroDrivebase extends Subsystem {
                 STARTING_X = 55.25;
                 STARTING_Y = 9.0;
             STARTING_ANGLE = 90;
-            } else{
+            } else if (autoSide == AutoSide.SHORT){
                 STARTING_X = 32.0;
                 STARTING_Y = 134.7;
                 STARTING_ANGLE = 0;
+            } else{
+                throw new IllegalArgumentException("PedroDrivebase needs set side");
             }
         } else if (allianceColor == StellarBot.AllianceColor.RED) {
-            GOAL_X = 162.0;
-            GOAL_Y = 140.0;
-
             REAL_GOAL_X = 138.0;
-            REAL_GOAL_Y = 144.0;
-
-            STARTING_X = 88.75;
-            STARTING_Y = 9.0;
+            REAL_GOAL_Y = 140.0;
+            GOAL_X = REAL_GOAL_X;
+            GOAL_Y = REAL_GOAL_Y;
+            if (autoSide == AutoSide.FAR){
+                STARTING_X = 88.75;
+                STARTING_Y = 9.0;
+                STARTING_ANGLE = 90;
+            } else if (autoSide== AutoSide.SHORT){
+                STARTING_X = 110.2;
+                STARTING_Y = 134.7;
+                STARTING_ANGLE = 180;
+            } else{
+                throw new IllegalArgumentException("PedroDrivebase needs set side");
+            }
         } else {
             throw new IllegalArgumentException("PedroDrivebase needs set alliance color");
         }

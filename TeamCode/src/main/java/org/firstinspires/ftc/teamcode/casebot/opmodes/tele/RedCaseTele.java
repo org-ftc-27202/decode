@@ -20,7 +20,7 @@ import org.firstinspires.ftc.teamcode.stellarstructure.StellarBot;
 import org.firstinspires.ftc.teamcode.util.bootscreen.BootScreen;
 import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
 
-@TeleOp(name = "-Red Case +Pedro", group = "Robot")
+@TeleOp(name = "RED TELEOP", group = ".TELEOP")
 public final class RedCaseTele extends LinearOpMode {
     private final PedroDrivebase pedroDrivebase = new PedroDrivebase();
     private final Intake intake = new Intake();
@@ -50,7 +50,7 @@ public final class RedCaseTele extends LinearOpMode {
 
         StellarBot.getInstance().getSubsystem(PedroDrivebase.class);
 
-        caseBot.setPrintDebug(true);
+        caseBot.setPrintDebug(false);
 
         pedroDrivebase.setOpMode(PedroDrivebase.opModeType.TELEOP);
         pedroDrivebase.setAutoSide(PedroDrivebase.AutoSide.FAR);

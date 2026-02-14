@@ -22,7 +22,7 @@ import org.firstinspires.ftc.teamcode.stellarstructure.StellarBot;
 import org.firstinspires.ftc.teamcode.util.bootscreen.BootScreen;
 import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
 
-@TeleOp(name = "-BLUECase +Pedro", group = "Robot")
+@TeleOp(name = "BLUE TELEOP", group = ".TELEOP")
     public final class BlueCaseTele extends LinearOpMode {
         private final PedroDrivebase pedroDrivebase = new PedroDrivebase();
         private final Intake intake = new Intake();

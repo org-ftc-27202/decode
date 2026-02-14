@@ -32,7 +32,7 @@ import org.firstinspires.ftc.teamcode.util.DecodeDataTypes;
 import org.firstinspires.ftc.teamcode.util.bootscreen.BootScreen;
 import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
 
-@Autonomous(name = "BLUE sHORT Auto ", group = "Auto")
+@Autonomous(name = "SHORT blue auto ", group = "Blue Auto", preselectTeleOp = "BLUE TELEOP")
 public final class BlueCaseShortAuto extends OpMode {
 
     private final double PRE_MATCH_DELAY = 0.0;

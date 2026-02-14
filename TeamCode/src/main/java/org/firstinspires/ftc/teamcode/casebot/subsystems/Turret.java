@@ -138,13 +138,13 @@ public final class Turret extends Subsystem {
     public double getBoundedTurretYawAngleTarget() {
         double targetAngle = getTurretYawAngleTarget();
         double boundedTargetAngle;
-        if ((targetAngle<-13) && (targetAngle>-90)){
-            boundedTargetAngle = -13;
+        if ((targetAngle<-25) && (targetAngle>-90)){
+            boundedTargetAngle = -25;
         }
         else if (targetAngle < -90.0){
-            boundedTargetAngle= -30.0;
-        } else if (targetAngle > 30.0){
-            boundedTargetAngle = 30.0;
+            boundedTargetAngle= 60.0;
+        } else if (targetAngle > 60.0){
+            boundedTargetAngle = 60.0;
         } else{
             boundedTargetAngle = targetAngle;
         }

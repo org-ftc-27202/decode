@@ -29,7 +29,7 @@ import org.firstinspires.ftc.teamcode.util.DecodeDataTypes;
 import org.firstinspires.ftc.teamcode.util.bootscreen.BootScreen;
 import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
 
-@Autonomous(name = "BLUECase Auto Pedro", group = "Auto")
+@Autonomous(name = "FAR blue auto", group = "Blue Auto", preselectTeleOp = "BLUE TELEOP")
 public final class BlueCaseFarAuto extends OpMode {
 
     private final double PRE_MATCH_DELAY = 0.0;
