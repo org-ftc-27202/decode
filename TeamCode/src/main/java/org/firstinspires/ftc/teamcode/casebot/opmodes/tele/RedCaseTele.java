@@ -117,7 +117,7 @@ public final class RedCaseTele extends LinearOpMode {
                 turret.updateTurretYawServo();
                 turret.updateTurretWithInterpolation(pedroDrivebase.getDistanceFromGoal());
             } else {
-            turret.setTurretToForward();
+            turret.setTurretToGoal(caseBot.getAllianceColor());
             turret.updateTurretWithInterpolation(pedroDrivebase.getDistanceFromGoalFromPose(new Pose(70.75, 15)));
         }
 

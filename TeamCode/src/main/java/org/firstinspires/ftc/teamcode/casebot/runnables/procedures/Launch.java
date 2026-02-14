@@ -33,7 +33,7 @@ public class Launch extends Procedure {
                         new FullOuttake(),
                         new Procedure(
                                 "Start Driving",
-                                new Sleep(1.5),
+                                new Sleep(1.0),
                                 new InstantlyDo(()->
                                         subsystem(PedroDrivebase.class).getFollower().startTeleopDrive(true)
                                 )

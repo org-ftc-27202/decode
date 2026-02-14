@@ -30,8 +30,8 @@ import org.firstinspires.ftc.teamcode.util.DecodeDataTypes;
 import org.firstinspires.ftc.teamcode.util.bootscreen.BootScreen;
 import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
 
-@Autonomous(name = "FREAKY blue auto", group = "Blue Auto", preselectTeleOp = "BLUE TELEOP")
-public final class BlueCaseFreakyAuto extends OpMode {
+@Autonomous(name = "FREAKY red auto", group = "Red Auto", preselectTeleOp = "RED TELEOP")
+public final class RedCaseFreakyAuto extends OpMode {
 
     private final double PRE_MATCH_DELAY = 0.0;
 
@@ -49,20 +49,20 @@ public final class BlueCaseFreakyAuto extends OpMode {
     private boolean turretStarted = false;
     private boolean HasMotifPattern = false;
 
-    private final Pose startPose = new Pose(55.3,7, Math.toRadians(90));
-    private final Pose cameraPose = new Pose(58, 15, Math.toRadians(90));
-    private final Pose launchControlPose = new Pose(58, 15, Math.toRadians(90));
-    private final Pose launchPose = new Pose(58, 15, Math.toRadians(85));
-    private final Pose spike1Control = new Pose(43,35.5, Math.toRadians(180));
-    private final Pose spike1Start = new Pose(33,35.5, Math.toRadians(180));
-    private final Pose spike1End = new Pose(17,35.5, Math.toRadians(180));
+    private final Pose startPose = new Pose(55.3, 7, Math.toRadians(90)).mirror();
+    private final Pose cameraPose = new Pose(56.5, 15, Math.toRadians(90)).mirror();
+    private final Pose launchControlPose = new Pose(56.5, 15, Math.toRadians(90)).mirror();
+    private final Pose launchPose = new Pose(56.5, 15, Math.toRadians(85)).mirror();
+    private final Pose spike1Control = new Pose(43, 35.5, Math.toRadians(180)).mirror();
+    private final Pose spike1Start = new Pose(33, 35.5, Math.toRadians(180)).mirror();
+    private final Pose spike1End = new Pose(17, 35.5, Math.toRadians(180)).mirror();
 
-    private final Pose spike2Control = new Pose(43,59, Math.toRadians(180));
-    private final Pose spike2Start = new Pose(34,59, Math.toRadians(180));
-    private final Pose spike2End = new Pose(17,59, Math.toRadians(180));
-    private final Pose gate = new Pose(14,33, Math.toRadians(90));
-    private final Pose wallControl = new Pose(12.5, 20.0, Math.toRadians(216));
-    private final Pose wallEnd = new Pose(12.0, 12.2, Math.toRadians(216));
+    private final Pose spike2Control = new Pose(43, 59, Math.toRadians(180)).mirror();
+    private final Pose spike2Start = new Pose(34, 59, Math.toRadians(180)).mirror();
+    private final Pose spike2End = new Pose(17, 59, Math.toRadians(180)).mirror();
+    private final Pose gate = new Pose(14, 33, Math.toRadians(90)).mirror();
+    private final Pose wallControl = new Pose(10.5, 20.0, Math.toRadians(216)).mirror();
+    private final Pose wallEnd = new Pose(9.5, 12.2, Math.toRadians(216)).mirror();
 
 
     //  private final Pose collect1Pose = new Pose(19, 35.5);
@@ -91,7 +91,7 @@ public final class BlueCaseFreakyAuto extends OpMode {
                 .addPath(
                         new BezierLine(spike1Control, spike1Start)
                 )
-                .setConstantHeadingInterpolation(Math.toRadians(180))
+                .setConstantHeadingInterpolation(Math.toRadians(0))
                 .build();
 
         driveToSpike1End = follower
@@ -99,7 +99,7 @@ public final class BlueCaseFreakyAuto extends OpMode {
                 .addPath(
                         new BezierLine(spike1Start, spike1End)
                 )
-                .setConstantHeadingInterpolation(Math.toRadians(180))
+                .setConstantHeadingInterpolation(Math.toRadians(0))
                 .build();
 
         driveToLaunch1 = follower
@@ -121,28 +121,28 @@ public final class BlueCaseFreakyAuto extends OpMode {
                 .addPath(
                         new BezierLine(spike2Control, spike2Start)
                 )
-                .setConstantHeadingInterpolation(Math.toRadians(180))
+                .setConstantHeadingInterpolation(Math.toRadians(0))
                 .build();
         driveToSpike2End = follower
                 .pathBuilder()
                 .addPath(
                         new BezierLine(spike2Start, spike2End)
                 )
-                .setConstantHeadingInterpolation(Math.toRadians(180))
+                .setConstantHeadingInterpolation(Math.toRadians(0))
                 .build();
         driveToLaunch2pt1 = follower
                 .pathBuilder()
                 .addPath(
                         new BezierLine(spike2End, spike2Start)
                 )
-                .setLinearHeadingInterpolation(spike2End.getHeading(), Math.toRadians(135))
+                .setLinearHeadingInterpolation(spike2End.getHeading(), Math.toRadians(45))
                 .build();
         driveToLaunch2pt2 = follower
                 .pathBuilder()
                 .addPath(
                         new BezierLine(spike2Start, launchControlPose)
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(135), launchControlPose.getHeading())
+                .setLinearHeadingInterpolation(Math.toRadians(45), launchControlPose.getHeading())
                 .build();
         driveToLever = follower
                 .pathBuilder()
@@ -177,7 +177,7 @@ public final class BlueCaseFreakyAuto extends OpMode {
     @Override
     public void init() {
         caseBot.setupBot(
-                StellarBot.AllianceColor.BLUE,
+                StellarBot.AllianceColor.RED,
                 pedroDrivebase,
                 intake,
                 leverTransfer,
@@ -212,8 +212,8 @@ public final class BlueCaseFreakyAuto extends OpMode {
     public void start() {
         new Procedure(
                 "AutoDrive",
-                new InstantlyDo(()-> HasMotifPattern = false),
-                new InstantlyDo(()-> turretStarted = false),
+                new InstantlyDo(() -> HasMotifPattern = false),
+                new InstantlyDo(() -> turretStarted = false),
                 new SetPos(leverTransfer.getLeverTransferServo(), LeverTransfer.LEVER_DOWN_POSITION),
                 new InstantlyDo(() -> intake.setIntakeSpeed(1.0)),
                 new InstantlyDo(intake::setMotorSpeed),
@@ -221,25 +221,25 @@ public final class BlueCaseFreakyAuto extends OpMode {
                         "hmm",
                         new Procedure("ahh",
                                 new TurretStartup(),
-                                new InstantlyDo(()-> turretStarted=true)),
+                                new InstantlyDo(() -> turretStarted = true)),
                         new Sleep(PRE_MATCH_DELAY),// This runs in the background
                         new Procedure(
                                 "lock in", // While this part continues forward
                                 new Race("get Motif",
                                         new GetMotif(),
                                         new Sleep(3.0)),
-                                new InstantlyDo(()-> HasMotifPattern = true),
+                                new InstantlyDo(() -> HasMotifPattern = true),
                                 new FollowPath(driveToGetMotif, follower, cameraPose, true, 1.0)
                         )),
                 new MotifLaunch(),
-                new InstantlyDo(()-> intake.setIntakeSpeed(1.0)),
+                new InstantlyDo(() -> intake.setIntakeSpeed(1.0)),
                 new InstantlyDo(intake::setMotorSpeed),
                 new FollowPath(driveToSpike1Control, follower, spike1Control, true, 1.0),
                 new Race(
                         "pickup1Race",
                         new Parallel("pickup1",
                                 new FullIntake(),
-                                new Procedure ("spike1pickup",
+                                new Procedure("spike1pickup",
                                         new FollowPath(driveToSpike1Start, follower, spike1Start, true, 0.4),
                                         new Sleep(0.3),
                                         new FollowPath(driveToSpike1End, follower, spike1End, true, 0.4)
@@ -247,7 +247,7 @@ public final class BlueCaseFreakyAuto extends OpMode {
                         ),
                         new Sleep(2.5)
                 ),
-                new InstantlyDo(()-> {
+                new InstantlyDo(() -> {
                     spindexer.setArtifactColorInSpindexer(0, DecodeDataTypes.ArtifactColor.GREEN);
                     spindexer.setArtifactColorInSpindexer(1, DecodeDataTypes.ArtifactColor.PURPLE);
                     spindexer.setArtifactColorInSpindexer(2, DecodeDataTypes.ArtifactColor.PURPLE);
@@ -260,18 +260,18 @@ public final class BlueCaseFreakyAuto extends OpMode {
                         "pickup2Race",
                         new Parallel("pickup2",
                                 new FullIntake(),
-                                new Procedure ("spike2pickup",
+                                new Procedure("spike2pickup",
                                         new FollowPath(collectFromWall, follower, wallEnd, true, 0.55)
                                 )
                         ),
                         new Sleep(2.0)
                 ),
-                new InstantlyDo(()-> {
+                new InstantlyDo(() -> {
                     spindexer.setArtifactColorInSpindexer(0, DecodeDataTypes.ArtifactColor.PURPLE);
                     spindexer.setArtifactColorInSpindexer(1, DecodeDataTypes.ArtifactColor.GREEN);
                     spindexer.setArtifactColorInSpindexer(2, DecodeDataTypes.ArtifactColor.PURPLE);
                 }),
-                new FollowPath(driveToLaunchWall, follower, launchPose, true,1.0),
+                new FollowPath(driveToLaunchWall, follower, launchPose, true, 1.0),
                 new Launch(),
                 new FollowPath(driveToLever, follower, gate, true, 1.0)
                 //new FarMotifLaunch(),
@@ -333,5 +333,4 @@ public final class BlueCaseFreakyAuto extends OpMode {
 
         telemetry.update();
     }
-
 }

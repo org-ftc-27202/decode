@@ -18,6 +18,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.stellarstructure.StellarBot;
 import org.firstinspires.ftc.teamcode.stellarstructure.Subsystem;
 import org.firstinspires.ftc.teamcode.stellarstructure.hardwaremapwrappers.StellarDcMotor;
 import org.firstinspires.ftc.teamcode.stellarstructure.hardwaremapwrappers.StellarServo;
@@ -32,7 +33,7 @@ public final class Turret extends Subsystem {
     private final static double YAW_SERVO_DEGREE_RANGE = 330.0;
     private final static double YAW_GEAR_RATIO = 1.167;
     private final static double DEGREES_TO_POS = (YAW_GEAR_RATIO/YAW_SERVO_DEGREE_RANGE);
-    private final static double YAW_SERVO_MID = 0.82;
+    private final static double YAW_SERVO_MID = 0.22;
 
     private double velocity = 0.0;
 
@@ -165,6 +166,15 @@ public final class Turret extends Subsystem {
     }
     public void setTurretToForward(){
         turretYawServo.setPosition(YAW_SERVO_MID);
+    }
+    public void setTurretToGoal(StellarBot.AllianceColor allianceColor){
+        double servoPos;
+        if (allianceColor == StellarBot.AllianceColor.RED){
+            servoPos = 0.75;
+        }else {
+            servoPos = 0.7;
+        }
+        turretYawServo.setPosition(servoPos);
     }
 
 

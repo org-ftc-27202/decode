@@ -119,7 +119,7 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
                     turret.updateTurretYawServo();
                     turret.updateTurretWithInterpolation(pedroDrivebase.getDistanceFromGoal());
                 } else {
-                    turret.setTurretToForward();
+                    turret.setTurretToGoal(caseBot.getAllianceColor());
                     turret.updateTurretWithInterpolation(pedroDrivebase.getDistanceFromGoalFromPose(new Pose(70.75, 15)));
                 }
 
