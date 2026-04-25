@@ -60,6 +60,8 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
             caseBot.init(hardwareMap);
             pedroDrivebase.getFollower().setMaxPower(1.0);
 
+            pedroDrivebase.setSpeedScale(.5);
+
 
             onStart = true;
 

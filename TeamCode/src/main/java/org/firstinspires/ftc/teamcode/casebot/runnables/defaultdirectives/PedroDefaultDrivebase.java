@@ -35,9 +35,9 @@ public class PedroDefaultDrivebase extends DefaultDirective {
 			// this is the normal version to use in the teleop
 
 		subsystem(PedroDrivebase.class).getFollower().setTeleOpDrive(
-					-gamepad1.left_stick_y,
-					-gamepad1.left_stick_x,
-					-gamepad1.right_stick_x * 0.75001,
+					-gamepad1.left_stick_y * subsystem(PedroDrivebase.class).getSpeedScale(),
+					-gamepad1.left_stick_x * subsystem(PedroDrivebase.class).getSpeedScale(),
+					-gamepad1.right_stick_x * 0.75001 * subsystem(PedroDrivebase.class).getSpeedScale(),
 					true
 			); // robot centric
 		if (pedroDrivebase.inWrongSideEndgame()){
