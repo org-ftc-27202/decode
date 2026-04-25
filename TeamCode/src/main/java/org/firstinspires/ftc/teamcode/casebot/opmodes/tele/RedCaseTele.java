@@ -58,6 +58,7 @@ public final class RedCaseTele extends LinearOpMode {
         // set up subsystems
         caseBot.init(hardwareMap);
         pedroDrivebase.getFollower().setMaxPower(1.0);
+        pedroDrivebase.setSpeedScale(.5);
 
         onStart = true;
 
