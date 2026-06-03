@@ -202,7 +202,7 @@ public final class PedroDrivebase extends Subsystem {
     public StellarLight getLeftLight() {
         return this.lightLeft;
     }
-
+    public StellarLight getMiddleLight(){return this.lightMiddle;}
     public StellarLight getRightLight() {
         return this.lightRight;
     }

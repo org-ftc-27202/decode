@@ -2,44 +2,49 @@ package org.firstinspires.ftc.teamcode.endurancebot.subsystems;
 
 import androidx.annotation.NonNull;
 
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.stellarstructure.Subsystem;
+import org.firstinspires.ftc.teamcode.stellarstructure.hardwaremapwrappers.StellarDcMotor;
 import org.firstinspires.ftc.teamcode.stellarstructure.hardwaremapwrappers.StellarServo;
 
 public final class Transfer extends Subsystem {
 
-	public StellarServo getTransferRed() {
-		return transferRed;
+
+
+	public StellarDcMotor getTransfer() {
+		return transfer;
 	}
 
-	public StellarServo getTransferBlue() {
-		return transferBlue;
-	}
+	public DigitalChannel getBeamBreak() {return beamBreak;}
 
 	public void setTransferPower(double power) {
-		transferRed.setPosition(power);
-		transferBlue.setPosition(power);
+		transfer.setPower(power);
 	}
-
-	private StellarServo transferRed, transferBlue;
-
+	private DigitalChannel beamBreak;
+	private StellarDcMotor transfer;
+	private Boolean beamBreakState;
 	@Override
 	public void init(HardwareMap hardwareMap) {
-		transferRed = new StellarServo(hardwareMap, "transferRed");
-		transferBlue = new StellarServo(hardwareMap, "transferBlue");
+		transfer = new StellarDcMotor(hardwareMap, "transfer");
 
-		transferRed.setDirection(Servo.Direction.FORWARD);
-		transferBlue.setDirection(Servo.Direction.FORWARD);
+		beamBreak = hardwareMap.get(DigitalChannel.class, "beamBreak");
+		beamBreak.setMode(DigitalChannel.Mode.INPUT);
+
 	}
-
+	public boolean getBeamBreakState(){
+		return beamBreakState;
+	}
 	@Override
-	public void update() {}
+	public void update() {
+		beamBreakState = beamBreak.getState();
+	}
 
 	@NonNull
 	@Override
 	public String debugTelemetry() {
-		return String.format("Transfer Red Power: %f, Transfer Blue Power: %f", transferRed.getPosition(), transferBlue.getPosition());
+		return String.format("Transfer Power: %f", transfer.getPower());
 	}
 }

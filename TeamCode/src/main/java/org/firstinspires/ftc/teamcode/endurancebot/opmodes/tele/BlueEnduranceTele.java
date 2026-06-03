@@ -27,7 +27,7 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
         private final Turret turret = new Turret();
         private boolean onStart;
 
-        // define these at the class level of your OpMode
+
         private boolean poseResetToggled = false; // tracks if the reset command has been run for the current press
 
         private long lastCycleTime = 0;
@@ -123,8 +123,8 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
                     telemetry.addData("telemetry didn't work", e);
                 }
 
-                telemetry.addLine("\nHonesty setting: 90%");
-                telemetry.addLine("Humor setting: 75%");
+                telemetry.addLine("\nHonesty setting: 1%");
+                telemetry.addLine("Humor setting: 100%");
 
                 telemetry.update();
             }

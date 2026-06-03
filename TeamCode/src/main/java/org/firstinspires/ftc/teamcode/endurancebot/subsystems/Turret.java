@@ -24,11 +24,13 @@ public final class Turret extends Subsystem {
     private final static double YAW_GEAR_RATIO = 1.167;
     private final static double YAW_SERVO_MID = 0.82;
 
+    private final static double COVER_OPEN = 0.0;
+    private final static double COVER_CLOSED = 0.25;
+
     private double velocity = 0.0;
 
-    private StellarDcMotor turretYaw;
+    private StellarServo turretYaw, turretPitch, cover;
     private StellarDcMotor turretRed, turretBlue;
-    private StellarServo turretPitchServo;
     private WebcamName webcamName;
 
     private double PIDFScale;
@@ -38,10 +40,11 @@ public final class Turret extends Subsystem {
     public void init(HardwareMap hardwareMap) {
         PIDFScale = 1.0;
         needsToStart = true;
-        turretYaw = new StellarDcMotor(hardwareMap, "turretRotation");
-        turretPitchServo = new StellarServo(hardwareMap, "turretHood");
+        turretYaw = new StellarServo(hardwareMap, "turretYaw");
+        turretPitch = new StellarServo(hardwareMap, "turretPitch");
         turretRed = new StellarDcMotor(hardwareMap, "turretRed" );
         turretBlue = new StellarDcMotor(hardwareMap, "turretBlue");
+        cover = new StellarServo(hardwareMap, "coverServo");
 
         webcamName = hardwareMap.get(WebcamName.class, "camera");
         //turretYawServo.setPosition(YAW_SERVO_MID);
@@ -70,9 +73,13 @@ public final class Turret extends Subsystem {
     // return turretYawServo;
     //}
 
-    public StellarServo getTurretHoodServo(){
-        return turretPitchServo;
+    public StellarServo getTurretPitchServo(){
+        return turretPitch;
     }
+
+    public StellarServo getTurretCoverServo(){return cover;}
+
+    public StellarServo getTurretYawServo(){return turretYaw;}
 
     public StellarDcMotor getTurretRed() {
         return turretRed;
@@ -123,7 +130,7 @@ public final class Turret extends Subsystem {
     public void updateTurretWithInterpolation(double distance){
         LaunchParameters parameters = LaunchInterpolator.getEstimatedLaunchParameters(distance);
         setTurretVelocity(parameters.getVelocity());
-        turretPitchServo.setPosition(parameters.getAngle());
+        turretPitch.setPosition(parameters.getAngle());
     }
 
     public double getBoundedTurretYawAngleTarget() {
@@ -158,6 +165,13 @@ public final class Turret extends Subsystem {
     //    turretYawServo.setPosition(YAW_SERVO_MID);
     }
 
+    public void setCoverOpen(){
+       cover.setPosition(COVER_OPEN);
+    }
+    public void setCoverClosed(){
+        cover.setPosition(COVER_CLOSED);
+    }
+
 
     @NonNull
     @Override
@@ -170,7 +184,7 @@ public final class Turret extends Subsystem {
                     "   TurretAtTargetVelocity?: %b\n"+
                 "Bounded Turret Yaw Target Angle: %f",
                 //turretYawServo.getPosition(),
-                turretPitchServo.getPosition(),
+                turretPitch.getPosition(),
                 turretRed.getVelocity(),
                 turretBlue.getVelocity(),
                 velocity,

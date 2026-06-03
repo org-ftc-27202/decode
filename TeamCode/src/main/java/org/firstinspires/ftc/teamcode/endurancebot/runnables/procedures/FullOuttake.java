@@ -12,9 +12,11 @@ public class FullOuttake extends Procedure {
     public FullOuttake() {
         super(
                 "FullOuttake",
+                new InstantlyDo(()-> subsystem(Turret.class).setCoverOpen()),
                 new InstantlyDo(() -> subsystem(Transfer.class).setTransferPower(1.0)),
                 new Sleep(3.0),
-                new InstantlyDo(() -> subsystem(Transfer.class).setTransferPower( 0.5))
+                new InstantlyDo(() -> subsystem(Transfer.class).setTransferPower(0.0)),
+                new InstantlyDo(()-> subsystem(Turret.class).setCoverClosed())
         );
 
         setRequiredSubsystems(
