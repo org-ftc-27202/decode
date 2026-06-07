@@ -8,6 +8,7 @@ import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsyst
 import androidx.annotation.NonNull;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -30,7 +31,7 @@ public final class Turret extends Subsystem {
     private double velocity = 0.0;
 
     private StellarServo turretYaw, turretPitch, cover;
-    private StellarDcMotor turretRed, turretBlue;
+    private StellarDcMotor turretTop, turretBottom;
     private WebcamName webcamName;
 
     private double PIDFScale;
@@ -42,20 +43,20 @@ public final class Turret extends Subsystem {
         needsToStart = true;
         turretYaw = new StellarServo(hardwareMap, "turretYaw");
         turretPitch = new StellarServo(hardwareMap, "turretPitch");
-        turretRed = new StellarDcMotor(hardwareMap, "turretRed" );
-        turretBlue = new StellarDcMotor(hardwareMap, "turretBlue");
+        turretTop = new StellarDcMotor(hardwareMap, "turretTop" );
+        turretBottom = new StellarDcMotor(hardwareMap, "turretBottom");
         cover = new StellarServo(hardwareMap, "coverServo");
 
         webcamName = hardwareMap.get(WebcamName.class, "camera");
         //turretYawServo.setPosition(YAW_SERVO_MID);
-        turretRed.setDirection(DcMotorEx.Direction.REVERSE);
-        turretBlue.setDirection(DcMotorEx.Direction.FORWARD);
+        turretTop.setDirection(DcMotorEx.Direction.REVERSE);
+        turretBottom.setDirection(DcMotorEx.Direction.REVERSE);
 
-        turretRed.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        turretBlue.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        turretTop.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        turretBottom.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
-        turretRed.setVelocityPIDFCoefficents(p_red, i_red, d_red, f_red);
-        turretBlue.setVelocityPIDFCoefficents(p_blue, i_blue, d_blue, f_blue);
+        turretTop.setVelocityPIDFCoefficents(p_red, i_red, d_red, f_red);
+        turretBottom.setVelocityPIDFCoefficents(p_blue, i_blue, d_blue, f_blue);
 
 
     }
@@ -81,12 +82,12 @@ public final class Turret extends Subsystem {
 
     public StellarServo getTurretYawServo(){return turretYaw;}
 
-    public StellarDcMotor getTurretRed() {
-        return turretRed;
+    public StellarDcMotor getTurretTop() {
+        return turretTop;
     }
 
-    public StellarDcMotor getTurretBlue() {
-        return turretBlue;
+    public StellarDcMotor getTurretBottom() {
+        return turretBottom;
     }
 
     public WebcamName getWebcamName() {
@@ -96,22 +97,22 @@ public final class Turret extends Subsystem {
     public void setTurretVelocity(double velocity) {
         this.velocity = velocity;
 
-        turretRed.setTargetVelocity(velocity);
-        turretBlue.setTargetVelocity(velocity);
+        turretTop.setTargetVelocity(velocity);
+        turretBottom.setTargetVelocity(velocity);
     }
 
     public void setPIDFScale(double scale){
         PIDFScale = scale;
-        turretRed.setVelocityPIDFCoefficents(p_red * PIDFScale, i_red * PIDFScale, d_red * PIDFScale, f_red * PIDFScale);
-        turretBlue.setVelocityPIDFCoefficents(p_blue * PIDFScale, i_blue * PIDFScale, d_blue * PIDFScale, f_blue * PIDFScale);
+        turretTop.setVelocityPIDFCoefficents(p_red * PIDFScale, i_red * PIDFScale, d_red * PIDFScale, f_red * PIDFScale);
+        turretBottom.setVelocityPIDFCoefficents(p_blue * PIDFScale, i_blue * PIDFScale, d_blue * PIDFScale, f_blue * PIDFScale);
     }
 
     public double getVelocityOffOfTarget() {
-        return Math.abs(turretRed.getVelocity() - velocity);
+        return Math.abs(turretTop.getVelocity() - velocity);
     }
 
     public double getRealVelocityOffOfTarget(){
-        return turretRed.getVelocity() - velocity;
+        return turretTop.getVelocity() - velocity;
     }
 
     public boolean velocityWithinTolerance() {
@@ -185,8 +186,8 @@ public final class Turret extends Subsystem {
                 "Bounded Turret Yaw Target Angle: %f",
                 //turretYawServo.getPosition(),
                 turretPitch.getPosition(),
-                turretRed.getVelocity(),
-                turretBlue.getVelocity(),
+                turretTop.getVelocity(),
+                turretBottom.getVelocity(),
                 velocity,
                 velocityWithinTolerance(),
                 getBoundedTurretYawAngleTarget()
