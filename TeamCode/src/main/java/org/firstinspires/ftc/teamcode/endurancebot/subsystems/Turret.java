@@ -25,8 +25,8 @@ public final class Turret extends Subsystem {
     private final static double YAW_GEAR_RATIO = 1.167;
     private final static double YAW_SERVO_MID = 0.82;
 
-    private final static double COVER_OPEN = 0.0;
-    private final static double COVER_CLOSED = 0.25;
+    private final static double COVER_OPEN = 0.95;
+    private final static double COVER_CLOSED = 0.90;
 
     private double velocity = 0.0;
 
@@ -58,7 +58,7 @@ public final class Turret extends Subsystem {
         turretTop.setVelocityPIDFCoefficents(p_red, i_red, d_red, f_red);
         turretBottom.setVelocityPIDFCoefficents(p_blue, i_blue, d_blue, f_blue);
 
-
+        cover.setPosition(COVER_CLOSED);
     }
     //:todo add on start
     @Override
@@ -166,10 +166,10 @@ public final class Turret extends Subsystem {
     //    turretYawServo.setPosition(YAW_SERVO_MID);
     }
 
-    public void setCoverOpen(){
+    public void setCoverOpen() {
        cover.setPosition(COVER_OPEN);
     }
-    public void setCoverClosed(){
+    public void setCoverClosed() {
         cover.setPosition(COVER_CLOSED);
     }
 

@@ -5,9 +5,11 @@ import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsyst
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.endurancebot.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.endurancebot.subsystems.Transfer;
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.GamepadButtonMap;
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.StatefulCondition;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.DefaultDirective;
+import org.firstinspires.ftc.teamcode.stellarstructure.runnables.InstantlyDo;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Parallel;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Procedure;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Sleep;
@@ -19,6 +21,33 @@ public class DefaultIntake extends DefaultDirective {
 	public DefaultIntake(Gamepad gamepad1, Gamepad gamepad2) {
 		super(subsystem(Intake.class));
 
+		addTrigger(new ActionTrigger(
+				new StatefulCondition(
+						new GamepadButtonMap(
+								gamepad1,
+								GamepadButtonMap.Button.RIGHT_BUMPER
+						),
+						StatefulCondition.Edge.RISING
+				),
+				() -> {
+					subsystem(Transfer.class).setTransferPower(0.75);
+					subsystem(Intake.class).getIntakeMotor().setPower(1.0);
+				}
+		));
+
+		addTrigger(new ActionTrigger(
+				new StatefulCondition(
+						new GamepadButtonMap(
+								gamepad1,
+								GamepadButtonMap.Button.RIGHT_BUMPER
+						),
+						StatefulCondition.Edge.FALLING
+				),
+				() -> {
+					subsystem(Transfer.class).setTransferPower(0.0);
+					subsystem(Intake.class).getIntakeMotor().setPower(0.0);
+				}
+		));
 		/*addTrigger(new IteratorTrigger(
 				new StatefulCondition(
 						() -> gamepad1.left_trigger > 0.05,
@@ -33,14 +62,16 @@ public class DefaultIntake extends DefaultDirective {
 		addTrigger(new ActionTrigger(
 				() -> gamepad1.left_trigger > 0.05, //when left trigger pressed
 				//() -> {intake.setIntakeSpeed(0.5);} //set intake to left trigger
-				() -> {intake.getIntakeMotor().setPower(-0.7
-				                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          );} //set intake to left trigger
-		));
+				() -> {intake.getIntakeMotor().setPower(-0.7);}
+				)
+		);
 
+
+		/*
 		addTrigger(new ActionTrigger(
 				() -> gamepad1.right_trigger <= 0.05, //when right trigger pressed
 				() -> {intake.getIntakeMotor().setPower(0.7);} //set intake to right trigger
-		));
+		));*/
 
 
 		/*addTrigger(new ActionTrigger(

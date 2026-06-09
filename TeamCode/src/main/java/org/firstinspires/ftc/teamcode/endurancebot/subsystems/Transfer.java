@@ -23,15 +23,19 @@ public final class Transfer extends Subsystem {
 	public void setTransferPower(double power) {
 		transfer.setPower(power);
 	}
+
 	private DigitalChannel beamBreak;
 	private StellarDcMotor transfer;
 	private Boolean beamBreakState;
+
 	@Override
 	public void init(HardwareMap hardwareMap) {
 		transfer = new StellarDcMotor(hardwareMap, "transfer");
 
 		beamBreak = hardwareMap.get(DigitalChannel.class, "beamBreak");
 		beamBreak.setMode(DigitalChannel.Mode.INPUT);
+
+		setTransferPower(1.0);
 
 	}
 	public boolean getBeamBreakState(){
