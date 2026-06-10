@@ -7,9 +7,12 @@ import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsyst
 
 import androidx.annotation.NonNull;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -30,8 +33,21 @@ public final class Turret extends Subsystem {
 
     private double velocity = 0.0;
 
-    private StellarServo turretYaw, turretPitch, cover;
+    double Kp = 0.0;
+    double Ki = 0.0;
+    double Kd = 0.0;
+
+    double integralSum = 0;
+    double lastError = 0;
+
+    ElapsedTime timer = new ElapsedTime();
+
+    private double TICKS_FULL_ROTATION;
+
+
+    private StellarServo turretPitch, cover, turretYaw;
     private StellarDcMotor turretTop, turretBottom;
+
     private WebcamName webcamName;
 
     private double PIDFScale;
@@ -54,6 +70,10 @@ public final class Turret extends Subsystem {
 
         turretTop.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         turretBottom.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+
+        //turretYaw.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+
 
         turretTop.setVelocityPIDFCoefficents(p_red, i_red, d_red, f_red);
         turretBottom.setVelocityPIDFCoefficents(p_blue, i_blue, d_blue, f_blue);
@@ -130,7 +150,8 @@ public final class Turret extends Subsystem {
 
     public void updateTurretWithInterpolation(double distance){
         LaunchParameters parameters = LaunchInterpolator.getEstimatedLaunchParameters(distance);
-        setTurretVelocity(parameters.getVelocity());
+        //setTurretVelocity(parameters.getVelocity());
+        setTurretVelocity(1570);
         turretPitch.setPosition(parameters.getAngle());
     }
 
@@ -149,7 +170,39 @@ public final class Turret extends Subsystem {
         }
         return boundedTargetAngle;
     }
+    public double calculateTurretYawPower(double error) {
+        // 1. Get the time elapsed since the last loop and reset the timer
+        double seconds = timer.seconds();
+        timer.reset();
 
+        // 2. Proportional
+        double proportional = error * Kp;
+
+        // 3. Integral
+        // Add the error multiplied by the time step to our running total
+        integralSum += (error * seconds);
+
+        // Optional: Anti-windup cap for the integral sum
+        // Limits how huge the integral can get so the turret doesn't go crazy
+        double maxIntegralSum = 0.5; // Adjust as needed
+        integralSum = Range.clip(integralSum, -maxIntegralSum, maxIntegralSum);
+
+        double integral = integralSum * Ki;
+
+        // 4. Derivative
+        // Calculate how fast the error is changing
+        double derivative = 0;
+        if (seconds > 0) { // Prevent divide-by-zero on the very first loop
+            derivative = ((error - lastError) / seconds) * Kd;
+        }
+
+        // 5. Update lastError for the next loop
+        lastError = error;
+
+        // 6. Calculate total power and clamp it between -1.0 and 1.0
+        double totalPower = proportional + integral + derivative;
+        return Range.clip(totalPower, -1.0, 1.0);
+    }
     public void updateTurretYawServo() {
         double targetAngle = getBoundedTurretYawAngleTarget();
 
@@ -160,6 +213,15 @@ public final class Turret extends Subsystem {
 
         double finalServoPos = YAW_SERVO_MID - servoPosOffset;
         // turretYawServo.setPosition(finalServoPos);
+
+    }
+    public void  updateTurretYawMotor(){
+        double targetAngle = Math.toRadians(getTurretYawAngleTarget());
+        if (Math.abs(targetAngle) >= TICKS_FULL_ROTATION){
+            targetAngle = TICKS_FULL_ROTATION;
+        }
+        //turretYaw.setPower(targetAngle);
+
 
     }
     public void setTurretToForward(){
@@ -183,7 +245,9 @@ public final class Turret extends Subsystem {
                     "   Turret Left/Right Motor Vel: %f, %f\n" +
                 "Turret Target Velocity: %f\n" +
                     "   TurretAtTargetVelocity?: %b\n"+
-                "Bounded Turret Yaw Target Angle: %f",
+                "Bounded Turret Yaw Target Angle: %f\n"+
+                            /*" YawPower: %f\n"+
+                "YawPosition?: %f\n",*/
                 //turretYawServo.getPosition(),
                 turretPitch.getPosition(),
                 turretTop.getVelocity(),
@@ -191,6 +255,8 @@ public final class Turret extends Subsystem {
                 velocity,
                 velocityWithinTolerance(),
                 getBoundedTurretYawAngleTarget()
+                /*turretYaw.getPower(),
+                turretYaw.getCurrentPosition()*/
         );
     }
 }
