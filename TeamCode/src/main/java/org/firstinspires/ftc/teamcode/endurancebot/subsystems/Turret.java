@@ -31,7 +31,13 @@ public final class Turret extends Subsystem {
     private final static double COVER_OPEN = 0.95;
     private final static double COVER_CLOSED = 0.85;
 
+    private final static double HOOD_FACTOR = 0.002;
+
+    private final static double YAW_MOTOR_TICKS_HALF = 3000;
+    private final static double DEGREES_TO_TICKS = YAW_MOTOR_TICKS_HALF/180;
     private double velocity = 0.0;
+
+    private boolean launchMode = false;
 
     double Kp = 0.0;
     double Ki = 0.0;
@@ -42,11 +48,11 @@ public final class Turret extends Subsystem {
 
     ElapsedTime timer = new ElapsedTime();
 
-    private double TICKS_FULL_ROTATION;
 
 
-    private StellarServo turretPitch, cover, turretYaw;
-    private StellarDcMotor turretTop, turretBottom;
+
+    private StellarServo turretPitch, cover;
+    private StellarDcMotor turretTop, turretBottom, turretYaw;
 
     private WebcamName webcamName;
 
@@ -57,7 +63,7 @@ public final class Turret extends Subsystem {
     public void init(HardwareMap hardwareMap) {
         PIDFScale = 1.0;
         needsToStart = true;
-        turretYaw = new StellarServo(hardwareMap, "turretYaw");
+        turretYaw = new StellarDcMotor(hardwareMap, "leftBack");
         turretPitch = new StellarServo(hardwareMap, "turretPitch");
         turretTop = new StellarDcMotor(hardwareMap, "turretTop" );
         turretBottom = new StellarDcMotor(hardwareMap, "turretBottom");
@@ -71,7 +77,7 @@ public final class Turret extends Subsystem {
         turretTop.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         turretBottom.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
-        //turretYaw.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        turretYaw.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
 
 
@@ -93,14 +99,16 @@ public final class Turret extends Subsystem {
     //public StellarServo getTurretServo() {
     // return turretYawServo;
     //}
-
+    public void setLaunchMode(boolean mode){
+        launchMode = mode;
+    }
     public StellarServo getTurretPitchServo(){
         return turretPitch;
     }
 
     public StellarServo getTurretCoverServo(){return cover;}
 
-    public StellarServo getTurretYawServo(){return turretYaw;}
+    public StellarDcMotor getTurretYawServo(){return turretYaw;}
 
     public StellarDcMotor getTurretTop() {
         return turretTop;
@@ -135,6 +143,20 @@ public final class Turret extends Subsystem {
         return turretTop.getVelocity() - velocity;
     }
 
+    public double getRealBoundedVelocityOffOfTarget() {
+        if (getVelocityOffOfTarget()>140){
+            if (getRealVelocityOffOfTarget()>0){
+                return 140;
+            } else {
+                return -140;
+            }
+        }
+        if (getVelocityOffOfTarget()<20){
+            return 0.0;
+        }
+        else return getRealVelocityOffOfTarget();
+    }
+
     public boolean velocityWithinTolerance() {
         return getVelocityOffOfTarget() < VELOCITY_TOLERANCE;
     }
@@ -149,10 +171,15 @@ public final class Turret extends Subsystem {
     }
     public void updateTurretWithInterpolation(double distance){
         LaunchParameters parameters = LaunchInterpolator.getEstimatedLaunchParameters(distance);
-        //setTurretVelocity(parameters.getVelocity());
-        setTurretVelocity(1570);
+        setTurretVelocity(LaunchInterpolator.getEstimatedLaunchParameters(125).getVelocity());
 
-        turretPitch.setPosition(parameters.getAngle());
+        double pitchAdjusted;
+        if (launchMode){
+            pitchAdjusted = getRealBoundedVelocityOffOfTarget() * HOOD_FACTOR + parameters.getAngle();
+        }else {
+            pitchAdjusted = LaunchInterpolator.getEstimatedLaunchParameters(125).getAngle();
+        }
+        turretPitch.setPosition(pitchAdjusted);
     }
 
     public double getBoundedTurretYawAngleTarget() {
@@ -169,7 +196,7 @@ public final class Turret extends Subsystem {
         }
         return boundedTargetAngle;
     }
-    public double calculateTurretYawPower(double error) {
+    public double calculateTurretYawPower(double error, double posInTicks, double velInTicks) {
         // 1. Get the time elapsed since the last loop and reset the timer
         double seconds = timer.seconds();
         timer.reset();
@@ -200,6 +227,11 @@ public final class Turret extends Subsystem {
 
         // 6. Calculate total power and clamp it between -1.0 and 1.0
         double totalPower = proportional + integral + derivative;
+        if ((posInTicks>= ((YAW_MOTOR_TICKS_HALF*2)-200))&&(velInTicks>0)){
+            return 0;
+        } if (posInTicks<= 200&&(velInTicks<0)){
+            return 0;
+        }
         return Range.clip(totalPower, -1.0, 1.0);
     }
     public void updateTurretYawServo() {
@@ -215,12 +247,12 @@ public final class Turret extends Subsystem {
 
     }
     public void  updateTurretYawMotor(){
-        double targetAngle = Math.toRadians(getTurretYawAngleTarget());
-        if (Math.abs(targetAngle) >= TICKS_FULL_ROTATION){
-            targetAngle = TICKS_FULL_ROTATION;
-        }
-        //turretYaw.setPower(targetAngle);
-
+        double posInTicks = turretYaw.getCurrentPosition();
+        double velInTicks = turretYaw.getVelocity();
+        double targetInTicks = getTurretYawAngleTarget()*DEGREES_TO_TICKS;
+        double errorInTicks = posInTicks-targetInTicks;
+        double power = calculateTurretYawPower(errorInTicks, posInTicks, velInTicks);
+        turretYaw.setPower(power);
 
     }
     public void setTurretToForward(){
@@ -239,23 +271,19 @@ public final class Turret extends Subsystem {
     @Override
     public String debugTelemetry() {
         return String.format(
-                //"Turret Servo Pos: %f\n" +
-                    "   Hood Pos: %f\n" +
-                    "   Turret Left/Right Motor Vel: %f, %f\n" +
-                "Turret Target Velocity: %f\n" +
-                    "   TurretAtTargetVelocity?: %b\n"+
-                "Bounded Turret Yaw Target Angle: %f\n"+
-                            /*" YawPower: %f\n"+
-                "YawPosition?: %f\n",*/
-                //turretYawServo.getPosition(),
+                "   Hood Pos: %f\n" +
+                        "   Turret Left/Right Motor Vel: %f, %f\n" +
+                        "Turret Target Velocity: %f\n" +
+                        "Yaw Pos: %d\n" +
+                        "   TurretAtTargetVelocity?: %b\n" +
+                        "Bounded Turret Yaw Target Angle: %f\n", // Cleaned up comments and fixed comma placement
                 turretPitch.getPosition(),
                 turretTop.getVelocity(),
                 turretBottom.getVelocity(),
                 velocity,
-                velocityWithinTolerance(),
+                turretYaw.getCurrentPosition(),
+                velocityWithinTolerance(), // Perfectly matches %b
                 getBoundedTurretYawAngleTarget()
-                /*turretYaw.getPower(),
-                turretYaw.getCurrentPosition()*/
         );
     }
 }

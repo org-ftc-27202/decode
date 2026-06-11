@@ -8,10 +8,10 @@ public class LaunchInterpolator {
 
     static TreeMap<Double, LaunchParameters> launchData = new TreeMap<>(
             Map.of(
-                    65.0, new LaunchParameters(0.55, 1120*1.5),
-                    123.0, new LaunchParameters(0.2,1300*1.5),
-                    140.0, new LaunchParameters(0.2, 1460*1.5),
-                    172.0, new LaunchParameters(0.2,1640*1.5)
+                    65.0, new LaunchParameters(0.9, 1620),
+                    125.0, new LaunchParameters(0.7,1980),
+                    140.0, new LaunchParameters(0.9, 1860),
+                    172.0, new LaunchParameters(0.9,1940)
             )
     );
 
