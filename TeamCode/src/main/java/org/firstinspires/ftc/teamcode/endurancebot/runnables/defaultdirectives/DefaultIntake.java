@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Parallel;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Procedure;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Sleep;
 import org.firstinspires.ftc.teamcode.stellarstructure.triggers.ActionTrigger;
+import org.firstinspires.ftc.teamcode.stellarstructure.triggers.IteratorTrigger;
 
 public class DefaultIntake extends DefaultDirective {
 	private final Intake intake = subsystem(Intake.class);
@@ -21,7 +22,7 @@ public class DefaultIntake extends DefaultDirective {
 	public DefaultIntake(Gamepad gamepad1, Gamepad gamepad2) {
 		super(subsystem(Intake.class));
 
-		addTrigger(new ActionTrigger(
+		addTrigger(new IteratorTrigger(
 				new StatefulCondition(
 						new GamepadButtonMap(
 								gamepad1,
@@ -32,22 +33,13 @@ public class DefaultIntake extends DefaultDirective {
 				() -> {
 					subsystem(Transfer.class).setTransferPower(0.75);
 					subsystem(Intake.class).getIntakeMotor().setPower(1.0);
-				}
-		));
-
-		addTrigger(new ActionTrigger(
-				new StatefulCondition(
-						new GamepadButtonMap(
-								gamepad1,
-								GamepadButtonMap.Button.RIGHT_BUMPER
-						),
-						StatefulCondition.Edge.FALLING
-				),
+				},
 				() -> {
-					subsystem(Transfer.class).setTransferPower(0.0);
+					subsystem(Transfer.class).setTransferPower(0.3);
 					subsystem(Intake.class).getIntakeMotor().setPower(0.0);
 				}
 		));
+
 		/*addTrigger(new IteratorTrigger(
 				new StatefulCondition(
 						() -> gamepad1.left_trigger > 0.05,

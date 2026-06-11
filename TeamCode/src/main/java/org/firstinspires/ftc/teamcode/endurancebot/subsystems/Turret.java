@@ -29,7 +29,7 @@ public final class Turret extends Subsystem {
     private final static double YAW_SERVO_MID = 0.82;
 
     private final static double COVER_OPEN = 0.95;
-    private final static double COVER_CLOSED = 0.90;
+    private final static double COVER_CLOSED = 0.85;
 
     private double velocity = 0.0;
 
@@ -147,11 +147,11 @@ public final class Turret extends Subsystem {
         // This forces the result to stay between -180 and 180
         return AngleUnit.normalizeDegrees(robotHeading - launchYaw);
     }
-
     public void updateTurretWithInterpolation(double distance){
         LaunchParameters parameters = LaunchInterpolator.getEstimatedLaunchParameters(distance);
         //setTurretVelocity(parameters.getVelocity());
         setTurretVelocity(1570);
+
         turretPitch.setPosition(parameters.getAngle());
     }
 
@@ -160,8 +160,7 @@ public final class Turret extends Subsystem {
         double boundedTargetAngle;
         if ((targetAngle<-13) && (targetAngle>-90)){
             boundedTargetAngle = -13;
-        }
-        else if (targetAngle < -90.0){
+        } else if (targetAngle < -90.0){
             boundedTargetAngle= -30.0;
         } else if (targetAngle > 30.0){
             boundedTargetAngle = 30.0;
