@@ -18,22 +18,31 @@ public final class Transfer extends Subsystem {
 		return transfer;
 	}
 
-	public DigitalChannel getBeamBreak() {return beamBreak;}
+	public DigitalChannel getBeamBreak1() {return beamBreak1;}
+	public DigitalChannel getBeamBreak2() {return beamBreak2;}
 
 	public void setTransferPower(double power) {
 		transfer.setPower(power);
 	}
 
-	private DigitalChannel beamBreak;
+	private DigitalChannel beamBreak1, beamBreak2;
 	private StellarDcMotor transfer;
-	private Boolean beamBreakState;
+	private Boolean beamBreakState = false;
+	private Boolean turretFull = false;
+	private Boolean lastBeamBreakState = false;
+	private static final int TURRET_FULL_CYCLES = 4;
+
+	private int updateNo = 0;
 
 	@Override
 	public void init(HardwareMap hardwareMap) {
 		transfer = new StellarDcMotor(hardwareMap, "transfer");
 
-		beamBreak = hardwareMap.get(DigitalChannel.class, "beamBreak");
-		beamBreak.setMode(DigitalChannel.Mode.INPUT);
+		beamBreak1 = hardwareMap.get(DigitalChannel.class, "beamBreak1");
+		beamBreak1.setMode(DigitalChannel.Mode.INPUT);
+
+		beamBreak2 = hardwareMap.get(DigitalChannel.class, "beamBreak2");
+		beamBreak2.setMode(DigitalChannel.Mode.INPUT);
 
 		setTransferPower(1.0);
 
@@ -41,14 +50,23 @@ public final class Transfer extends Subsystem {
 	public boolean getBeamBreakState(){
 		return beamBreakState;
 	}
+	public boolean getTurretFull(){
+		return turretFull;
+	}
+
 	@Override
 	public void update() {
-		beamBreakState = beamBreak.getState();
+		beamBreakState = (!beamBreak1.getState() || !beamBreak2.getState());
+		updateNo = updateNo+1;
+		if (updateNo%TURRET_FULL_CYCLES ==0){
+            turretFull = beamBreakState && lastBeamBreakState;
+			lastBeamBreakState = beamBreakState;
+		}
 	}
 
 	@NonNull
 	@Override
 	public String debugTelemetry() {
-		return String.format("Transfer Power: %f", transfer.getPower());
+		return String.format("TurretFull: %b", turretFull);
 	}
 }

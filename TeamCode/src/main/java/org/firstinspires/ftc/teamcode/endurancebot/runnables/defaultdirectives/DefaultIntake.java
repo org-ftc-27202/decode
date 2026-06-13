@@ -4,6 +4,8 @@ import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsyst
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+import org.firstinspires.ftc.teamcode.endurancebot.runnables.procedures.FullOuttake;
+import org.firstinspires.ftc.teamcode.endurancebot.runnables.procedures.IntakeThree;
 import org.firstinspires.ftc.teamcode.endurancebot.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.endurancebot.subsystems.Transfer;
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.GamepadButtonMap;
@@ -22,7 +24,7 @@ public class DefaultIntake extends DefaultDirective {
 	public DefaultIntake(Gamepad gamepad1, Gamepad gamepad2) {
 		super(subsystem(Intake.class));
 
-		addTrigger(new IteratorTrigger(
+		/*addTrigger(new IteratorTrigger(
 				new StatefulCondition(
 						new GamepadButtonMap(
 								gamepad1,
@@ -37,6 +39,15 @@ public class DefaultIntake extends DefaultDirective {
 				() -> {
 					subsystem(Transfer.class).setTransferPower(0.3);
 					subsystem(Intake.class).getIntakeMotor().setPower(0.0);
+				}
+		));*/
+		addTrigger(new ActionTrigger(
+				new StatefulCondition(
+						new GamepadButtonMap(gamepad1, GamepadButtonMap.Button.RIGHT_BUMPER),
+						StatefulCondition.Edge.RISING //On initial press
+				),
+				() -> {
+					new IntakeThree().schedule();
 				}
 		));
 

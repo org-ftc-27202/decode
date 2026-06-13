@@ -9,7 +9,6 @@ public class LaunchParameters {
         this.velocity = velocity;
     }
 
-    // Optional: Add getter methods
     public double getAngle() {
         return angle;
     }
@@ -17,6 +16,4 @@ public class LaunchParameters {
     public double getVelocity() {
         return velocity;
     }
-
-
 }
