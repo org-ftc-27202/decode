@@ -1,16 +1,14 @@
 package org.firstinspires.ftc.teamcode.endurancebot.opmodes.tele;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad1;
-import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
-
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.endurancebot.runnables.defaultdirectives.DefaultIntake;
+import org.firstinspires.ftc.teamcode.endurancebot.runnables.defaultdirectives.DefaultPedroDrivebase;
 import org.firstinspires.ftc.teamcode.endurancebot.runnables.defaultdirectives.DefaultTransfer;
 import org.firstinspires.ftc.teamcode.endurancebot.runnables.defaultdirectives.DefaultTurret;
-import org.firstinspires.ftc.teamcode.endurancebot.runnables.defaultdirectives.DefaultPedroDrivebase;
+import org.firstinspires.ftc.teamcode.endurancebot.runnables.procedures.IntakeThree;
 import org.firstinspires.ftc.teamcode.endurancebot.runnables.procedures.TurretStartup;
 import org.firstinspires.ftc.teamcode.endurancebot.subsystems.Camera;
 import org.firstinspires.ftc.teamcode.endurancebot.subsystems.Intake;
@@ -85,11 +83,13 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
             if (isStopRequested()) return;
 
             while (opModeIsActive()) {
-                // panic: reset bot
                 if (onStart){
                     new TurretStartup().schedule();
+                    new IntakeThree().schedule();
                     onStart = false;
                 }
+
+                // panic: reset bot
                 if (gamepad2.left_bumper && gamepad2.right_bumper) {
                     enduranceBot.deactivateBot();
                 }

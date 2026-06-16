@@ -2,8 +2,6 @@ package org.firstinspires.ftc.teamcode.endurancebot.runnables.defaultdirectives;
 
 import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
 
-import android.os.Trace;
-
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.endurancebot.subsystems.PedroDrivebase;

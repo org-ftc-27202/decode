@@ -1,15 +1,19 @@
 package org.firstinspires.ftc.teamcode.endurancebot.subsystems;
 
-import static org.firstinspires.ftc.teamcode.endurancebot.subsystems.TurretPIDFConstants.*;
-
-
+import static org.firstinspires.ftc.teamcode.endurancebot.subsystems.TurretPIDFConstants.d_blue;
+import static org.firstinspires.ftc.teamcode.endurancebot.subsystems.TurretPIDFConstants.d_red;
+import static org.firstinspires.ftc.teamcode.endurancebot.subsystems.TurretPIDFConstants.f_blue;
+import static org.firstinspires.ftc.teamcode.endurancebot.subsystems.TurretPIDFConstants.f_red;
+import static org.firstinspires.ftc.teamcode.endurancebot.subsystems.TurretPIDFConstants.i_blue;
+import static org.firstinspires.ftc.teamcode.endurancebot.subsystems.TurretPIDFConstants.i_red;
+import static org.firstinspires.ftc.teamcode.endurancebot.subsystems.TurretPIDFConstants.p_blue;
+import static org.firstinspires.ftc.teamcode.endurancebot.subsystems.TurretPIDFConstants.p_red;
 import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
 
 import androidx.annotation.NonNull;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -28,8 +32,8 @@ public final class Turret extends Subsystem {
     private final static double YAW_GEAR_RATIO = 1.167;
     private final static double YAW_SERVO_MID = 0.82;
 
-    private final static double COVER_OPEN = 0.95;
-    private final static double COVER_CLOSED = 0.85;
+    private final static double COVER_OPEN = 0.0;
+    private final static double COVER_CLOSED = 0.12;
 
     private final static double HOOD_FACTOR = 0.002;
 
@@ -270,6 +274,7 @@ public final class Turret extends Subsystem {
                 "   Hood Pos: %f\n" +
                         "   Turret Top/Bottom Motor Vel: %f, %f\n" +
                         "Turret Target Velocity: %f\n" +
+                        "Cover Position: %f\n" +
                         "Yaw Pos: %d\n" +
                         "   TurretAtTargetVelocity?: %b\n" +
                         "Bounded Turret Yaw Target Angle: %f\n", // Cleaned up comments and fixed comma placement
@@ -277,6 +282,7 @@ public final class Turret extends Subsystem {
                 turretTop.getVelocity(),
                 turretBottom.getVelocity(),
                 velocity,
+                cover.getPosition(),
                 turretYaw.getCurrentPosition(),
                 velocityWithinTolerance(), // Perfectly matches %b
                 getBoundedTurretYawAngleTarget()

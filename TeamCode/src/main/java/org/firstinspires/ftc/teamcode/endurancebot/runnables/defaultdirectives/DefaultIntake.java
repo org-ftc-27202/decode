@@ -4,19 +4,12 @@ import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsyst
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.teamcode.endurancebot.runnables.procedures.FullOuttake;
 import org.firstinspires.ftc.teamcode.endurancebot.runnables.procedures.IntakeThree;
 import org.firstinspires.ftc.teamcode.endurancebot.subsystems.Intake;
-import org.firstinspires.ftc.teamcode.endurancebot.subsystems.Transfer;
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.GamepadButtonMap;
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.StatefulCondition;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.DefaultDirective;
-import org.firstinspires.ftc.teamcode.stellarstructure.runnables.InstantlyDo;
-import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Parallel;
-import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Procedure;
-import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Sleep;
 import org.firstinspires.ftc.teamcode.stellarstructure.triggers.ActionTrigger;
-import org.firstinspires.ftc.teamcode.stellarstructure.triggers.IteratorTrigger;
 
 public class DefaultIntake extends DefaultDirective {
 	private final Intake intake = subsystem(Intake.class);

@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.stellarstructure;
 
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
 import androidx.annotation.NonNull;
 
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.Condition;

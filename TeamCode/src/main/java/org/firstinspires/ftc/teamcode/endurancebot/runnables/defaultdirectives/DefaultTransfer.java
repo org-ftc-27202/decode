@@ -1,12 +1,10 @@
 package org.firstinspires.ftc.teamcode.endurancebot.runnables.defaultdirectives;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad1;
 import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.endurancebot.runnables.procedures.FullOuttake;
-import org.firstinspires.ftc.teamcode.endurancebot.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.endurancebot.subsystems.Transfer;
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.GamepadButtonMap;
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.StatefulCondition;

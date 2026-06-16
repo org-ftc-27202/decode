@@ -12,13 +12,21 @@ public class FullOuttake extends Procedure {
     public FullOuttake() {
         super(
                 "FullOuttake",
-                new InstantlyDo(()-> subsystem(Turret.class).setLaunchMode(true)),
-                new InstantlyDo(()-> subsystem(Turret.class).setCoverOpen()),
-                new InstantlyDo(() -> subsystem(Transfer.class).setTransferPower(1.0)),
+                new InstantlyDo(()-> {
+                    subsystem(Turret.class).setLaunchMode(true);
+                    subsystem(Turret.class).setCoverOpen();
+                    subsystem(Transfer.class).setTransferPower(1.0);
+                    subsystem(Transfer.class).setTransferWheelPower(-1.0);
+                    subsystem(Transfer.class).setIntakePhase(false);
+                }),
                 new Sleep(3.0),
-                new InstantlyDo(() -> subsystem(Transfer.class).setTransferPower(0.0)),
-                new InstantlyDo(()-> subsystem(Turret.class).setCoverClosed()),
-                new InstantlyDo(()-> subsystem(Turret.class).setLaunchMode(false))
+                new InstantlyDo(() -> {
+                    subsystem(Turret.class).setLaunchMode(false);
+                    subsystem(Turret.class).setCoverClosed();
+                    subsystem(Transfer.class).setTransferPower(0.0);
+                    subsystem(Transfer.class).setTransferWheelPower(0.0);
+                }),
+                new IntakeThree()
         );
 
         setRequiredSubsystems(
