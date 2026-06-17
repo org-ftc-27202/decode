@@ -16,6 +16,8 @@ public class IntakeThree extends Procedure {
                 new InstantlyDo(() -> {
                     subsystem(Transfer.class).setTransferPower(1.0);
                     subsystem(Intake.class).getIntakeMotor().setPower(1.0);
+                }),
+                new InstantlyDo(()-> {
                     subsystem(Transfer.class).setIntakePhase(true);
                 })
         );

@@ -50,6 +50,7 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
             enduranceBot.setPrintDebug(true);
 
             pedroDrivebase.setOpMode(PedroDrivebase.opModeType.TELEOP);
+            pedroDrivebase.setAutoSide(PedroDrivebase.AutoSide.SHORT);
 
             // set up subsystems
             enduranceBot.init(hardwareMap);
@@ -111,7 +112,7 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
 
                 // run scheduler and subsystems logic
                 enduranceBot.update();
-                turret.updateTurretYawServo();
+                turret.updateTurretYawCRServo();
                 turret.updateTurretWithInterpolation(pedroDrivebase.getDistanceFromGoal());
 
                 // print telemetry
@@ -131,7 +132,7 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
 
                 telemetry.update();
             }
-
+            turret.setTotalCarryoverRevoltions(turret.getTotalRevoltions());
             // cancel triggers and runnables
             enduranceBot.deactivateBot();
         }

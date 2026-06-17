@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.endurancebot.subsystems;
 
+import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
+
 import androidx.annotation.NonNull;
 
 import com.pedropathing.follower.Follower;
@@ -58,21 +60,21 @@ public final class PedroDrivebase extends Subsystem {
 
         StellarBot.AllianceColor allianceColor = StellarBot.getInstance().getAllianceColor();
         if (allianceColor == StellarBot.AllianceColor.BLUE) {
-            GOAL_X = -18.0;
-            GOAL_Y = 140.0;
-            REAL_GOAL_X = 6.0;
-            REAL_GOAL_Y = 144.0;
+            GOAL_X = 4.0;
+            GOAL_Y = 142.0;
+            REAL_GOAL_X = 2.0;
+            REAL_GOAL_Y = 142.0;
             if (autoSide == AutoSide.FAR){
             STARTING_X = 55.25;
             STARTING_Y = 9.0;
             STARTING_ANGLE = 90;
             } else{
-                STARTING_X = 36.0;
-                STARTING_Y = 135.0;
+                STARTING_X = 30.0;
+                STARTING_Y = 136.0;
                 STARTING_ANGLE = 0;
             }
         } else if (allianceColor == StellarBot.AllianceColor.RED) {
-            GOAL_X = 162.0;
+            GOAL_X = 140.0;
             GOAL_Y = 140.0;
 
             REAL_GOAL_X = 138.0;
@@ -91,8 +93,11 @@ public final class PedroDrivebase extends Subsystem {
 
         if (opMode == opModeType.AUTO) {
             follower.setStartingPose(new Pose(STARTING_X, STARTING_Y, Math.toRadians(STARTING_ANGLE)));
+            subsystem(Turret.class).setTotalCarryoverRevoltions(0);
             firstInit = false;
+
         } else if (opMode == opModeType.TELEOP && firstInit){
+            subsystem(Turret.class).setTotalCarryoverRevoltions(0);
             follower.setStartingPose(new Pose(STARTING_X, STARTING_Y, Math.toRadians(STARTING_ANGLE)));
             firstInit = false;
         }

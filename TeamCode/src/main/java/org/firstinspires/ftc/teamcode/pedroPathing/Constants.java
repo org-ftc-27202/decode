@@ -16,9 +16,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class Constants {
     public static FollowerConstants followerConstants = new FollowerConstants()
-            .mass(11.06)
-            .forwardZeroPowerAcceleration(-65.40)
-            .lateralZeroPowerAcceleration(-88.90)
+            .mass(10.88)
+            .forwardZeroPowerAcceleration(-55.40)
+            .lateralZeroPowerAcceleration(-72.90)
             .translationalPIDFCoefficients(new PIDFCoefficients(0.3, 0, 0.03, 0.025))
             .headingPIDFCoefficients(new PIDFCoefficients(2.75, 0, 0.175, 0))
             .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.1,0.0,0.0015,0.6,0.11))
@@ -30,8 +30,8 @@ public class Constants {
             .encoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD)
             .forwardEncoderDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED)
             .strafeEncoderDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED)
-            .forwardPodY(-5.4)
-            .strafePodX(-3.5)
+            .forwardPodY(-3.1)
+            .strafePodX(-5.7)
 
             ;
     public static MecanumConstants driveConstants = new MecanumConstants()
@@ -44,8 +44,8 @@ public class Constants {
             .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
             .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
             .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD)
-            .xVelocity(77.40)
-            .yVelocity(55.6)
+            .xVelocity(65.40)
+            .yVelocity(37.0)
 
             ;
 

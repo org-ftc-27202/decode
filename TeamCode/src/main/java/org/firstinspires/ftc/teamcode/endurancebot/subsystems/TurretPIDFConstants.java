@@ -4,10 +4,10 @@ import com.bylazar.configurables.annotations.Configurable;
 
 @Configurable
 public class TurretPIDFConstants {
-    public static double p_red = 12.0;
+    public static double p_red = 20.0;
     public static double i_red = 0.03;
     public static double d_red = 0.0;
-    public static double f_red = 12.0;
+    public static double f_red = 13.7;
 
     public static double p_blue = p_red;
     public static double i_blue = i_red;
