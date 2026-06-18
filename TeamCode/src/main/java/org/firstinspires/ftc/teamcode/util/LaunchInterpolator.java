@@ -12,8 +12,11 @@ public class LaunchInterpolator {
                         70.0, new LaunchParameters(0.5, 1560),
                         80.0, new LaunchParameters(0.35 ,1640),
                         90.0, new LaunchParameters(0.23,1620),
-                    100.0, new LaunchParameters(0.50,1800),
-                    172.0, new LaunchParameters(0.9,1940)
+                        100.0, new LaunchParameters(0.1,1720),
+                        110.0, new LaunchParameters(.1, 1820),
+                        120.0, new LaunchParameters(.1,1920),
+                            135.0, new LaunchParameters(.1, 1980),
+                    153.0, new LaunchParameters(0.1,2080)
 
             )
     );

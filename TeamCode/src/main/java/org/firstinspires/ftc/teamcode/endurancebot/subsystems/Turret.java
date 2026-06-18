@@ -36,7 +36,7 @@ public final class Turret extends Subsystem {
     private final static double YAW_SERVO_MID = 0.82;
     private final static double MIN_TURRET_POWER = .006;
     private final static double TURRET_DEGREES_TOLERANCE = 1.0;
-    private final static double TURRET_ZERO_POS = 159.0;
+    private final static double TURRET_ZERO_POS = 189.0;
 
     private final static double MIN_VOLTS = 0.015;
     private final static double MAX_VOLTS = 3.230;
@@ -225,7 +225,7 @@ public final class Turret extends Subsystem {
     }
 
     public void updateTurretWithInterpolation(double distance){
-        LaunchParameters parameters = LaunchInterpolator.getEstimatedLaunchParameters(40);
+        LaunchParameters parameters = LaunchInterpolator.getEstimatedLaunchParameters(distance);
         setTurretVelocity(parameters.getVelocity());
 
         double pitchAdjusted;
