@@ -38,6 +38,8 @@ public final class Turret extends Subsystem {
     private final static double TURRET_DEGREES_TOLERANCE = 1.0;
     private final static double TURRET_ZERO_POS = 189.0;
 
+    private final static double TURRET_FUDGE_FACTOR = 3.0;
+
     private final static double MIN_VOLTS = 0.015;
     private final static double MAX_VOLTS = 3.230;
 
@@ -58,6 +60,11 @@ public final class Turret extends Subsystem {
     private double externalEncoderRawDegrees;
     private double externalEncoderTotalDegrees;
     private double maxExternalEncoderVoltage;
+    private double totalTurretFudge = 0.0;
+
+    private boolean turretLocked;
+
+    private double turretLockedTarget;
 
     private int totalRevolutions = totalCarryoverRevoltions;
     private static int  totalCarryoverRevoltions =  0;
@@ -114,6 +121,7 @@ public final class Turret extends Subsystem {
 
         lastDegrees = voltageToDegrees(externalEncoder.getVoltage());
         error = 0;
+        unlockTurret();
     }
     //:todo add on start
     @Override
@@ -147,7 +155,7 @@ public final class Turret extends Subsystem {
             totalRevolutions--;
         }
         externalEncoderTotalDegrees = externalEncoderRawDegrees + ((totalRevolutions)*360.0);
-        turretPosition = (externalEncoderTotalDegrees*PULLEY_RATIO)-TURRET_ZERO_POS;
+        turretPosition = (externalEncoderTotalDegrees*PULLEY_RATIO)-TURRET_ZERO_POS-totalTurretFudge;
         lastDegrees = externalEncoderRawDegrees;
 
 
@@ -158,6 +166,12 @@ public final class Turret extends Subsystem {
 
     public StellarServo getTurretPitchServo(){
         return turretPitch;
+    }
+    public void rightTurretFudge(){
+        totalTurretFudge += TURRET_FUDGE_FACTOR;
+    }
+    public void leftTurretFudge(){
+        totalTurretFudge -= TURRET_FUDGE_FACTOR;
     }
 
     public StellarServo getTurretCoverServo(){return cover;}
@@ -251,7 +265,18 @@ public final class Turret extends Subsystem {
     }
     public void updateTurretYawCRServo(){
         double error = turretPosition-getBoundedTurretYawAngleTarget();
-        turretYaw.setPower(calculateTurretYawPower(error));
+        if (turretLocked){
+            turretYaw.setPower(calculateTurretYawPower(turretPosition-turretLockedTarget));
+        } else {
+            turretYaw.setPower(calculateTurretYawPower(error));
+        }
+    }
+    public void lockTurret(){
+        turretLocked = true;
+        turretLockedTarget = turretPosition;
+    }
+    public void unlockTurret(){
+        turretLocked = false;
     }
     public double calculateTurretYawPower(double error) {
         // 1. Get the time elapsed since the last loop and reset the timer

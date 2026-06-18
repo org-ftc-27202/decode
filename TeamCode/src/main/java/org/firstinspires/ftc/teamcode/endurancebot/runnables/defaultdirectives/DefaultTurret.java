@@ -5,7 +5,10 @@ import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsyst
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.endurancebot.subsystems.Turret;
+import org.firstinspires.ftc.teamcode.stellarstructure.conditions.GamepadButtonMap;
+import org.firstinspires.ftc.teamcode.stellarstructure.conditions.StatefulCondition;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.DefaultDirective;
+import org.firstinspires.ftc.teamcode.stellarstructure.triggers.ActionTrigger;
 
 public class DefaultTurret extends DefaultDirective {
     private final Turret turret = subsystem(Turret.class);
@@ -16,16 +19,47 @@ public class DefaultTurret extends DefaultDirective {
     public DefaultTurret(Gamepad gamepad1, Gamepad gamepad2) {
         super(subsystem(Turret.class));
 
-        /*addTrigger(new ActionTrigger(
+        addTrigger(new ActionTrigger(
                 // when dpad up just first pressed
                 new StatefulCondition(
-                        new GamepadButtonMap(gamepad1, GamepadButtonMap.Button.DPAD_UP),
+                        new GamepadButtonMap(gamepad2, GamepadButtonMap.Button.DPAD_RIGHT),
                         StatefulCondition.Edge.RISING
                 ),
                 () -> {
-                    velocity += 100.0;
+                    subsystem(Turret.class).rightTurretFudge();
                 }
         ));
+        addTrigger(new ActionTrigger(
+                // when dpad up just first pressed
+                new StatefulCondition(
+                        new GamepadButtonMap(gamepad2, GamepadButtonMap.Button.DPAD_LEFT),
+                        StatefulCondition.Edge.RISING
+                ),
+                () -> {
+                    subsystem(Turret.class).leftTurretFudge();
+                }
+        ));
+        addTrigger(new ActionTrigger(
+                // when dpad up just first pressed
+                new StatefulCondition(
+                        new GamepadButtonMap(gamepad2, GamepadButtonMap.Button.B),
+                        StatefulCondition.Edge.RISING
+                ),
+                () -> {
+                    subsystem(Turret.class).lockTurret();
+                }
+        ));
+        addTrigger(new ActionTrigger(
+                // when dpad up just first pressed
+                new StatefulCondition(
+                        new GamepadButtonMap(gamepad2, GamepadButtonMap.Button.A),
+                        StatefulCondition.Edge.RISING
+                ),
+                () -> {
+                    subsystem(Turret.class).unlockTurret();
+                }
+        ));/*
+
 
         addTrigger(new ActionTrigger(
                 // when dpad down just first pressed
