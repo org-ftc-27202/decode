@@ -14,9 +14,7 @@ import androidx.annotation.NonNull;
 
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -36,9 +34,14 @@ public final class Turret extends Subsystem {
     private final static double YAW_SERVO_MID = 0.82;
     private final static double MIN_TURRET_POWER = .006;
     private final static double TURRET_DEGREES_TOLERANCE = 1.0;
-    private final static double TURRET_ZERO_POS = 189.0;
+    private final static double TURRET_ZERO_POS = 106.0;
 
-    private final static double TURRET_FUDGE_FACTOR = 3.0;
+    private final static double TURRET_LEFT_BOUND = -100;
+    private final static double TURRET_RIGHT_BOUND = 160;
+
+    private final static double YAW_MAX_POWER = 0.95;
+
+    private final static double YAW_FUDGE_FACTOR = 3.0;
 
     private final static double MIN_VOLTS = 0.015;
     private final static double MAX_VOLTS = 3.230;
@@ -48,10 +51,12 @@ public final class Turret extends Subsystem {
 
     private final static double HOOD_FACTOR = 0.002;
 
+    private final static double VELOCITY_FUDGE = -20;
+
     private final static double YAW_MOTOR_TICKS_HALF = 3000.0;
     private final static double DEGREES_TO_TICKS = YAW_MOTOR_TICKS_HALF / 180.0;
 
-    private final static double PULLEY_RATIO = 60.0 / 109.0;
+    private final static double PULLEY_RATIO = 62.0 / 109.0;
     private double velocity = 0.0;
     private double error;
     private double externalEncoderVoltage;
@@ -60,23 +65,26 @@ public final class Turret extends Subsystem {
     private double externalEncoderRawDegrees;
     private double externalEncoderTotalDegrees;
     private double maxExternalEncoderVoltage;
-    private double totalTurretFudge = 0.0;
+    private static double totalTurretFudge = 0.0;
 
     private boolean turretLocked;
 
     private double turretLockedTarget;
-
-    private int totalRevolutions = totalCarryoverRevoltions;
-    private static int  totalCarryoverRevoltions =  0;
+    private static int totalCarryoverRevolutions =  0;
+    private int totalRevolutions = totalCarryoverRevolutions;
 
     private boolean launchMode = false;
 
     double Kp = 0.02;
-    double Ki = 0.008;
+    double Ki = 0.005;
     double Kd = 0.002;
 
     double integralSum = 0;
     double lastError = 0;
+    double lastTargetPower = 0;
+
+    private static final double maxDeltaPerUpdate = 0.3;
+    double limitedTargetPower;
 
     ElapsedTime timer = new ElapsedTime();
     private CRServo turretYaw;
@@ -89,6 +97,8 @@ public final class Turret extends Subsystem {
 
     private double PIDFScale;
     private boolean needsToStart = true;
+
+    private boolean turretZeroMode = false;
 
     @Override
     public void init(HardwareMap hardwareMap) {
@@ -140,11 +150,14 @@ public final class Turret extends Subsystem {
     public void setLaunchMode(boolean mode){
         launchMode = mode;
     }
-    public void setTotalCarryoverRevoltions(int carryoverRevoltions){
-        totalCarryoverRevoltions = carryoverRevoltions;
+    public void setTotalCarryoverRevoltions(int carryoverRevolutions){
+        totalCarryoverRevolutions = carryoverRevolutions;
     }
     public int getTotalRevoltions(){
         return totalRevolutions;
+    }
+    public void setTurretModeToZero(){
+        turretZeroMode = true;
     }
     public void updateExternalEncoder(){
         externalEncoderRawDegrees = voltageToDegrees(externalEncoder.getVoltage());
@@ -169,10 +182,10 @@ public final class Turret extends Subsystem {
         return turretPitch;
     }
     public void rightTurretFudge(){
-        totalTurretFudge += TURRET_FUDGE_FACTOR;
+        totalTurretFudge += YAW_FUDGE_FACTOR;
     }
     public void leftTurretFudge(){
-        totalTurretFudge -= TURRET_FUDGE_FACTOR;
+        totalTurretFudge -= YAW_FUDGE_FACTOR;
     }
 
     public StellarServo getTurretCoverServo(){return cover;}
@@ -241,7 +254,7 @@ public final class Turret extends Subsystem {
 
     public void updateTurretWithInterpolation(double distance){
         LaunchParameters parameters = LaunchInterpolator.getEstimatedLaunchParameters(distance);
-        setTurretVelocity(parameters.getVelocity());
+        setTurretVelocity(parameters.getVelocity()+VELOCITY_FUDGE);
 
         double pitchAdjusted;
         if (launchMode){
@@ -255,10 +268,10 @@ public final class Turret extends Subsystem {
     public double getBoundedTurretYawAngleTarget() {
         double targetAngle = getTurretYawAngleTarget();
         double boundedTargetAngle;
-        if ((targetAngle < -160)){
-            boundedTargetAngle = -160.0;
-        } else if (targetAngle > 160.0){
-            boundedTargetAngle = 160.0;
+        if ((targetAngle < (TURRET_LEFT_BOUND))){
+            boundedTargetAngle = (TURRET_LEFT_BOUND);
+        } else if (targetAngle > (TURRET_RIGHT_BOUND)){
+            boundedTargetAngle = (TURRET_RIGHT_BOUND);
         } else{
             boundedTargetAngle = targetAngle;
         }
@@ -268,7 +281,9 @@ public final class Turret extends Subsystem {
         double error = turretPosition-getBoundedTurretYawAngleTarget();
         if (turretLocked){
             turretYaw.setPower(calculateTurretYawPower(turretPosition-turretLockedTarget));
-        } else {
+        } else if (turretZeroMode){
+            turretYaw.setPower(calculateTurretYawPower(turretPosition-0.0));
+        }else {
             turretYaw.setPower(calculateTurretYawPower(error));
         }
     }
@@ -311,17 +326,20 @@ public final class Turret extends Subsystem {
         lastError = error;
 
         // 6. Calculate total power and clamp it between -1.0 and 1.0
-        double totalPower = proportional + integral + derivative;
+        double targetPower = proportional + integral + derivative;
         if (Math.abs(error) > TURRET_DEGREES_TOLERANCE){
-            if(totalPower > 0 && totalPower < MIN_TURRET_POWER){
-                totalPower = MIN_TURRET_POWER;
-            } else if (totalPower < 0 && totalPower> -MIN_TURRET_POWER) {
-                totalPower =-MIN_TURRET_POWER;
+            if(targetPower > 0 && targetPower < MIN_TURRET_POWER){
+                targetPower = MIN_TURRET_POWER;
+            } else if (targetPower < 0 && targetPower> -MIN_TURRET_POWER) {
+                targetPower =-MIN_TURRET_POWER;
             }
         } else {
-            totalPower = 0.0;
+            targetPower = 0.0;
         }
-        return Range.clip(totalPower, -0.3, 0.3);
+        limitedTargetPower = lastTargetPower + Math.max(-maxDeltaPerUpdate, Math.min(maxDeltaPerUpdate, targetPower- lastTargetPower));
+        lastTargetPower = limitedTargetPower;
+        targetPower = limitedTargetPower;
+        return Range.clip(targetPower, -YAW_MAX_POWER, YAW_MAX_POWER);
     }
     public void updateTurretYawServo() {
         double targetAngle = getBoundedTurretYawAngleTarget();

@@ -19,8 +19,8 @@ import org.firstinspires.ftc.teamcode.stellarstructure.StellarBot;
 import org.firstinspires.ftc.teamcode.util.bootscreen.BootScreen;
 import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
 
-@TeleOp(name = "-BlueEndurance", group = "Robot")
-    public final class BlueEnduranceTele extends LinearOpMode {
+@TeleOp(name = "-BlueCloseEndurance", group = "Robot")
+    public final class BlueCLOSEnduranceTele extends LinearOpMode {
         private final PedroDrivebase pedroDrivebase = new PedroDrivebase();
         private final Intake intake = new Intake();
         private final Transfer transfer = new Transfer();
@@ -84,9 +84,9 @@ import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
             if (isStopRequested()) return;
 
             while (opModeIsActive()) {
-                if (onStart){
-                    new TurretStartup().schedule();
+                if (onStart) {
                     new IntakeThree().schedule();
+                    new TurretStartup().schedule();
                     onStart = false;
                 }
 

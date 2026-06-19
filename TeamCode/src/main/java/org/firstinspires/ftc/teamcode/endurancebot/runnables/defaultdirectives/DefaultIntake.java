@@ -60,8 +60,11 @@ public class DefaultIntake extends DefaultDirective {
 		addTrigger(new ActionTrigger(
 				() -> gamepad1.left_trigger > 0.05, //when left trigger pressed
 				//() -> {intake.setIntakeSpeed(0.5);} //set intake to left trigger
-				() -> {intake.getIntakeMotor().setPower(-0.7);}
-				)
+				() -> {
+					subsystem(Transfer.class).setIntakePhase(false);
+					subsystem(Transfer.class).setWasIntakePhaseLast(false);
+					intake.getIntakeMotor().setPower(-0.7);
+				})
 		);
 
 

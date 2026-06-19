@@ -63,8 +63,6 @@ public final class Transfer extends Subsystem {
 		beamBreak2.setMode(DigitalChannel.Mode.INPUT);
 
 		transferWheel = hardwareMap.get(CRServo.class, "transferWheel");
-
-		setTransferPower(1.0);
 	}
 
 	public boolean getBeamBreakState(){
