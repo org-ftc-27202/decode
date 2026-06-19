@@ -8,8 +8,8 @@ import org.firstinspires.ftc.teamcode.stellarstructure.runnables.InstantlyDo;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Procedure;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Sleep;
 
-public class FullOuttake extends Procedure {
-    public FullOuttake() {
+public class FullOuttakeThenIntake extends Procedure {
+    public FullOuttakeThenIntake() {
         super(
                 "FullOuttake",
                 new InstantlyDo(()-> {
@@ -26,6 +26,7 @@ public class FullOuttake extends Procedure {
                     subsystem(Turret.class).setCoverClosed();
                     subsystem(Transfer.class).setTransferPower(0.0);
                     subsystem(Transfer.class).setTransferWheelPower(0.0);
+                    subsystem(Transfer.class).setIntakePhase(true);
                 })
         );
 

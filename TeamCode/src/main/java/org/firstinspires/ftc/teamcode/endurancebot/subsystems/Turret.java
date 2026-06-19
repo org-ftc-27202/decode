@@ -51,7 +51,7 @@ public final class Turret extends Subsystem {
     private final static double YAW_MOTOR_TICKS_HALF = 3000.0;
     private final static double DEGREES_TO_TICKS = YAW_MOTOR_TICKS_HALF / 180.0;
 
-    private final static double PULLEY_RATIO = 60 /109.0;
+    private final static double PULLEY_RATIO = 60.0 / 109.0;
     private double velocity = 0.0;
     private double error;
     private double externalEncoderVoltage;
@@ -133,6 +133,7 @@ public final class Turret extends Subsystem {
     public boolean getNeedsToStart(){
         return needsToStart;
     }
+
     //public StellarServo getTurretServo() {
     // return turretYawServo;
     //}
@@ -312,15 +313,15 @@ public final class Turret extends Subsystem {
         // 6. Calculate total power and clamp it between -1.0 and 1.0
         double totalPower = proportional + integral + derivative;
         if (Math.abs(error) > TURRET_DEGREES_TOLERANCE){
-            if(totalPower>0 && totalPower < MIN_TURRET_POWER){
+            if(totalPower > 0 && totalPower < MIN_TURRET_POWER){
                 totalPower = MIN_TURRET_POWER;
-            } else if (totalPower<0 && totalPower>-MIN_TURRET_POWER){
+            } else if (totalPower < 0 && totalPower> -MIN_TURRET_POWER) {
                 totalPower =-MIN_TURRET_POWER;
             }
-        } else{
+        } else {
             totalPower = 0.0;
         }
-        return Range.clip(totalPower, -1.0, 1.0);
+        return Range.clip(totalPower, -0.3, 0.3);
     }
     public void updateTurretYawServo() {
         double targetAngle = getBoundedTurretYawAngleTarget();
@@ -360,7 +361,9 @@ public final class Turret extends Subsystem {
                         "External Encoder Total Degrees: %f\n" +
                         "Turret Current Degrees: %f\n"+
                         "error: %f"+
-                        "totalRevolotions: %o"
+                        "totalRevolotions: %o\n"+
+                        "turretLocked? %b" +
+                        "turret total Fudge %f"
                 ,// Cleaned up comments and fixed comma placement
                 turretPitch.getPosition(),
                 turretTop.getVelocity(),
@@ -374,7 +377,9 @@ public final class Turret extends Subsystem {
                 externalEncoderTotalDegrees,
                 turretPosition,
                 error,
-                totalRevolutions
+                totalRevolutions,
+                turretLocked,
+                totalTurretFudge
         );
     }
 }

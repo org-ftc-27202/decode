@@ -16,8 +16,13 @@ public final class Transfer extends Subsystem {
 		isIntakePhase = intakePhase;
 	}
 
+	public void setWasIntakePhaseLast(boolean intakePhaseLast) {
+		wasIntakePhaseLast = intakePhaseLast;
+	}
+
 	private boolean wasIntakePhaseLast = false;
 	private boolean isIntakePhase = false;
+	private boolean wasTurretFull = false;
 
 	public StellarDcMotor getTransfer() {
 		return transfer;
@@ -70,21 +75,29 @@ public final class Transfer extends Subsystem {
 	public void update() {
 		beamBreakState = (!beamBreak1.getState() || !beamBreak2.getState());
 		updateNo++;
+
 		if (updateNo % TURRET_FULL_CYCLES == 0) {
-            turretFull = beamBreakState && lastBeamBreakState;
+			turretFull = beamBreakState && lastBeamBreakState;
 			lastBeamBreakState = beamBreakState;
 		}
 
-		if (isIntakePhase && turretFull) {
+
+		if (isIntakePhase && turretFull && !wasTurretFull) {
 			isIntakePhase = false;
 		}
 
-		if (!isIntakePhase && wasIntakePhaseLast) {
-			subsystem(Intake.class).getIntakeMotor().setPower(-0.5);
-			subsystem(Transfer.class).setTransferPower(0.3);
+		if (isIntakePhase) {
+			setTransferPower(1.0);
+			subsystem(Intake.class).getIntakeMotor().setPower(1.0);
 		}
-		
+
+		if (!isIntakePhase && wasIntakePhaseLast) {
+			setTransferPower(0.3);
+			subsystem(Intake.class).getIntakeMotor().setPower(-0.5);
+		}
+
 		wasIntakePhaseLast = isIntakePhase;
+		wasTurretFull = turretFull;
 	}
 
 	@NonNull

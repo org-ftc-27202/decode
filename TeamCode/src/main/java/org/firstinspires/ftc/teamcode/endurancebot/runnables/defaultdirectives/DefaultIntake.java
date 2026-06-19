@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.endurancebot.runnables.procedures.IntakeThree;
 import org.firstinspires.ftc.teamcode.endurancebot.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.endurancebot.subsystems.Transfer;
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.GamepadButtonMap;
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.StatefulCondition;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.DefaultDirective;
@@ -40,7 +41,8 @@ public class DefaultIntake extends DefaultDirective {
 						StatefulCondition.Edge.RISING //On initial press
 				),
 				() -> {
-					new IntakeThree().schedule();
+					// new IntakeThree().schedule();
+					subsystem(Transfer.class).setIntakePhase(true);
 				}
 		));
 

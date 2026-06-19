@@ -13,10 +13,6 @@ public class IntakeThree extends Procedure {
     public IntakeThree() {
         super(
                 "Intake",
-                new InstantlyDo(() -> {
-                    subsystem(Transfer.class).setTransferPower(1.0);
-                    subsystem(Intake.class).getIntakeMotor().setPower(1.0);
-                }),
                 new InstantlyDo(()-> {
                     subsystem(Transfer.class).setIntakePhase(true);
                 })

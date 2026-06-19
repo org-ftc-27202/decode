@@ -4,7 +4,7 @@ import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsyst
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.teamcode.endurancebot.runnables.procedures.FullOuttake;
+import org.firstinspires.ftc.teamcode.endurancebot.runnables.procedures.FullOuttakeThenIntake;
 import org.firstinspires.ftc.teamcode.endurancebot.subsystems.Transfer;
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.GamepadButtonMap;
 import org.firstinspires.ftc.teamcode.stellarstructure.conditions.StatefulCondition;
@@ -23,7 +23,7 @@ public class DefaultTransfer extends DefaultDirective {
 						StatefulCondition.Edge.RISING //On initial press
 				),
 				() -> {
-					new FullOuttake().schedule();
+					new FullOuttakeThenIntake().schedule();
 				}
 		));
 
