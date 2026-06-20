@@ -87,11 +87,16 @@ public final class Transfer extends Subsystem {
 		if (isIntakePhase) {
 			setTransferPower(1.0);
 			subsystem(Intake.class).getIntakeMotor().setPower(1.0);
+			subsystem(Turret.class).lockTurret();
 		}
 
 		if (!isIntakePhase && wasIntakePhaseLast) {
 			setTransferPower(0.3);
 			subsystem(Intake.class).getIntakeMotor().setPower(-0.5);
+		}
+
+		if (!isIntakePhase) {
+			subsystem(Turret.class).unlockTurret();
 		}
 
 		wasIntakePhaseLast = isIntakePhase;

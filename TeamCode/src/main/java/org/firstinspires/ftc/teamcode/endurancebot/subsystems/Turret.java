@@ -32,9 +32,9 @@ public final class Turret extends Subsystem {
     private final static double YAW_SERVO_DEGREE_RANGE = 330.0;
     private final static double YAW_GEAR_RATIO = 1.167;
     private final static double YAW_SERVO_MID = 0.82;
-    private final static double MIN_TURRET_POWER = .006;
+    private final static double MIN_TURRET_POWER = 0.006;
     private final static double TURRET_DEGREES_TOLERANCE = 1.0;
-    private final static double TURRET_ZERO_POS = 106.0;
+    public static double turretZeroPos = 16.5;
 
     private final static double TURRET_LEFT_BOUND = -100;
     private final static double TURRET_RIGHT_BOUND = 160;
@@ -51,12 +51,12 @@ public final class Turret extends Subsystem {
 
     private final static double HOOD_FACTOR = 0.002;
 
-    private final static double VELOCITY_FUDGE = -20;
+    private double velocityFudge = -20;
 
     private final static double YAW_MOTOR_TICKS_HALF = 3000.0;
     private final static double DEGREES_TO_TICKS = YAW_MOTOR_TICKS_HALF / 180.0;
 
-    private final static double PULLEY_RATIO = 62.0 / 109.0;
+    public final static double PULLEY_RATIO = 62.0 / 109.0;
     private double velocity = 0.0;
     private double error;
     private double externalEncoderVoltage;
@@ -140,42 +140,41 @@ public final class Turret extends Subsystem {
     //leftTurretMotor.setVelocityPIDFCoefficents(p_left*PIDFScale, i_left*PIDFScale, d_left*PIDFScale, f_left*PIDFScale);
         //rightTurretMotor.setVelocityPIDFCoefficents(p_right*PIDFScale, i_right*PIDFScale, d_right*PIDFScale, f_right*PIDFScale);
     }
-    public boolean getNeedsToStart(){
+    public boolean getNeedsToStart() {
         return needsToStart;
     }
 
     //public StellarServo getTurretServo() {
     // return turretYawServo;
     //}
-    public void setLaunchMode(boolean mode){
+    public void setLaunchMode(boolean mode) {
         launchMode = mode;
     }
-    public void setTotalCarryoverRevoltions(int carryoverRevolutions){
+    public void setTotalCarryoverRevoltions(int carryoverRevolutions) {
         totalCarryoverRevolutions = carryoverRevolutions;
     }
-    public int getTotalRevoltions(){
+    public int getTotalRevoltions() {
         return totalRevolutions;
     }
-    public void setTurretModeToZero(){
+    public void setTurretModeToZero() {
         turretZeroMode = true;
     }
-    public void updateExternalEncoder(){
+    public void updateExternalEncoder() {
         externalEncoderRawDegrees = voltageToDegrees(externalEncoder.getVoltage());
-        double delta = externalEncoderRawDegrees-lastDegrees;
-        if (delta< -180.0){
+        double delta = externalEncoderRawDegrees - lastDegrees;
+        if (delta < -180.0){
             totalRevolutions++;
         }
-        if (delta> 180.0){
+        if (delta > 180.0){
             totalRevolutions--;
         }
-        externalEncoderTotalDegrees = externalEncoderRawDegrees + ((totalRevolutions)*360.0);
-        turretPosition = (externalEncoderTotalDegrees*PULLEY_RATIO)-TURRET_ZERO_POS-totalTurretFudge;
+        externalEncoderTotalDegrees = externalEncoderRawDegrees + ((totalRevolutions) * 360.0);
+        turretPosition = (externalEncoderTotalDegrees * PULLEY_RATIO) - turretZeroPos - totalTurretFudge;
         lastDegrees = externalEncoderRawDegrees;
-
-
     }
-    public double voltageToDegrees(double voltage){
-        return ((voltage-MIN_VOLTS)/(MAX_VOLTS-MIN_VOLTS)) * 360.0;
+
+    public static double voltageToDegrees(double voltage){
+        return ((voltage - MIN_VOLTS) / (MAX_VOLTS - MIN_VOLTS)) * 360.0;
     }
 
     public StellarServo getTurretPitchServo(){
@@ -186,6 +185,12 @@ public final class Turret extends Subsystem {
     }
     public void leftTurretFudge(){
         totalTurretFudge -= YAW_FUDGE_FACTOR;
+    }
+    public void upTurretFudge(){
+        velocityFudge += 20.0;
+    }
+    public void downTurretFudge(){
+       velocityFudge -= 20.0;
     }
 
     public StellarServo getTurretCoverServo(){return cover;}
@@ -254,7 +259,7 @@ public final class Turret extends Subsystem {
 
     public void updateTurretWithInterpolation(double distance){
         LaunchParameters parameters = LaunchInterpolator.getEstimatedLaunchParameters(distance);
-        setTurretVelocity(parameters.getVelocity()+VELOCITY_FUDGE);
+        setTurretVelocity(parameters.getVelocity()+velocityFudge);
 
         double pitchAdjusted;
         if (launchMode){
@@ -380,7 +385,7 @@ public final class Turret extends Subsystem {
                         "Turret Current Degrees: %f\n"+
                         "error: %f"+
                         "totalRevolotions: %o\n"+
-                        "turretLocked? %b" +
+                        "turretLocked? %b\n" +
                         "turret total Fudge %f"
                 ,// Cleaned up comments and fixed comma placement
                 turretPitch.getPosition(),

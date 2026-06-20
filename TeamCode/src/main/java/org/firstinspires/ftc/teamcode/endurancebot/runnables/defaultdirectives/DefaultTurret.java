@@ -58,7 +58,28 @@ public class DefaultTurret extends DefaultDirective {
                 () -> {
                     subsystem(Turret.class).unlockTurret();
                 }
+        ));
+        addTrigger(new ActionTrigger(
+                // when dpad up just first pressed
+                new StatefulCondition(
+                        new GamepadButtonMap(gamepad2, GamepadButtonMap.Button.DPAD_UP),
+                        StatefulCondition.Edge.RISING
+                ),
+                () -> {
+                    subsystem(Turret.class).upTurretFudge();
+                }
+        ));
+        addTrigger(new ActionTrigger(
+                // when dpad up just first pressed
+                new StatefulCondition(
+                        new GamepadButtonMap(gamepad2, GamepadButtonMap.Button.DPAD_DOWN),
+                        StatefulCondition.Edge.RISING
+                ),
+                () -> {
+                    subsystem(Turret.class).downTurretFudge();
+                }
         ));/*
+
 
 
         addTrigger(new ActionTrigger(

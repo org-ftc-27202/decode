@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.endurancebot.opmodes.shortauto;// make sure this aligns with class location
 
-import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
-
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
@@ -25,8 +23,8 @@ import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Sleep;
 import org.firstinspires.ftc.teamcode.util.bootscreen.BootScreen;
 import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
 
-@Autonomous(name = "BLUE SHORT Auto ", group = "Auto")
-public final class BlueEnduranceShortAuto extends OpMode {
+@Autonomous(name = "blue FAR Auto ", group = "Auto")
+public final class BLUEFARauto extends OpMode {
 
     private final double PRE_MATCH_DELAY = 0.0;
 
@@ -43,9 +41,10 @@ public final class BlueEnduranceShortAuto extends OpMode {
 
     private long lastCycleTime = 0;
 
-    private final Pose startPose = new Pose(36.0,135.0, Math.toRadians(0));
+    private final Pose startPose = new Pose(88.75,9.0, Math.toRadians(90)).mirror();
+    private final Pose leavePose = new Pose(100.0, 15.0, Math.toRadians(90)).mirror();
     private final Pose cameraPose = new Pose(53.5, 80.0, Math.toRadians(60));
-    private final Pose firstLaunchPose = new Pose(50.0, 82.5, Math.toRadians(180));
+    private final Pose firstLaunchPose = new Pose(90.0, 14.0, Math.toRadians(90)).mirror();
     private final Pose launchControlPose = new Pose(53.5, 80.0, Math.toRadians(135));
     private final Pose launchPose = new Pose(53.5, 80.0, Math.toRadians(135));
     private final Pose spike1Control = new Pose(43,35.5, Math.toRadians(180));
@@ -61,11 +60,12 @@ public final class BlueEnduranceShortAuto extends OpMode {
     private final Pose gateApr = new Pose(26,76, Math.toRadians(180));
     private final Pose gateHold = new Pose(15, 76, Math.toRadians(180));
 
+
     //  private final Pose collect1Pose = new Pose(19, 35.5);
 
     //  private final Pose collect1Control = new Pose(56,35.5);
     //  private final Pose launchFarPose = new Pose(60,21);
-    private PathChain driveToSpike2Start, driveToThirdLaunch, driveToSpike2Collect, driveToApr2Gate, driveToFirstLaunch, driveToLeave, driveToSpike3Start, driveToSpike3Collect, driveToAprGate, driveToOpenGate, driveToSecondLaunch;
+    private PathChain driveToSpike1Start, driveToSpike1Collect, driveToSpike2Start, driveToThirdLaunch, driveToSpike2Collect, driveToApr2Gate, driveToFirstLaunch, driveToLeave, driveToSpike3Start, driveToSpike3Collect, driveToAprGate, driveToOpenGate, driveToSecondLaunch;
 
     public void buildPaths() {
         driveToFirstLaunch = follower
@@ -106,9 +106,23 @@ public final class BlueEnduranceShortAuto extends OpMode {
         driveToSecondLaunch = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(gateHold, firstLaunchPose)
+                        new BezierLine(spike3End, firstLaunchPose)
                 )
-                .setLinearHeadingInterpolation(gateHold.getHeading(), Math.toRadians(180))
+                .setLinearHeadingInterpolation(gateHold.getHeading(), Math.toRadians(90))
+                .build();
+        driveToSpike1Start = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(firstLaunchPose,spike1Control )
+                )
+                .setLinearHeadingInterpolation(firstLaunchPose.getHeading(), spike1Control.getHeading())
+                .build();
+        driveToSpike1Collect = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(spike1Control, spike1End)
+                )
+                .setLinearHeadingInterpolation(spike2Control.getHeading(), spike2End.getHeading())
                 .build();
         driveToSpike2Start = follower
                 .pathBuilder()
@@ -142,9 +156,9 @@ public final class BlueEnduranceShortAuto extends OpMode {
         driveToLeave = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(firstLaunchPose, gateApr)
+                        new BezierLine(firstLaunchPose, leavePose)
                 )
-                .setLinearHeadingInterpolation(firstLaunchPose.getHeading(), gateApr.getHeading())
+                .setLinearHeadingInterpolation(firstLaunchPose.getHeading(), leavePose.getHeading())
                 .build();
 
 
@@ -164,7 +178,7 @@ public final class BlueEnduranceShortAuto extends OpMode {
 
         //this.follower = Constants.createFollower(hardwareMap);
         pedroDrivebase.setOpMode(PedroDrivebase.opModeType.AUTO);
-        pedroDrivebase.setAutoSide(PedroDrivebase.AutoSide.SHORT);
+        pedroDrivebase.setAutoSide(PedroDrivebase.AutoSide.FAR);
         enduranceBot.init(hardwareMap);
         enduranceBot.setPrintDebug(true);
         follower = pedroDrivebase.getFollower();
@@ -193,44 +207,16 @@ public final class BlueEnduranceShortAuto extends OpMode {
                     transfer.setTransferPower(1.0);
                     intake.getIntakeMotor().setPower(1.0);}),
                 new Race("race",
-                        new FollowPath(driveToSpike3Start, follower, spike3Control, false, 1.0),
+                        new FollowPath(driveToSpike1Start, follower, spike1Control, false, 1.0),
                         new Sleep(.7)
-                        ),
-                new FollowPath(driveToSpike3Collect, follower, spike3End, true, 1.0),
+                ),
+                new FollowPath(driveToSpike1Collect, follower, spike1End, true, 1.0),
                 new InstantlyDo(()-> {
-            transfer.setTransferPower(0.2);
-            intake.getIntakeMotor().setPower(0.0);}),
-                new Race("race",
-                        new FollowPath(driveToAprGate, follower, gateApr, false, 1.0),
-                    new Sleep(.8)),
-                new Parallel("race",
-                new FollowPath(driveToOpenGate, follower, gateHold, true, 1.0),
-                new Sleep(2.0)),
+                    transfer.setTransferPower(0.2);
+                    intake.getIntakeMotor().setPower(0.0);}),
                 new FollowPath(driveToSecondLaunch, follower, firstLaunchPose, true, 1.0),
                 new FullOuttake(),
-                new InstantlyDo(()-> {
-                    transfer.setTransferPower(1.0);
-                    intake.getIntakeMotor().setPower(1.0);}),
-                new Race("race",
-                        new FollowPath(driveToSpike2Start, follower, spike2Control, false, 1.0),
-                        new Sleep(1.2)
-                ),
-                new FollowPath(driveToSpike2Collect, follower, spike2End, true, 1.0),
-                new Sleep(.5),
-                new InstantlyDo(()-> {
-                    transfer.setTransferPower(0.0);
-                    intake.getIntakeMotor().setPower(0.2);}),
-                new Race("race",
-                        new FollowPath(driveToApr2Gate, follower, gateApr, true, 1.0),
-                        new Sleep(1.0)),
-                new Parallel("race",
-                        new FollowPath(driveToOpenGate, follower, gateHold, true, 1.0),
-                        new Sleep(1.5)),
-                new FollowPath(driveToThirdLaunch, follower, firstLaunchPose, true, 1.0),
-                new FullOuttake(),
-                new FollowPath(driveToLeave, follower, gateApr, true, 1.0)
-
-
+                new FollowPath(driveToLeave, follower, firstLaunchPose, true, 1.0)
         ).schedule();
     }
 
