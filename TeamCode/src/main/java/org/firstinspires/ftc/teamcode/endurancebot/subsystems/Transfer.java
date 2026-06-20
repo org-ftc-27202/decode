@@ -51,7 +51,9 @@ public final class Transfer extends Subsystem {
 	private CRServo transferWheel;
 
 	private int updateNo = 0;
-
+	public boolean getTurretFull(){
+		return turretFull;
+	}
 	@Override
 	public void init(HardwareMap hardwareMap) {
 		transfer = new StellarDcMotor(hardwareMap, "transfer");
@@ -78,7 +80,6 @@ public final class Transfer extends Subsystem {
 			turretFull = beamBreakState && lastBeamBreakState;
 			lastBeamBreakState = beamBreakState;
 		}
-
 
 		if (isIntakePhase && turretFull && !wasTurretFull) {
 			isIntakePhase = false;

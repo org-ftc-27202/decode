@@ -77,8 +77,8 @@ public final class PedroDrivebase extends Subsystem {
             GOAL_X = 140.0;
             GOAL_Y = 142.0;
 
-            REAL_GOAL_X = 138.0;
-            REAL_GOAL_Y = 144.0;
+            REAL_GOAL_X = 141.0;
+            REAL_GOAL_Y = 142.5;
 
             if (autoSide == AutoSide.FAR){
                 STARTING_X = 88.75;

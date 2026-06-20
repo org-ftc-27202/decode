@@ -34,12 +34,12 @@ public final class Turret extends Subsystem {
     private final static double YAW_SERVO_MID = 0.82;
     private final static double MIN_TURRET_POWER = 0.006;
     private final static double TURRET_DEGREES_TOLERANCE = 1.0;
-    public static double turretZeroPos = 16.5;
+    public static double turretZeroPos = 30.0 ;
 
     private final static double TURRET_LEFT_BOUND = -100;
     private final static double TURRET_RIGHT_BOUND = 160;
 
-    private final static double YAW_MAX_POWER = 0.95;
+    private final static double YAW_MAX_POWER = 0.5;
 
     private final static double YAW_FUDGE_FACTOR = 3.0;
 
@@ -75,9 +75,9 @@ public final class Turret extends Subsystem {
 
     private boolean launchMode = false;
 
-    double Kp = 0.02;
+    double Kp = 0.01;
     double Ki = 0.005;
-    double Kd = 0.002;
+    double Kd = 0.001;
 
     double integralSum = 0;
     double lastError = 0;
@@ -119,8 +119,6 @@ public final class Turret extends Subsystem {
 
         turretTop.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         turretBottom.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-
-
 
         turretTop.setVelocityPIDFCoefficents(p_red, i_red, d_red, f_red);
         turretBottom.setVelocityPIDFCoefficents(p_blue, i_blue, d_blue, f_blue);
@@ -285,9 +283,9 @@ public final class Turret extends Subsystem {
     public void updateTurretYawCRServo(){
         double error = turretPosition-getBoundedTurretYawAngleTarget();
         if (turretLocked){
-            turretYaw.setPower(calculateTurretYawPower(turretPosition-turretLockedTarget));
+            turretYaw.setPower(calculateTurretYawPower(turretPosition - turretLockedTarget));
         } else if (turretZeroMode){
-            turretYaw.setPower(calculateTurretYawPower(turretPosition-0.0));
+            turretYaw.setPower(calculateTurretYawPower(turretPosition - 0.0));
         }else {
             turretYaw.setPower(calculateTurretYawPower(error));
         }

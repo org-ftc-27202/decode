@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.endurancebot.opmodes.shortauto;// make sure this aligns with class location
+package org.firstinspires.ftc.teamcode.endurancebot.opmodes.farauto;// make sure this aligns with class location
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
@@ -20,6 +20,7 @@ import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Parallel;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Procedure;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Race;
 import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Sleep;
+import org.firstinspires.ftc.teamcode.stellarstructure.runnables.WaitUntil;
 import org.firstinspires.ftc.teamcode.util.bootscreen.BootScreen;
 import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
 
@@ -59,13 +60,14 @@ public final class BLUEFARauto extends OpMode {
     private final Pose spike3End = new Pose(17,82.5, Math.toRadians(180));
     private final Pose gateApr = new Pose(26,76, Math.toRadians(180));
     private final Pose gateHold = new Pose(15, 76, Math.toRadians(180));
+    private final Pose loadingZone= new Pose(8.0, 8.0, Math.toRadians(180));
 
 
     //  private final Pose collect1Pose = new Pose(19, 35.5);
 
     //  private final Pose collect1Control = new Pose(56,35.5);
     //  private final Pose launchFarPose = new Pose(60,21);
-    private PathChain driveToSpike1Start, driveToSpike1Collect, driveToSpike2Start, driveToThirdLaunch, driveToSpike2Collect, driveToApr2Gate, driveToFirstLaunch, driveToLeave, driveToSpike3Start, driveToSpike3Collect, driveToAprGate, driveToOpenGate, driveToSecondLaunch;
+    private PathChain driveToLoadingZoneCollect, driveToSpike1Start, driveToSpike1Collect, driveToSpike2Start, driveToThirdLaunch, driveToSpike2Collect, driveToApr2Gate, driveToFirstLaunch, driveToLeave, driveToSpike3Start, driveToSpike3Collect, driveToAprGate, driveToOpenGate, driveToSecondLaunch;
 
     public void buildPaths() {
         driveToFirstLaunch = follower
@@ -145,12 +147,19 @@ public final class BLUEFARauto extends OpMode {
                 )
                 .setConstantHeadingInterpolation(Math.toRadians(180))
                 .build();
+        driveToLoadingZoneCollect = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(firstLaunchPose, loadingZone)
+                )
+                .setConstantHeadingInterpolation(Math.toRadians(180))
+                .build();
         driveToThirdLaunch = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(gateHold, firstLaunchPose)
+                        new BezierLine(loadingZone, firstLaunchPose)
                 )
-                .setLinearHeadingInterpolation(gateHold.getHeading(), Math.toRadians(180))
+                .setLinearHeadingInterpolation(loadingZone.getHeading(), Math.toRadians(180))
                 .build();
 
         driveToLeave = follower
@@ -216,7 +225,43 @@ public final class BLUEFARauto extends OpMode {
                     intake.getIntakeMotor().setPower(0.0);}),
                 new FollowPath(driveToSecondLaunch, follower, firstLaunchPose, true, 1.0),
                 new FullOuttake(),
-                new FollowPath(driveToLeave, follower, firstLaunchPose, true, 1.0)
+                new InstantlyDo(()-> {
+                    transfer.setTransferPower(1.0);
+                    intake.getIntakeMotor().setPower(1.0);}),
+                new Parallel("parar",
+                        new Race("a",
+                            new Sleep(3.0),
+                            new Procedure("a",
+                                new WaitUntil(()-> transfer.getTurretFull()),
+                                new InstantlyDo(()-> {
+                            transfer.setTransferPower(0.2);
+                            intake.getIntakeMotor().setPower(-1.0);}))
+                        ),
+                    new Race("race",
+                        new FollowPath(driveToLoadingZoneCollect, follower, loadingZone, true, 1.0),
+                        new Sleep(3.0))
+                ),
+                new FollowPath(driveToThirdLaunch, follower, firstLaunchPose, true, 1.0),
+                new FullOuttake(),
+                new InstantlyDo(()-> {
+                    transfer.setTransferPower(1.0);
+                    intake.getIntakeMotor().setPower(1.0);}),
+                new Parallel("parar",
+                        new Race("a",
+                                new Sleep(3.0),
+                                new Procedure("a",
+                                        new WaitUntil(()-> transfer. getTurretFull()),
+                                        new InstantlyDo(()-> {
+                                            transfer.setTransferPower(0.2);
+                                            intake.getIntakeMotor().setPower(-1.0);}))
+                        ),
+                        new Race("race",
+                                new FollowPath(driveToLoadingZoneCollect, follower, loadingZone, true, 1.0),
+                                new Sleep(3.0))
+                ),
+                new FollowPath(driveToThirdLaunch, follower, firstLaunchPose, true, 1.0),
+                new FullOuttake(),
+                new FollowPath(driveToLeave, follower, leavePose, true, 1.0)
         ).schedule();
     }
 

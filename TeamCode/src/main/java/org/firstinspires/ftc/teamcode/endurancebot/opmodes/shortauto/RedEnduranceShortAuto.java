@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.endurancebot.opmodes.shortauto;// make sure this aligns with class location
 
-import static org.firstinspires.ftc.teamcode.stellarstructure.StellarBot.subsystem;
-
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
@@ -25,8 +23,8 @@ import org.firstinspires.ftc.teamcode.stellarstructure.runnables.Sleep;
 import org.firstinspires.ftc.teamcode.util.bootscreen.BootScreen;
 import org.firstinspires.ftc.teamcode.util.bootscreen.TerminalVelocityLogo;
 
-@Autonomous(name = "RED FAR Auto ", group = "Auto")
-public final class RedFARauto extends OpMode {
+@Autonomous(name = "RED SHORT Auto ", group = "Auto")
+public final class RedEnduranceShortAuto extends OpMode {
 
     private final double PRE_MATCH_DELAY = 0.0;
 
@@ -43,25 +41,22 @@ public final class RedFARauto extends OpMode {
 
     private long lastCycleTime = 0;
 
-    private final Pose startPose = new Pose(88.75,9.0, Math.toRadians(90));
-    private final Pose leavePose = new Pose(100.0, 15.0, Math.toRadians(90));
+    private final Pose startPose = new Pose(36.0,137.0, Math.toRadians(0)).mirror();
     private final Pose cameraPose = new Pose(53.5, 80.0, Math.toRadians(60));
-    private final Pose firstLaunchPose = new Pose(90.0, 14.0, Math.toRadians(90));
+    private final Pose firstLaunchPose = new Pose(50.0, 82.5, Math.toRadians(180)).mirror();
     private final Pose launchControlPose = new Pose(53.5, 80.0, Math.toRadians(135));
-    private final Pose launchPose = new Pose(53.5, 80.0, Math.toRadians(135));
     private final Pose spike1Control = new Pose(43,35.5, Math.toRadians(180));
     private final Pose spike1Start = new Pose(33,35.5, Math.toRadians(180));
     private final Pose spike1End = new Pose(12 ,35.5, Math.toRadians(180));
 
-    private final Pose spike2Control = new Pose(43,59, Math.toRadians(180));
+    private final Pose spike2Control = new Pose(43,59, Math.toRadians(180)).mirror();
     private final Pose spike2Start = new Pose(34,59, Math.toRadians(180));
-    private final Pose spike2End = new Pose(17,59, Math.toRadians(180));
-    private final Pose spike3Control = new Pose(43,82.5, Math.toRadians(180));
+    private final Pose spike2End = new Pose(17,59, Math.toRadians(180)).mirror();
+    private final Pose spike3Control = new Pose(43,82.5, Math.toRadians(180)).mirror();
     private final Pose spike3Start = new Pose(34,82.5, Math.toRadians(180));
-    private final Pose spike3End = new Pose(17,82.5, Math.toRadians(180));
-    private final Pose gateApr = new Pose(26,76, Math.toRadians(180));
-    private final Pose gateHold = new Pose(15, 76, Math.toRadians(180));
-
+    private final Pose spike3End = new Pose(17,82.5, Math.toRadians(180)).mirror();
+    private final Pose gateApr = new Pose(26,76, Math.toRadians(180)).mirror();
+    private final Pose gateHold = new Pose(15, 76, Math.toRadians(180)).mirror();
 
     //  private final Pose collect1Pose = new Pose(19, 35.5);
 
@@ -96,21 +91,21 @@ public final class RedFARauto extends OpMode {
                 .addPath(
                         new BezierLine(spike3End, gateApr)
                 )
-                .setConstantHeadingInterpolation(Math.toRadians(180))
+                .setConstantHeadingInterpolation(Math.toRadians(0))
                 .build();
         driveToOpenGate = follower
                 .pathBuilder()
                 .addPath(
                         new BezierLine(gateApr, gateHold)
                 )
-                .setConstantHeadingInterpolation(Math.toRadians(180))
+                .setConstantHeadingInterpolation(Math.toRadians(0))
                 .build();
         driveToSecondLaunch = follower
                 .pathBuilder()
                 .addPath(
                         new BezierLine(gateHold, firstLaunchPose)
                 )
-                .setLinearHeadingInterpolation(gateHold.getHeading(), Math.toRadians(180))
+                .setLinearHeadingInterpolation(gateHold.getHeading(), Math.toRadians(0))
                 .build();
         driveToSpike2Start = follower
                 .pathBuilder()
@@ -131,22 +126,22 @@ public final class RedFARauto extends OpMode {
                 .addPath(
                         new BezierLine(spike3End, gateApr)
                 )
-                .setConstantHeadingInterpolation(Math.toRadians(180))
+                .setConstantHeadingInterpolation(Math.toRadians(0))
                 .build();
         driveToThirdLaunch = follower
                 .pathBuilder()
                 .addPath(
                         new BezierLine(gateHold, firstLaunchPose)
                 )
-                .setLinearHeadingInterpolation(gateHold.getHeading(), Math.toRadians(180))
+                .setLinearHeadingInterpolation(gateHold.getHeading(), Math.toRadians(0))
                 .build();
 
         driveToLeave = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(firstLaunchPose, leavePose)
+                        new BezierLine(firstLaunchPose, gateApr)
                 )
-                .setLinearHeadingInterpolation(firstLaunchPose.getHeading(), leavePose.getHeading())
+                .setLinearHeadingInterpolation(firstLaunchPose.getHeading(), gateApr.getHeading())
                 .build();
 
 
@@ -166,7 +161,7 @@ public final class RedFARauto extends OpMode {
 
         //this.follower = Constants.createFollower(hardwareMap);
         pedroDrivebase.setOpMode(PedroDrivebase.opModeType.AUTO);
-        pedroDrivebase.setAutoSide(PedroDrivebase.AutoSide.FAR);
+        pedroDrivebase.setAutoSide(PedroDrivebase.AutoSide.SHORT);
         enduranceBot.init(hardwareMap);
         enduranceBot.setPrintDebug(true);
         follower = pedroDrivebase.getFollower();
@@ -191,7 +186,48 @@ public final class RedFARauto extends OpMode {
                 "AutoDrive",
                 new FollowPath(driveToFirstLaunch, follower, firstLaunchPose, true, 1.0),
                 new FullOuttake(),
-                new FollowPath(driveToLeave, follower, leavePose, true, 1.0)
+                new InstantlyDo(()-> {
+                    transfer.setTransferPower(1.0);
+                    intake.getIntakeMotor().setPower(1.0);}),
+                new Race("race",
+                        new FollowPath(driveToSpike3Start, follower, spike3Control, false, 1.0),
+                        new Sleep(.7)
+                        ),
+                new FollowPath(driveToSpike3Collect, follower, spike3End, true, 1.0),
+                new InstantlyDo(()-> {
+            transfer.setTransferPower(0.2);
+            intake.getIntakeMotor().setPower(0.0);}),
+                new Race("race",
+                        new FollowPath(driveToAprGate, follower, gateApr, false, 1.0),
+                    new Sleep(.8)),
+                new Parallel("race",
+                new FollowPath(driveToOpenGate, follower, gateHold, true, 1.0),
+                new Sleep(2.0)),
+                new FollowPath(driveToSecondLaunch, follower, firstLaunchPose, true, 1.0),
+                new FullOuttake(),
+                new InstantlyDo(()-> {
+                    transfer.setTransferPower(1.0);
+                    intake.getIntakeMotor().setPower(1.0);}),
+                new Race("race",
+                        new FollowPath(driveToSpike2Start, follower, spike2Control, false, 1.0),
+                        new Sleep(1.2)
+                ),
+                new FollowPath(driveToSpike2Collect, follower, spike2End, true, 1.0),
+                new Sleep(.5),
+                new InstantlyDo(()-> {
+                    transfer.setTransferPower(0.0);
+                    intake.getIntakeMotor().setPower(0.2);}),
+                new Race("race",
+                        new FollowPath(driveToApr2Gate, follower, gateApr, true, 1.0),
+                        new Sleep(1.0)),
+                new Parallel("race",
+                        new FollowPath(driveToOpenGate, follower, gateHold, true, 1.0),
+                        new Sleep(1.5)),
+                new FollowPath(driveToThirdLaunch, follower, firstLaunchPose, true, 1.0),
+                new FullOuttake(),
+                new FollowPath(driveToLeave, follower, gateApr, true, 1.0)
+
+
         ).schedule();
     }
 

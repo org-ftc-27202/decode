@@ -22,7 +22,8 @@ public class TurretZero extends LinearOpMode {
         while (!isStopRequested()) {
             if (hasSetPos) {
                 telemetry.addLine(String.format("Changed turret position by %f to %f !", turretPosition, turretZeroPos));
-                return;
+                telemetry.update();
+                continue;
             }
 
             externalEncoderRawDegrees = voltageToDegrees(externalEncoder.getVoltage());
